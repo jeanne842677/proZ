@@ -1,0 +1,156 @@
+    /*      <!-- 모달 작동에 필요한 외부 source -->
+    <!-- JQuery 필요 -->
+    <!-- FontAwsome 필요 -->
+    <!-- Bootstrap.css(bootswatch flicky) 필요 -->
+    <!-- 모달 스타일 코드 --> */
+   
+    .Modal {
+        /* Modal_background */
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0px;
+        bottom: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+
+    .popUp {
+        /* Modal_contentPopup_window */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        width: 400px;
+        border-radius: 10px;
+        background-color: white;
+        overflow: hidden;
+
+    }
+
+    .popUp>* {}
+
+    .modal-popUp-input {
+        /* Modal_inputTag_wrapper */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 90%;
+        height: 50%;
+    }
+
+    .modal-popUp-message {
+        /* Modal_subtitle_Message */
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        color: slategray;
+        height: 10%;
+    }
+
+    /* ---모달 x버튼, 취소버튼, 변경버튼--- */
+    .xbutton {
+        /* Modal_right_xbutton */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 10px;
+        left: 90%;
+        font-size: 25px;
+        border: none;
+        color: slategray;
+        background-color: inherit;
+
+
+
+    }
+
+    .xbutton:hover {
+        color: lightgray;
+    }
+
+
+    #modal-btn-cancel {
+        /* Modal_cancel_button */
+        height: 55%;
+        font-size: 14px;
+        width: 70px;
+        border: inherit;
+        margin-right: 15px;
+    }
+
+    #modal-btn-confirm {
+        /* Modal_confirm_button */
+        height: 55%;
+        font-size: 14px;
+        width: 70px;
+        margin-right: 25px;
+    }
+
+
+    /*내코드*/
+
+    .content-wrap {
+
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+
+
+
+    }
+
+    .modal-popUp-message {
+        margin-top: 10px;
+        width: 80%;
+    }
+
+
+    .modal-popUp-title {
+        /* Modal_title */
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bolder;
+        color: rgb(80, 94, 107);
+        height: 60px;
+        line-height: 60px;
+        margin: 10px 0;
+
+
+
+    }
+
+
+    .modal-popUp-input {
+
+        width: 80%;
+        margin: 5px 0 20px 0;
+
+    }
+
+
+
+    .modal-popUp-button-wrapper {
+        /* Modal_cancel_confirm wrapper */
+
+        display: flex;
+        align-items: center;
+        background-color: lightgray;
+        width: 100%;
+        justify-content: flex-end;
+        height: 70px;
+
+    }
