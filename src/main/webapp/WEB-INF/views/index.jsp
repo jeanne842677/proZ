@@ -4,28 +4,51 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<link rel="stylesheet" href="/resources/css/index.css">
+<title>proz index</title>
 </head>
 <body>
 
-<h1 style="text-align: center;">PCLASS TOY PROJECT</h1>
+<div id="wrap">
+        
+            <header>
+                <div class="middleheader-wrap">
+                    <div class="leftheader">
+                            <div class="project" onclick="location.href='/'">home</div>
+                            <div class="templates" onclick="location.href='/project/project-list'">projects</div>
+                    </div>
+                    <div class="logo"><img src="/resources/img/LOGO0000w.png"></div>
+                    
+                    <div class="rightheader">
+                            <div class="signup" onclick="location.href='/member/join'">sign-up</div>
+                            <div class="login" onclick="location.href='/member/login'">login</div>
+                    </div>
+                    
+                </div>
+            </header>
 
-<c:if test="${not empty message}">
-<script type="text/javascript">
-	alert("${message}");
-</script>
-</c:if>
+                <div id="contents">
+                <section id="beforelogin">
+                    <div class="mainimg"><img src="/resources/img/index.png"></div>
+                    <div class="maintext">
+                        <div class="textlogo"><img src="/resources/img/logo-white.png"></div>
+                        <div class="des1">Proz is used for better project work.</div>
+                        <div class="des2"> click the button to join us.</div>
+                        <div class="startbtn" onclick="location.href='/member/login'">start now!</div>
+                    </div>
+                </section>
 
-<c:if test="${empty authentication}">
-	<h2><a href="/member/login-form">login</a></h2>
-	<h2><a href="/member/join">회원가입</a></h2>
-</c:if>
+            <footer>
+                <div class="footleft">
+                    <div class="footdes1">project by DragonBall.</div>
+                    <div class="footdes2">Lim Ji-young , Kang Min-hyeop ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yoon-ji</div>
+                </div>
+                <div class="footright">Email_ lucky007proz@gmail.com</div>
 
-<c:if test="${not empty authentication}">
-	<h2>${authentication.userId}님 안녕?</h2>
-	<h2><a href="/member/logout">logout</a></h2>
-	<h2><a href="/member/mypage">마이페이지</a></h2>
-	<h2><a href="/board/board-form">게시글 작성</a></h2>
-</c:if>
+            </footer>
+        </div>
+    </div>
+
 
 </body>
 </html>
