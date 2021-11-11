@@ -58,5 +58,8 @@ public class MemberServiceImpl implements MemberService{
 		mailSender.send(form.getEmail(), "회원가입을 축하합니다.", htmlTxt);
 	}
 
+	public Member selectMemberByEmailAndPassword(Member member) {
+	      return memberRepository.selectMemberByEmailAndPassword(member);
+	   }
 	
 }

@@ -2,10 +2,12 @@ package com.kh.spring.member.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -37,6 +39,8 @@ public class MemberController {
    
    private MemberService memberService;
    private JoinFormValidator joinFormValidator;
+   @Autowired
+   private MemberService memberServiceImpl;
    
    public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
       super();
@@ -123,7 +127,36 @@ public class MemberController {
    @GetMapping("login")
    public void login() {}; 
    
+   @PostMapping("login")
+   public String loginImpl(Member member, HttpSession session, RedirectAttributes redirctAttr) {
+      
+      System.out.println(member.toString());
+      
+      Member certifiedUser = memberServiceImpl.selectMemberByEmailAndPassword(member);
+      
+      
+      if(certifiedUser == null) {
+         redirctAttr.addFlashAttribute("message", "아이디나 비밀번호가 정확하지 않습니다.");
+         return "redirect:/member/login";
+      }
+      
+      session.setAttribute("authentication", certifiedUser);
+      logger.debug(certifiedUser.toString());
+      return "redirect:/member/join";
+      
+      
+   }
    
+//   로그아웃
+   @GetMapping("logout.do")
+   public String logout (HttpServletRequest request) throws Exception{
+      logger.info("logout메서드 진입");
+      
+      HttpSession session = request.getSession();
+      
+      return "redirect:/";
+      
+   }
    
    
    

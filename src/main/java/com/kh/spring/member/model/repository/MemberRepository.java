@@ -24,6 +24,8 @@ public interface MemberRepository {
 	@Insert("insert into member(email,password,nickname,git) values(#{email},#{password},#{nickname},#{git})")
 	void insertMember(JoinForm form);
 	
+	@Select("select * from member where email = #{email} and password = #{password}")
+	   Member selectMemberByEmailAndPassword(Member member);
 
 
 }

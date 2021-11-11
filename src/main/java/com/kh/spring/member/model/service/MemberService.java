@@ -15,7 +15,8 @@ public interface MemberService {
 	void insertMember(JoinForm form);
 
 	void authenticateByEmail(JoinForm form, String token);
-
+	
+	Member selectMemberByEmailAndPassword(Member member);
 	
 
 
