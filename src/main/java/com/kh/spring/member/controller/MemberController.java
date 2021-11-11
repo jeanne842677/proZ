@@ -20,6 +20,9 @@ public class MemberController {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@Autowired
+	private MemberService memberService;
+	
 	
 	@GetMapping("login")
 	public void login() {}; 
@@ -29,5 +32,14 @@ public class MemberController {
 	
 	@GetMapping("join")
 	public void join() {}; 
-
+	
+	
+	@PostMapping("login")
+	public void loginImpl(Member member) {
+		
+		Member mem = memberService.selectMemberByEmailAndPassword(member);
+		System.out.println(mem);
+		
+		
+	}
 }
