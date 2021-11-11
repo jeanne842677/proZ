@@ -1,0 +1,324 @@
+html , body {
+
+    width: 100%;
+    height: 100%;
+    min-width: 1450px;
+
+}
+
+div {   
+    /* border : solid 1px #000; */
+   
+}
+
+.wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+header {
+    width: 100%;
+    height: 60px;
+    background: rgb(143, 122, 229);
+    background: radial-gradient(circle, rgba(143, 122, 229, 1) 0%, rgba(241, 112, 170, 1) 100%);
+    min-height: 60px;
+
+}
+
+.con {
+
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    overflow: auto;
+
+}
+
+nav {
+    background: rgb(19, 23, 34);
+    background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
+
+
+    width: 220px;
+    height: 100%;
+    flex-shrink: 0;
+
+}
+
+section {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    background: RGB(245, 246, 247);
+
+
+}
+
+
+aside {
+    background: rgb(19, 23, 34);
+    background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
+    height: 100%;
+    width: 200px;
+    flex-shrink: 0;
+}   
+
+
+
+
+.prject-setting-top {
+    display: flex;
+    justify-content: center;
+    height: 10%; 
+    margin: 50px 100px 60px 100px;
+}
+
+.prject-setting-top > .title {
+    flex-wrap: wrap;
+    display: flex;
+    width: 80%;
+    font-size: 40px;
+    align-content: flex-end;
+    font-weight: bolder;
+    margin-left: 10px;
+}
+
+.title-img {
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.title-img > img{
+    display: flex;
+    margin-left: 30px;
+    width:60px;
+}
+
+.member-manage-main {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.main-wrapper {
+    display: flex;
+    height: 180px;
+    width: 900px;
+    
+    
+}
+
+.invite-member {
+    height: 20%;
+}
+
+
+.form-group{
+    display: flex;
+}
+
+.form-group > div> button {
+    margin-right: 10px;
+}
+
+.button-wrapper{
+}
+
+#invite-member-input {
+    width: 40%;
+    color: darkgrey;
+}
+
+.search-member-wrapper {
+     display: flex;
+     align-items: center;
+}
+
+.search-icon {
+    height: 45px;
+}
+
+#search-member {
+    width: 250px;
+    color: darkgrey;
+}
+
+.category-member {
+    display: flex;
+    justify-content: flex-end;
+    
+    width: 500px;
+}
+
+.category-member > div {
+    margin-left: 100px;
+}
+
+.category-member > div > p { 
+     text-align: center;
+     font-weight: bolder;
+     padding: 10px 0 0 20px;
+}
+.category-member-info > div > p { 
+     text-align: center;
+     font-weight: bolder;
+     padding: 10px 0 0 20px;
+}
+
+.member {
+    display: flex;
+    height: 60px;
+
+}
+
+.category-member-info {
+    display: flex;
+    justify-content: flex-end;
+    width: 325px;
+    align-items: center;
+}
+
+.member-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 200px;
+}
+
+.member-profile > p {
+    
+    margin-left: 15px;
+}
+
+.category-title {
+    font-size: 27px;
+    font-weight: bolder;
+    color: #000;
+}
+
+.member-img-wrapper { 
+    display: flex;
+    align-items: center;
+}
+
+.exile-button {
+    display: flex; 
+    align-items: center; 
+    padding-bottom: 20px;  
+    position: relative;    /*절대값으로 위치를 설정*/
+    left: 79px; 
+    top : 15px;
+}
+
+.user-name {
+    margin-bottom: 0;
+}
+
+#project-title {
+    width: 200px;
+}
+
+#role {
+    width: 80%;
+    height: 100%;
+    margin: 20px 20px 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+#role-wrapper {
+    display: flex;
+    height: 60px;
+    margin: 15px;
+}
+
+
+
+.role-list-wrapper{
+    width: 100%;
+    height: 68%;
+    margin-top: 20px;
+    border: 5px solid rgba(11, 11, 32, 0.596);
+    overflow: scroll;
+    border-radius: 1ch;
+    
+
+}
+
+#role-title {
+    color: rgb(19, 23, 34);
+    height: 80%;
+    width: 30%;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.role-list-wrapper-bottom {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 20px 0;
+    height: 100px;
+    width: 700px;
+    justify-content: flex-end;
+}
+
+.save-button-wrapper {
+    display: flex;
+    align-items: baseline;
+    
+}
+
+.project-img-wrapper {
+    border-radius: 100%;
+    width: 150px;
+    height: 150px;
+}
+
+.project-img-wrapper > img {
+    width: 100%;
+    height: 100%;
+}
+
+.project-img-button {
+    margin: 30px 30px 30px 30px;
+}
+
+.project-info-wrapper {
+    width: 900px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+}
+
+.input-label-wrapper {
+    display: flex;
+    margin: 20px 0 0 0;
+
+
+}
+
+.main-frame {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 900px;
+    margin-top: 20px;
+    border: 1px solid rgba(11, 11, 32, 0.200);
+    border-radius: 1ch;
+    overflow: visible;
+    background-color: rgb(236, 235, 245);
+    flex-wrap: wrap;
+    padding: 40px 40px 20px 40px;
+}

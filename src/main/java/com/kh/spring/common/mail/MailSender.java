@@ -10,6 +10,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 import com.kh.spring.common.code.Config;
+import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.exception.HandlableException;
+import com.kh.spring.common.exception.HandlableException;
 
 @Component
 public class MailSender {
@@ -37,8 +40,7 @@ public class MailSender {
 			mailSender.send(msg);
 
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new HandlableException(ErrorCode.MAIL_SEND_FAIL_ERROR);
 		}
 
 	}
