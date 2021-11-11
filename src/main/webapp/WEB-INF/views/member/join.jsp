@@ -114,7 +114,7 @@
         #password,
         #password-check,
         #nickname,
-        #git-hub {
+        #git {
             width: 392px;
             margin-bottom: 5px;
             height: 48px;
@@ -233,27 +233,46 @@
         <div class="content-wrap">
             <section>
                 <div class="logo-wrap">
+                <a href="/member/logout.do">로그아웃</a>
                     <img src="/resources/img/logo-white.png" height="100%">
                 </div>
-                <form class="join-wrap">
+                <form:form modelAttribute="joinForm" 
+                action="/member/join" method="post" id="frm_join" class="join-wrap">
                     <label for="email" id="email-label">01. 이메일을 입력하고 인증을 완료하세요. </label>
                     <div class="email-wrap">
-                        <input type="email" class="form-control" id="email">
-                        <button type="button" class="btn btn-primary" id="email-btn">중복확인</button>
+                        <input type="email" class="form-control" id="email" name="email"
+                        <c:if test="${empty error.email}">
+                            value="${joinForm.email}"   
+                        </c:if> 
+                        required />
+                        
+                        <button type="button" class="btn btn-primary" id="btnEmailCheck">중복확인</button>
+                         <c:if test="${empty error.email}">
+                               <span id="emailCheck" class="valid-msg"></span>
+                       </c:if>
+                         <form:errors path="email" cssClass="valid-msg"/>
                     </div>
 
 
                     <label for="password" id="password-label">02-1. 사용하실 비밀번호를 입력하세요. </label>
-                    <input type="password" class="form-control" id="password">
-                    <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
-                    <input type="password" class="form-control" id="password-check">
+                    <input type="password" class="form-control" id="password" name="password"
+                    	 <c:if test="${empty error.password}">
+                            value="${joinForm.password}"   
+                        </c:if> 
+                    required/>
+                   <%--  <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
+                    <input type="password" class="form-control" id="password-check" 
+                    	 <c:if test="${empty error.password}">
+                            value="${joinForm.password}"   
+                        </c:if> 
+                    required/>/ --%>
 
 
-                    <label for="nickname" id="nickname-label">03. 사용하실 닉네임을 입력하세요 </label>
-                    <input type="text" class="form-control" id="nickname">
+                    <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요 </label>
+                    <input type="text" class="form-control" id="nickname" name="nickname" required>
 
                     <label for="git-hub" id="git-label">04. Git-Hub 주소를 등록해주세요. (선택) </label>
-                    <input type="text" class="form-control" id="git-hub">
+                    <input type="text" class="form-control" id="git" name="git">
 
 
                     <label id="terms-label">05. 이용 약관에 동의 후 회원가입 버튼을 클릭하세요. </label>
@@ -265,15 +284,16 @@
                     </div>
                     <div class="form-check terms-wrap">
                         <input class="form-check-input" type="checkbox" value="" id="terms-agree">
-                        <label class="form-check-label" for="terms-agree">
+                        <label class="form-check-label" for="terms-agree" required>
                             프로Z 이용 약관 동의(필수)
                         </label>
                     </div>
                     <button type="submit" class="btn btn-primary" id="join-impl">가입하기</button>
 
 
-                </form>
-
+                </form:form>
+                
+<script type="text/javascript" src="/resources/js/member/joinForm.js"></script>
 
             </section>
 

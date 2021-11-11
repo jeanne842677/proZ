@@ -13,8 +13,6 @@
 	</typeAliases>
 	<mappers>
 		<!-- 매퍼틑 Dao 1개당 1개씩 있음 -->
-		<mapper resource="mybatis/mapper/mybatisMapper.xml" />
-		<mapper resource="mybatis/mapper/mybatisMapper2.xml" />
 	</mappers>
 </configuration>
 

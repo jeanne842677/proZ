@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring.common.code.Config;
 import com.kh.spring.common.code.ErrorCode;
-import com.kh.spring.common.exception.HandleableException;
+import com.kh.spring.common.exception.HandlableException;
 
 public class FileUtil {
 	
@@ -25,7 +25,7 @@ public class FileUtil {
 			File dest = new File(uploadPath + fileDTO.getRenameFileName());
 			file.transferTo(dest); //파일 업로드하는 메소드
 		} catch (IllegalStateException | IOException e) {
-			throw new HandleableException(ErrorCode.FAILED_FILE_UPLOAD_ERROR,e);
+			throw new HandlableException(ErrorCode.FAILED_FILE_UPLOAD_ERROR,e);
 		}
 		
 		return fileDTO;

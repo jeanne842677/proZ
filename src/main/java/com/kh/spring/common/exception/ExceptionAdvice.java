@@ -27,8 +27,8 @@ public class ExceptionAdvice {
 	//속성값 : 저 class의 예외가 발생할떄만 이게 실행 됨.
 	//기본 상태코드는 200번, 예외가 발생했으므로 응답 상태코드를 직접 500번으로 지정해 준다.
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR) //internal_server_error : 500번에러
-	@ExceptionHandler(HandleableException.class)
-	public String  handleableExceptionProcess(HandleableException e , Model model) {
+	@ExceptionHandler(HandlableException.class)
+	public String  handleableExceptionProcess(HandlableException e , Model model) {
 		
 		model.addAttribute("msg" , e.error.MESSAGE);
 		model.addAttribute("url" , e.error.URL);

@@ -5,6 +5,14 @@
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="/resources/css/index.css">
+<link rel="stylesheet" href="/resources/css/modal/modal.css">
+<style type="text/css">
+
+	.clone{
+	display: none;
+	}
+
+</style>
 <title>my projects</title>
 </head>
 <body>
@@ -62,7 +70,7 @@
                         </div>
 
                         <div class="con1">
-                            <div class="conimg"><img src="/resources/img/dragonball.jpg"></div>
+                            <div class="conimg"><img src="/resources/img/no-img.png"></div>
                             <div class="con1title">
                                 <div class="projecttit">Proz</div>
                                 <div class="teamtit">드래곤볼z</div>
@@ -93,5 +101,65 @@
         </div>
     </div>
 
+
+	<div class="con1 clone">
+		<div class="conimg">
+			<img src="/resources/img/no-img.png">
+		</div>
+		<div class="con1title">
+			<div class="projecttit">프로젝트 이름을 설정해주세요</div>
+			<div class="summary"> </div>
+		</div>
+	</div>
+	
 </body>
+<script type="text/javascript" src="/resources/js/modal/modal.js"></script>
+<script type="text/javascript">
+	var newProject = new Modal("새 프로젝트", "새 프로젝트 이름 (15자 이내)");
+	var secondModal = new Modal("생성 완료", "새 프로젝트가 생성되었습니다!!");
+
+	
+	
+	newProject.createInputModal(); //버튼 2개생성 first-button : 저장 second-button : 취소
+	newProject.makeModalBtn($(".addnew")) //버튼에 지정
+	
+	//인풋태그 추가
+	let test = $("<div class='modal-popUp-message'>간단한 프로젝트 설명 (20자 이내)</div><div class='modal-popUp-input'><input class='form-control' id='input-summary' type='text' ></div>");
+	test.find
+	test.appendTo(".content-wrap");
+	
+	
+	
+	secondModal.createAlertModal(); //두번쨰모달 생성
+	secondModal.makeModalBtn($(".second-button"));
+	
+	secondModal.setConfirmFnc((e) => {
+		
+		
+		var projectTitle = newProject.getInputValue(); 
+		var projectSummary = $("#input-summary").val();
+
+		if(projectTitle == "") {
+			projectTitle = "프로젝트 이름을 설정해주세요";
+		}
+		
+
+		newProject.modal.find('#input').val('');
+		test.find("#input-summary").val('');
+		//여기서 데이터 보내기
+		
+		let clone = $(".clone").clone();
+		
+		clone.find(".projecttit").html(projectTitle);
+		clone.find(".summary").html(projectSummary);
+		clone.toggleClass("clone")
+		
+		clone.appendTo(".tem-wrap");
+		
+		
+		
+		});
+	
+
+</script>
 </html>
