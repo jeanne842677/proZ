@@ -4,12 +4,12 @@ import java.sql.Date;
 
 public class Project {
 
-	private String projectIdx;
-	private String proName;
-	private String inviteCode;
-	private int isDel;
-	private Date regDate;
-	private String proDescription;
+	private String projectIdx; 
+	private String proName; //프로젝트 이름
+	private String inviteCode;  //프로젝트 초대코드 UUID
+	private int isDel;	//삭제여부
+	private Date regDate; //생성날짜
+	private String proDescription; //프로젝트 설명
 
 	public Project() {
 		// TODO Auto-generated constructor stub
