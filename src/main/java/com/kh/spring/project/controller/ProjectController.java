@@ -20,77 +20,75 @@ import com.kh.spring.project.model.service.ProjectService;
 @Controller
 @RequestMapping("project")
 public class ProjectController {
-	
-	@Autowired
-	ProjectService projectService;
+   
+   @Autowired
+   ProjectService projectService;
 
-	Logger logger = LoggerFactory.getLogger(this.getClass());
-	   
+   Logger logger = LoggerFactory.getLogger(this.getClass());
+      
 
-	
-	@GetMapping("project-list")
-	public void list() {}; 
-	
+   
+   @GetMapping("project-list")
+   public void list() {}; 
+   
+   @GetMapping("welcome")
+   public void welcome() {};
+   
+   //==========================================내가 작업=====================
+   
+   
+   @GetMapping("setting/member-management/{projectIdx}")
+   public String memberManagement(Model model , @PathVariable String projectIdx) {
+      
+      System.out.println("내가보낸 idx"+ projectIdx );
+      //프로젝트Idx가 유효한지 확인한다
+      Project project = projectService.selectProjectByIdx(projectIdx);
+      //유효하면 requestAttribute에 넣는다. 
+      
+      System.out.println(project);
+      
+      //만약 프로젝트가 없으면?
+      if(project==null) {
+         
+         System.out.println("프로젝트가 널값입니다.");
+         throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
+         
+      }
+      
+      
+      model.addAttribute(project);
+      
+      return "project/setting/member-management";
+      
+      
+   }   
+   
+   
+   @PostMapping("/invite-member")
+   public String inviteMember(Model model) {
+      
+      
+      
+      return "";
+   }
+   
+   @GetMapping("setting/role-management")
+   public void settingRoleManagement() {};
 
-	@GetMapping("welcome")
-	public void welcome() {}; 
-
-	//==========================================내가 작업=====================
-	
-	
-	@GetMapping("setting/member-management/{projectIdx}")
-	public String memberManagement(Model model , @PathVariable String projectIdx) {
-		
-		System.out.println("내가보낸 idx"+ projectIdx );
-		//프로젝트Idx가 유효한지 확인한다
-		Project project = projectService.selectProjectByIdx(projectIdx);
-		//유효하면 requestAttribute에 넣는다. 
-		
-		System.out.println(project);
-		
-		//만약 프로젝트가 없으면?
-		if(project==null) {
-			
-			System.out.println("프로젝트가 널값입니다.");
-			throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-			
-		}
-		
-		
-		model.addAttribute(project);
-		
-		return "project/setting/member-management";
-		
-		
-	}	
-	
-	
-	@PostMapping("/invite-member")
-	public String inviteMember(Model model) {
-		
-		
-		
-		return "";
-	}
-	
-	@GetMapping("setting/role-management")
-	public void settingRoleManagement() {};
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//==========================================내가 작업=====================
-
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   //==========================================내가 작업=====================
 }
