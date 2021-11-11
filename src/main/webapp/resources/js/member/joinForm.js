@@ -4,23 +4,23 @@
 	3. 전화번호는 숫자로만 입력 */
 	(()=>{
 		let confirmId = '';
-   		document.querySelector("#btnIdCheck").addEventListener('click', e => {
+   		document.querySelector("#btnEmailCheck").addEventListener('click', e => {
 
    			//id속성값이 지정되어있으면 id값으로 해당 요소객체 호출 가능
-   			let id = userId.value;
+   			let id = email.value;
    			if(id){
-   				fetch('/member/id-check?userId=' + id)
+   				fetch('/member/email-check?email=' + id)
    				.then(response => response.text())
    				.then(text => {
 					console.dir(text);
 					
    					if(text == 'available'){
-   						document.querySelector('#idCheck').innerHTML ='사용 가능한 아이디 입니다.';   	
+   						document.querySelector('#emailCheck').innerHTML ='사용 가능한 이메일 입니다.';   	
    						confirmId = id;
    					}else if(text == 'disable'){
-   						document.querySelector('#idCheck').innerHTML ='사용 불가능한 아이디 입니다.';   						
+   						document.querySelector('#emailCheck').innerHTML ='사용 불가능한 이메일 입니다.';   						
    					}else{
-						document.querySelector('#idCheck').innerHTML ='시스템장애입니다.'; 
+						document.querySelector('#emailCheck').innerHTML ='시스템장애입니다.'; 
 					}
    				})
    			}
@@ -33,7 +33,7 @@
    			
    			if(confirmId != userId.value){
    				e.preventDefault();
-   				document.querySelector('#idCheck').innerHTML ='아이디 중복 검사를 통과하지 않았습니다.';   	
+   				document.querySelector('#emailCheck').innerHTML ='이메일 중복 검사를 통과하지 않았습니다.';   	
    			}
    			
    			/*if(!pwReg.test(password.value)){

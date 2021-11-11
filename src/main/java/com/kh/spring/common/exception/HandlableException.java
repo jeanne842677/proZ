@@ -2,18 +2,18 @@ package com.kh.spring.common.exception;
 
 import com.kh.spring.common.code.ErrorCode;
 
-public class HandleableException extends RuntimeException{
+public class HandlableException extends RuntimeException{
 
 	
 	private static final long serialVersionUID = -3930409458039432875L;
 	public ErrorCode error;
 	
-	public HandleableException(ErrorCode error) {
+	public HandlableException(ErrorCode error) {
 		this.error = error;
 		this.setStackTrace(new StackTraceElement[0]);
 	}
 	
-	public HandleableException(ErrorCode error, Exception e) {
+	public HandlableException(ErrorCode error, Exception e) {
 		this.error = error;
 		e.printStackTrace();
 		this.setStackTrace(new StackTraceElement[0]);
