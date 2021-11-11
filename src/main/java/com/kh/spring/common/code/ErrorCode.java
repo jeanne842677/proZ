@@ -10,7 +10,8 @@ public enum ErrorCode {
 	AUTHENTICATION_FAILED_ERROR("유효하지 않은 인증입니다."),
 	UNAUTHORIZE_PAGE("접근 권한이 없는 페이지입니다."),
 	REDIRECT_LOGIN_PAGE("","/member/login-form"), //알림창 없애고 싶으면 ""로 입력
-	FAILED_FILE_UPLOAD_ERROR("파일 업로드 에러가 발생했습니다..");
+	FAILED_FILE_UPLOAD_ERROR("파일 업로드 에러가 발생했습니다.."),
+	PROJECT_URL_ERROR("존재하지 않는 프로젝트입니다.");
 	
 	public final String MESSAGE;
 	public final String URL;
