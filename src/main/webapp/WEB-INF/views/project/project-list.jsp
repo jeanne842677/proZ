@@ -108,14 +108,14 @@
 		</div>
 		<div class="con1title">
 			<div class="projecttit">프로젝트 이름을 설정해주세요</div>
-			<div class="teamtit">ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</div>
+			<div class="summary"> </div>
 		</div>
 	</div>
 	
 </body>
 <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
 <script type="text/javascript">
-	var newProject = new Modal("새 프로젝트", "새 프로젝트 이름 (11자 이내)");
+	var newProject = new Modal("새 프로젝트", "새 프로젝트 이름 (15자 이내)");
 	var secondModal = new Modal("생성 완료", "새 프로젝트가 생성되었습니다!!");
 
 	
@@ -137,17 +137,21 @@
 		
 		
 		var projectTitle = newProject.getInputValue(); 
-		var projectSummary;
+		var projectSummary = $("#input-summary").val();
 
 		if(projectTitle == "") {
 			projectTitle = "프로젝트 이름을 설정해주세요";
 		}
+		
+
 		newProject.modal.find('#input').val('');
+		test.find("#input-summary").val('');
 		//여기서 데이터 보내기
 		
 		let clone = $(".clone").clone();
 		
 		clone.find(".projecttit").html(projectTitle);
+		clone.find(".summary").html(projectSummary);
 		clone.toggleClass("clone")
 		
 		clone.appendTo(".tem-wrap");
