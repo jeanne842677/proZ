@@ -21,13 +21,13 @@ import com.kh.spring.project.model.service.ProjectService;
 @RequestMapping("project")
 public class ProjectController {
    
-   @Autowired
-   ProjectService projectService;
 
-   Logger logger = LoggerFactory.getLogger(this.getClass());
-      
+	@Autowired
+	ProjectService projectService;
 
-   
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
    @GetMapping("project-list")
    public void list() {}; 
    
