@@ -1,4 +1,4 @@
-package com.kh.spring.jeeyoung;
+package com.kh.spring.admin;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/**/*-context.xml"})
-public class jeeyoungTest {
+public class adminTest {
       
    Logger logger = LoggerFactory.getLogger(this.getClass());
       

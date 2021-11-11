@@ -8,6 +8,7 @@ import com.kh.spring.member.model.repository.MemberRepository;
 
 public interface MemberService {
 	
+	Member selectMemberByEmailAndPassword(Member member);
 	
 
 }
