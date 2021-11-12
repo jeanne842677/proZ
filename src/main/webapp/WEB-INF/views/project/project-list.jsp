@@ -40,7 +40,7 @@
                     <div class="line2"><hr></div>
                     <div class="thistit">Projects</div>
                     <div class="thisdes">All of these templates are<br>provided for free widthin Proz.
-                        <div class="addnew" onclick="location.href='#'">+ new project</div></div>
+                        <div class="addnew">+ new project</div></div>
                     
                 </div>
                 <section id="temsection">
@@ -136,9 +136,23 @@
 	secondModal.setConfirmFnc((e) => {
 		
 		
-		var projectTitle = newProject.getInputValue(); 
-		var projectSummary = $("#input-summary").val();
+		var projectTitle = newProject.getInputValue(); //제목 input value
+		var projectSummary = $("#input-summary").val(); // 설명 input value
 
+		let projectData = {
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/json; charset=UTF-8'
+				},
+				body : JSON.stringify({proName : projectTitle, proDescription : projectSummary})
+		};
+		
+		fetch('/project/project-list', projectData)
+			.then(response => response.json())
+			.then((data) => {
+				console.log(data);
+			});
+		
 		if(projectTitle == "") {
 			projectTitle = "프로젝트 이름을 설정해주세요";
 		}
