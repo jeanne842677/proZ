@@ -214,6 +214,12 @@
             background-color: RGB(62, 66, 77);
             padding: 10px;
         }
+        
+	   .valid-msg{
+			display:block;
+			color:red;	
+			font-size:15px;
+		}
 
 
     </style>
@@ -247,19 +253,21 @@
                         required />
                         
                         <button type="button" class="btn btn-primary" id="btnEmailCheck">중복확인</button>
-                         <c:if test="${empty error.email}">
+                       
+                    </div>
+                      <c:if test="${empty error.email}">
                                <span id="emailCheck" class="valid-msg"></span>
                        </c:if>
-                         <form:errors path="email" cssClass="valid-msg"/>
-                    </div>
+                    <form:errors path="email" cssClass="valid-msg"/>
 
 
                     <label for="password" id="password-label">02-1. 사용하실 비밀번호를 입력하세요. </label>
                     <input type="password" class="form-control" id="password" name="password"
                     	 <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
-                        </c:if> 
-                    required/>
+                        </c:if>  required/>
+                        <form:errors path="password" cssClass="valid-msg"/>
+                   
                    <%--  <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
                     <input type="password" class="form-control" id="password-check" 
                     	 <c:if test="${empty error.password}">
@@ -268,8 +276,8 @@
                     required/>/ --%>
 
 
-                    <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요 </label>
-                    <input type="text" class="form-control" id="nickname" name="nickname" required>
+                    <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요. (8글자 이내)</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname" maxlength="8" required>
 
                     <label for="git-hub" id="git-label">04. Git-Hub 주소를 등록해주세요. (선택) </label>
                     <input type="text" class="form-control" id="git" name="git">
@@ -283,8 +291,8 @@
                         새가 되는 꾸며 보라. 이 얼마나 같으며, 이상이 가지에 피고, 이상 목숨을 위하여서.
                     </div>
                     <div class="form-check terms-wrap">
-                        <input class="form-check-input" type="checkbox" value="" id="terms-agree">
-                        <label class="form-check-label" for="terms-agree" required>
+                        <input class="form-check-input" type="checkbox" value="" id="terms-agree" required>
+                        <label class="form-check-label" for="terms-agree" >
                             프로Z 이용 약관 동의(필수)
                         </label>
                     </div>
