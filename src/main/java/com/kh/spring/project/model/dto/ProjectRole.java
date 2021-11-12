@@ -1,13 +1,18 @@
 package com.kh.spring.project.model.dto;
 
+import java.sql.Date;
+
 public class ProjectRole {
 
-	private String authIdx; //권한 인덱스
-	private String projectIdx; //프로젝트 인덱스
-	private String auth_name; //역할명
-	private String grant_auth; //역할 관리 권한
-	private String create_auth; //카테고리 생성 권한
-	private String member_auth; // 멤버 관리 권한
+	private String authIdx; // 권한 인덱스
+	private String projectIdx; // 프로젝트 인덱스
+	private String authName; // 역할명
+	private int projectAuth; // 프로젝트 관리 권한
+	private int createAuth; // 채팅방 개설권한
+	private int memberAuth; // 멤버 초대 권한
+	private Date regDate; //생성일
+	
+	
 	
 	public String getAuthIdx() {
 		return authIdx;
@@ -21,35 +26,50 @@ public class ProjectRole {
 	public void setProjectIdx(String projectIdx) {
 		this.projectIdx = projectIdx;
 	}
-	public String getAuth_name() {
-		return auth_name;
+	public String getAuthName() {
+		return authName;
 	}
-	public void setAuth_name(String auth_name) {
-		this.auth_name = auth_name;
+	public void setAuthName(String authName) {
+		this.authName = authName;
 	}
-	public String getGrant_auth() {
-		return grant_auth;
+	public int getProjectAuth() {
+		return projectAuth;
 	}
-	public void setGrant_auth(String grant_auth) {
-		this.grant_auth = grant_auth;
+	public void setProjectAuth(int projectAuth) {
+		this.projectAuth = projectAuth;
 	}
-	public String getCreate_auth() {
-		return create_auth;
+	public int getCreateAuth() {
+		return createAuth;
 	}
-	public void setCreate_auth(String create_auth) {
-		this.create_auth = create_auth;
+	public void setCreateAuth(int createAuth) {
+		this.createAuth = createAuth;
 	}
-	public String getMember_auth() {
-		return member_auth;
+	public int getMemberAuth() {
+		return memberAuth;
 	}
-	public void setMember_auth(String member_auth) {
-		this.member_auth = member_auth;
+	public void setMemberAuth(int memberAuth) {
+		this.memberAuth = memberAuth;
 	}
+	public Date getRegDate() {
+		return regDate;
+	}
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
+	}
+	
 	@Override
 	public String toString() {
-		return "ProjectRole [authIdx=" + authIdx + ", projectIdx=" + projectIdx + ", auth_name=" + auth_name
-				+ ", grant_auth=" + grant_auth + ", create_auth=" + create_auth + ", member_auth=" + member_auth + "]";
-	} 
+		return "ProjectRole [authIdx=" + authIdx + ", projectIdx=" + projectIdx + ", authName=" + authName
+				+ ", projectAuth=" + projectAuth + ", createAuth=" + createAuth + ", memberAuth=" + memberAuth
+				+ ", regDate=" + regDate + "]";
+	}
 	
+	
+	
+	
+
+	
+	
+
 	
 }

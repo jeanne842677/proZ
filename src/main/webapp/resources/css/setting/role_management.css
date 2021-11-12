@@ -308,5 +308,29 @@ aside {
 
 .on{
     background-color: #907ae5;
-    border : #907ae5;
+    border-color : #907ae5;
 }
+
+.btn-info:hover {
+  color: #fff;
+  /* background-color: #2c81ba; 민협수정*/
+  background-color:  #5d37f3;
+  border-color: #2a7aaf;
+}
+
+
+
+.btn-check:focus + .btn-info, .btn-info:focus {
+  color: #fff;
+  background-color: #907ae5;
+  border-color: none; 
+  box-shadow: 0 0 0 0.25rem rgba(82, 167, 224, 0);
+}
+
+.default-del{
+	background-color: #7f8c8d;
+    border-color: #7f8c8d;
+	
+}
+
+

@@ -18,13 +18,14 @@ import com.kh.spring.member.model.dto.Member;
 public interface MemberRepository {
 
 
-	@Select("select * from member where email = #{email}")
+	@Select("select * from proz_user where email = #{email}")
 	Member selectMemberByEmail(String email);
 
-	@Insert("insert into member(email,password,nickname,git) values(#{email},#{password},#{nickname},#{git})")
+	//insert into proz_user(user_Idx,email,password,nickname,git) values(sc_proz_Idx.nextval,'cxyxj@naver.com','dbswl1219!','윤지','www.naver.com');
+	@Insert("insert into proz_user(user_Idx,email,password,nickname,git) values(sc_proz_Idx.nextval,#{email},#{password},#{nickname},#{git})")
 	void insertMember(JoinForm form);
 	
-	@Select("select * from member where email = #{email} and password = #{password}")
+	@Select("select * from proz_user where email = #{email} and password = #{password}")
 	   Member selectMemberByEmailAndPassword(Member member);
 
 

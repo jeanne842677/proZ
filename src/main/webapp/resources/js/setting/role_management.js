@@ -6,10 +6,16 @@
 
 
         $(".btn-info").click(function() {
+			if( $(this).hasClass("default")){
+				return;
+			}
             $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on")
          })
      
          $(".btn-secondary").click(function() {
+			if( $(this).hasClass("default")){
+				return;
+			}
             $(this).toggleClass("btn-info").toggleClass("btn-secondary")
             
          })
@@ -18,7 +24,12 @@
              역할 삭제 
          */
          $(".delete-role").click(function() {
-             $(this).parent("div").parent("div").parent("div").remove();
+			if( $(this).hasClass("default")){
+				return;
+			}
+			
+	
+             $(this).parent("div").parent("div").remove();
          })
      
          /* 

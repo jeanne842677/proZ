@@ -76,6 +76,7 @@ aside {
     justify-content: center;
     height: 10%; 
     margin: 50px 100px 60px 100px;
+    align-self: flex-start;
 }
 
 .member-manage-top > .title {
@@ -103,17 +104,28 @@ aside {
 
 
 .member-manage-main {
-    width: 100%;
-    height: 500px;
+    width: 80%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
+
+
 .invite-link {
-    height: 30%;
+    
+
 }
+
 
 .invite-member {
     height: 20%;
+}
+
+
+/*링크 재설정*/
+#link-reset , #member-save {
+    margin-left: 3px;
+
 }
 
 
@@ -143,6 +155,7 @@ aside {
 .search-member-wrapper {
      display: flex;
      align-items: center;
+     justify-content: space-between;
 }
 
 .search-icon {
@@ -151,32 +164,43 @@ aside {
 
 #search-member {
     width: 250px;
+    margin-right: 5px;
 }
 
 .category-member {
     display: flex;
     justify-content: space-evenly;
-    width: 500px;
+    width: 250px;
+
 }
 
-.category-member > div {
-    margin-left: 100px;
+#role-text , #exile-text {
+    font-weight: bold;
+    font-size: 18px;
+
 }
 
-.category-member > div > p { 
-     text-align: center;
-     font-weight: bolder;
-     padding: 10px 0 0 20px;
+#exile-text {
+
+    position: relative;
+    left:35px;
 }
-.category-member-info > div > p { 
-     text-align: center;
-     font-weight: bolder;
-     padding: 10px 0 0 20px;
-}
+
+
 
 .member {
     display: flex;
     height: 60px;
+    justify-content: space-between;
+    align-content: center;
+    
+
+}
+
+.search-member-content {
+
+    display: flex;
+    align-content: center;
 
 }
 
@@ -187,36 +211,54 @@ aside {
     align-items: center;
 }
 
-.member-profile {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 200px;
+.role-wrap {
+
+    margin-right: 10px;
 }
 
 .member-profile > p {
     
     margin-left: 15px;
+    margin-bottom: 0;
 }
+
+.invite-wrap {
+}
+
 
 .category-title {
     font-size: 27px;
     font-weight: bolder;
     color: #000;
+    
 }
 
-.member-img-wrapper { 
+
+.member-profile-wrapper {
     display: flex;
     align-items: center;
+    padding-left: 10px;
 }
 
-.exile-button {
+
+
+
+.member-profile {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    
+    
+}
+
+
+
+
+.exile {
     display: flex; 
     align-items: center; 
-    padding-bottom: 20px;  
-    position: relative;    /*절대값으로 위치를 설정*/
-    left: 79px; 
-    top : 15px;
+    margin-left: 5px;
+
 }
 
 .user-name {

@@ -2,7 +2,7 @@
     
     title;
     message;
-    placehoder;
+    placeholder;
     modal;
     inputValue;
     
@@ -140,8 +140,8 @@ createpasswordModal = function () {
         this.modal.find('.modal-popUp-message').html(body);
     }
     
-    setPlacehoder(placehoder) {
-        this.modal.find('#input').attr('placeholder', placehoder);
+    setPlaceholder(placeholder) {
+        this.modal.find('#input').attr('placeholder', placeholder);
     };
     
     setConfirmFnc(fuc) {

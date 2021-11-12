@@ -5,7 +5,14 @@
   
   <mapper namespace="com.kh.spring.project.model.repository.ProjectRepository">
   	 
-  	
+  	<select id="selectProjectMemberRoleByProjectIdx" resultType="map">
+	  	select project_idx , pm_idx , user_idx , nickname , is_ok , auth_name from project_Member member
+		join project_role role
+		using(project_idx)
+		where project_idx = #{projectIdx}
+		order by role.reg_date , member.reg_date
+  	</select>
+
   	
   	
   </mapper>

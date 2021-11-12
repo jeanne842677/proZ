@@ -1,11 +1,13 @@
 package com.kh.spring.member.validator;
 
 public class JoinForm {
-	
+		
 	private String email;
 	private String password;
 	private String nickname;
 	private String git;
+	
+	
 	public String getEmail() {
 		return email;
 	}
@@ -34,6 +36,8 @@ public class JoinForm {
 	public String toString() {
 		return "JoinForm [email=" + email + ", password=" + password + ", nickname=" + nickname + ", git=" + git + "]";
 	}
+	
+	
 	
 	
 	
