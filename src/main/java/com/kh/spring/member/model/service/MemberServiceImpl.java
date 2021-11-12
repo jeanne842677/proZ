@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService{
    }
    
    public void insertMember(JoinForm form) {
-      //  form.setPassword(passwordEncoder.encode(form.getPassword()));
+      form.setPassword(passwordEncoder.encode(form.getPassword()));
         memberRepository.insertMember(form); }
    
    public void authenticateByEmail(JoinForm form, String token) {
@@ -62,7 +62,13 @@ public class MemberServiceImpl implements MemberService{
    }
 
    public Member selectMemberByEmailAndPassword(Member member) {
-         return memberRepository.selectMemberByEmailAndPassword(member);
+	   Member storedMember = memberRepository.selectMemberByEmail(member.getEmail());
+		
+		if(storedMember != null && passwordEncoder.matches(member.getPassword(), storedMember.getPassword())) {
+			return storedMember;
+		}
+		
+		return null;
       }
-   
+  
 }
