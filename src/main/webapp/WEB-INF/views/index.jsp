@@ -9,6 +9,11 @@
 </head>
 <body>
 
+<c:if test="${not empty message}">
+	<script type="text/javascript">
+		alert("${message}");
+	</script>
+</c:if>
 <div id="wrap">
         
             <header>
@@ -41,7 +46,7 @@
             <footer>
                 <div class="footleft">
                     <div class="footdes1">project by DragonBall.</div>
-                    <div class="footdes2">Lim Ji-young , Kang Min-hyup ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yoon-ji</div>
+                    <div class="footdes2">Lim Ji-young , Kang Min-hyup ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yun-ji</div>
                 </div>
                 <div class="footright">Email_ lucky007proz@gmail.com</div>
 
