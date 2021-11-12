@@ -1,5 +1,10 @@
 package com.kh.spring.minhyup;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +35,13 @@ public class MinhyupTest {
 	      this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 	   }
 	   
+	   
+	   
 	   @Test //프로젝트 생성시 프로젝트 생성자에게 관리자권한 부여, 일반 역할 생성
 	   public void createProject() throws Exception {
+		   mockMvc.perform(get("/project/setting/role-management/999998"))
+		   .andExpect(status().isOk())
+		   .andDo(print());
 		   
 	   }
 }
