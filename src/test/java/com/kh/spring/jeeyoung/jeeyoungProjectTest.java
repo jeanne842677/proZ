@@ -47,6 +47,16 @@ public class jeeyoungProjectTest {
       .andExpect(status().isOk())
       .andDo(print());
    }
+   
+   
+   @Test
+   public void memberSettingTest() throws Exception{
+	   mockMvc.perform(get("/project/setting/member-management/999998"))
+	   .andExpect(status().isOk())
+	   .andDo(print());
+   }
+   
+   
 }
 
 	 

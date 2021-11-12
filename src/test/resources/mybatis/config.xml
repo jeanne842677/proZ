@@ -12,7 +12,11 @@
 		  <typeAlias alias="Member" type="com.kh.spring.member.model.dto.Member"/>
 	</typeAliases>
 	<mappers>
-		<!-- 매퍼틑 Dao 1개당 1개씩 있음 -->
+		<mapper resource="mybatis/mapper/chatMapper.xml" />	
+		<mapper resource="mybatis/mapper/memberMapper.xml" />	
+		<mapper resource="mybatis/mapper/memoMapper.xml" />	
+		<mapper resource="mybatis/mapper/projectMapper.xml" />	
+		<mapper resource="mybatis/mapper/workspaceMapper.xml" />
 	</mappers>
 </configuration>
 
