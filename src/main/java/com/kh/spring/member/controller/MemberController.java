@@ -144,7 +144,6 @@ public class MemberController {
       logger.debug(certifiedUser.toString());
       return "redirect:/member/join";
       
-      
    }
    
 //   로그아웃

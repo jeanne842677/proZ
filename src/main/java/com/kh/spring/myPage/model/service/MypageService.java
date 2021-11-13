@@ -1,8 +1,8 @@
 package com.kh.spring.myPage.model.service;
 
-import org.springframework.stereotype.Service;
+import com.kh.spring.member.model.dto.Member;
 
-@Service
-public class MypageService {
+public interface MypageService {
 
+	int updateMypageMemberByProfileColor(Member member); 
 }
