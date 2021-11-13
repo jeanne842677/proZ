@@ -76,7 +76,7 @@ input {
                             <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="#">비밀번호 재설정</a></div>
                             <div class="social">다른 서비스 계정으로 로그인</div>
                             <div class="btn-wrap">
-                                <button id="kakao-btn" class="btn  btn-primary" type="button">카카오 로그인</button>
+                                <button id="custom-login-btn" href="javascript:loginWithKakao()" class="btn  btn-primary" type="button">카카오 로그인</button>
                                 <button id="google-btn" class="btn  btn-primary" type="button">구글 로그인</button>
     
                             </div>
@@ -95,7 +95,7 @@ input {
 
     </div>
 
-
+	
 </body>
 
 </html>

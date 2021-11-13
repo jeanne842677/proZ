@@ -16,6 +16,8 @@
     
     }
     
+    
+    
     //input있는 모달 만들기
     createInputModal = function () {
     
@@ -156,6 +158,22 @@ createpasswordModal = function () {
         });
     
     }
+    
+    viewModal = function() {
+	
+		let modal = this.modal;
+		modal.css('display' , 'flex');
+	
+	}
+	
+	
+	hideModal = function() {
+		
+	
+		let modal = this.modal;
+        modal.hide();
+		
+	}
     
     
     
