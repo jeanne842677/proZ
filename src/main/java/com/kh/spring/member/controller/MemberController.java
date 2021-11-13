@@ -136,7 +136,7 @@ public class MemberController {
       
       
       if(certifiedUser == null) {
-         redirctAttr.addFlashAttribute("message", "아이디나 비밀번호가 정확하지 않습니다.");
+    	  redirctAttr.addFlashAttribute("message","아이디나 비밀번호가 정확하지 않습니다.");
          return "redirect:/member/login";
       }
       
