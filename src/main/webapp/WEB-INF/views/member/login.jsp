@@ -76,8 +76,12 @@ input {
                             <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="#">비밀번호 재설정</a></div>
                             <div class="social">다른 서비스 계정으로 로그인</div>
                             <div class="btn-wrap">
-                                <button id="custom-login-btn" href="javascript:loginWithKakao()" class="btn  btn-primary" type="button">카카오 로그인</button>
-                                <button id="google-btn" class="btn  btn-primary" type="button">구글 로그인</button>
+                             	<a href="/member/kakao_login" id="custom-login-btn" >
+			                       <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="186"  />
+			                     </a>
+                                <button id="google-btn" class="btn  btn-primary" type="button">
+                                	<a href="${google_url}">구글 로그인</a>
+    							</button>
     
                             </div>
 
@@ -94,8 +98,7 @@ input {
         <div class="design-box3"></div>
 
     </div>
-
-	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </body>
 
 </html>
