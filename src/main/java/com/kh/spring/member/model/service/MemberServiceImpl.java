@@ -5,6 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -70,5 +72,17 @@ public class MemberServiceImpl implements MemberService{
 		
 		return null;
       }
+
+@Override
+public String getReturnAccessToken(String code) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public Map<String, Object> getUserInfo(String kakaoToken) {
+	// TODO Auto-generated method stub
+	return null;
+}
   
 }

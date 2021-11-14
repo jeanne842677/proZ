@@ -262,7 +262,7 @@
 
 
                     <label for="password" id="password-label">02-1. 사용하실 비밀번호를 입력하세요. </label>
-                    <input type="password" class="form-control" id="password" name="password"
+                    <input type="password" class="form-control" id="password" name="password" placeholder="8글자 이상의 숫자 영문자 특수문자 조합 입니다."
                     	 <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if>  required/>
@@ -276,8 +276,8 @@
                     required/>/ --%>
 
 
-                    <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요. (8글자 이내)</label>
-                    <input type="text" class="form-control" id="nickname" name="nickname" maxlength="8" required>
+                    <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요.</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname" maxlength="8" required placeholder="8글자 이내로 입력하세요.">
 
                     <label for="git-hub" id="git-label">04. Git-Hub 주소를 등록해주세요. (선택) </label>
                     <input type="text" class="form-control" id="git" name="git">
