@@ -37,6 +37,8 @@ input {
 
 <body>
 <script type="text/javascript" src="/resources/js/member/login.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+
 <c:if test="${not empty message}">
 	<script type="text/javascript">
 		alert("${message}");
