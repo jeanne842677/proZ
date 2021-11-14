@@ -59,6 +59,7 @@
                             
 	                           <c:choose>
 	                           	<c:when test="${idx.index == 0}">
+	                           	<div class="one-role-total-wrapper" data-authIdx="${role.authIdx}">
 	                           		<div id="role-wrapper">
 	                                    <div class="role-title-wrapper">
 	                                        <input class="form-control" id="role-title" type="text" value="${role.authName}" >
@@ -73,10 +74,11 @@
 	                                <div class="hr-wrapper">
 	                                    <hr>
 	                                </div>
-	                           	
+	                           	</div>
 	                           	</c:when>
 	                           	
 	                           	<c:when test="${idx.index == 1}">
+	                           	<div class="one-role-total-wrapper" data-authIdx="${role.authIdx}">
 		                           	<div id="role-wrapper">
 		                                <div class="role-title-wrapper">
 		                                    <input class="form-control" id="role-title" type="text" value="${role.authName}" >
@@ -91,10 +93,12 @@
 		                            <div class="hr-wrapper">
 		                                <hr>
 		                            </div>
+		                        </div>
 	                           	
 	                           	</c:when>
 	                           	
 	                            	<c:otherwise>
+	                            <div class="one-role-total-wrapper" data-authIdx="${role.authIdx}">
 	                           		<div id="role-wrapper">
 		                                <div class="role-title-wrapper">
 		                                    <input class="form-control" id="role-title" type="text" value="${role.authName}" >
@@ -133,6 +137,7 @@
 				                            <div class="hr-wrapper">
 				                                <hr>
 				                            </div>
+				                  </div>
 	                           	</c:otherwise>
 	                           </c:choose>
                            </c:forEach>
@@ -149,20 +154,22 @@
 
                         <!-- 새로운 역할 -->
                         <div class="role-list-content-new"  style="display: none;">
-                            <div id="role-wrapper">
-                                <div class="role-title-wrapper">
-                                    <input class="form-control" id="role-title" type="text" value="" >
-                                </div>
-                                <div id="role" class="role">
-                                    <button type="button" class="btn btn-info on" data-bs-toggle="tooltip" data-bs-placement="top" title="프로젝트 의 설정할수있는 권한을 부여합니다.">프로젝트권한</button>
-                                    <button type="button" class="btn btn-info on" data-bs-toggle="tooltip" data-bs-placement="top" title="채팅방 개설할수있는 권한을 부여합니다.">채팅방개설</button>
-                                    <button type="button" class="btn btn-info on" data-bs-toggle="tooltip" data-bs-placement="top" title="프로젝트로 맴버를 초대할 수 있는 권한을 부여합니다.">맴버 초대</button>
-                                    <button type="button" class="btn btn-danger delete-role">삭제</button>
-                                </div>
-                            </div>
-                            <div class="hr-wrapper">
-                                <hr>
-                            </div>
+                          <div class="one-role-total-wrapper" data-authIdx="new">
+	                            <div id="role-wrapper" class="role-wrapper">
+	                                <div class="role-title-wrapper">
+	                                    <input class="form-control" id="role-title" type="text" value="" >
+	                                </div>
+	                                <div id="role" class="role">
+	                                    <button type="button" class="btn btn-info on" data-bs-toggle="tooltip" data-bs-placement="top" title="프로젝트 의 설정할수있는 권한을 부여합니다.">프로젝트권한</button>
+	                                    <button type="button" class="btn btn-info on" data-bs-toggle="tooltip" data-bs-placement="top" title="채팅방 개설할수있는 권한을 부여합니다.">채팅방개설</button>
+	                                    <button type="button" class="btn btn-info on" data-bs-toggle="tooltip" data-bs-placement="top" title="프로젝트로 맴버를 초대할 수 있는 권한을 부여합니다.">맴버 초대</button>
+	                                    <button type="button" class="btn btn-danger delete-role">삭제</button>
+	                                </div>
+	                            </div>
+                            	<div class="hr-wrapper">
+                               		<hr>
+                            	</div>
+                           </div>
                         </div>
 
                         
@@ -202,12 +209,17 @@
 
 
 
-
+//설정 저장버튼 누름
 $(".first-button").click(function() {
 	
 	
 	let roleList = [];
+	let prjectIdx = ${projectIdx};
+	let isSave = 1;
 	
+	$(".one-role-total-wrapper").each(function (index) {
+		
+	})
 
 	
 	
@@ -216,68 +228,105 @@ $(".first-button").click(function() {
 	$(".role-title-wrapper").each(function(index) {	
 		let authName = $(this).find("#role-title").val();
 		
-		//이치문으로 어떤권한이 있는지
-		$(".role").each(function (index) {
+
+		
+		let projectAuth = 0;
+		let createAuth = 0;
+		let memberAuth = 0;
+		let authIdx = $(this).closest(".one-role-total-wrapper").data('authIdx'); //값이 데이터셋에서 안받아짐
+		
+		let test = $(".one-role-total-wrapper").data('authIdx');
+		
+		console.log("test = " + test);
+		
+		
+		
+		console.log("authIdx = " + authIdx);
+		
+		//이치문으로 어떤권한이 있는지 버튼이 4개라서 4번돔
+		$(this).siblings(".role").find(".btn").each(function (index) {
 			
-			switch ($(this).find(".btn").text();) {
+			switch ($(this).text()) {
 			case '프로젝트권한':
-				
+				if($(this).hasClass("on")) {
+					projectAuth = 1
+				}
 				break;
 			case '채팅방개설':
-				
+				if($(this).hasClass("on")) {
+					createAuth = 1
+				}
 				break;
 			case '맴버 초대':
-				
+				if($(this).hasClass("on")) {
+					memberAuth = 1
+				}
 				break;
 
 			default:
 				break;
 			}
 			
-			console.log(index)
+			
 		})
 		
 		
 		
 		
-		
-		
-		console.log("auth = " + auth)
-		
-		if(index == 3) {
+		if(index == 3) {//display : none 된 role-list-content-new 때문에 3번인덱스는 빈값
 			return;
+		}else{
+			
+			if(!authName) {//역할명이 빈칸일시
+				secondSaveModal.setTitle("저장 취소");
+				secondSaveModal.setMessage("역할명이 공백입니다. 역할명을 입력해주세요.");
+				console.log("공백은 불가능하다고");
+				isSave = 0;
+				return false;
+				
+			}else {
+				secondSaveModal.setTitle("저장 완료");
+				secondSaveModal.setMessage("저장이 완료되었습니다.");
+				
+				roleList.push({"projectIdx" : prjectIdx
+					  ,"authName" : authName
+					  ,"projectAuth" : projectAuth	
+					  ,"createAuth" : createAuth
+					  ,"memberAuth" : memberAuth
+					  ,"authIdx" : authIdx
+						});
+				
+			}
 		}
 		
-		roleList.push({"autName" : authName
-					  ,"projectAuth" : 		
-					  ,"autcreateAuthhIdx" : 
-					  ,"memberAuth" :
+
 		
-		})
-		
-		
-		console.log(roleList);
 		
 	});
 	
 	
+	console.log(roleList);
 	
 	
-	
-	
-	
+	if(isSave == 1){
+		
+		let projectIdx = "/project/setting/role-management/" + "${projectIdx}";
+		
+		
+		fetch(projectIdx ,
+				{method : "POST"
+				,headers : {"Content-type" : "application/json; charset=UTF-8"}
+				,body : JSON.stringify(roleList)
+				}).then(res => {
+					console.log(res);
+				})
+		
+		
+		
+	}
 
 		
-	let projectIdx = "/project/setting/role-management/" + "${projectIdx}";
 	
-	
-	fetch(projectIdx ,
-			{method : "POST"
-			,headers : {"Content-type" : "application/json; charset=UTF-8"}
-			,body : JSON.stringify(role)
-			}).then(res => {
-				console.log(res);
-			})
 	
 });
 
