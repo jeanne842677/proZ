@@ -23,8 +23,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.kh.spring.common.code.Config;
 import com.kh.spring.common.mail.MailSender;
 import com.kh.spring.member.model.dto.Member;
