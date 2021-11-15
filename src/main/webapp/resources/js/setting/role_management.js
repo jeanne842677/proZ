@@ -9,14 +9,18 @@
 			if( $(this).hasClass("default")){
 				return;
 			}
-            $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on")
+            $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
+            $(this).closest(".one-role-total-wrapper").removeAttr('data-state');
+			$(this).closest(".one-role-total-wrapper").data('state','update'); 
          })
      
          $(".btn-secondary").click(function() {
 			if( $(this).hasClass("default")){
 				return;
 			}
-            $(this).toggleClass("btn-info").toggleClass("btn-secondary")
+            $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("off").toggleClass("on");
+            $(this).closest(".one-role-total-wrapper").removeAttr('data-state');
+			$(this).closest(".one-role-total-wrapper").data('state','update'); 
             
          })
      
@@ -28,8 +32,9 @@
 				return;
 			}
 			
-	
-             $(this).parent("div").parent("div").parent("div").remove();
+			$(this).closest(".one-role-total-wrapper").removeAttr('data-state');
+			$(this).closest(".one-role-total-wrapper").data('state','delete'); 
+            $(this).closest(".one-role-total-wrapper").hide();
          })
      
          /* 
@@ -50,14 +55,22 @@
              b.appendTo(".role-list-wrapper");
              
      
+     		//역할삭제
              b.find("#role").children('.delete-role').on('click', e=> {
-                 b.remove();
+                b.closest(".one-role-total-wrapper").removeAttr('data-state');
+				b.closest(".one-role-total-wrapper").data('state','delete'); 
+				
+				b.hide();
              })
      
      
      
              b.find("#role").children('.btn-info').click(function () {
-                 $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on");
+                 $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
+             })
+             
+             b.find("#role").children('.btn-secondary').click(function () {
+                 $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
              })
      
      
