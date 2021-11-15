@@ -1,5 +1,6 @@
 package com.kh.spring.eunbi;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,6 +67,19 @@ public class eunbiTest {
 				.content(projectJson))
 				.andExpect(status().isOk())
 				.andDo(print());
+				
+	}
+	
+	@Test
+	public void selectProjectList() throws Exception{
+		Member member = new Member();
+		member.setUserIdx("100021");
+		mockMvc.perform(get("/project/project-list")
+		.sessionAttr("authentication", member))		
+		.andExpect(status().isOk())
+		.andDo(print());
+					
+				
 				
 	}
 

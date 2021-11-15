@@ -209,6 +209,8 @@
 
 
 
+
+
 //설정 저장버튼 누름
 $(".first-button").click(function() {
 	
@@ -329,6 +331,13 @@ $(".first-button").click(function() {
 	
 	
 });
+
+
+$(".one-role-total-wrapper").each(function (index,e) {
+	let test = $(this).data("authidx");
+	console.log("index=" + index);
+	console.log("test = " + test);
+})
 
 </script>
 
