@@ -11,7 +11,9 @@ public enum ErrorCode {
 	UNAUTHORIZE_PAGE("접근 권한이 없는 페이지입니다."),
 	REDIRECT_LOGIN_PAGE("","/member/login-form"), //알림창 없애고 싶으면 ""로 입력
 	FAILED_FILE_UPLOAD_ERROR("파일 업로드 에러가 발생했습니다.."),
-	PROJECT_URL_ERROR("존재하지 않는 프로젝트입니다.");
+	PROJECT_URL_ERROR("존재하지 않는 프로젝트입니다."),
+	PROJECT_INVITATION_REJECTED("초대가 거부되었습니다."),
+	NEED_LOGIN("로그인을 먼저 해주세요.");
 	
 	public final String MESSAGE;
 	public final String URL;

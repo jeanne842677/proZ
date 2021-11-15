@@ -21,21 +21,25 @@
     //input있는 모달 만들기
     createInputModal = function () {
     
-        this.modal = $("<div class='Modal'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>" + this.title + "</div><div class='modal-popUp-message'>" + this.message + "</div><div class='modal-popUp-input'><input class='form-control' id='input' type='text' ></div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-cancel' class='btn btn-secondary first-button'>취소</button><button id='modal-btn-confirm' class='btn btn-primary second-button'>확인</button></div></div></div>")
+        this.modal = $("<div class='Modal' style='display:none'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>" + this.title + "</div><div class='modal-popUp-message'>" + this.message + "</div><div class='modal-popUp-input'><input class='form-control' id='input' type='text' ></div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-cancel' class='btn btn-secondary first-button'>취소</button><button id='modal-btn-confirm' class='btn btn-primary second-button'>확인</button></div></div></div>")
     
         let modal = this.modal;
         modal.find('.xbutton').on('click', function () {
     
-            modal.hide();
+            
+            modal.css('display' ,'none');
+    
             modal.find('#input').val('');
     
         });
         modal.find('#modal-btn-cancel').on('click', function () {
-            modal.hide();
+            
+            modal.css('display' ,'none');
             modal.find('#input').val('');
         })
         modal.find('.second-button').on('click', function () {
-            modal.hide();
+           
+            modal.css('display' ,'none');
         })
         $('body').append(modal);
     
@@ -45,16 +49,17 @@
     //알림용 모달 만들기
     createAlertModal = function () {
     
-        this.modal = $("<div class='Modal'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>"+this.title+"</div><div class='modal-popUp-message' style='margin-bottom:30px;'>"+this.message+"</div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-confirm' class='btn btn-primary'>확인</button></div></div></div> ");
+        this.modal = $("<div class='Modal' style='display:none'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>"+this.title+"</div><div class='modal-popUp-message' style='margin-bottom:30px;'>"+this.message+"</div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-confirm' class='btn btn-primary'>확인</button></div></div></div> ");
         
         let modal = this.modal;
         modal.find('.xbutton').on('click', function () {
     
-            modal.hide();
+            modal.css('display' ,'none');
     
         });
         modal.find('#modal-btn-confirm').on('click', function () {
-            modal.hide();
+            
+            modal.css('display' ,'none');
         })
     
         $('body').append(modal);
@@ -68,17 +73,21 @@
     //버튼 2개있는 모달 매개변수로 버튼 내용을 받음
     createTwoButtonModal = function (firstContent,secondContent) {
     
-    this.modal = $("<div class='Modal'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>"+this.title+"</div><div class='modal-popUp-message' style='margin-bottom:30px;'>"+this.message+"</div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-confirm' class='btn btn-primary first-button'>"+ firstContent+ "</button><button id='modal-btn-confirm' class='btn btn-primary second-button'>"+secondContent+"</button></div></div></div> ");
+    this.modal = $("<div class='Modal' style='display:none'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>"+this.title+"</div><div class='modal-popUp-message' style='margin-bottom:30px;'>"+this.message+"</div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-confirm' class='btn btn-primary first-button'>"+ firstContent+ "</button><button id='modal-btn-confirm' class='btn btn-primary second-button'>"+secondContent+"</button></div></div></div> ");
    
     
     let modal = this.modal;
     modal.find('.xbutton').on('click', function () {
 
-        modal.hide();
+        
+            modal.css('display' ,'none');
+    
 
     });
     modal.find('#modal-btn-confirm').on('click', function () {
-        modal.hide();
+        
+            modal.css('display' ,'none');
+    
     })
 
 
@@ -97,17 +106,21 @@
   //패스워드 모달 만들기
 createpasswordModal = function () {
 
-    this.modal = $("<div class='Modal'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>" + this.title + "</div><div class='modal-popUp-message'>" + this.message + "</div><div class='modal-popUp-input'><input class='form-control' id='input1' type='password' ><input class='form-control' id='input2' type='password' style='margin-top:10px'></div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-cancel' class='btn btn-secondary'>취소</button><button id='modal-btn-confirm' class='btn btn-primary'>확인</button></div></div></div>")
+    this.modal = $("<div class='Modal style='display:none'><div class='popUp' ><div class='content-wrap'><button class='xbutton'><i class='fas fa-times'></i></button><div class='modal-popUp-title'>" + this.title + "</div><div class='modal-popUp-message'>" + this.message + "</div><div class='modal-popUp-input'><input class='form-control' id='input1' type='password' ><input class='form-control' id='input2' type='password' style='margin-top:10px'></div></div><div class='modal-popUp-button-wrapper'><button id='modal-btn-cancel' class='btn btn-secondary'>취소</button><button id='modal-btn-confirm' class='btn btn-primary'>확인</button></div></div></div>")
 
     let modal = this.modal;
     modal.find('.xbutton').on('click', function () {
 
-        modal.hide();
+        
+            modal.css('display' ,'none');
+    
         modal.find('input').val('');
 
     });
     modal.find('#modal-btn-cancel').on('click', function () {
-        modal.hide();
+        
+            modal.css('display' ,'none');
+    
         modal.find('input').val('');
     })
     $('body').append(modal);
@@ -151,7 +164,9 @@ createpasswordModal = function () {
         
         modal.find('#modal-btn-confirm').on('click', function () {
             fuc();
-            modal.hide();
+           
+            modal.css('display' ,'none');
+    
 
             /*modal.find('#input').val('');*/
     		
@@ -171,8 +186,9 @@ createpasswordModal = function () {
 		
 	
 		let modal = this.modal;
-        modal.hide();
-		
+        
+            modal.css('display' ,'none');
+    
 	}
     
     

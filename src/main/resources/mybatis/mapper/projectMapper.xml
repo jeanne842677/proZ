@@ -5,17 +5,87 @@
   
   <mapper namespace="com.kh.spring.project.model.repository.ProjectRepository">
   	 
+  	 
+  	     <!-- 11/15 지영작성 -->
+  	 
   	<select id="selectProjectMemberRoleByProjectIdx" resultType="map">
-	  	select project_idx , pm_idx , user_idx , nickname , is_ok , auth_name from project_Member member
-		join project_role role
-		using(project_idx)
-		where project_idx = #{projectIdx}
-		order by role.reg_date , member.reg_date
+		select pm_idx , auth_idx , auth_name , email , member.nickname , is_ok from project_member member
+	    join project_role role
+	    using(auth_idx)
+	    join proz_user prouser
+	    using(user_idx)
+	    where role.project_idx = #{projectIdx}
+	    order by is_ok desc, role.reg_date , member.reg_date
   	</select>
+  	
+   	<!-- 일반 권한 찾기 -->
+  	<select id="selectDefaultOfProjectRole" resultType="map">
+	  	select * from 
+		(select auth_idx , auth_name, rank() over(order by reg_date) as rank from project_role
+		where project_idx = #{projectIdx})
+		where rank=2
+  	</select>
+  	
+  	<delete id="deleteProjectMember" parameterType="map">
+  	
+  	delete from project_member 
+  	<where>
+			<if test="pmIdx !=null">
+				and pm_idx = #{pmIdx}
+			</if>  		
+			<if test="userIdx !=null">
+				and user_Idx = #{userIdx}
+			</if>  		
+			<if test="projectIdx !=null">
+				and project_Idx = #{projectIdx}
+			</if>  		
+  	</where>
+  	
+	
+  	</delete>
+  	
+  	     <!-- 11/15 지영작성 끝-->
+  	 
+  	
+  	     <!-- 11/15 민협작성-->
+     <update id="updateRoleByAuthIdx" parameterType="com.kh.spring.project.model.dto.ProjectRole">
+     update PROJECT_ROLE 
+     set
+     AUTH_NAME = #{authName},
+     PROJECT_AUTH = #{projectAuth},
+     CREATE_AUTH = #{createAuth},
+     MEMBER_AUTH = #{memberAuth}
+     where 
+     PROJECT_IDX = #{projectIdx}
+      AND AUTH_NAME = #{authName}
+
+     
+     </update>
+     
+     <insert id="insertNewRole" parameterType="com.kh.spring.project.model.dto.ProjectRole">
+     insert into PROJECT_ROLE
+     values(SC_PROZ_IDX.nextval , #{projectIdx} , #{authName} , #{projectAuth}, #{createAuth}, #{memberAuth}, current_date )
+     
+     </insert>
+     
+     <delete id="deleteRoleByAuthIdx">
+     delete from PROJECT_ROLE
+     where AUTH_IDX = #{authIdx}
+     </delete>
+     
+     <delete id="deleteRoleByProjectIdxAndAuthName" parameterType="com.kh.spring.project.model.dto.ProjectRole" >
+     delete from PROJECT_ROLE
+     where PROJECT_IDX = #{projectIdx} and AUTH_NAME = #{authName}
+     
+     </delete>
+     
+     
+  	
+  	     <!-- 11/15 민협작성 끝-->
 
   	
-  	
   </mapper>
+  
   
   
   
