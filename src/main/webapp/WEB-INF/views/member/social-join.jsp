@@ -215,11 +215,11 @@
             padding: 10px;
         }
         
-	   .valid-msg{
-			display:block;
-			color:red;	
-			font-size:15px;
-		}
+      .valid-msg{
+         display:block;
+         color:red;   
+         font-size:15px;
+      }
 
 
     </style>
@@ -242,9 +242,6 @@
                 <a href="/member/logout.do">로그아웃</a>
                     <img src="/resources/img/logo-white.png" height="100%">
                 </div>
-                <a href="/member/kakao_logout" id="custom-login-btn" >
-			                       <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="186"  />
-			                     </a>
                 <form:form modelAttribute="joinForm" 
                 action="/member/join" method="post" id="frm_join" class="join-wrap">
                     <label for="email" id="email-label">01. 이메일을 입력하고 인증을 완료하세요. </label>
@@ -266,21 +263,21 @@
 
                     <label for="password" id="password-label">02-1. 사용하실 비밀번호를 입력하세요. </label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="8글자 이상의 숫자 영문자 특수문자 조합 입니다."
-                    	 <c:if test="${empty error.password}">
+                        <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if>  required/>
                         <form:errors path="password" cssClass="valid-msg"/>
                    
                    <%--  <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
                     <input type="password" class="form-control" id="password-check" 
-                    	 <c:if test="${empty error.password}">
+                        <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if> 
                     required/>/ --%>
 
 
                     <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요.</label>
-                    <input type="text" class="form-control" id="nickname" name="nickname" maxlength="8" required placeholder="8글자 이내로 입력하세요.">
+                    <input type="text" class="form-control" id="nickname" name="nickname" maxlength="8" required value="${name}">
 
                     <label for="git-hub" id="git-label">04. Git-Hub 주소를 등록해주세요. (선택) </label>
                     <input type="text" class="form-control" id="git" name="git">
