@@ -239,7 +239,7 @@
         <div class="content-wrap">
             <section>
                 <div class="logo-wrap">
-                <a href="/member/logout.do">로그아웃</a>
+                
                     <img src="/resources/img/logo-white.png" height="100%">
                 </div>
                 <a href="/member/kakao_logout" id="custom-login-btn" >

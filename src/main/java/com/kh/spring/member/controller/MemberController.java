@@ -180,7 +180,7 @@ public class MemberController {
       
       session.setAttribute("authentication", certifiedUser);
       logger.debug(certifiedUser.toString());
-      return "redirect:/member/join";
+      return "redirect:/project/project-list";
       
       
    }
@@ -250,14 +250,14 @@ public class MemberController {
    //////////////////////////////////////////
    Member GoogleUser = memberServiceImpl.selectGoogleId(googleId);
    System.out.println(GoogleUser);
-      if(GoogleUser != null) {
-         System.out.println("아이디가 존재해서 바로 로그인 시킴");
-         return "redirect:/";
+      if(GoogleUser == null) {
+         System.out.println("아이디가 존재하지 않으면 소셜로그인폼으로 ");
+         return "redirect:/member/social-join";
       }
    
-   
+      
    //id가 존재하지 않아 소셜조인폼으로 보냅니다.
-   return "redirect:/member/social-join";
+   return "redirect:/project/template";
  }
 
  
@@ -287,7 +287,7 @@ public class MemberController {
          memberService.authenticateByEmail(form,token);
          redirectAttr.addFlashAttribute("message", "이메일이 발송되었습니다.");
          
-         return "redirect:/";
+         return "redirect:/member/login";
     
     
 //    memberService.insertSocialMember(member);
