@@ -103,6 +103,50 @@ public class jeeyoungProjectTest {
    
    
    
+   //멤버 강퇴 테스트
+   @Test
+   public void memberExileTest() throws Exception{
+	   
+	   Map<String , String> map = new HashMap<>();
+	   map.put("pmIdx" , "100098");
+	   System.out.println(map);
+	   
+	   String fetchData = JsonMaker.json(map);
+	   System.out.println(fetchData);
+	   
+	   mockMvc.perform(post("/project/exile")
+			   .contentType(MediaType.APPLICATION_JSON)
+			   .content(fetchData))
+	   .andExpect(status().isOk())
+	   .andDo(print());
+	   
+	   
+	   
+   }
+   
+   
+   //멤버 초대 취소
+   @Test
+   public void memberinviteCancelTest() throws Exception{
+	   
+	   Map<String , String> map = new HashMap<>();
+	   map.put("pmIdx" , "100193");
+	   System.out.println(map);
+	   
+	   String fetchData = JsonMaker.json(map);
+	   System.out.println(fetchData);
+	   
+	   mockMvc.perform(post("/project/invite-cancel")
+			   .contentType(MediaType.APPLICATION_JSON)
+			   .content(fetchData))
+	   .andExpect(status().isOk())
+	   .andDo(print());
+	   
+	   
+	   
+   }
+   
+   
 }
 
 	 

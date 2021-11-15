@@ -3,6 +3,7 @@ package com.kh.spring.project.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
@@ -13,23 +14,53 @@ public interface ProjectService {
 
 	Project selectProjectByIdx(String projectIdx);
 
-	List<Map<String , Object>> selectProjectMemberByProjectIdx(String projectIdx);
+	List<Map<String, Object>> selectProjectMemberByProjectIdx(String projectIdx);
 
+	List<Map<String, Object>> selectProjectMemberRoleByProjectIdx(String projectIdx);
 
-	List<Map <String , Object>> selectProjectMemberRoleByProjectIdx(String projectIdx);
-	
-	   /////////////////은비가 작성한 코드 시작
-	   ProjectMember selectProjectMemberByUserIdx(String userIdx);
+	// 지영 추가코드
 
-	   Project createProject(String proName, String proDescription);
+	List<Map<String, Object>> selectUserAndMemberByEmail(String email);
 
-	   ProjectRole createRole(String projectIdx);
+	void inviteMemberByEmail(Member newMember, Project project);
 
-	   ProjectMember allocateAdmin(String projectIdx, String userIdx, int authIdx);
-	   
-	   
-	   ///////////////은비가 작성한 코드 끝
-	   
-	   List<ProjectRole> selectProjectRoleByIdx(String projectIdx);
-	
+	int inviteMemberByEmailImpl(String projectIdx, String userIdx);
+
+	List<ProjectRole> selectProjectRoleByIdx(String projectIdx);
+
+	Project selectProjectByInviteCode(String inviteCode);
+
+	public void inviteMemberByCode(String inviteCode, Member member);
+
+	void deleteProjectMember(Map<String, String> map);
+
+	void updateProjectMemberAuth(Map<String, String> map);
+
+	// 지영 추가코드 끝
+
+	// 민협 코드 시작
+
+	void updateRoleByAuthNameAndProjectIdx(ProjectRole role);
+
+	void insertNewRole(ProjectRole role);
+
+	void deleteRoleByAuthIdx(String authIdx);
+
+	void deleteRoleByProjectIdxAndAuthName(ProjectRole role);
+
+	// 민협 코드 끝
+
+/////////////////은비가 작성한 코드 시작
+	List<ProjectMember> selectProjectMemberByUserIdx(String userIdx);
+
+	void insertProject(String proName, String proDescription, String inviteCode, String userIdx);
+
+	List<String> selectProjectIdxByUserIdx(String userIdx);
+
+	List<Project> selectProjectByProjectIdx(String projectIdx);
+
+	Project selectProjectExist(String projectIdx);
+
+///////////////은비가 작성한 코드 끝
+
 }
