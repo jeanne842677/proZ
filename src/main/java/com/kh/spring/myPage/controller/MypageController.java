@@ -34,14 +34,17 @@ public class MypageController {
 	public String mypage(HttpSession session) {
 		
 		Member dummyMember = new Member(); 
-		dummyMember.setEmail("111111");
+		dummyMember.setEmail("zaxscd95@naver.com");
 		dummyMember.setUserIdx("100021");
-		dummyMember.setProfileColor("color");
+		dummyMember.setProfileColor("#b3cbd0ff");
+		dummyMember.setGit("tempGit@repository.com");
+		dummyMember.setNickname("aramarabara");
 		
 		session.setAttribute("certifiedUser", dummyMember);
 	
 		return "member/mypage"; 
 	}
+	
 		//GetMapping의 경우 경로설정, mypage/mypage로 설정 
 	
 	@PostMapping("profileColor")
@@ -74,30 +77,91 @@ public class MypageController {
 	@ResponseBody
 	public String changeProfileImg(@RequestParam List<MultipartFile> files) {
 		
+		//1. 파일 추출 및 업로드 
 		FileUtil fileUtil = new FileUtil(); 
 		FileDTO fileUploaded = fileUtil.fileUpload(files.get(0)); 
 		
+		//2. 파일 데이터베이스 저장 
 		int res = mypageService.insertMemberProfileImg(fileUploaded); 
 		
 		if(res != 1) {
 			return "failed"; 
 		}
 		
+		// 3. profileImg는 join을 통해 추출, session 업데이트 불필요 
 		return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
 	}
 	
-	@PostMapping("profileNickname")
-	public String changeProfileNickname() {
-		return ""; 
+	@PostMapping(value= "profileNickname", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changeProfileNickname(@RequestParam String nickname
+			,HttpSession session) {
+		
+		//session에서 member추출 
+		Member member = (Member) session.getAttribute("certifiedUser"); 
+		member.setNickname(nickname);
+		
+		// 에러 보류, try-catch말고 HandlableException없나? 
+		// 12자리 이하 수정필요 
+		int res = mypageService.updateMypageMemberByNickname(member); 
+		
+		// res값이 아예 오지를 않는다, failed가 작동할 수가 없음, 그리고 
+		// 반환값이 그대로 db오류로 들어간다 
+		if(res != 1) {
+			return "failed"; 
+		}
+		
+		session.setAttribute("certifiedUser", member);
+		return nickname; 
 	}
 	
-	@PostMapping("profileGitRepo")
-	public String changeProfileGitRepo() {
-		return ""; 
+	@PostMapping(value= "profileGitRepo", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changeProfileGitRepo(@RequestParam String git
+			,HttpSession session) {
+		
+		//session에서 member추출 
+		Member member = (Member) session.getAttribute("certifiedUser"); 
+		member.setGit(git);
+		
+		int res = mypageService.updateMypageMemberByGit(member); 
+		
+		if(res != 1) {
+			return "failed"; 
+		}
+		
+		session.setAttribute("certifiedUser", member);
+		return git; 
 	}
 	
 	@PostMapping("profilePassword")
 	public String changeProfilePasswordr() {
 		return ""; 
 	}
+	
+	
+	@PostMapping("isleave")
+	@ResponseBody
+	public String changeMemberIsleave(HttpSession session) {
+		
+		// 7일의 유예기간을 어떻게 줄 것인가? 
+		// 7일 후에 탈퇴하는 것이 아니라, 당장에 ISLEAVE와 함께 날짜를 저장하나?
+		// 회원탈퇴 7일 기능은 DB변경 및 다른 조건이 너무 많다, 일단 뺄 생각 
+		
+		//session에서 member추출 
+		Member member = (Member) session.getAttribute("certifiedUser"); 
+		
+		int res = mypageService.memberIsleave(member); 
+		
+		if(res != 1) {
+			return "failed"; 
+		}
+		
+		session.removeAttribute("certifiedUser");
+		
+		return "success"; 
+	}
+	
+
+	
 }
