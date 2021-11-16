@@ -175,11 +175,13 @@ public class ProjectServiceImpl implements ProjectService {
 
 		return projectRepository.selectProjectRoleByIdx(projectIdx);
 	}
-
+	
 	@Override
-	public void updateRoleByAuthNameAndProjectIdx(ProjectRole role) {
-		projectRepository.updateRoleByAuthNameAndProjectIdx(role);
+	public void updateRoleByPrevAuthName(Map<String, String> map) {
+		projectRepository.updateRoleByPrevAuthName(map);
+		
 	}
+
 
 	@Override
 	public void insertNewRole(ProjectRole role) {
@@ -227,6 +229,10 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project selectProjectExist(String projectIdx) {
 		return projectRepository.selectProjectExist(projectIdx);
 	}
+
+
+
+
 
 //은비가 작성한 코드 끝
 

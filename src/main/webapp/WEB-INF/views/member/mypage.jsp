@@ -21,6 +21,7 @@
                     <div class="content-wrapper" id="profileImg-wrapper">
                         <button id="profile-banner-btn"></button>
                         <button id="profile-img"><img class="profile" src="/resources/img/cat01.png"></button>
+                        <input id="profile-img-input" type="file" accept="image/*">
                     </div>
                     <div class="content-wrapper" id="profile">
                         <div class="profile-title">#사용자 프로필</div>
@@ -79,40 +80,94 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/resources/js/modal/modal.js"></script>
+<script src="https://unpkg.com/vanilla-picker@2"></script>
 <script>
 
-    //Fetch 사용 시, Value()초기화 코드가 들어가야 한다. 
-
-    // session의 DummyMember 확인 
-    
-    
 	//fetch 프로필컬러 변경 코드 
-	$('#profile-banner-btn').on('click', function() {
-		
-		fetch('/mypage/profileColor?profileColor='+ '1111', 
-				{
-				method: 'POST', 	
-				credentials : 'include'
-			}) 
-		.then(response => response.text())
-		.then(text=>{
-			if(text != 'failed'){
-				alert('색 변경이 성공하였습니다.'); 
-				$('.profile-color-btn').css('background-color',text)
-			} else {
-				alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
-			}
-		})
-		.catch( ()=>{
-			// fetch를 실행하는 도중 문제가 발생할 경우 예외처리 
-			alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
-		});
-		
-		var DummyMember = '<%= session.getAttribute("certifiedUser") %>';
-	    console.log(DummyMember); 
-	    console.log(typeof(DummyMember)); 
-	})
+	var parent = document.querySelector('#profile-banner-btn');
+    var picker = new Picker(parent);
+    picker.setOptions({
+        popup:'bottom'
+    })
+    // 버튼의 Callback을 통해 내부 ColorPicker CSS를 변경
+    var parentJquery = $('#profile-banner-btn'); 
+    parentJquery.click( ()=>{
+    	parentJquery.children().css('position','relative'); 
+    	parentJquery.children().css('left', '100px');
+    });  
+     
+   	//2. ColorPicker Value추출 및 onDone을 통한 비동기통신 
+   	picker.onDone = function(color) {
+    	//color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
+    	profileColorHex = color.hex.slice(1);
+    	
+    	// 비동기통신으로 색 전달, 결과값 반환 후 CSS 적용 
+    	fetch('/mypage/profileColor?profileColor='+ profileColorHex, 
+    			{
+    			method: 'POST', 	
+    			credentials : 'include'
+    		}) 
+    	.then(response => response.text())
+    	.then(text=>{
+    		if(text != 'failed'){
+    			parentJquery.css('background-color', text);
+    		} else {
+    			alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
+    		}
+    	})
+    	.catch( ()=>{
+    		alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
+    	});	
+	};
     
+	//fetch profileImg 변경 
+	var profileImgInputJquery = $('#profile-img-input'); 
+	
+	$('#profile-img').click( ()=>{
+		profileImgInputJquery.click(); 
+	});
+	
+	profileImgInputJquery.on('input', function() {
+		
+		//File전송을 위해 file객체를 추출, formData 형태로 전송 
+		var file = document.querySelector('#profile-img-input').files[0]; 
+		var formData = new FormData();  
+		
+		//fileInput이 없을때는 return 
+		if(file == null){
+			alert('파일을 선댁해주세요'); 
+			return false; 
+		}
+		
+		formData.append('files', file); 
+		
+		fetch('/mypage/profileImg', {
+			method: 'POST', 	
+			body : formData
+		})
+		.then(response => response.text())
+    	.then(text=>{
+    		if(text != 'failed'){
+    			$('.profile').attr('src', 'http://localhost:9090/resources/upload/' + text);
+    		} else {
+    			alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
+    		}
+    	})
+    	.catch( ()=>{
+    		alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
+    	});	
+		
+		//fetch의 body로 다시 전송 
+		
+	});
+	
+	
+	
+	
+	
+	
+	
+	
     
     //닉네임 변경 Modal 코드
     let nickNameModal = new Modal('닉네임 변경하기', '변경하실 닉네임을 입력하세요'); 

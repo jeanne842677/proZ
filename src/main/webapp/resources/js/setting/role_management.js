@@ -4,23 +4,24 @@
         off : btn-secondary
     */
 
-
-        $(".btn-info").click(function() {
-			if( $(this).hasClass("default")){
-				return;
-			}
-            $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
-            $(this).closest(".one-role-total-wrapper").removeAttr('data-state');
-			$(this).closest(".one-role-total-wrapper").data('state','update'); 
+	
+	        $(".btn-info").click(function() {
+         if( $(this).hasClass("default")){
+            return;
+         }
+         
+         $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
+         $(this).closest(".one-role-total-wrapper").removeAttr('data-state');
+         $(this).closest(".one-role-total-wrapper").data('state','update'); 
          })
      
          $(".btn-secondary").click(function() {
-			if( $(this).hasClass("default")){
-				return;
-			}
+         if( $(this).hasClass("default")){
+            return;
+         }
             $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("off").toggleClass("on");
             $(this).closest(".one-role-total-wrapper").removeAttr('data-state');
-			$(this).closest(".one-role-total-wrapper").data('state','update'); 
+         	$(this).closest(".one-role-total-wrapper").data('state','update'); 
             
          })
      
@@ -28,13 +29,13 @@
              역할 삭제 
          */
          $(".delete-role").click(function() {
-			if( $(this).hasClass("default")){
-				return;
-			}
-			
-			$(this).closest(".one-role-total-wrapper").removeAttr('data-state');
-			$(this).closest(".one-role-total-wrapper").data('state','delete'); 
-            $(this).closest(".one-role-total-wrapper").hide();
+         if( $(this).hasClass("default")){
+            return;
+         }
+         
+         $(this).closest(".one-role-total-wrapper").removeAttr('data-state');
+         $(this).closest(".one-role-total-wrapper").data('state','delete'); 
+         $(this).closest(".one-role-total-wrapper").hide();
          })
      
          /* 
@@ -47,7 +48,6 @@
             var input = $("#new-role-input").val();
             if(input != ""){
              console.dir(input);
-             var i = 1;
              
      
              let b = $(".role-list-content-new").children().clone();
@@ -55,29 +55,46 @@
              b.appendTo(".role-list-wrapper");
              
      
-     		//역할삭제
-             b.find("#role").children('.delete-role').on('click', e=> {
-                b.closest(".one-role-total-wrapper").removeAttr('data-state');
-				b.closest(".one-role-total-wrapper").data('state','delete'); 
+           //역할삭제
+            b.find("#role").children('.delete-role').on('click', e=> {
+	
+			if(b.closest(".one-role-total-wrapper").data('state') == 'new') {
+				b.closest(".one-role-total-wrapper").remove();
 				
-				b.hide();
+			}else{
+				b.closest(".one-role-total-wrapper").removeAttr('data-state');
+	            b.closest(".one-role-total-wrapper").data('state','delete'); 
+	            
+	            b.hide();
+			}
+
              })
      
      
      
              b.find("#role").children('.btn-info').click(function () {
                  $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
+                 
+                 if(b.closest(".one-role-total-wrapper").data('state') == 'none') {
+	 				b.closest(".one-role-total-wrapper").removeAttr('data-state');
+        		 	b.closest(".one-role-total-wrapper").data('state','update'); 
+				}
+                
              })
              
              b.find("#role").children('.btn-secondary').click(function () {
                  $(this).toggleClass("btn-info").toggleClass("btn-secondary").toggleClass("on").toggleClass("off");
+                 
+				 if(b.closest(".one-role-total-wrapper").data('state') == 'none') {
+	 				b.closest(".one-role-total-wrapper").removeAttr('data-state');
+        		 	b.closest(".one-role-total-wrapper").data('state','update'); 
+				}
              })
      
      
      
              $("#new-role-input").val("");
      
-                 i++;
             }else{
                 alert("역할명을 입력해주세요");
             }
@@ -102,12 +119,11 @@
          secondSaveModal.createAlertModal(); //두번쨰모달 생성
          secondSaveModal.makeModalBtn($(".first-button")); //first-button : 저장 <--여기에지정
          
-         
-         
-         
-     
-     
-         /* 역할 추가  */
+	
+	
+
+	 
+
      
      
      

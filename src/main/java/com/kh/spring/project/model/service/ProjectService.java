@@ -40,7 +40,7 @@ public interface ProjectService {
 
 	// 민협 코드 시작
 
-	void updateRoleByAuthNameAndProjectIdx(ProjectRole role);
+	void updateRoleByPrevAuthName(Map<String, String> map);
 
 	void insertNewRole(ProjectRole role);
 
@@ -60,6 +60,12 @@ public interface ProjectService {
 	List<Project> selectProjectByProjectIdx(String projectIdx);
 
 	Project selectProjectExist(String projectIdx);
+
+	
+
+
+
+
 
 ///////////////은비가 작성한 코드 끝
 

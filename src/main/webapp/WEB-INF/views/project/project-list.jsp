@@ -28,7 +28,7 @@
                     <div class="logo"><img src="/resources/img/LOGO0000w.png"></div>
                     <div class="rightheader">
                         <div class="signup" onclick="location.href='/member/join'">sign-up</div>
-                        <div class="login" onclick="location.href='/member/login'">login</div>
+                        <div class="login" ><a href="/member/logout.do">logout</a></div>
                     </div>
                 </div>
             </header>

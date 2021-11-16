@@ -6,8 +6,8 @@
 
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
-<link type="text/css" rel="stylesheet"
-	href="/resources/css/modal/modal.css" />
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
+<link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css" />
 <link type="text/css" rel="stylesheet"
 	href="/resources/css/setting/member-management.css?ver=2" />
 <script type="text/javascript" src="/resources/js/modal/modal.js?ver=2"></script>
@@ -19,17 +19,14 @@
 	<div class="wrap">
 		<header>
 
-
-
 			<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
-
 
 		</header>
 
 		<div class="con">
 			<nav>
 
-				<%@ include file="/WEB-INF/views/include/nav/settingnav.jsp"%>
+				<%@ include file="/WEB-INF/views/include/nav/setting-nav.jsp"%>
 
 
 			</nav>

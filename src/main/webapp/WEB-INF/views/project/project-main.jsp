@@ -4,9 +4,41 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>proZ</title>
+<%@ include file="/WEB-INF/views/include/head.jsp"%>
+<title>프로젝트 메인</title>
+
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=2">
 </head>
 <body>
-<h1> 프로젝트 메인에 진입하였습니다.</h1>
+
+	<div class="wrap">
+		<header>
+
+
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
+
+
+		</header>
+
+		<div class="con">
+			<nav>
+
+				<%@ include file="/WEB-INF/views/include/nav/main-nav.jsp"%>
+
+
+			</nav>
+			<section>
+				
+				<div>환영합니다.</div>
+
+			</section>
+			<aside>
+
+
+				<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+			</aside>
+		</div>
+
+	</div>
 </body>
 </html>

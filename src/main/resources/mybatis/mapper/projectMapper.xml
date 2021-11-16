@@ -48,7 +48,7 @@
   	 
   	
   	     <!-- 11/15 민협작성-->
-     <update id="updateRoleByAuthIdx" parameterType="com.kh.spring.project.model.dto.ProjectRole">
+     <update id="updateRoleByPrevAuthName" parameterType="hashmap">
      update PROJECT_ROLE 
      set
      AUTH_NAME = #{authName},
@@ -57,9 +57,9 @@
      MEMBER_AUTH = #{memberAuth}
      where 
      PROJECT_IDX = #{projectIdx}
-      AND AUTH_NAME = #{authName}
+      AND AUTH_NAME = #{prevAuthName}
 
-     
+      
      </update>
      
      <insert id="insertNewRole" parameterType="com.kh.spring.project.model.dto.ProjectRole">

@@ -22,27 +22,25 @@ input {
             appearance: none;
 
 #email, #password {
-	background-color: RGB(62, 66, 77);
-	margin: 10px 0;
-	border-color: RGB(255, 255, 255, 0.2);
-	color: white;
-	height: 48px;
+   background-color: RGB(62, 66, 77);
+   margin: 10px 0;
+   border-color: RGB(255, 255, 255, 0.2);
+   color: white;
+   height: 48px;
 }
 
 .emptyemail, .emptypassword, .message{
-	font-size:15px;
+   font-size:15px;
 }
 
 </style>
 
 <body>
 <script type="text/javascript" src="/resources/js/member/login.js"></script>
-<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-
 <c:if test="${not empty message}">
-	<script type="text/javascript">
-		alert("${message}");
-	</script>
+   <script type="text/javascript">
+      alert("${message}");
+   </script>
 </c:if>
 
 
@@ -67,8 +65,8 @@ input {
                                 placeholder="비밀번호를 입력하세요" >
                                 
                             <span class="emptypassword" style="display:none">비밀번호가 입력되지 않았습니다.</span>
-							
-                            	<span class="message" style="color:red;">${message}</span>
+                     
+                               <span class="message" style="color:red;">${message}</span>
                             
                             <button id="login-btn" class="btn btn-lg btn-primary" 
                             type="submit" onclick="check();" >로그인</button>
@@ -78,12 +76,12 @@ input {
                             <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="#">비밀번호 재설정</a></div>
                             <div class="social">다른 서비스 계정으로 로그인</div>
                             <div class="btn-wrap">
-                             	<a href="/member/kakao_login" id="custom-login-btn" >
-			                       <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="186"  />
-			                     </a>
-                                <button id="google-btn" class="btn  btn-primary" type="button">
-                                	<a href="${google_url}">구글 로그인</a>
-    							</button>
+                                <a href="/member/kakao_login" id="custom-login-btn" >
+                                <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="186"  />
+                              </a>
+                                <button id="google-btn" class="btn  btn-primary" type="button" >
+                                   <a href="/member/google_login">구글 로그인</a>
+                         </button>
     
                             </div>
 

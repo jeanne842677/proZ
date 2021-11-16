@@ -58,18 +58,19 @@ public interface ProjectRepository {
 	
 	
 	
-	@Select("select * from project_role where project_idx = #{projectIdx} order by reg_date")
+	@Select("select * from project_role where project_idx = #{projectIdx} order by auth_Idx")
 	List<ProjectRole> selectProjectRoleByIdx(String projectIdx);
 	
 	
 	  //11-15 민협작성
-	   void updateRoleByAuthNameAndProjectIdx(ProjectRole role);
+	
+	void updateRoleByPrevAuthName(Map<String, String> map);
 
-	   void insertNewRole(ProjectRole role);
+	void insertNewRole(ProjectRole role);
 
-	   void deleteRoleByAuthIdx(String authIdx);
+	void deleteRoleByAuthIdx(String authIdx);
 
-	   void deleteRoleByProjectIdxAndAuthName(ProjectRole role);
+	void deleteRoleByProjectIdxAndAuthName(ProjectRole role);
 	
 
 	// 은비가 작성한 코드 시작
@@ -100,6 +101,10 @@ public interface ProjectRepository {
 
 	   @Select("select * from project where project_idx = #{projectIdx}")
 	   Project selectProjectExist(String projectIdx);
+
+
+
+
 
 
 	   // 은비가 작성한 코드 끝

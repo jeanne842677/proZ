@@ -11,6 +11,7 @@
                         <i class="fas fa-folder" id="folderclose"></i>메모</div>
                         <li class="folderli" style="display: none;">오늘 뭐먹지</li>
                         <li class="folderli" style="display: none;">잡담방</li>
+                    	
                     </ul>
                     <ul class="video"><div class="cate2"><i class="fas fa-chalkboard-teacher"></i>화상회의</div>
                         <li class="videoli" style="display: none;"><p class="on">●</p>오늘 뭐먹지</li>
@@ -20,4 +21,13 @@
                 <div class="private">
                             <div class="reload" onClick="window.location.reload()"><i class="fas fa-sync"></i>동기화</div>
                 </div>
+                
+                
+                <script>
+                
+                $('.search').find('.setting').on('click' , function() {
+                	location.href="/project/setting/role-management/${projectIdx}";
+                })
+                
+                </script>
             

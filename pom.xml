@@ -301,9 +301,34 @@
           <artifactId>spring-social-google</artifactId>
           <version>1.0.0.RELEASE</version>
    </dependency>
+   
 
 
 
+<!-- httpcore -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.6</version>
+        </dependency>
+        
+        <!-- httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>        
+ 
+     
+     
+     <!-- 잠깐 붙여보는 json -->
+     <dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+</dependency>
+     
+     
 
    </dependencies>
 
