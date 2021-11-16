@@ -51,9 +51,9 @@ public interface ProjectService {
 	// 민협 코드 끝
 
 /////////////////은비가 작성한 코드 시작
-	List<ProjectMember> selectProjectMemberByUserIdx(String userIdx);
+	List<Project> selectProjectByUserIdx(String userIdx);
 
-	void insertProject(String proName, String proDescription, String inviteCode, String userIdx);
+	int insertProject(String proName, String proDescription, String inviteCode, String userIdx);
 
 	List<String> selectProjectIdxByUserIdx(String userIdx);
 

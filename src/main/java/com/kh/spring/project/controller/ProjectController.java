@@ -347,15 +347,15 @@ public class ProjectController {
       //member가 속한 프로젝트 list 정보를 보내기
       String userIdx = member.getUserIdx();
       
-      //member가 속한 프로젝트 list
-      List<String> projectIdxList = projectService.selectProjectIdxByUserIdx(userIdx);
-      
+//      //member가 속한 프로젝트 list
+//      List<String> projectIdxList = projectService.selectProjectIdxByUserIdx(userIdx);
+//      
+      //member가 속한 프로젝트 list (11월16일)
       List<Project> projectList = new ArrayList<Project>();
+      projectList = projectService.selectProjectByUserIdx(userIdx);
       
-      //프로젝트의 상세 정보 저장하기
-      for(String projectIdx : projectIdxList) {
-         projectList.addAll(projectService.selectProjectByProjectIdx(projectIdx));
-      }
+      
+     
       
       model.addAttribute(projectList);
       
@@ -364,7 +364,8 @@ public class ProjectController {
    
    
    @PostMapping("project-list")
-   public String createProject(@RequestBody Project project, 
+   @ResponseBody
+   public Project createProject(@RequestBody Project project, 
                            @SessionAttribute("authentication") Member member,
                            HttpSession session) {
       System.out.println(member.toString());
@@ -383,10 +384,15 @@ public class ProjectController {
       String inviteCode = UUID.randomUUID().toString();
       
       //새로운 프로젝트 생성
-      projectService.insertProject(proName, proDescription, inviteCode, userIdx);
-     
+      int res = projectService.insertProject(proName, proDescription, inviteCode, userIdx);
+      
+      
+      
+      //생성된 프로젝트 column
+      //제이슨으로 만들고 ..넹! 객체로 리턴 보내고. 
+      //jsp에서 return이 되는지 확인.
       //생성 되고나도 원래 페이지에 있도록 유지
-      return "proejct/project-list";
+      return null;
    };
    
    
@@ -420,8 +426,8 @@ public class ProjectController {
       }
       
       //프로젝트 멤버가 아닐 경우
-      List<ProjectMember> projectMember = new ArrayList<ProjectMember>();
-      projectMember = projectService.selectProjectMemberByUserIdx(userIdx);
+      List<Project> projectMember = new ArrayList<Project>();
+      projectMember = projectService.selectProjectByUserIdx(userIdx);
       if(projectMember == null) {
          throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
       }
