@@ -103,6 +103,7 @@ public class MypageController {
 		
 		// 에러 보류, try-catch말고 HandlableException없나? 
 		// 12자리 이하 수정필요 
+		// try-catch 문을 작성, return문을 작동시킨다. 
 		int res = mypageService.updateMypageMemberByNickname(member); 
 		
 		// res값이 아예 오지를 않는다, failed가 작동할 수가 없음, 그리고 
@@ -123,8 +124,8 @@ public class MypageController {
 		//session에서 member추출 
 		Member member = (Member) session.getAttribute("certifiedUser"); 
 		member.setGit(git);
-		
-		int res = mypageService.updateMypageMemberByGit(member); 
+		int res  = 0; 
+		res = mypageService.updateMypageMemberByGit(member); 
 		
 		if(res != 1) {
 			return "failed"; 

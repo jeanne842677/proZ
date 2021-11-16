@@ -87,6 +87,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/resources/js/modal/modal.js"></script>
 <script src="https://unpkg.com/vanilla-picker@2"></script>
+<script src="/resources/js/validator/validateMachine1.0.js"></script>
 <script>
 
 	
@@ -167,9 +168,8 @@
     let nickNamePopUp = nickNameModal.modal; 
     nickNameModal.makeModalBtn($('#profile-change-nickName-btn')); 
     nickNameModal.setPlaceholder('닉네임 입력 (최대 8글자)'); 
-    nickNamePopUp.find('#input').attr('maxlength',8);
+    //nickNamePopUp.find('#input').attr('maxlength',8);
     nickNameModal.setConfirmFnc( function(){
-
     	var changedNickname = nickNamePopUp.find('#input').val(); 
     	fetch('/mypage/profileNickname?nickname='+changedNickname, {
     		method : 'POST',
@@ -254,5 +254,23 @@
     		alert('회원 탈퇴에 실패하였습니다. 다시 시도하세요'); 
     	})
     }); 
+    
+    
+    //Validator 적용을 위한 Jquery 객체 추출, 적용 
+    let inputTag = nickNamePopUp.find('#input').get(); 
+    let realTag = inputTag[0]; 
+    var v = new ValidateMachine();
+    v.addValidator(realTag); 
+    v.addReverseRegExp({
+        '\\s' : '닉네임에 공백을 포함할 수 없습니다'
+    });
+    v.addReverseRegExp({
+        '\[~!@#$%^&*()_+|<>?:{}]' : '특수문자를 포함할 수 없습니다'
+    });
+    v.addRegExp({
+    	'[a-z]' : '첫번째 정규표현식 테스트입니다.',
+    	'\^[A-Za-z]{1}[A-Za-z0-9]{8,12}$' : '비밀번호는 8-12자리 이내의 영문숫자 조합입니다.'
+    })
+    
 </script>
 </html>
