@@ -3,6 +3,7 @@ package com.kh.spring.myPage.model.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.myPage.model.repository.MypageRepository;
 
@@ -15,6 +16,11 @@ public class MypageServiceImpl implements MypageService{
 	@Override
 	public int updateMypageMemberByProfileColor(Member member) {
 		return mypageRepository.updateMypageMemberByProfileColor(member);
+	}
+
+	@Override
+	public int insertMemberProfileImg(FileDTO fileUploaded) {
+		return mypageRepository.insertMemberProfileImg(fileUploaded);
 	}
 	
 
