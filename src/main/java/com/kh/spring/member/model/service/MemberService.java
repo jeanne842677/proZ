@@ -37,6 +37,10 @@ public interface MemberService {
 
    Member selectGoogleId(String googleId);
    
+   Member selectKakaoId(String kakaoId);
+   
+   Map<String,Object> kakaoCallback(String code) throws JsonMappingException, JsonProcessingException;
+   
 
 
 

@@ -40,6 +40,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -175,6 +176,48 @@ public Member selectGoogleId(String googleId) {
 public void insertSocialMember(JoinForm form) {
    memberRepository.insertSocialMember(form);
    
+}
+
+@Override
+public Member selectKakaoId(String kakaoId) {
+	System.out.println("serviceimpl kakaoId 타나?" + kakaoId);
+	   return memberRepository.selectKakaoId(kakaoId);
+}
+
+@Override
+public Map<String,Object> kakaoCallback(String code) throws JsonMappingException, JsonProcessingException {
+	 MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+	    map.add("grant_type", "authorization_code");
+	    map.add("client_id", "448c3d7ccd2aea13e02cfe7121e656dc");
+	    map.add("redirect_uri", "http://localhost:9090/member/kakao_callback");
+	    map.add("code", code);
+
+	    String kakao = http.postForObject("https://kauth.kakao.com/oauth/token", map, String.class);
+	    
+	    System.out.println("카카오 토큰: " + kakao);
+
+	    ObjectMapper mapper = new ObjectMapper();
+	    Map<String , Object> kakaoMap = mapper.readValue(kakao, Map.class);
+	    System.out.println("kakaoMap: "+kakaoMap);
+	    	
+	    String accessToken = (String) kakaoMap.get("access_token");
+	    
+	    
+	    
+	    String uri = "https://kapi.kakao.com/v2/user/me";
+	    
+	    RequestEntity<Void> request = RequestEntity.post(uri)
+	          .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+	          .header("Authorization", "Bearer " + accessToken)
+	          .build();
+	       
+	    
+	    ResponseEntity<String> res = http.exchange(request, String.class); 
+	    String resBody = res.getBody();
+	    System.out.println("resBody :"+resBody);
+	    
+	    Map<String,Object> kakaoUser = mapper.readValue(resBody, new TypeReference<Map<String,Object>>(){});
+	return kakaoUser;
 }
 
 
