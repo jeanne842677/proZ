@@ -58,7 +58,7 @@ public interface ProjectRepository {
 	
 	
 	
-	@Select("select * from project_role where project_idx = #{projectIdx} order by reg_date")
+	@Select("select * from project_role where project_idx = #{projectIdx} order by auth_Idx")
 	List<ProjectRole> selectProjectRoleByIdx(String projectIdx);
 	
 	
