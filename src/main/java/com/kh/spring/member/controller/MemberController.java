@@ -133,7 +133,12 @@ public class MemberController {
          throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
       }
       
-//      memberService.insertSocialMember(form);
+      if(form.getSocialId() != null) {
+    	  memberService.insertSocialMember(form);
+    	  return "redirect:/member/login";
+      }
+      
+      
       memberService.insertMember(form);
       redirectAttrs.addFlashAttribute("message", "회원가입을 환영합니다. 로그인 해주세요");
       session.removeAttribute("persistToken");
@@ -241,23 +246,29 @@ public class MemberController {
    System.out.println("map으로 바꾸기" + userJson);
    String googleId = userJson.get("id");
    String googleName = userJson.get("name");
-   System.out.println("access_token : " + googleId);
-   System.out.println("access_token : " + googleName);
+   System.out.println("googleId : " + googleId);
+   System.out.println("googleName : " + googleName);
    session.setAttribute("googleId", googleId);
 
    
    redirectAttr.addFlashAttribute("name", googleName);
    //////////////////////////////////////////
    Member GoogleUser = memberServiceImpl.selectGoogleId(googleId);
-   System.out.println(GoogleUser);
+   
+   System.out.println("GoogleUser 서비스로 보낸값 받은거 : "+GoogleUser);
+   
+   System.out.println("보낸후 googleId : " + googleId);
+   System.out.println("보낸후 googleName : " + googleName);
+   
       if(GoogleUser == null) {
-         System.out.println("아이디가 존재하지 않으면 소셜로그인폼으로 ");
+         System.out.println("아이디가 존재하지 않으면 소셜조인폼으로 ");
          return "redirect:/member/social-join";
       }
    
+      session.setAttribute("authentication", GoogleUser);
       
-   //id가 존재하지 않아 소셜조인폼으로 보냅니다.
-   return "redirect:/project/template";
+   //id가 존재하여 템플릿으로 이동.
+   return "redirect:/project/project-list";
  }
 
  

@@ -33,7 +33,7 @@ public interface MemberRepository {
    @Insert("insert into proz_user(user_Idx,email,password,nickname,git,social_Id) values(sc_proz_Idx.nextval,#{email},#{password},#{nickname},#{git},#{socialId})")
    void insertSocialMember(JoinForm form);
 
-   @Select("select * from proz_user where social_Id = #{socialId}")
+   @Select("select * from proz_user where social_Id = #{googleId}")
    Member selectGoogleId(String googleId);   
    
 

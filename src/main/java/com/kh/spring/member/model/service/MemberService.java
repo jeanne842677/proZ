@@ -36,6 +36,7 @@ public interface MemberService {
    void insertSocialMember(JoinForm form);
 
    Member selectGoogleId(String googleId);
+   
 
 
 

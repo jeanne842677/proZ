@@ -243,7 +243,7 @@
                     <img src="/resources/img/logo-white.png" height="100%">
                 </div>
                 <form:form modelAttribute="joinForm" 
-                action="/member/join" method="post" id="frm_join" class="join-wrap">
+                action="/member/social-join" method="post" id="frm_join" class="join-wrap">
                     <label for="email" id="email-label">01. 이메일을 입력하고 인증을 완료하세요. </label>
                     <div class="email-wrap">
                         <input type="email" class="form-control" id="email" name="email"

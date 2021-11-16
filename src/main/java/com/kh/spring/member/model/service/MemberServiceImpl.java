@@ -167,6 +167,7 @@ public Map<String, String> GoogleCallback(String code) throws IOException {
 
 @Override
 public Member selectGoogleId(String googleId) {
+	System.out.println("serviceimpl구글아이디 타나?" + googleId);
    return memberRepository.selectGoogleId(googleId);
   }
 
