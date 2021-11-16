@@ -4,7 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
-<link rel="stylesheet" href="/resources/css/index.css">
+<link rel="stylesheet" href="/resources/css/index.css?ver=1">
 <link rel="stylesheet" href="/resources/css/modal/modal.css">
 <style type="text/css">
 
@@ -28,7 +28,7 @@
                     <div class="logo"><img src="/resources/img/LOGO0000w.png"></div>
                     <div class="rightheader">
                         <div class="signup" onclick="location.href='/member/join'">sign-up</div>
-                        <div class="login" onclick="location.href='/member/login'">login</div>
+                        <div class="login" ><a href="/member/logout.do">logout</a></div>
                     </div>
                 </div>
             </header>
@@ -41,56 +41,37 @@
                     <div class="thistit">Projects</div>
                     <div class="thisdes">All of these templates are<br>provided for free widthin Proz.
                         <div class="addnew">+ new project</div></div>
-                    
                 </div>
-                <section id="temsection">
-                    <div class="tem-wrap">
-                        <div class="con1">
-                            <div class="conimg"><img src="/resources/img/dragonball.jpg"></div>
-                            <div class="con1title">
-                                <div class="projecttit">Proz</div>
-                                <div class="teamtit">드래곤볼z</div>
-                            </div>
-                        </div>
-
-                        <div class="con1">
-                            <div class="conimg"><img src="/resources/img/dragonball.jpg"></div>
-                            <div class="con1title">
-                                <div class="projecttit">Proz</div>
-                                <div class="teamtit">드래곤볼z</div>
-                            </div>
-                        </div>
-
-                        <div class="con1">
-                            <div class="conimg"><img src="/resources/img/dragonball.jpg"></div>
-                            <div class="con1title">
-                                <div class="projecttit">Proz</div>
-                                <div class="teamtit">드래곤볼z</div>
-                            </div>
-                        </div>
-
-                        <div class="con1">
-                            <div class="conimg"><img src="/resources/img/no-img.png"></div>
-                            <div class="con1title">
-                                <div class="projecttit">Proz</div>
-                                <div class="teamtit">드래곤볼z</div>
-                            </div>
-                        </div>
-
-                        
-                        
-                        
-
-
-                        
-                    </div>
-                    <div class="design-box1"></div>
-                    <div class="design-box2"></div>
-                    <!-- <div class="design-box3"></div> -->
-                </section>
                 
-            
-            <footer>
+                
+			<section id="temsection">
+					<div class="tem-wrap">
+						<c:if test="${not empty projectList}">
+							<c:forEach items="${projectList}" var="project" varStatus="i">
+								<div class="con1">
+									<div class="conimg">
+										<a href="${project.projectIdx}">
+											<img src="/resources/img/no-img.png" > 
+										</a>
+									</div>
+									<div class="con1title">
+										<div class="projecttit">${project.proName}</div>
+										<div class="summary">${project.proDescription}</div>
+									</div>
+								</div>
+							</c:forEach>
+						</c:if>
+					</div>
+					
+				
+				
+				<div class="design-box1"></div>
+				<div class="design-box2"></div>
+				<!-- <div class="design-box3"></div> -->
+			</section>
+
+
+			<footer>
                 <div class="footleft">
                     <div class="footdes1">project by DragonBall.</div>
                     <div class="footdes2">Lim Ji-young , Kang Min-hyeop ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yoon-ji</div>
@@ -100,19 +81,21 @@
             </footer>
         </div>
     </div>
-
-
-	<div class="con1 clone">
-		<div class="conimg">
-			<img src="/resources/img/no-img.png">
-		</div>
-		<div class="con1title">
-			<div class="projecttit">프로젝트 이름을 설정해주세요</div>
-			<div class="summary"> </div>
-		</div>
-	</div>
-	
+    
+      <div class="con1 clone">
+      <div class="conimg">
+         <img src="/resources/img/no-img.png">
+      </div>
+      <div class="con1title">
+         <div class="projecttit">프로젝트 이름을 설정해주세요</div>
+         <div class="summary"> </div>
+      </div>
+   </div>
+    
 </body>
+
+
+
 <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
 <script type="text/javascript">
 	var newProject = new Modal("새 프로젝트", "새 프로젝트 이름 (15자 이내)");

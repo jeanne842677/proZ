@@ -439,7 +439,8 @@ footer{
 
 #temsection{
     width:1200px;
-    height:auto;
+    height : auto;
+    min-height : 450px;
     display:flex;
     justify-content: center;
     align-items: center;
