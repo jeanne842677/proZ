@@ -82,7 +82,7 @@ public class jeeyoungProjectTest {
 	   
    }
    
-   //멤버 이메일 조인 테이스트
+   //멤버 이메일 조인 테스트
    @Test
    public void joinByEmailTest() throws Exception{
       mockMvc.perform(get("/project/join-by-email/100023/999998")
