@@ -170,6 +170,7 @@
     nickNameModal.setPlaceholder('닉네임 입력 (최대 8글자)'); 
     //nickNamePopUp.find('#input').attr('maxlength',8);
     nickNameModal.setConfirmFnc( function(){
+
     	var changedNickname = nickNamePopUp.find('#input').val(); 
     	fetch('/mypage/profileNickname?nickname='+changedNickname, {
     		method : 'POST',
