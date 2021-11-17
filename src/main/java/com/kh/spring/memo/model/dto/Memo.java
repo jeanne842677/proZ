@@ -9,6 +9,7 @@ public class Memo {
    private String content;
    private Date regDate;
    private String bgColor;
+   
    public String getMemoIdx() {
       return memoIdx;
    }
