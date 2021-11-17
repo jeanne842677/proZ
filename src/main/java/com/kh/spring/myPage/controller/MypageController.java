@@ -39,7 +39,6 @@ public class MypageController {
 		dummyMember.setProfileColor("#b3cbd0ff");
 		dummyMember.setGit("tempGit@repository.com");
 		dummyMember.setNickname("aramarabara");
-		
 		session.setAttribute("certifiedUser", dummyMember);
 	
 		return "member/mypage"; 
