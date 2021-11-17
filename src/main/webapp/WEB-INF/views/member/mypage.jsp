@@ -87,7 +87,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/resources/js/modal/modal.js"></script>
 <script src="https://unpkg.com/vanilla-picker@2"></script>
-<script src="/resources/js/validator/validateMachine1.0.js"></script>
+<script src="/resources/js/validator/validateMachine1.1.js"></script>
 <script>
 
 	
@@ -258,9 +258,9 @@
     
     //Validator 적용을 위한 Jquery 객체 추출, 적용 
     let inputTag = nickNamePopUp.find('#input').get(); 
-    let realTag = inputTag[0]; 
+    var realNicknameInput = inputTag[0]; 
     var v = new ValidateMachine();
-    v.addValidator(realTag); 
+    v.addValidator(realNicknameInput); 
     v.addReverseRegExp({
         '\\s' : '닉네임에 공백을 포함할 수 없습니다'
     });
@@ -268,9 +268,63 @@
         '\[~!@#$%^&*()_+|<>?:{}]' : '특수문자를 포함할 수 없습니다'
     });
     v.addRegExp({
-    	'[a-z]' : '첫번째 정규표현식 테스트입니다.',
-    	'\^[A-Za-z]{1}[A-Za-z0-9]{8,12}$' : '비밀번호는 8-12자리 이내의 영문숫자 조합입니다.'
+        '\^[a-zA-Zㄱ-힣0-9]{1,8}$' : '닉네임은 8글자를 넘을 수 없습니다.'
+    });
+    
+    let inputTag2 = gitPopUp.find('#input').get(); 
+    var realGitInput = inputTag2[0];
+    var v2 = new ValidateMachine();
+    v2.addValidator(realGitInput); 
+    v2.addReverseRegExp({
+        '\\s' : 'GIT주소에 공백을 포함할 수 없습니다'
+    });
+    
+   let inputTag3 = passwordPopUp.find('#input1').get(); 
+   
+   var realPasswordInput1 = inputTag3[0];
+   
+   var v3 = new ValidateMachine();
+   v3.addValidator(realPasswordInput1); 
+   v3.addReverseRegExp({
+       '\\s' : '패스워드에 공백을 포함할 수 없습니다'
+   });
+   v3.addRegExp({
+	   '\^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Zㄱ-힣0-9]).{8,}$' : '8자 이상 영문,숫자,특수문자가 아닙니다.'
     })
+   // 중복검사를 위한 코드
+   
+   // 문제점, querySelector로 넣을때는 되는데, 그 외에는 안된다. 
+   // dom이 부모태그를 추가하는 과정에서 삭제되었다 다시 추가됨으로인해 발생하는 오류 
+   let inputTag4 = passwordPopUp.find('#input2').get(); 
+   let inputTag5 = passwordPopUp.find('#input1').get(); 
+   var v4 = new ValidateMachine(); 
+   var realPasswordInput2 = inputTag4[0];
+   v4.addDuplicateValidator(realPasswordInput2, inputTag5[0]);
+   
+   // 문제점, 다시 킬 경우 border와 Msg가 그대로이다. input으로 없에는 것이 아니라 
+   // 그냥 없에는 것이기 때문에 생긴다. 
+   // modal을 다시 킬 경우 clickevent의 이전에 그 안의 inputTag들을 inputEvent를 
+   // 통해 초기화시켜야 한다. 
+   // 모든 모달에 이벤트핸들러를 초기회시킨 후 다시 적용시킨다.. 
+	var event = new Event('input', {
+	    bubbles: true,
+	    cancelable: true,
+	});
+   
+   $('#profile-change-nickName-btn').on('click', ()=>{
+	    let nicknameDOM = nickNamePopUp.find('#input').get();
+	    nicknameDOM[0].dispatchEvent(event); 
+   })
+   $('#profile-change-git-btn').on('click', ()=>{
+	    let gitDOM = gitPopUp.find('#input').get();
+	    gitDOM[0].dispatchEvent(event); 
+   })
+   $('#profile-change-password-btn').on('click', ()=>{
+	    let passwordDOM = passwordPopUp.find('#input1').get();
+	    passwordDOM[0].dispatchEvent(event); 
+	    let passwordDOM2 = passwordPopUp.find('#input2').get();
+	    passwordDOM2[0].dispatchEvent(event); 
+   })
     
 </script>
 </html>
