@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.kh.spring.board.model.repository.BoardRepository">
+
+	<insert id="insertBoard" >
+	
+		<selectKey resultType="string" keyProperty="bdIdx" order="BEFORE">
+		select sc_proz_idx.nextval from dual
+		</selectKey>
+		
+		insert into board(bd_idx, ws_idx , bd_name , sort , bd_size )
+		values( #{bdIdx} , #{wsIdx} , #{bdName} , (select max(sort)+1 from board where ws_idx = #{wsIdx})
+		 , #{bdSize} )
+	</insert>
+
+
+</mapper>
+  
+  
+  

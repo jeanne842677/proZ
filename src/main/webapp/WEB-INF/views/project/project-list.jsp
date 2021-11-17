@@ -81,17 +81,19 @@
             </footer>
         </div>
     </div>
-    
-      <div class="con1 clone">
-      <div class="conimg">
-         <img src="/resources/img/no-img.png">
-      </div>
-      <div class="con1title">
-         <div class="projecttit">프로젝트 이름을 설정해주세요</div>
-         <div class="summary"> </div>
-      </div>
-   </div>
-    
+
+	<div class="con1 clone">
+		<div class="conimg">
+			<a href="${project.projectIdx}"> <img
+				src="/resources/img/no-img.png">
+			</a>
+		</div>
+		<div class="con1title">
+			<div class="projecttit">${project.proName}</div>
+			<div class="summary">${project.proDescription}</div>
+		</div>
+	</div>
+
 </body>
 
 

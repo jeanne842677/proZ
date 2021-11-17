@@ -83,6 +83,13 @@
   	
   	     <!-- 11/15 민협작성 끝-->
 
+  	<!-- 은비 작성 시작  -->
+  	<insert id="insertProject" useGeneratedKeys="true" keyProperty="projectIdx" parameterType="com.kh.spring.project.model.dto.Project">
+  	insert into project
+  		(project_idx, pro_name, invite_code, pro_description)
+  	values
+  		(sc_proz_idx.nextval, #{proName}, #{inviteCode}, #{proDescription})
+  	</insert>
   	
   </mapper>
   

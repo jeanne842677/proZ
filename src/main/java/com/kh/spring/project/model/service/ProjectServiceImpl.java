@@ -203,16 +203,26 @@ public class ProjectServiceImpl implements ProjectService {
 	// 민협 코드 끝
 ////////////은비가 작성한 코드 시작
 	@Override
-	public List<ProjectMember> selectProjectMemberByUserIdx(String userIdx) {
+	public List<Project> selectProjectByUserIdx(String userIdx) {
 
-		return projectRepository.selectProjectMemberByUserIdx(userIdx);
+		return projectRepository.selectProjectByUserIdx(userIdx);
 	}
 
 	@Override
-	public void insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
-		projectRepository.insertProject(proName, proDescription, inviteCode);
+	public int insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
+		Project project = new Project();
+		project.setProName(proName);
+		project.setProDescription(proDescription);
+		project.setInviteCode(inviteCode);
+		int res = projectRepository.insertProject(project);
 		projectRepository.insertRole();
 		projectRepository.insertAdmin(userIdx);
+		
+		
+		System.out.println("서비스 : 제발 되어라" + project.getProjectIdx());
+		return res;
+		
+		
 	}
 
 	@Override
