@@ -148,103 +148,8 @@
             <button type="button"  id="memo-btn" class="memo-btn">메모 작성</button>
         </div>
     <div id="memo">        
-            <div id = "memo-yellow">
-                <div id="content">
-                안녕하세요 반갑습니다.
-                </div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
-
-            <div id = "memo-pink">
-                <div id="content">
-                    동해물과 백두산이 마르고 닳도록
-                    하느님이 보우하사 우리나라 만세
-                    무궁화 삼천리 화려 강산
-                    대한 사람 대한으로 길이 보전하세
-                </div>
-                 <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-                </div>
-            <div id = "memo-green">
-              <div id="content">
-                달이 익어가니 서둘러 젊은 피야
-                민들레 한 송이 들고
-                사랑이 어지러이 떠다니는 밤이야
-                날아가 사뿐히 이루렴
-              </div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>     
-            <div id = "memo-yellow">
-                <div id="content">
-                    팽팽한 어둠 사이로
-                    떠오르는 기분
-                    이 거대한 무중력에 혹 휘청해도
-                    두렵진 않을 거야
-                </div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
-            <div id = "memo-blue">
-                <div id="content">
-                프로젝트 시작 11월 9일 ->
-                 </div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
-            <div id = "memo-gray">
-                <div id="content">
-                달이 익어가니 서둘러 젊은 피야
-                민들레 한 송이 들고
-                사랑이 어지러이 떠다니는 밤이야
-                날아가 사뿐히 이루렴
-                </div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div> 
-            <div id = "memo-pink">
-                <div id="content"></div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
-            <div id = "memo-green">
-                <div id="content"></div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>     
-            <div id = "memo-yellow">
-                <div id="content"></div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
-            <div id = "memo-green">
-                <div id="content"></div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>     
-            <div id = "memo-yellow">
-                <div id="content"></div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
-            <div id = "memo-blue">
-                <div id="content"></div>
-                <div id="profile">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </div>
-            </div>
+           
+           
      </div>
      <div id="modal">
         <div id = "write-memo">
@@ -273,14 +178,13 @@
         </div>
     </div>
 
-    
-
-
         </section>
         <aside></aside>
         </div>
-
     </div>
     
+    <script type="text/javascript">
+   
+    </script>
 </body>
 </html>
