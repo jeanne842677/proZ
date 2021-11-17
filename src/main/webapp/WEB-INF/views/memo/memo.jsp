@@ -1,12 +1,12 @@
-<!-- <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%> -->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
     <!DOCTYPE html>
     <html>
     <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
-     <link type="text/css" rel="stylesheet" href="/resources/css/bootstrap.css"> 
-     <link type="text/css" rel="stylesheet" href="/resources/css/memo/memo.css">
+     <link type="text/css" rel="stylesheet" href="bootstrap.css"> 
+     <link type="text/css" rel="stylesheet" href="memo.css">
         <script type="text/javascript" src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         
