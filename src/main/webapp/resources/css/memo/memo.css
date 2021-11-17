@@ -37,7 +37,7 @@
     background : none;
     border: 0;
     font-weight: bold;
-    color: RGB(143, 122, 229);
+    color: #A4A4A4;
 }
 #search-form{
     display: flex;
@@ -79,7 +79,7 @@
     margin:auto;
     position: relative;
     top:20px;
-    justify-content: flex-start;
+    justify-content: space-around;
 }
 
 #content{
@@ -101,14 +101,13 @@
     background-color: #fff3cd;
     width:250px;
     height:200px;
+    margin-bottom: 50px;
    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
    flex-direction: column;
    justify-content: flex-end;
    align-items: flex-end;
    padding: 10px 10px 10px 10px;
-   margin: 16px;
 }
-
 
 #memo-pink{
     display: flex;
@@ -191,7 +190,13 @@
     border-color: rgba(255, 255, 255, 0.5);
     flex-direction:column;
 }
-
+#close{
+    display: flex;  
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 20px;
+    justify-content: flex-end;
+}
 #editor{
     display: flex;
     width: 370px;
@@ -297,13 +302,7 @@
     height:370px;
     border-color: rgba(255, 255, 255, 0.5);
 }
-#close{
-    display: flex;  
-    position:absolute;
-    margin-top: 5px;
-    margin-right: 5px;
-    font-size: 20px;
-}
+
 #editor{
     display: flex;
     width: 370px;
@@ -331,26 +330,7 @@
     font-size: 22px;
 }
 
-#font{
-    display: inline-block;
-    position:relative;
-    font-size: 22px;
-}
-#italic{
-    display: inline-block;
-    position:relative;
-    font-size: 22px;
-}
-#under{
-    display: inline-block;
-    position:relative;
-    font-size: 22px;
-}
-#line{
-    display: inline-block;
-    position:relative;
-    font-size: 22px;
-}
+
 #save{
     display: inline-block;
     position:relative;

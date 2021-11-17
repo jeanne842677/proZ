@@ -209,10 +209,7 @@
             
                 <div id="editor">
                     <div id="back-color"><i class="fas fa-palette "></i></i></div>
-                    <!-- <div id="font"><i class="fas fa-font "></i></div>
-                    <div id="italic"><i class="fas fa-italic "></i></div>
-                    <div id="under"><i class="fas fa-underline "></i></div>
-                    <div id="line"><i class="fas fa-strikethrough"></i></div> -->
+                   
                     <div id="save"><i class="fas fa-save "></i></div>
                 </div> 
             </div>
