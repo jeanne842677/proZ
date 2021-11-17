@@ -242,9 +242,7 @@
                 
                     <img src="/resources/img/logo-white.png" height="100%">
                 </div>
-                <a href="/member/kakao_logout" id="custom-login-btn" >
-			                       <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="186"  />
-			                     </a>
+               
                 <form:form modelAttribute="joinForm" 
                 action="/member/join" method="post" id="frm_join" class="join-wrap">
                     <label for="email" id="email-label">01. 이메일을 입력하고 인증을 완료하세요. </label>
