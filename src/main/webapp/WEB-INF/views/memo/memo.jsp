@@ -5,8 +5,8 @@
     <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
-     <link type="text/css" rel="stylesheet" href="bootstrap.css"> 
-     <link type="text/css" rel="stylesheet" href="memo.css">
+     <link type="text/css" rel="stylesheet" href="/resources/css/bootstrap.css"> 
+     <link type="text/css" rel="stylesheet" href="/resources/css/memo/memo.css">
         <script type="text/javascript" src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         
@@ -137,6 +137,20 @@
             .panel-default>.panel-heading{
                 border:none;
             }
+            
+            .btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:nth-child(n+3), .btn-group>:not(.btn-check)+.btn {
+		       border-top-left-radius: 0;
+		       border-bottom-left-radius: 0;
+		       border: none;
+		       background:transparent;
+			}
+            
+            .btn-group-vertical>.btn, .btn-group>.btn {
+			    position: relative;
+			    float: left;
+			    border: none;
+			    background:transparent;
+			}
 
 
             
@@ -171,9 +185,10 @@
     
             <div id="top">
                 <div id="range">
-                    <button id="new">최신순</button>
-                    <button id="old">오래된순</button>
+                    <button id="new" class="newBtn">최신순</button>
+                    <button id="old" class="oldBtn">오래된순</button>
                 </div>
+
                 <div id="search-form">
                     <img class="search-icon" src="/resources/img/search.png">
                     <input class="form-control" id="search" type="text" placeholder="검색하기" >  
@@ -226,6 +241,17 @@
         </div>
         
         <script type="text/javascript">
+        $("#save").click(function(){ 
+            $("#modal").hide();
+            $("#memo").prepend('<div id = "memo-yellow"><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
+            $(".textvalue").text($(".note-editable").text());
+            $("#memo-yellow").css("background-color",$("#write-memo").css("background-color"));
+        })
+        
+        
+        
+        
+        
             $(document).ready(function (){
                 $(".memo-btn").click(function(){
                     $("#modal").css('display','flex');
@@ -318,6 +344,20 @@
             ['color', ['color']]
         ]
     });
+            
+            
+            //
+            $(".newBtn").click(function(){
+                $(".newBtn").css('color','#8F7AE5');
+                $(".oldBtn").css('color','#A4A4A4');
+            });
+            
+            $(".oldBtn").click(function(){
+                $(".oldBtn").css('color','#8F7AE5');
+                $(".newBtn").css('color','#A4A4A4');
+                
+            });
+
 
 
 
