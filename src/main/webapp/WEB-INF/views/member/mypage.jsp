@@ -13,6 +13,10 @@
 					#profile-change-git-btn{
                     	width: 200px; 
                     }
+                    a{
+                    text-decoration: none; 
+                    color: inherit;
+                    }
                     
 </style>
 
@@ -31,11 +35,11 @@
                 <div class="section-wrapper">
                     <div class="content-wrapper" id="profileImg-wrapper">
                         <button id="profile-banner-btn" style="background-color: ${authentication.profileColor}"></button>
-                        <button id="profile-img"><img class="profile" src="http://localhost:9090/resources/upload/${profileImg}"></button>
+                        <button id="profile-img"><img class="profileImg" src="http://localhost:9090/resources/upload/${profileImg}"></button>
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
                     </div>
                     <div class="content-wrapper" id="profile">
-                        <div class="profile-title">#사용자 프로필</div>
+                        <div class="profile-title"><a name="userProfile">#사용자 프로필</a></div>
                         <div class="profile-subtitle">프로필 사진 변경</div>
                         <div class="profile-message"></div>
                         <div class="proflie-advice">프로필 사진을 클릭하여 최대 2MB 크기의 원하는 프로필 사진을 첨부하세요. </div>
@@ -48,7 +52,7 @@
                     </div>
     
                     <div class="content-wrapper" id="userInfo">
-                        <div class="profile-title">#계정 정보</div>
+                        <div class="profile-title"><a name="userInfo">#계정 정보</a></div>
                         <div class="profile-subtitle">가입 이메일</div>
                         <div class="proflie-advice">로그인 시 입력하신 이메일 주소입니다 </div>
                         <div class="info-wrapper">
@@ -71,7 +75,7 @@
                     </div>
                     
                     <div class="content-wrapper" id="leave">
-                        <div class="profile-title">#회원 탈퇴</div>
+                        <div class="profile-title"><a name="userIsleave">#회원 탈퇴</a></div>
                         <div class="leave-wrapper">
                             <img class="leave-img" src="/resources/img/undraw-space.png"> 
                             <div class="profile-subtitle">정말로 PRO_Z를 탈퇴하시나요?</div>
