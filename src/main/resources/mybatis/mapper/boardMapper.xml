@@ -6,16 +6,28 @@
 <mapper
 	namespace="com.kh.spring.board.model.repository.BoardRepository">
 
-	<insert id="insertBoard" >
-	
-		<selectKey resultType="string" keyProperty="bdIdx" order="BEFORE">
-		select sc_proz_idx.nextval from dual
+	<insert id="insertBoard">
+
+		<selectKey resultType="string" keyProperty="bdIdx"
+			order="BEFORE">
+			select sc_proz_idx.nextval from dual
 		</selectKey>
-		
+
 		insert into board(bd_idx, ws_idx , bd_name , sort , bd_size )
-		values( #{bdIdx} , #{wsIdx} , #{bdName} , (select max(sort)+1 from board where ws_idx = #{wsIdx})
-		 , #{bdSize} )
+		values(
+		#{bdIdx} , #{wsIdx} , #{bdName} , (select nvl(max(sort),0)+1 from board where
+		ws_idx = #{wsIdx})
+		, #{bdSize} )
 	</insert>
+
+	<select id="selectBoardByWsIdx" resultType="Board">
+		select ws_name , bd_idx , bd_name, b.sort , bd_size from workspace ws
+		join board b
+		using(ws_idx)
+		where ws_idx=#{wsIdx}
+		and b.parent is null
+		order by b.sort
+	</select>
 
 
 </mapper>
