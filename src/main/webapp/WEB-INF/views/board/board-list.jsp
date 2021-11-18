@@ -602,7 +602,6 @@
               	})
               	
               	
-              	alert(changeSort);
               	
             	fetch("/board/change/sort" ,{
     				
@@ -628,7 +627,7 @@
 	
 
 
-
+		let jj;
 
         $('#add-small-board').on('click', function () {
 
@@ -743,34 +742,14 @@
 	
                 
                 addBtn.on('click' , function() {
-                    
+                    alert('추가버튼');
 
 
                 })
 
 
-                boardDiv.find('.card-wrap').sortable({
 
-                    connectWith: ".card-wrap",
-                    cancel: ".board-subject-wrap, .post-btn",
-                    start: (e, ui) => {
-                        let height = ui.item.css('height');
-
-                        $(".card-shadow").css('height', height);
-                    },
-                    placeholder: "card-shadow"
-                     
-
-
-
-                }).disableSelection();
-
-                boardDiv.find('#remove-board').on('click' , function() {
-                    boardDiv.remove();
-
-                   
-
-                })
+                boardDiv.find('#remove-board').on('click' , removeEvent)
                 
                 
                 fetch("/board/change/add-board" ,{
@@ -785,11 +764,11 @@
  
     					})
     				
-    			}).then(res=>res.text())
-    			.then(text=> {
-    					alert(text)
-    					
-    			
+    			}).then(res=>res.json())
+    			.then(board=> {
+    				
+    				boardDiv.attr('id' , board.bdIdx);
+    				boardDiv.data('sort' , $('.board').length);
     			})
 
 
@@ -800,11 +779,11 @@
         }
 
     	
-		let aa = function() {
+		let removeEvent = function() {
 
-			$(this).on('click' , function() {
+			
 
-				alert("dd");
+				alert("삭제");
 				let board = $(this).parents('.board')
 				board.remove();
 				
@@ -820,21 +799,33 @@
  
     					})
     				
-    			}).then(res=>{
-    				
-    				
-    				
-    			})
+    			}).then(res=>{})
 			
 				
-				
-			})
+			
 		
 		}
 		
    
 	//게시판 삭제 버튼을 눌렀을 때
-		$('.remove-board').each(aa)
+		$('.remove-board').each(function() {
+			
+			$(this).on('click' , removeEvent)
+			
+			
+			
+			
+		});
+	
+	
+	let addPost = function () {
+		
+		
+		
+		
+		
+		
+	}
 		
 	
 
