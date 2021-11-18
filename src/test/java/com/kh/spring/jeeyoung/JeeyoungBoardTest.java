@@ -1,5 +1,6 @@
 package com.kh.spring.jeeyoung;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,7 +44,7 @@ public class JeeyoungBoardTest {
 
 	   //게시판 추가테스트
 	   @Test
-	   public void addBoard() throws Exception{
+	   public void addBoardTest() throws Exception{
 		   
 		   Map<String , String> map = new HashMap<>();
 		   map.put("bdName" , "게시판제목입니다");
@@ -61,6 +62,42 @@ public class JeeyoungBoardTest {
 		   
 		   
 	   }
+	   
+
+	   
+	   //게시판 진입 테스트
+	   @Test
+	   public void BoardTest() throws Exception{
+		   mockMvc.perform(get("/board/999990"))
+		   .andExpect(status().isOk())
+		   .andDo(print());
+	   }
+	   
+	   
+	   
+
+	   //게시판 자리체인지
+	   @Test
+	   public void changeTest() throws Exception{
+		   
+		   Map<String , Object> map = new HashMap<>();
+		   map.put("bdIdx" , "100361");
+		   map.put("sort" , 2);
+		   map.put("changeSort" , 4);
+		   map.put("wsIdx" , "999990");
+		   
+		   String fetchData = JsonMaker.json(map);
+		   
+		   mockMvc.perform(post("/board/change/sort")
+				   .contentType(MediaType.APPLICATION_JSON)
+				   .content(fetchData))
+		   .andExpect(status().isOk())
+		   .andDo(print());
+		   
+		   
+		   
+	   }
+	   
 	   
 	   
 

@@ -228,6 +228,7 @@
 
 <body>
 
+
     <div class="wrap">
         <header>
 
@@ -263,19 +264,21 @@
 
 
                     <label for="password" id="password-label">02-1. 사용하실 비밀번호를 입력하세요. </label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="8글자 이상의 숫자 영문자 특수문자 조합 입니다."
+                    <input type="password" class="pw1 pw" id="password" name="password" placeholder="8글자 이상의 숫자 영문자 특수문자 조합 입니다."
                     	 <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if>  required/>
                         <form:errors path="password" cssClass="valid-msg"/>
                    
-                   <%--  <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
-                    <input type="password" class="form-control" id="password-check" 
+                   <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
+                    <input type="password" class="pw2 pw" id="password-check" placeholder="비밀번호를 다시 입력해주세요."
                     	 <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if> 
-                    required/>/ --%>
-
+                    required/>                  
+					 
+					<div class="alert-fail" style="display: none;">패스워드가 틀렸습니다.</div>
+					<div class="alert" style="display: none;">패스워드가 일치합니다.</div>
 
                     <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요.</label>
                     <input type="text" class="form-control" id="nickname" name="nickname" maxlength="8" required placeholder="8글자 이내로 입력하세요.">
@@ -316,7 +319,35 @@
 
     </div>
 
+<script type="text/javascript">
+$('.pw').focusout(function() {
+    let pw1 = $('.pw1').val();
+    let pw2 = $('.pw2').val();
+    
+    if(pw1 & pw2) {
+        return;
+    }
 
+
+    if(pw1 != pw2 ) {
+        $('.alert-fail').css('display' , 'block');
+        $('.alert-fail').css('color' , 'red');
+        $('.alert').css('display' , 'none');
+        $("#join-impl").attr("disabled", "disabled");
+
+       
+    }else if(pw1 == pw2){
+    	 $('.alert').css('display' , 'block');
+         $('.alert').css('color' , 'red');
+         $('.alert-fail').css('display' , 'none');
+         $("#join-impl").removeAttr("disabled");
+
+        
+    }
+    
+
+})
+</script>
 
 </body>
 
