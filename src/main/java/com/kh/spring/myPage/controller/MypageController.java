@@ -168,6 +168,7 @@ public class MypageController {
 			Member member = (Member) session.getAttribute("authentication"); 
 			member.setGit(mypageForm.getGit());
 			
+			
 			//2) git 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
 			int res = mypageService.updateMypageMemberByGit(member); 
 			session.setAttribute("authentication", member);
