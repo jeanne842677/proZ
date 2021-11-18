@@ -1,196 +1,196 @@
         @charset "UTF-8";
 
 html, body {
-	width: 100%;
-	height: 100%;
-	min-width: 1000px;
-	color: white;
+   width: 100%;
+   height: 100%;
+   min-width: 1000px;
+   color: white;
 }
 
 .wrap {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	background: rgb(40, 146, 186);
-	background: linear-gradient(128deg, rgba(40, 146, 186, 1) 0%,
-		rgba(120, 118, 177, 1) 33%, rgba(196, 93, 161, 1) 68%,
-		rgba(200, 129, 94, 1) 100%);
-	overflow: hidden;
-	position: relative;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   background: rgb(40, 146, 186);
+   background: linear-gradient(128deg, rgba(40, 146, 186, 1) 0%,
+      rgba(120, 118, 177, 1) 33%, rgba(196, 93, 161, 1) 68%,
+      rgba(200, 129, 94, 1) 100%);
+   overflow: hidden;
+   position: relative;
 }
 
 header {
-	height: 60px;
-	background: transparent;
+   height: 60px;
+   background: transparent;
 }
 
 .con {
-	height: 100%;
-	display: flex;
-	justify-content: space-between;
+   height: 100%;
+   display: flex;
+   justify-content: space-between;
 }
 
 section {
-	height: 100%;
-	width: 100%;
-	overflow: hidden;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
+   height: 100%;
+   width: 100%;
+   overflow: hidden;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
 }
 
 /*가운데 박스*/
 .login-wrap {
-	border-radius: 10px;
-	height: 580px;
-	width: 960px;
-	background: RGB(22, 26, 37);
-	display: flex;
-	min-height: 540px;
-	min-width: 960px;
-	position: relative;
-	box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4)
+   border-radius: 10px;
+   height: 580px;
+   width: 960px;
+   background: RGB(22, 26, 37);
+   display: flex;
+   min-height: 540px;
+   min-width: 960px;
+   position: relative;
+   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4)
 }
 
 .login-box {
-	width: 50%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
+   width: 50%;
+   height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
 }
 
 .login-box {
-	height: 580px;
-	width: 480px;
-	border-radius: 10px;
-	background: RGB(22, 26, 37);
-	box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4);
-	z-index: 4;
+   height: 580px;
+   width: 480px;
+   border-radius: 10px;
+   background: RGB(22, 26, 37);
+   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4);
+   z-index: 4;
 }
 
 #login-logo {
-	position: absolute;
-	top: 10px;
-	left: 0px;
-	width: 150px;
+   position: absolute;
+   top: 10px;
+   left: 0px;
+   width: 150px;
 }
 
 .login-content {
-	display: flex;
-	flex-direction: column;
-	width: 350px;
+   display: flex;
+   flex-direction: column;
+   width: 350px;
 }
 
 #sign-text {
-	text-align: center;
-	font-weight: 900;
-	font-size: 30px;
-	margin-bottom: 20px;
-	color:#fff;
+   text-align: center;
+   font-weight: 900;
+   font-size: 30px;
+   margin-bottom: 20px;
+   color:#fff;
 }
 
 #email, #password {
-	background-color: RGB(62, 66, 77);
-	margin: 10px 0;
-	border-color: RGB(255, 255, 255, 0.2);
-	color: white;
-	height: 48px;
+   background-color: RGB(62, 66, 77);
+   margin: 10px 0;
+   border-color: RGB(255, 255, 255, 0.2);
+   color: white;
+   height: 48px;
 }
 
 #login-btn {
-	margin: 10px 0;
-	background: rgb(117, 55, 181);
-	background: linear-gradient(128deg, rgba(117, 55, 181, 1) 0%,
-		rgba(190, 68, 172, 1) 100%);
-	height:48px;
-	font-size:18px;
-	width:100%;
+   margin: 10px 0;
+   background: rgb(117, 55, 181);
+   background: linear-gradient(128deg, rgba(117, 55, 181, 1) 0%,
+      rgba(190, 68, 172, 1) 100%);
+   height:48px;
+   font-size:18px;
+   width:100%;
 }
 
 .find-wrap {
-	text-align: right;
+   text-align: right;
 }
 
 .find-wrap>a {
-	margin: 0 10px;
-	text-decoration: none;
-	color: white;
+   margin: 0 10px;
+   text-decoration: none;
+   color: white;
 }
 
 .btn-wrap {
-	display: flex;
-	justify-content: center;
-	height: 40px;
-	margin-top: 10px;
+   display: flex;
+   justify-content: center;
+   height: 40px;
+   margin-top: 10px;
 }
 
 .social {
-	font-size: 14px;
-	margin-top: 50px;
-	text-align: center;
-	margin-bottom: 5px;
-	color: rgb(222, 222, 222);
+   font-size: 14px;
+   margin-top: 50px;
+   text-align: center;
+   margin-bottom: 5px;
+   color: rgb(222, 222, 222);
 }
 
-#custom-login-btn, #google-btn {
-	/* //background: rgb(250,225,0);
+#kakao-btn, #google-btn {
+   /* //background: rgb(250,225,0);
         // background: linear-gradient(128deg, rgba(250,225,0,1) 0%, rgba(255,246,162,1) 100%);
         */
-	color: black;
-	margin: 0px 10px;
-	font-weight: 900;
-	width: 130px;
+   color: black;
+   margin: 0px 10px;
+   font-weight: 900;
+   width: 130px;
 }
 
 #kakao-btn {
-	background: RGB(254, 229, 0);
+   background: RGB(254, 229, 0);
+   font-size:14px;
 }
 
 #google-btn {
-	background: white;
+   background: white;
 }
 
 .wave {
-	height: 580px;
-	overflow: hidden;
+   height: 580px;
+   overflow: hidden;
 }
 
 .design-box1 {
-	position: absolute;
-	width: 500px;
-	height: 650px;
-	transform: rotate(-30deg);
-	background: rgba(0, 0, 0, 0.1);
-	top: 50px;
-	right: -320px;
-	border-radius: 2px;
-	overflow: hidden;
+   position: absolute;
+   width: 500px;
+   height: 650px;
+   transform: rotate(-30deg);
+   background: rgba(0, 0, 0, 0.1);
+   top: 50px;
+   right: -320px;
+   border-radius: 2px;
+   overflow: hidden;
 }
 
 .design-box2 {
-	position: absolute;
-	width: 500px;
-	height: 500px;
-	transform: rotate(-30deg);
-	background: rgba(255, 255, 255, 0.1);
-	top: -200px;
-	left: -300px;
-	border-radius: 2px;
-	overflow: hidden;
+   position: absolute;
+   width: 500px;
+   height: 500px;
+   transform: rotate(-30deg);
+   background: rgba(255, 255, 255, 0.1);
+   top: -200px;
+   left: -300px;
+   border-radius: 2px;
+   overflow: hidden;
 }
 
 .design-box3 {
-	position: absolute;
-	width: 500px;
-	height: 500px;
-	transform: rotate(-30deg);
-	background: rgba(255, 255, 255, 0.1);
-	top: 900px;
-	left: 200px;
-	border-radius: 2px;
-	overflow: hidden;
+   position: absolute;
+   width: 500px;
+   height: 500px;
+   transform: rotate(-30deg);
+   background: rgba(255, 255, 255, 0.1);
+   top: 900px;
+   left: 200px;
+   border-radius: 2px;
+   overflow: hidden;
 }
-

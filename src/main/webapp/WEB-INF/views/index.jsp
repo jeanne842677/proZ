@@ -26,8 +26,17 @@
                     
                     <div class="rightheader">
                             <div class="signup" onclick="location.href='/member/join'">sign-up</div>
-                            <div class="login" onclick="location.href='/member/login'">login</div>
-                    </div>
+                            <div class="login" ><a href="/member/logout.do">
+                            <c:set var="loginout" value="${authentication}" />
+                        <c:choose>
+	                        <c:when test="${empty loginout}">
+								 login
+							</c:when> 
+							<c:when test="${!empty loginout}">
+							      logout
+							 </c:when>
+                        </c:choose>
+                            </a></div>
                     
                 </div>
             </header>

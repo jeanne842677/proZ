@@ -33,6 +33,11 @@ input {
    font-size:15px;
 }
 
+ a:link { color: none; text-decoration: none;}
+ a:visited { color: none; text-decoration: none;}
+ a:hover { color: none; text-decoration: none;}
+
+
 </style>
 
 <body>
@@ -76,11 +81,12 @@ input {
                             <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="#">비밀번호 재설정</a></div>
                             <div class="social">다른 서비스 계정으로 로그인</div>
                             <div class="btn-wrap">
-                                <a href="/member/kakao_login" id="custom-login-btn" >
-                                <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="186"  />
-                              </a>
+                            <button id="kakao-btn" class="btn  btn-primary" type="button" >
+                                
+                                <a href="/member/kakao_login" ><i class="fas fa-comment"></i>  카카오 로그인</a>
+                              </button>
                                 <button id="google-btn" class="btn  btn-primary" type="button" >
-                                   <a href="/member/google_login">구글 로그인</a>
+                                   <a href="/member/google_login"><i class="fab fa-google"></i>  구글 로그인</a>
                          </button>
     
                             </div>

@@ -160,6 +160,7 @@ public class MemberController {
          return "disable";
       }
    }
+   
    @PostMapping("join-json")
    public String joinWithJson(@RequestBody Member member) {
       logger.debug(member.toString());
@@ -185,7 +186,7 @@ public class MemberController {
       }
       
       session.setAttribute("authentication", certifiedUser);
-      logger.debug(certifiedUser.toString());
+      logger.debug("세션 안담겨??!!!"  + certifiedUser.toString());
       return "redirect:/project/project-list";
       
       
@@ -198,8 +199,10 @@ public class MemberController {
       logger.info("logout메서드 진입");
       
       HttpSession session = request.getSession();
+      session.invalidate();
+
       
-      return "redirect:/";
+      return "redirect:/member/login";
       
    }
    
