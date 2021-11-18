@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.spring.board.model.dto.Board;
+import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.workspace.model.dto.Workspace;
 
 public interface BoardService {
@@ -17,5 +19,13 @@ public interface BoardService {
 	void deleteBoard(Board board);
 
 	void updateSort(Map<String, String> map);
+
+	void insertPost(Map<String, String> map , Member member);
+
+	List<Post> selectPostListByWsIdx(String wsIdx);
+
+	Board selectBoardByBdIdx(String bdidx);
+
+	void updatePostSort(Map<String, String> map);
 
 }

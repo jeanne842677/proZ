@@ -438,14 +438,14 @@
                                     </div>
 
                                     <div class="card-wrap">
-                                        <div class="card">
-                                            <div class="card-subject">안녕안녕</div>
-                                            <div class="profile-img"></div>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-subject">안녕안녕</div>
-                                            <div class="profile-img"></div>
-                                        </div>
+	                                    <c:forEach items="${postList}" var="post">
+	                                    	<c:if test="${board.bdIdx == post.bdIdx }">
+	                                        <div class="card" id="${post.postIdx }" data-sort="${post.sort}">
+	                                            <div class="card-subject">${post.postTitle}</div>
+	                                            <div class="profile-img"></div>
+	                                        </div>
+	                                        </c:if>
+	                                    </c:forEach>
                                     </div>
                                     <button class="post-btn btn btn-primary">
                                         추가하기
@@ -553,8 +553,9 @@
     </div>
 
     <script type="text/javascript">
-
-
+		
+    let test;
+	//카드끼리 소팅하기
         $('.card-wrap').sortable({
 
             connectWith: ".card-wrap",
@@ -563,6 +564,48 @@
                 let height = ui.item.css('height');
 
                 $(".card-shadow").css('height', height);
+            },
+            update : (e , ui) => {
+            	
+            	
+            	//이벤트 두번 등록 방지
+				if(ui.sender == null) { 
+
+	            	let board = ui.item.parents('.board');
+	            	let bdIdx = board.attr('id');
+	            	let postIdx = ui.item.attr('id');
+					
+					let changeSort;
+	            	
+	             	board.find('.card').each(function(i){
+						let thisPostIdx = $(this).attr('id');
+	            		if( thisPostIdx== postIdx) {
+	            			changeSort = i+1;
+	            	
+	            		
+	            			return;
+	            		}
+	
+	            	})
+	            	
+	            	fetch("/board/post/change-sort" , {
+	    				
+	    				method : "POST",
+	    				headers :  {"Content-type" : "application/json; charset=UTF-8"},
+	    				body : JSON.stringify({
+	    					bdIdx : bdIdx,
+	    					changeSort : changeSort ,
+	    					postIdx : postIdx
+	    				
+	    					})
+	    				
+	    			})
+	            	
+					
+				            		
+				 }
+            	
+            	
             },
             placeholder: "card-shadow" 
 
@@ -741,11 +784,7 @@
                 input.attr('readonly', 'readonly');
 	
                 
-                addBtn.on('click' , function() {
-                    alert('추가버튼');
-
-
-                })
+                addBtn.on('click' , addPost);
 
 
 
@@ -819,14 +858,24 @@
 	
 	
 	let addPost = function () {
-		
-		
-		
-		
-		
-		
+			
+			let bdidx = $(this).parents('.board').attr('id');
+			location.href="/board/post?bdidx="+ bdidx;
+			
+			
+			
+			
 	}
+			
+	
+	//추가하기 버튼 눌렀을 때 
+	$('.post-btn').each(function() {
 		
+		$(this).on('click' , addPost)
+		
+	})
+	
+
 	
 
 
