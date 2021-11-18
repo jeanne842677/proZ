@@ -73,6 +73,10 @@ public interface ProjectRepository {
 
 	void deleteRoleByProjectIdxAndAuthName(ProjectRole role);
 	
+	//11/17민협수정
+	@Update("update project set PRO_NAME = #{proName} , PRO_DESCRIPTION = #{proDescription} where PROJECT_IDX = #{projectIdx}")
+	void updateProjectByProjectIdx(Map<String, String> project);
+	
 
 	// 은비가 작성한 코드 시작
 	   @Select("select * from project where project_idx in(select project_idx from project_member where user_idx = #{userIdx}) order by project_idx asc")
@@ -103,6 +107,10 @@ public interface ProjectRepository {
 
 	   @Select("select * from project where project_idx = #{projectIdx}")
 	   Project selectProjectExist(String projectIdx);
+	   
+	   
+
+	
 
 
 

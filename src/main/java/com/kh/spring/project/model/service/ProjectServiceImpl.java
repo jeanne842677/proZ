@@ -199,6 +199,18 @@ public class ProjectServiceImpl implements ProjectService {
 	public void deleteRoleByProjectIdxAndAuthName(ProjectRole role) {
 		projectRepository.deleteRoleByProjectIdxAndAuthName(role);
 	}
+	
+	//11/17 민협
+	@Override
+	public String updateProjectByProjectIdx(Map<String, String> project) {
+		System.out.println("service ::" + project);
+		if(project.get("nameState").equals("update") || project.get("descriptionState").equals("update") ) {
+			projectRepository.updateProjectByProjectIdx(project);
+			return "바뀜";
+		}else {
+			return "바뀐게 없음.";		
+			}
+	}
 
 	// 민협 코드 끝
 ////////////은비가 작성한 코드 시작
@@ -239,6 +251,8 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project selectProjectExist(String projectIdx) {
 		return projectRepository.selectProjectExist(projectIdx);
 	}
+
+
 
 
 

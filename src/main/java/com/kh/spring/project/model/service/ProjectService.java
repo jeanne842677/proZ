@@ -61,6 +61,8 @@ public interface ProjectService {
 
 	Project selectProjectExist(String projectIdx);
 
+	String updateProjectByProjectIdx(Map<String, String> project);
+
 	
 
 

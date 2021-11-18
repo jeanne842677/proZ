@@ -6,7 +6,7 @@
 
 <head>
    <%@ include file="/WEB-INF/views/include/head.jsp" %>
-   <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=2">
+   <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=1">
     <link type="text/css" rel="stylesheet" href="/resources/css/setting/role_management.css">
     <link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
     <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
