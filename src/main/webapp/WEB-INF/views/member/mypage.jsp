@@ -30,7 +30,7 @@
                 <!--작업 내용-->
                 <div class="section-wrapper">
                     <div class="content-wrapper" id="profileImg-wrapper">
-                        <button id="profile-banner-btn" style="background-color: ${certifiedUser.profileColor}"></button>
+                        <button id="profile-banner-btn" style="background-color: ${authentication.profileColor}"></button>
                         <button id="profile-img"><img class="profile" src="http://localhost:9090/resources/upload/${profileImg}"></button>
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
                     </div>
