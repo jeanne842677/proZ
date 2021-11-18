@@ -12,6 +12,7 @@
 		  <typeAlias alias="Member" type="com.kh.spring.member.model.dto.Member"/>
 	</typeAliases>
 	<mappers>
+		<mapper resource="mybatis/mapper/boardMapper.xml" />	
 		<mapper resource="mybatis/mapper/chatMapper.xml" />	
 		<mapper resource="mybatis/mapper/memberMapper.xml" />	
 		<mapper resource="mybatis/mapper/memoMapper.xml" />	

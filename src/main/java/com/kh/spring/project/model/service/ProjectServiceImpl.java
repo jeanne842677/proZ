@@ -199,20 +199,42 @@ public class ProjectServiceImpl implements ProjectService {
 	public void deleteRoleByProjectIdxAndAuthName(ProjectRole role) {
 		projectRepository.deleteRoleByProjectIdxAndAuthName(role);
 	}
+	
+	//11/17 민협
+	@Override
+	public String updateProjectByProjectIdx(Map<String, String> project) {
+		System.out.println("service ::" + project);
+		if(project.get("nameState").equals("update") || project.get("descriptionState").equals("update") ) {
+			projectRepository.updateProjectByProjectIdx(project);
+			return "바뀜";
+		}else {
+			return "바뀐게 없음.";		
+			}
+	}
 
 	// 민협 코드 끝
 ////////////은비가 작성한 코드 시작
 	@Override
-	public List<ProjectMember> selectProjectMemberByUserIdx(String userIdx) {
+	public List<Project> selectProjectByUserIdx(String userIdx) {
 
-		return projectRepository.selectProjectMemberByUserIdx(userIdx);
+		return projectRepository.selectProjectByUserIdx(userIdx);
 	}
 
 	@Override
-	public void insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
-		projectRepository.insertProject(proName, proDescription, inviteCode);
+	public int insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
+		Project project = new Project();
+		project.setProName(proName);
+		project.setProDescription(proDescription);
+		project.setInviteCode(inviteCode);
+		int res = projectRepository.insertProject(project);
 		projectRepository.insertRole();
 		projectRepository.insertAdmin(userIdx);
+		
+		
+		System.out.println("서비스 : 제발 되어라" + project.getProjectIdx());
+		return res;
+		
+		
 	}
 
 	@Override
@@ -229,6 +251,8 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project selectProjectExist(String projectIdx) {
 		return projectRepository.selectProjectExist(projectIdx);
 	}
+
+
 
 
 

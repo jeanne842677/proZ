@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.spring.common.code.ErrorCode;
@@ -290,9 +291,11 @@ public class MemberController {
          //token 생성
          String token  = UUID.randomUUID().toString();
          
-      
-         
+      if(session.getAttribute("kakaoId") != null) {
+         form.setSocialId((String)session.getAttribute("kakaoId"));
+      }else {
          form.setSocialId((String)session.getAttribute("googleId"));
+      }
          session.setAttribute("persistToken", token);
          session.setAttribute("persistUser", form);
          memberService.authenticateByEmail(form,token);
@@ -321,48 +324,32 @@ public class MemberController {
  }
 
  @RequestMapping(value ="kakao_callback", method = RequestMethod.GET)
- public String redirectkakao(@RequestParam String code, HttpSession session) throws IOException {
+ public String redirectkakao(@RequestParam String code, HttpSession session ,RedirectAttributes redirectAttr ) throws IOException {
  // 접속토큰 get
     System.out.println("code:"+code);
     
- 
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-    map.add("grant_type", "authorization_code");
-    map.add("client_id", "448c3d7ccd2aea13e02cfe7121e656dc");
-    map.add("redirect_uri", "http://localhost:9090/member/kakao_callback");
-    map.add("code", code);
+    
+    Map<String,Object> kakaoUser = memberService.kakaoCallback(code);
+    
+    Map<String,String> kakaoProperties =(Map<String,String>) kakaoUser.get("properties");
+    String kakaoName = kakaoProperties.get("nickname");
+    String kakaoId = String.valueOf(kakaoUser.get("id"));
+    System.out.println("kakaoUser"+kakaoUser);
+    System.out.println("kakaoId : " + kakaoId);
+    System.out.println("kakaoName : " + kakaoName);
+    session.setAttribute("kakaoId", kakaoId);
+    Member member =  memberService.selectKakaoId(kakaoId);
+    session.setAttribute("authentication", member);
+    redirectAttr.addFlashAttribute("name", kakaoName);
+    
+    if(member == null) {
+        System.out.println("아이디가 존재하지 않으면 소셜조인폼으로 ");
+        return "redirect:/member/social-join";
+     }
+  
 
-    String kakao = http.postForObject("https://kauth.kakao.com/oauth/token", map, String.class);
-    
-    System.out.println("카카오 토큰: " + kakao);
-
-    ObjectMapper mapper = new ObjectMapper();
-    Map<String , String> kakaoMap = mapper.readValue(kakao, Map.class);
-    System.out.println(kakaoMap);
-    String accessToken = kakaoMap.get("access_token");
-    
-    
-    
-    String uri = "https://kapi.kakao.com/v2/user/me";
-    
-    RequestEntity<Void> request = RequestEntity.post(uri)
-          .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-          .header("Authorization", "Bearer " + accessToken)
-          .build();
-       
-    
-    ResponseEntity<String> res = http.exchange(request, String.class); 
-    String resBody = res.getBody();
-    System.out.println(resBody);
-    
-    String url = "https://kapi.kakao.com/v1/user/update_profile";
-    
-    RequestEntity<Void> requestUrl = RequestEntity.post(url)
-          .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-          .header("Authorization", "Bearer   " + accessToken)
-          .build();
-
-     return  "redirect:/";
+  //id가 존재하여 템플릿으로 이동.
+  return "redirect:/project/project-list";
            
  }
  
@@ -376,6 +363,7 @@ public class MemberController {
     logoutUrl.append("&logout_redirect_uri=");
     logoutUrl.append("http://localhost:9090");
 
+   
        System.out.println("로그아웃했습니다.");
        System.out.println("카카오 " + logoutUrl);
        return "redirect:/";

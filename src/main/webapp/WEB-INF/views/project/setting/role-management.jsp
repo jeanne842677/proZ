@@ -6,6 +6,7 @@
 
 <head>
    <%@ include file="/WEB-INF/views/include/head.jsp" %>
+   <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=1">
     <link type="text/css" rel="stylesheet" href="/resources/css/setting/role_management.css">
     <link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
     <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
@@ -16,12 +17,19 @@
         
 
 
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
+
 
 
         </header>
 
         <div class="con">
-        <nav></nav>
+        <nav>
+        
+
+				<%@ include file="/WEB-INF/views/include/nav/setting-nav.jsp"%>
+        
+        </nav>
         <section>
             <!--여기서만 작업-->
             
@@ -194,7 +202,12 @@
         </section>
 
         
-        <aside></aside>
+        <aside>
+        
+
+				<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+		
+        </aside>
         </div>
 
     </div>

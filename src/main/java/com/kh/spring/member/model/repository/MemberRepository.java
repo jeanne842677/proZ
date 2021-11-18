@@ -34,7 +34,10 @@ public interface MemberRepository {
    void insertSocialMember(JoinForm form);
 
    @Select("select * from proz_user where social_Id = #{googleId}")
-   Member selectGoogleId(String googleId);   
+   Member selectGoogleId(String googleId);  
+   
+   @Select("select * from proz_user where social_Id = #{kakaoId}")
+   Member selectKakaoId(String kakaoId);  
    
 
 

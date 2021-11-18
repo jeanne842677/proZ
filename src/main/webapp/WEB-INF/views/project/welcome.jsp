@@ -15,7 +15,7 @@
         <header><%@ include file="/WEB-INF/views/include/nav/header.jsp" %></header>
 
         <div class="con">
-        <nav><%@ include file="/WEB-INF/views/include/nav/mainnav.jsp" %></nav>
+        <nav><%@ include file="/WEB-INF/views/include/nav/main-nav.jsp" %></nav>
         <section>
             <!--여기서만 작업-->
 

@@ -19,6 +19,7 @@
 	
 	<!-- 매퍼틑 Dao 1개당 1개씩 있음-->
 	<mappers>
+		<mapper resource="mybatis/mapper/boardMapper.xml" />	
 		<mapper resource="mybatis/mapper/chatMapper.xml" />	
 		<mapper resource="mybatis/mapper/memberMapper.xml" />	
 		<mapper resource="mybatis/mapper/memoMapper.xml" />	

@@ -7,5 +7,11 @@ public interface MypageService {
 
 	int updateMypageMemberByProfileColor(Member member);
 
-	int insertMemberProfileImg(FileDTO fileUploaded); 
+	int insertMemberProfileImg(FileDTO fileUploaded);
+
+	int updateMypageMemberByNickname(Member member);
+
+	int updateMypageMemberByGit(Member member);
+
+	int memberIsleave(Member member); 
 }
