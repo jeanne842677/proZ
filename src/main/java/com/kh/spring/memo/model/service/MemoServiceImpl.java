@@ -17,19 +17,19 @@ public class MemoServiceImpl implements MemoService{
 	private  MemoRepository memoRepository;
 	
 	@Override
-	public void insertMemo(Memo memo, Member member) {
+	public Memo insertMemo(Memo memo, Member member) {
 		
 		
 		ProjectMember projectmember = memoRepository.selectProjectMember(member.getUserIdx() , memo.getWsIdx());
 		memo.setPmIdx(projectmember.getPmIdx());
 		
-		memoRepository.insertMemo(memo);
 		
+		 memoRepository.insertMemo(memo);
 		
 		
 		System.out.println(projectmember);
 		
-		
+		return memo;
 		
 	}
 
