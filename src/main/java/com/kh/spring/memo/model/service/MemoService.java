@@ -8,7 +8,7 @@ import com.kh.spring.project.model.dto.ProjectMember;
 
 public interface MemoService {
 
-	void insertMemo(Memo memo, Member member);
+	Memo insertMemo(Memo memo, Member member);
 
 	List<Memo> selectMemoByWsIdx(String wsIdx);
 
