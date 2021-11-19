@@ -220,9 +220,27 @@ firstSaveModal.modal.find(".first-button").click(function() {
       
       
       
-	
+      
 });
 
+//프로젝트 삭제
+firstDelModal.modal.find(".first-button").click(function () {
+	alert("프로젝트 삭제");
+	let url = "/project/setting/project-delete/" + "${projectIdx}";
+    fetch(url,
+            {method : "POST"
+            ,headers : {"Content-type" : "application/json; charset=UTF-8"}
+    		,credentials: "same-origin"
+            ,body : JSON.stringify({"projectIdx" : "${project.projectIdx}"})
+            	
+            
+            }); 
+    
+    secondDelModal.modal.find("#modal-btn-confirm").click(function () {//확인을 누르면 redirect
+    	window.location = "http://localhost:9090/project/project-list";
+	})
+	
+});
 
 
 

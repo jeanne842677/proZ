@@ -379,7 +379,7 @@
 
 
                     <div class="cat-subject">
-                        #게시판 제목
+                        #${workspace.wsName}
                         <hr>
                     </div>
                     <div class="content-wrap">
@@ -409,30 +409,53 @@
 
                         <div class="board-wrap">
 
-
-                            <!-- <div class="small-board-wrap board" data-size="1">
+						<c:forEach items="${boardList}" var="board">
+							<div class=
+							<c:if test="${board.bdSize==1}">
+							"<c:out value="small-board-wrap"/> 
+							</c:if>
+							<c:if test="${board.bdSize==2}">
+							"<c:out value="medium-board-wrap"/> 
+							</c:if>
+							<c:if test="${board.bdSize==4}">
+							"<c:out value="large-board-wrap"/> 
+							</c:if> board"  
+							data-size="${board.bdSize }" data-sort="${board.sort }" id="${board.bdIdx}">
+                           
                                 <div class="small-board">
                                     <div class="board-subject-wrap">
-                                        <input class="board-subject" type="text" placeholder="제목을 입력하세요">
-
+                                        <input class="board-subject" type="text" value="${board.bdName }" placeholder="제목을 입력하세요" readonly="readonly">
+										<button class="nav-item dropdown board-change-btn">
+                                            <a data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                                                aria-expanded="false">⋮</a>
+                                            <div class="dropdown-menu" style="">
+                                                <div class="dropdown-item" href="#">지영</div>
+                                                <div class="dropdown-divider"></div>
+                                                <div class="dropdown-item" >게시판 추가</div>
+                                                <div class="dropdown-item remove-board">게시판 삭제</div>
+                                            </div>
+                                        </button>
                                     </div>
 
                                     <div class="card-wrap">
-                                        <div class="card">
-                                            <div class="card-subject">안녕안녕</div>
-                                            <div class="profile-img"></div>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-subject">안녕안녕</div>
-                                            <div class="profile-img"></div>
-                                        </div>
+	                                    <c:forEach items="${postList}" var="post">
+	                                    	<c:if test="${board.bdIdx == post.bdIdx }">
+	                                        <div class="card" id="${post.postIdx }" data-sort="${post.sort}">
+	                                            <div class="card-subject">${post.postTitle}</div>
+	                                            <div class="profile-img"></div>
+	                                        </div>
+	                                        </c:if>
+	                                    </c:forEach>
                                     </div>
                                     <button class="post-btn btn btn-primary">
-                                        저장하기
+                                        추가하기
                                     </button>
                                 </div>
 
-                            </div> -->
+                            </div> 
+						</c:forEach>
+                           
+						 
                             <!-- <div class="small-board-wrap">
                                 <div class="small-board">
                                     <div class="board-subject-wrap">
@@ -530,8 +553,9 @@
     </div>
 
     <script type="text/javascript">
-
-
+		
+    let test;
+	//카드끼리 소팅하기
         $('.card-wrap').sortable({
 
             connectWith: ".card-wrap",
@@ -540,6 +564,48 @@
                 let height = ui.item.css('height');
 
                 $(".card-shadow").css('height', height);
+            },
+            update : (e , ui) => {
+            	
+            	
+            	//이벤트 두번 등록 방지
+				if(ui.sender == null) { 
+
+	            	let board = ui.item.parents('.board');
+	            	let bdIdx = board.attr('id');
+	            	let postIdx = ui.item.attr('id');
+					
+					let changeSort;
+	            	
+	             	board.find('.card').each(function(i){
+						let thisPostIdx = $(this).attr('id');
+	            		if( thisPostIdx== postIdx) {
+	            			changeSort = i+1;
+	            	
+	            		
+	            			return;
+	            		}
+	
+	            	})
+	            	
+	            	fetch("/board/post/change-sort" , {
+	    				
+	    				method : "POST",
+	    				headers :  {"Content-type" : "application/json; charset=UTF-8"},
+	    				body : JSON.stringify({
+	    					bdIdx : bdIdx,
+	    					changeSort : changeSort ,
+	    					postIdx : postIdx
+	    				
+	    					})
+	    				
+	    			})
+	            	
+					
+				            		
+				 }
+            	
+            	
             },
             placeholder: "card-shadow" 
 
@@ -554,12 +620,57 @@
 
             alert('dd');
         }).disableSelection();
+	
+        let u;
+        $('.board-wrap').sortable({
+            
+            update : function(event ,ui) {
+              	
+              	let board = ui.item;
+            	let bdIdx = board.attr('id');
+              	let sort = board.data('sort');
+              	let changeSort ;
+          
+              	
+              	
+              	$('.board').each( function(i , b) {
+              		console.dir("현재 i: " + i);
+              		console.dir("현재 IDX: "+$(b).attr('id'));
+              		console.dir("bdIdx " + bdIdx);
+              		if($(b).attr('id')==bdIdx) {
+              			
+              			changeSort = i+1;
+              			return;
+              		}
+              	})
+              	
+              	
+              	
+            	fetch("/board/change/sort" ,{
+    				
+    				method : "POST",
+    				headers :  {"Content-type" : "application/json; charset=UTF-8"},
+    				body : JSON.stringify({
+    					bdIdx : bdIdx,
+    					sort : sort ,
+    					changeSort : changeSort ,
+    					wsIdx : ${workspace.wsIdx}
+    				
+    					
+ 
+    					})
+    				
+    			})
+            	
+            }
+
+        }).disableSelection();
 
 
+	
 
 
-
-
+		let jj;
 
         $('#add-small-board').on('click', function () {
 
@@ -673,37 +784,14 @@
                 input.attr('readonly', 'readonly');
 	
                 
-                addBtn.on('click' , function() {
-                    
-
-
-                })
-
-
-                boardDiv.find('.card-wrap').sortable({
-
-                    connectWith: ".card-wrap",
-                    cancel: ".board-subject-wrap, .post-btn",
-                    start: (e, ui) => {
-                        let height = ui.item.css('height');
-
-                        $(".card-shadow").css('height', height);
-                    },
-                    placeholder: "card-shadow"
-                     
+                addBtn.on('click' , addPost);
 
 
 
-                }).disableSelection();
-
-                boardDiv.find('#remove-board').on('click' , function() {
-                    boardDiv.remove();
-
-
-                })
+                boardDiv.find('#remove-board').on('click' , removeEvent)
                 
                 
-                fetch("/board/add-board" ,{
+                fetch("/board/change/add-board" ,{
     				
     				method : "POST",
     				headers :  {"Content-type" : "application/json; charset=UTF-8"},
@@ -715,11 +803,11 @@
  
     					})
     				
-    			}).then(res=>res.text())
-    			.then(text=> {
-    					alert(text)
-    					
-    			
+    			}).then(res=>res.json())
+    			.then(board=> {
+    				
+    				boardDiv.attr('id' , board.bdIdx);
+    				boardDiv.data('sort' , $('.board').length);
     			})
 
 
@@ -729,12 +817,66 @@
 
         }
 
+    	
+		let removeEvent = function() {
 
+			
+
+				alert("삭제");
+				let board = $(this).parents('.board')
+				board.remove();
+				
+				let bdIdx = board.attr('id');
+				let sort = board.data('sort');
+				fetch("/board/change/remove-board" , {
+    				
+    				method : "POST",
+    				headers :  {"Content-type" : "application/json; charset=UTF-8"},
+    				body : JSON.stringify({
+    					bdIdx : bdIdx ,
+    					sort : sort
+ 
+    					})
+    				
+    			}).then(res=>{})
+			
+				
+			
+		
+		}
+		
    
+	//게시판 삭제 버튼을 눌렀을 때
+		$('.remove-board').each(function() {
+			
+			$(this).on('click' , removeEvent)
+			
+			
+			
+			
+		});
+	
+	
+	let addPost = function () {
+			
+			let bdidx = $(this).parents('.board').attr('id');
+			location.href="/board/post?bdidx="+ bdidx;
+			
+			
+			
+			
+	}
+			
+	
+	//추가하기 버튼 눌렀을 때 
+	$('.post-btn').each(function() {
+		
+		$(this).on('click' , addPost)
+		
+	})
+	
 
-
-        
-
+	
 
 
 

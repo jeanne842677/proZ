@@ -211,6 +211,24 @@ public class ProjectServiceImpl implements ProjectService {
 			return "바뀐게 없음.";		
 			}
 	}
+	//11/18 민협
+	@Override
+	public void updateIsDelProjectByProjectIdx(String projectIdx) {
+		projectRepository.updateIsDelProjectByProjectIdx(projectIdx);
+	}
+	
+	@Override
+	public int projectIsDel(String projectIdx) {
+		
+		
+		return projectRepository.projectIsDel(projectIdx);
+	}
+	
+	@Override
+	public ProjectRole selectProjectRoleByProjectIdxAndUserIdx(String projectIdx, String userIdx) {
+		return projectRepository.selectProjectRoleByProjectIdxAndUserIdx(projectIdx,userIdx);
+	}
+
 
 	// 민협 코드 끝
 ////////////은비가 작성한 코드 시작
@@ -251,6 +269,11 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project selectProjectExist(String projectIdx) {
 		return projectRepository.selectProjectExist(projectIdx);
 	}
+
+
+
+
+
 
 
 

@@ -6,16 +6,57 @@
 <mapper
 	namespace="com.kh.spring.board.model.repository.BoardRepository">
 
-	<insert id="insertBoard" >
-	
-		<selectKey resultType="string" keyProperty="bdIdx" order="BEFORE">
-		select sc_proz_idx.nextval from dual
+	<insert id="insertBoard">
+
+		<selectKey resultType="string" keyProperty="bdIdx"
+			order="BEFORE">
+			select sc_proz_idx.nextval from dual
 		</selectKey>
-		
+
 		insert into board(bd_idx, ws_idx , bd_name , sort , bd_size )
-		values( #{bdIdx} , #{wsIdx} , #{bdName} , (select max(sort)+1 from board where ws_idx = #{wsIdx})
-		 , #{bdSize} )
+		values(
+		#{bdIdx} , #{wsIdx} , #{bdName} , (select nvl(max(sort),0)+1 from
+		board where
+		ws_idx = #{wsIdx})
+		, #{bdSize} )
 	</insert>
+
+	<select id="selectBoardByWsIdx" resultType="Board">
+		select ws_name ,
+		bd_idx , bd_name, b.sort , bd_size from workspace ws
+		join board b
+		using(ws_idx)
+		where ws_idx=#{wsIdx}
+		and b.parent is null
+		order by b.sort
+	</select>
+
+	<insert id="insertPost">
+		insert into post(post_idx , bd_idx , pm_idx ,post_title , post_content ,
+		sort)
+		values(sc_proz_idx.nextval , #{bdIdx} , #{pmIdx} ,#{postTitle} , #{postContent} ,
+		(select nvl(max(sort),0)+1 from post where bd_idx = #{bdIdx} ) )
+
+	</insert>
+
+	<select id="selectPostListByWsIdx" resultType="Post">
+
+		select post_idx , bd_idx , pm_idx , post_title , sort , post_color from post
+		where bd_idx in(select bd_idx from board where ws_idx = #{wsIdx})
+		order by sort
+	</select>
+
+	<update id="updatePostSortMinus">
+		update post set sort=sort-1 where bd_idx =
+		(select bd_Idx from post where post_idx = #{postIdx})
+		and sort > (select sort from post where post_idx = #{postIdx})
+	</update>
+
+	<update id="updatePostSortPlus">
+		update post set sort= sort+1 where bd_idx = #{bdIdx}
+		and sort >= #{changeSort}
+	</update>
+
 
 
 </mapper>

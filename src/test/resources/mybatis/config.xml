@@ -6,17 +6,24 @@
 	<settings> <!-- 스네이크 케이스를 카멜케이스로 변경 -->
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 	</settings>
-	
+
 	<!-- 풀네임 줄여주기 위해 별명 설정 -->
 	<typeAliases>
-		  <typeAlias alias="Member" type="com.kh.spring.member.model.dto.Member"/>
+		<typeAlias alias="Member"
+			type="com.kh.spring.member.model.dto.Member" />
+		<typeAlias alias="Board"
+			type="com.kh.spring.board.model.dto.Board" />
+		<typeAlias alias="ProjectMember"
+			type="com.kh.spring.project.model.dto.ProjectMember" />
+		<typeAlias alias="Post"
+			type="com.kh.spring.board.model.dto.Post" />
 	</typeAliases>
 	<mappers>
-		<mapper resource="mybatis/mapper/boardMapper.xml" />	
-		<mapper resource="mybatis/mapper/chatMapper.xml" />	
-		<mapper resource="mybatis/mapper/memberMapper.xml" />	
-		<mapper resource="mybatis/mapper/memoMapper.xml" />	
-		<mapper resource="mybatis/mapper/projectMapper.xml" />	
+		<mapper resource="mybatis/mapper/boardMapper.xml" />
+		<mapper resource="mybatis/mapper/chatMapper.xml" />
+		<mapper resource="mybatis/mapper/memberMapper.xml" />
+		<mapper resource="mybatis/mapper/memoMapper.xml" />
+		<mapper resource="mybatis/mapper/projectMapper.xml" />
 		<mapper resource="mybatis/mapper/workspaceMapper.xml" />
 	</mappers>
 </configuration>

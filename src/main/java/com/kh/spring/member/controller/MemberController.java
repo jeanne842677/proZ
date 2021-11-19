@@ -45,11 +45,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.validator.JoinForm;
 import com.kh.spring.member.validator.JoinFormValidator;
+import com.kh.spring.myPage.model.service.MypageService;
+import com.kh.spring.myPage.validator.MypageForm;
 
 
 
@@ -72,6 +75,8 @@ public class MemberController {
    RestTemplate http;
    @Autowired
    private OAuth2Parameters googleOAuth2Parameters;
+   @Autowired
+   private MypageService mypageService; 
    
    public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
       super();
@@ -160,6 +165,7 @@ public class MemberController {
          return "disable";
       }
    }
+   
    @PostMapping("join-json")
    public String joinWithJson(@RequestBody Member member) {
       logger.debug(member.toString());
@@ -185,7 +191,7 @@ public class MemberController {
       }
       
       session.setAttribute("authentication", certifiedUser);
-      logger.debug(certifiedUser.toString());
+      logger.debug("세션 안담겨??!!!"  + certifiedUser.toString());
       return "redirect:/project/project-list";
       
       
@@ -198,15 +204,17 @@ public class MemberController {
       logger.info("logout메서드 진입");
       
       HttpSession session = request.getSession();
+      session.invalidate();
+
       
-      return "redirect:/";
+      return "redirect:/member/login";
       
    }
    
  
 
    
-// 구글
+ // 구글
  //로그인 페이지로 이동하는 컨트롤러
  @RequestMapping(value="google_login")
  public String initLogin(Model model, HttpSession session ) throws Exception {
@@ -369,8 +377,28 @@ public class MemberController {
        return "redirect:/";
  }
 
- 
- 
+ 	//Mypage 접근하는 경로
+ 	@GetMapping("mypage") 
+	public String mypage(HttpSession session, Model model) {
+		
+		Member member = (Member) session.getAttribute("authentication");
+		logger.debug(member.toString());
+		//프로필 사진 추출
+		FileDTO fileDTO = mypageService.selectProfileImgFilebyMemberIdx(member);
+		
+		session.setAttribute("authentication", member);
+		
+		if(fileDTO == null) {
+			System.out.println("1. fileDTO 없음 진입확인");
+			session.setAttribute("profileImg", "person.png");
+		} else {
+			session.setAttribute("profileImg", fileDTO.getSavePath()+fileDTO.getRenameFileName());
+		}
+		
+		// Model에 error 객체 추가 
+		model.addAttribute(new MypageForm()).addAttribute("error",new ValidateResult().getError());
+		return "member/mypage"; 
+	}
  
  
  

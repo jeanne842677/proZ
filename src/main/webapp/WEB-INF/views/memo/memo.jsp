@@ -3,7 +3,8 @@
     <!DOCTYPE html>
     <html>
     <head>
-    <meta charset="UTF-8">
+
+<%@ include file="/WEB-INF/views/include/head.jsp"%>
     <title>Insert title here</title>
      <link type="text/css" rel="stylesheet" href="/resources/css/bootstrap.css"> 
      <link type="text/css" rel="stylesheet" href="/resources/css/memo/memo.css">
@@ -196,7 +197,17 @@
                 <button type="button"  id="memo-btn" class="memo-btn">메모 작성</button>
             </div>
         <div id="memo">        
-               
+        
+         <c:forEach items="${ memoList }" var="memo" > 
+         <!-- 여기있는 애들 싹다 클래스로 바꾸고  -->
+        <div id="memo-yellow" >
+            <div id="content">
+                <div class="textvalue"> ${ memo.content }</div>
+            </div>
+            <div id="profile"><i class="fas fa-user-circle fa-2x"></i></div>
+        </div>
+         </c:forEach>
+
                
          </div>
          <div id="modal">
@@ -238,12 +249,51 @@
         </div>
         
         <script type="text/javascript">
-        $("#save").click(function(){ 
-            $("#modal").hide();
-            $("#memo").prepend('<div id = "memo-yellow"><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
-            $(".textvalue").text($(".note-editable").text());
-            $("#memo-yellow").css("background-color",$("#write-memo").css("background-color"));
-        })
+        
+      //div 추가
+        $("#save").click(function () {
+        
+        	   	let markupStr = $('#summernote').summernote('code');
+              	console.dir(markupStr);
+              	let color = $("#write-memo").css('background-color');
+              	
+              	
+              	fetch("/memo/add/memo" , {
+              		method : "POST" ,
+              		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
+              		body : JSON.stringify({
+              			content : markupStr ,
+              			wsIdx : "${wsIdx}" ,
+              			bgColor : color
+              		})
+              	}).then(res=>res.text())
+              	.then(text=>{
+              		
+              		console.dir(text);
+              		
+              	})
+              	
+              	
+              	
+              	
+              	
+              	
+              	
+              	
+              	
+                  $("#modal").hide();
+                  let newMemo = $('<div id = "memo-yellow"><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
+                  $("#memo").prepend(newMemo);
+                  newMemo.find('.textvalue').text($(".note-editable").text());
+                  $("#memo-yellow").css("background-color", $("#write-memo").css("background-color"));
+                  $(".note-editable").text("");
+                  
+
+               
+
+               
+              })
+
         
         
         
@@ -274,53 +324,38 @@
                 });
             })
             
+            let changeColor = function(color){
+                $("#write-memo").css('background-color',color);
+                $(".note-editable").css('background-color',color);
+                $(".note-status-output").css('background-color',color);
+                $(".note-editor").css('background-color',color);
+                $(".note-toolbar").css('background-color',color);
+                $("#memocolor").hide();
+            }
+
             // 메모지 색상 변경
             $(document).ready(function (){
                 $(".yellow").click(function(){
-                    $("#write-memo").css('background-color','#fff3cd');
-                    $(".note-editable").css('background-color','#fff3cd');
-                    $(".note-status-output").css('background-color','#fff3cd');
-                    $(".note-editor").css('background-color','#fff3cd');
-                    $(".note-toolbar").css('background-color','#fff3cd');
-                    $("#memocolor").hide();
+                    changeColor("#fff3cd");
                 });
 
                 $(".pink").click(function(){
-                    $("#write-memo").css('background-color','#f8d7da');
-                    $(".note-editable").css('background-color','#f8d7da');
-                    $(".note-status-output").css('background-color','#f8d7da');
-                    $(".note-editor").css('background-color','#f8d7da');
-                    $(".note-toolbar").css('background-color','#f8d7da');
-                    $("#memocolor").hide();
+                    changeColor("#f8d7da");
                 });
 
                 $(".green").click(function(){
-                    $("#write-memo").css('background-color','#d4edda');
-                    $(".note-editable").css('background-color','#d4edda');
-                    $(".note-status-output").css('background-color','#d4edda');
-                    $(".note-editor").css('background-color','#d4edda');
-                    $(".note-toolbar").css('background-color','#d4edda');
-                    $("#memocolor").hide();
+                    changeColor("#d4edda");
                 });
 
                 $(".blue").click(function(){
-                    $("#write-memo").css('background-color','#d1ecf1');
-                    $(".note-editable").css('background-color','#d1ecf1');
-                    $(".note-status-output").css('background-color','#d1ecf1');
-                    $(".note-editor").css('background-color','#d1ecf1');
-                    $(".note-toolbar").css('background-color','#d1ecf1');
-                    $("#memocolor").hide();
+                    changeColor("#d1ecf1");
                 });
 
                 $(".black").click(function(){
-                    $("#write-memo").css('background-color','#dddddd');
-                    $(".note-editable").css('background-color','#dddddd');
-                    $(".note-status-output").css('background-color','#dddddd');
-                    $(".note-editor").css('background-color','#dddddd');
-                    $(".note-toolbar").css('background-color','#dddddd');
-                    $("#memocolor").hide();
+                    changeColor("#dddddd");
                 });
             })
+
 
 
         // summernote
@@ -337,7 +372,7 @@
             // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough']],
-            ['fontsize', ['fontsize']],
+            ['fontsize'],
             ['color', ['color']]
         ]
     });
@@ -354,6 +389,8 @@
                 $(".newBtn").css('color','#A4A4A4');
                 
             });
+            
+            
 
 
 

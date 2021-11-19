@@ -14,6 +14,9 @@
 	<!-- 별명 지정 -->
 	<typeAliases>
 		  <typeAlias alias="Member" type="com.kh.spring.member.model.dto.Member"/>
+		  <typeAlias alias="Board" type="com.kh.spring.board.model.dto.Board"/>
+		  <typeAlias alias="ProjectMember" type="com.kh.spring.project.model.dto.ProjectMember"/>
+		  <typeAlias alias="Post" type="com.kh.spring.board.model.dto.Post"/>
 	</typeAliases>
 	
 	

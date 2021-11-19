@@ -10,4 +10,3 @@
 
  secondDelModal.createAlertModal(); //두번쨰모달 생성
  secondDelModal.makeModalBtn(firstDelModal.modal.find(".first-button"))
- 

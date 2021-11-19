@@ -47,6 +47,11 @@ public interface ProjectService {
 	void deleteRoleByAuthIdx(String authIdx);
 
 	void deleteRoleByProjectIdxAndAuthName(ProjectRole role);
+	
+	//11-18민협
+	void updateIsDelProjectByProjectIdx(String projectIdx);
+	
+	int projectIsDel(String projectIdx);
 
 	// 민협 코드 끝
 
@@ -62,6 +67,10 @@ public interface ProjectService {
 	Project selectProjectExist(String projectIdx);
 
 	String updateProjectByProjectIdx(Map<String, String> project);
+
+	ProjectRole selectProjectRoleByProjectIdxAndUserIdx(String projectIdx, String userIdx);
+
+
 
 	
 

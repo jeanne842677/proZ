@@ -53,7 +53,7 @@ public interface ProjectRepository {
 	@Update("update project_member set is_ok = 1 where project_idx = #{projectIdx} and user_idx =#{userIdx}")
 	int updateProjectMemberStatus(@Param("projectIdx") String projectIdx, @Param("userIdx") String userIdx);
 
-	
+	ProjectMember selectProjectMemberByMap(Map<String, String> map);
 	
 	//지영 추가 코드 끝
 	
@@ -63,7 +63,11 @@ public interface ProjectRepository {
 	List<ProjectRole> selectProjectRoleByIdx(String projectIdx);
 	
 	
-	  //11-15 민협작성
+	
+	
+	
+	
+	//민협 추가 코드 시작
 	
 	void updateRoleByPrevAuthName(Map<String, String> map);
 
@@ -73,9 +77,26 @@ public interface ProjectRepository {
 
 	void deleteRoleByProjectIdxAndAuthName(ProjectRole role);
 	
-	//11/17민협수정
 	@Update("update project set PRO_NAME = #{proName} , PRO_DESCRIPTION = #{proDescription} where PROJECT_IDX = #{projectIdx}")
 	void updateProjectByProjectIdx(Map<String, String> project);
+	
+	@Update("update project set IS_DEL = 1 where PROJECT_IDX = #{projectIdx}")
+	void updateIsDelProjectByProjectIdx(String projectIdx);
+	
+	@Select("select IS_DEL from project where PROJECT_IDX = #{projectIdx}")
+	int projectIsDel(String projectIdx);
+	
+	
+	ProjectRole selectProjectRoleByProjectIdxAndUserIdx(@Param("projectIdx")String projectIdx, @Param("userIdx")String userIdx);
+	
+	
+	
+	
+	
+	
+	
+	//민협 추가 코드 끝
+	
 	
 
 	// 은비가 작성한 코드 시작
@@ -107,6 +128,12 @@ public interface ProjectRepository {
 
 	   @Select("select * from project where project_idx = #{projectIdx}")
 	   Project selectProjectExist(String projectIdx);
+
+
+
+
+
+
 	   
 	   
 
@@ -117,7 +144,6 @@ public interface ProjectRepository {
 
 
 
-	   // 은비가 작성한 코드 끝
 
 
 

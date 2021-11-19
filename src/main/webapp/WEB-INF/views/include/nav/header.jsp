@@ -8,5 +8,8 @@
                 </div>
                 <div class="profile"><i class="fas fa-user-circle"></i></div>
             </div>
-            
-        
+        	<script>
+        		document.querySelector('.profile').addEventListener('click', e=>{
+        			location.href = '/member/mypage'; 
+        		})
+        	</script>

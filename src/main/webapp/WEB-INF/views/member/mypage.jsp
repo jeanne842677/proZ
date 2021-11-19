@@ -8,53 +8,62 @@
 <link type="text/css" rel="stylesheet" href="/resources/css/bootstrap.css">
 <link type="text/css" rel="stylesheet" href="/resources/css/member/mypage.css">
 <link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css">
 <style type="text/css">
 					#profile-change-git-btn{
                     	width: 200px; 
                     }
+                    a{
+                    text-decoration: none; 
+                    color: inherit;
+                    }
+                    
 </style>
 
 </head>
 <body>
     <div class="wrap">
         <header>
+        	<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
         </header>
         <div class="con">
-            <nav></nav>
+            <nav>
+            	<%@ include file="/WEB-INF/views/include/nav/private-nav.jsp"%>
+            </nav>
             <section>
                 <!--작업 내용-->
                 <div class="section-wrapper">
                     <div class="content-wrapper" id="profileImg-wrapper">
-                        <button id="profile-banner-btn"></button>
-                        <button id="profile-img"><img class="profile" src="/resources/img/cat01.png"></button>
+                        <button id="profile-banner-btn" style="background-color: ${authentication.profileColor}"></button>
+                        <button id="profile-img"><img class="profileImg" src="http://localhost:9090/resources/upload/${profileImg}"></button>
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
                     </div>
                     <div class="content-wrapper" id="profile">
-                        <div class="profile-title">#사용자 프로필</div>
+                        <div class="profile-title"><a name="userProfile">#사용자 프로필</a></div>
                         <div class="profile-subtitle">프로필 사진 변경</div>
                         <div class="profile-message"></div>
                         <div class="proflie-advice">프로필 사진을 클릭하여 최대 2MB 크기의 원하는 프로필 사진을 첨부하세요. </div>
                         <div class="profile-subtitle">개인 색상 지정</div>
                         <div class="proflie-advice">프로필 배너를 클릭하여 개인 색상을 선택하세요.</div>
                         <div class="profile-subtitle">사용자 닉네임</div>
-                        <div class="extend-link">당신의 별명은 <b><u class="nickname">${certifiedUser.nickname}</u></b> 입니다. </div> 
+                        <div class="extend-link">당신의 별명은 <b><u class="nickname">${authentication.nickname}</u></b> 입니다. </div> 
                         <button class="btn btn-primary" id="profile-change-nickName-btn">닉네임 변경</button>
                         <div class="br-line"></div>
                     </div>
     
                     <div class="content-wrapper" id="userInfo">
-                        <div class="profile-title">#계정 정보</div>
+                        <div class="profile-title"><a name="userInfo">#계정 정보</a></div>
                         <div class="profile-subtitle">가입 이메일</div>
                         <div class="proflie-advice">로그인 시 입력하신 이메일 주소입니다 </div>
                         <div class="info-wrapper">
-                            <div class="profile-message" id="profile-email">${certifiedUser.email }</div>
+                            <div class="profile-message" id="profile-email">${authentication.email}</div>
                         </div>
                         <div class="profile-subtitle">GIT_주소</div>
                         <div class="proflie-advice">계정에 연동된 GIT_Repository 주소입니다</div>
                         <div class="info-wrapper">
                             <div class="profile-message">
                                 <div class="profile-message-btn-wrapper">
-                                    <input class="form-control" id="form-git" type="text" value="${certifiedUser.git }" readonly>
+                                    <input class="form-control" id="form-git" type="text" value="${authentication.git }" readonly>
                                     <button class="btn btn-primary" id="profile-change-git-btn">GIT 주소 변경</button> 
                                 </div>
                             </div>
@@ -66,7 +75,7 @@
                     </div>
                     
                     <div class="content-wrapper" id="leave">
-                        <div class="profile-title">#회원 탈퇴</div>
+                        <div class="profile-title"><a name="userIsleave">#회원 탈퇴</a></div>
                         <div class="leave-wrapper">
                             <img class="leave-img" src="/resources/img/undraw-space.png"> 
                             <div class="profile-subtitle">정말로 PRO_Z를 탈퇴하시나요?</div>
@@ -79,7 +88,9 @@
                     </div>
                 </div>
             </section>
-            <aside></aside>
+            <aside>
+            	<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+            </aside>
         </div>
     </div>
 </body>
@@ -89,7 +100,6 @@
 <script src="https://unpkg.com/vanilla-picker@2"></script>
 <script src="/resources/js/validator/validateMachine1.1.js"></script>
 <script>
-
 	
 	//**ColorPicker 설정 
 	var parent = document.querySelector('#profile-banner-btn');
@@ -173,12 +183,11 @@
 
     	var changedNickname = nickNamePopUp.find('#input').val(); 
     	fetch('/mypage/profileNickname?nickname='+changedNickname, {
-    		method : 'POST',
+    		method : 'POST'
     	})
     	.then(response => response.text())
     	.then(text=>{
     		if(text != 'failed'){
-    			// text가 오류메세지가 송출된다. (?) 
     			$('.nickname').text(text);  
     		} else {
     			alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
@@ -210,11 +219,11 @@
     		if(text != 'failed'){
     			$('#form-git').val(text); 
     		} else {
-    			alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
+    			alert('GIT주소 변경이 실패하였습니다. 다시 시도하세요'); 
     		}
     	})
     	.catch( ()=>{
-    		alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
+    		alert('GIT주소 변경이 실패하였습니다. 다시 시도하세요'); 
     	})
     	
     	gitPopUp.find('#input').val("");  
@@ -228,8 +237,27 @@
     passwordPopUp.find('#input1').attr('placeholder', '비밀번호(8자이상 숫자,영문,특수문자 조합)');
     passwordPopUp.find('#input2').attr('placeholder', '비밀번호 다시 입력')
     passwordModal.setConfirmFnc( function(){
-        alert(passwordPopUp.find('#input1').val() + '= 비밀번호 값<br>'
-        + passwordPopUp.find('#input2').val() + '= 비밀번호 중복확인 값');  
+        
+    	// back단에서 인자 2개를 보내어 처리 
+       	var password = passwordPopUp.find('#input1').val();
+    	var checkedPassword =  passwordPopUp.find('#input2').val();
+    	
+    	fetch('/mypage/profilePassword?password=' + password + "&checkedPassword=" + checkedPassword ,{
+    		method : 'POST'
+    	})
+    	.then(response => response.text())
+    	.then(text=>{
+    		if(text != 'failed'){
+    			console.log(text); 
+    			alert('패스워드 변경이 성공하였습니다.'); 
+    		} else {
+    			alert('패스워드 변경이 실패하였습니다. 다시 시도하세요'); 
+    		}
+    	})
+    	.catch( ()=>{
+    		alert('패스워드 변경이 실패하였습니다. 다시 시도하세요'); 
+    	})
+ 
     }); 
     
     //isLeave 버튼 
@@ -238,7 +266,7 @@
     isleaveModal.makeModalBtn($('#button-isleave')); 
     isleaveModal.setConfirmFnc( function() {
     	fetch('/mypage/isleave', {
-    		method : 'POST',
+    		method : 'POST'
     	})
     	.then(response => response.text())
     	.then(text=>{
@@ -290,7 +318,7 @@
        '\\s' : '패스워드에 공백을 포함할 수 없습니다'
    });
    v3.addRegExp({
-	   '\^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Zㄱ-힣0-9]).{8,}$' : '8자 이상 영문,숫자,특수문자가 아닙니다.'
+	   '\^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Zㄱ-힣0-9]).{8,70}$' : '8-70자의 영문,숫자,특수문자가 아닙니다.'
     })
    // 중복검사를 위한 코드
    

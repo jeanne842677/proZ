@@ -278,7 +278,7 @@ public class ProjectController {
 			@SessionAttribute(value = "authentication") Member member) {
 
 		  Project project =projectService.selectProjectExist(projectIdx);
-			
+			System.out.println("controller : " + projectIdx);
 		  
 
 		  model.addAttribute("project", project);
@@ -295,6 +295,15 @@ public class ProjectController {
 		System.out.println(res);
 
 		return "통신완료";
+	}
+	
+	//11-18민협
+	@PostMapping("setting/project-delete/{projectIdx}")
+	public void projectDelete(Model model, @PathVariable String projectIdx) {
+		System.out.println("delete projectIdx : " + projectIdx);
+		System.out.println("is del : " + projectService.projectIsDel(projectIdx));
+		projectService.updateIsDelProjectByProjectIdx(projectIdx);
+		
 	}
 
 	// ============================================민협 작업
