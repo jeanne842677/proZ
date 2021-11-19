@@ -40,4 +40,15 @@ public class MemoServiceImpl implements MemoService{
 		return memoRepository.selectMemoByWsIdx(wsIdx);
 	}
 
+	@Override
+	public ProjectMember selectProjectMember(String userIdx, String wsIdx) {
+		return memoRepository.selectProjectMember(userIdx, wsIdx);
+	}
+
+	@Override
+	public void deleteMemoByMemoIdx(String memoIdx) {
+		memoRepository.deleteMemoByMemoIdx(memoIdx);
+		
+	}
+
 }
