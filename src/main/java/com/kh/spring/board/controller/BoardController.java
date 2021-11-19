@@ -99,7 +99,7 @@ public class BoardController {
 	}
 	
 	
-	@GetMapping("post")
+	@GetMapping("posting")
 	public void postForm(@RequestParam(required = false) String bdidx ,
 			Model model) {
 		
