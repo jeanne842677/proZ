@@ -7,6 +7,8 @@
     
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
     <title>Document</title>
+    
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link type="text/css" rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
@@ -366,12 +368,17 @@
 
 
 
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
+
+
 
         </header>
 
         <div class="con">
             <nav>
 
+				<%@ include file="/WEB-INF/views/include/nav/main-nav.jsp"%>
+            
 
             </nav>
             <section>
@@ -547,7 +554,13 @@
 
 
             </section>
-            <aside></aside>
+            <aside>
+            
+
+				<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+            
+            
+            </aside>
         </div>
 
     </div>
@@ -860,7 +873,7 @@
 	let addPost = function () {
 			
 			let bdidx = $(this).parents('.board').attr('id');
-			location.href="/board/post?bdidx="+ bdidx;
+			location.href="/board/posting/${project.projectIdx}?bdidx="+ bdidx;
 			
 			
 			
