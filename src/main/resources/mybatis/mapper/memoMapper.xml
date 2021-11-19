@@ -5,6 +5,18 @@
   
   <mapper namespace="com.kh.spring.memo.model.repository.MemoRepository">
   	 
+  	 <insert id="insertMemo" >
+  	 
+  	 <selectKey keyProperty="memoIdx" resultType="string" order="BEFORE">
+			select sc_proz_idx.nextval from dual
+		</selectKey>
+  	 
+		insert into memo(memo_idx , ws_idx , pm_idx , content , bg_color)
+		values(#{memoIdx} , #{wsIdx} , #{pmIdx} , #{content} , #{bgColor})
+		
+		
+		
+  	 </insert>
   	
   	
   	

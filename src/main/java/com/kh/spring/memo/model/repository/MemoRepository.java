@@ -20,9 +20,7 @@ public interface MemoRepository {
 			+ "and project_idx = (select project_idx from workspace where ws_idx = #{wsIdx})")
 	ProjectMember selectProjectMember(@Param("userIdx") String userIdx,@Param("wsIdx") String wsIdx);
 	
-	@Insert("insert into memo(memo_idx , ws_idx , pm_idx , content , bg_color) "
-			+ "values(sc_proz_idx.nextval , #{wsIdx} , #{pmIdx} , #{content} , #{bgColor})")
-	void insertMemo(Memo memo);
+	int insertMemo(Memo memo);
 	
 	@Select("select * from memo where ws_idx = #{wsIdx} order by memo_idx desc")
 	List<Memo> selectMemoByWsIdx(String wsIdx);
