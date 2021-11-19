@@ -2,7 +2,7 @@ package com.kh.spring.myPage.model.service;
 
 import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.member.model.dto.Member;
-import com.kh.spring.myPage.validator.MypageForm;
+import com.kh.spring.member.validator.MypageForm;
 
 public interface MypageService {
 

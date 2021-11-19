@@ -15,6 +15,7 @@ import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
+import com.kh.spring.project.model.dto.ProjectRole;
 import com.kh.spring.project.model.service.ProjectService;
 
 //servlet-context에서 빈으로 등록해 사용함
@@ -33,7 +34,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 			switch (uri[1]) {
 
 			case "project":
-				System.out.println("project일로타냐?");
 				projectAuthorize(httpRequest, httpResponse, uri);
 				break;
 
@@ -56,18 +56,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 			switch (uri[2]) {
 
 			case "setting":
-				System.out.println("setting : 일로타냐?");
 				String projectIdx = uri[uri.length - 1];
 				System.out.println("setting projectIdx :  " + projectIdx);
 
 				Project project = projectService.selectProjectExist(projectIdx);
+				
 
 				// 로그인 하지 않았을 경우
 				if (member == null) {
 					throw new HandlableException(ErrorCode.NEED_LOGIN);
 				} else {
 					// 프로젝트가 없을 경우
-					if (project == null) {
+					if (project == null || projectService.projectIsDel(projectIdx) == 1) {
 						throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
 					}
 
@@ -86,6 +86,25 @@ public class AuthInterceptor implements HandlerInterceptor {
 					}
 
 				}
+				
+				ProjectRole role = projectService.selectProjectRoleByProjectIdxAndUserIdx(projectIdx,member.getUserIdx());
+				System.out.println("인터셉터 롤 : " + role);
+				switch (uri[3]) {
+				case "role-management"://역할관리권한체크
+					if(role.getProjectAuth() == 0) {
+						throw new HandlableException(ErrorCode.UNAUTHORIZE_PAGE);
+					}
+					break;
+				case "member-management"://맴버관리권한체크
+					if(role.getMemberAuth() == 0) {
+						throw new HandlableException(ErrorCode.UNAUTHORIZE_PAGE);
+					}
+					break;
+
+				default:
+					break;
+				}
+				
 
 				break;
 

@@ -34,12 +34,13 @@
                 <!--작업 내용-->
                 <div class="section-wrapper">
                     <div class="content-wrapper" id="profileImg-wrapper">
+                    	<a name="userProfile"></a>
                         <button id="profile-banner-btn" style="background-color: ${authentication.profileColor}"></button>
                         <button id="profile-img"><img class="profileImg" src="http://localhost:9090/resources/upload/${profileImg}"></button>
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
                     </div>
                     <div class="content-wrapper" id="profile">
-                        <div class="profile-title"><a name="userProfile">#사용자 프로필</a></div>
+                        <div class="profile-title">#사용자 프로필</div>
                         <div class="profile-subtitle">프로필 사진 변경</div>
                         <div class="profile-message"></div>
                         <div class="proflie-advice">프로필 사진을 클릭하여 최대 2MB 크기의 원하는 프로필 사진을 첨부하세요. </div>
@@ -100,7 +101,7 @@
 <script src="https://unpkg.com/vanilla-picker@2"></script>
 <script src="/resources/js/validator/validateMachine1.1.js"></script>
 <script>
-	
+
 	//**ColorPicker 설정 
 	var parent = document.querySelector('#profile-banner-btn');
     var picker = new Picker(parent);
@@ -118,7 +119,7 @@
     	//color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
     	profileColorHex = color.hex.slice(1);
     	
-    	fetch('/mypage/profileColor?profileColor='+ profileColorHex, 
+    	fetch('/member/profileColor?profileColor='+ profileColorHex, 
     			{
     			method: 'POST', 	
     			credentials : 'include'
@@ -155,14 +156,14 @@
 		
 		formData.append('files', file); 
 		
-		fetch('/mypage/profileImg', {
+		fetch('/member/profileImg', {
 			method: 'POST', 	
 			body : formData
 		})
 		.then(response => response.text())
     	.then(text=>{
-    		if(text != 'failed'){
-    			$('.profile').attr('src', 'http://localhost:9090/resources/upload/' + text);
+    		if(text != 'failed'){ 
+    			$('.profileImg').attr('src', 'http://localhost:9090/resources/upload/' + text);
     		} else {
     			alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
     		}
@@ -182,7 +183,7 @@
     nickNameModal.setConfirmFnc( function(){
 
     	var changedNickname = nickNamePopUp.find('#input').val(); 
-    	fetch('/mypage/profileNickname?nickname='+changedNickname, {
+    	fetch('/member/profileNickname?nickname='+changedNickname, {
     		method : 'POST'
     	})
     	.then(response => response.text())
@@ -211,7 +212,7 @@
     gitModal.setConfirmFnc( function(){
     	
     	var changedGit = gitPopUp.find('#input').val();
-    	fetch('/mypage/profileGitRepo?git='+changedGit, {
+    	fetch('/member/profileGitRepo?git='+changedGit, {
     		method : 'POST',
     	})
     	.then(response => response.text())
@@ -242,7 +243,7 @@
        	var password = passwordPopUp.find('#input1').val();
     	var checkedPassword =  passwordPopUp.find('#input2').val();
     	
-    	fetch('/mypage/profilePassword?password=' + password + "&checkedPassword=" + checkedPassword ,{
+    	fetch('/member/profilePassword?password=' + password + "&checkedPassword=" + checkedPassword ,{
     		method : 'POST'
     	})
     	.then(response => response.text())
@@ -265,7 +266,7 @@
     isleaveModal.createAlertModal(); 
     isleaveModal.makeModalBtn($('#button-isleave')); 
     isleaveModal.setConfirmFnc( function() {
-    	fetch('/mypage/isleave', {
+    	fetch('/member/isleave', {
     		method : 'POST'
     	})
     	.then(response => response.text())
