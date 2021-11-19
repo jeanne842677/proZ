@@ -2,6 +2,7 @@ package com.kh.spring.memo.model.repository;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,6 +26,10 @@ public interface MemoRepository {
 	
 	@Select("select * from memo where ws_idx = #{wsIdx} order by memo_idx desc")
 	List<Memo> selectMemoByWsIdx(String wsIdx);
+
+	@Delete("delete from memo where memo_idx = #{memoIdx}")
+	void deleteMemoByMemoIdx(String memoIdx);
+	
 
 	
 }
