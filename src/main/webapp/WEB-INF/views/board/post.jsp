@@ -44,7 +44,7 @@
 		}).then(res=>{res.text()})
 		.then(text=>{
 
-			location.href="/board/${wsIdx}";
+			location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
 			
 		})
 		

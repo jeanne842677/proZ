@@ -20,8 +20,14 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.board.model.service.BoardService;
+import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.json.JsonMaker;
+import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
+import com.kh.spring.project.model.dto.Project;
+import com.kh.spring.project.model.dto.ProjectMember;
+import com.kh.spring.project.model.service.ProjectService;
 import com.kh.spring.workspace.model.dto.Workspace;
 
 @Controller
@@ -31,32 +37,50 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 	
+	@Autowired
+	ProjectService projectService;
+	
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	
-	@GetMapping("{wsIdx}")
-	public String board(@PathVariable String wsIdx, Model model) {
+	@GetMapping("{projectIdx}")
+	public String board(@PathVariable String projectIdx, Model model,
+			@RequestParam String wsIdx) {
 		
-	
+		Project project = projectService.selectProjectByIdx(projectIdx);
 		Workspace workspace = boardService.selectWorkSpaceByWsIdx(wsIdx);
 		
+		
 		if(workspace==null) {
-			return "/error/404";
+			return "redirect:/project/" + projectIdx;
+		}else if(project == null)
+			throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
+		else if(!workspace.getProjectIdx().equals(projectIdx)) {
+			return "/project/" + projectIdx;
 		}
 		
 		
-		model.addAttribute(workspace);
+		List<Map<String, Object>> projectMember = 
+				CamelMap.changeListMap(projectService.selectProjectMemberByProjectIdx(projectIdx));
+
 		
 		List<Board> boardList = boardService.selectBoardByWsIdx(wsIdx);
-		model.addAttribute("boardList" , boardList);
-		
 		List<Post> postList = boardService.selectPostListByWsIdx(wsIdx);
+		System.out.println("프로젝트 멤버: "  + projectMember);
+		
+		model.addAttribute("projectMember" , projectMember);
+		model.addAttribute(workspace);
+		model.addAttribute("boardList" , boardList);
 		model.addAttribute("postList" , postList);
+		model.addAttribute(project);
+		
+
 		
 		System.out.println(boardList);
 		System.out.println("포스트 리스트: " + postList);
 		return "/board/board-list";
+		
 	}
 	
 	
@@ -64,13 +88,8 @@ public class BoardController {
 	@ResponseBody
 	public String addBoard(@RequestBody Board board) {
 		
-		System.out.println("인서트 전 board: "+board);
 		
 		boardService.insertBoard(board);
-		
-		System.out.println("인서트 이후 board: " +board);
-		
-		
 		
 		return JsonMaker.json(board);
 				
@@ -99,12 +118,17 @@ public class BoardController {
 	}
 	
 	
-	@GetMapping("post")
-	public void postForm(@RequestParam(required = false) String bdidx ,
-			Model model) {
+	@GetMapping("post/{projectIdx}")
+	public String postForm(@RequestParam(required = false) String bdidx ,
+			Model model,
+			@PathVariable String projectIdx) {
+		
 		
 		Board board = boardService.selectBoardByBdIdx(bdidx);
-		model.addAttribute("wsIdx" , board.getWsIdx());
+		model.addAttribute("wsIdx" , board.getWsIdx())
+		.addAttribute(projectIdx);
+		
+		return "board/post";
 		
 	} 
 	
