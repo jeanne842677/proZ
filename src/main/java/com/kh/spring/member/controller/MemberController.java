@@ -41,6 +41,7 @@ import com.kh.spring.common.util.file.FileUtil;
 import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.validator.EmailForm;
 import com.kh.spring.member.validator.JoinForm;
 import com.kh.spring.member.validator.JoinFormValidator;
 import com.kh.spring.member.validator.MypageForm;
@@ -543,14 +544,59 @@ public class MemberController {
  
  	
  	//*********아이디, 비밀번호 찾기 페이지*********
- 	@GetMapping("searchEmail")
- 	public String searchEmail() {
-		
- 		return "member/";
+ 	@GetMapping("searchPassword")
+ 	public void searchPassword() {}
+ 	
+ 	@PostMapping("searchPassword") 
+ 	public String searchMemberPassword(@Validated EmailForm emailForm
+ 			,Errors errors 
+ 			,HttpSession session
+ 			,RedirectAttributes redirectAttr 
+ 			) {
+ 		
+ 		if(errors.hasErrors()) {
+ 			redirectAttr.addFlashAttribute("message", "잘못된 이메일 값입니다. 다시 입력하세요");
+ 			return "redirect:/member/searchPassword"; 
+ 		}
+ 		
+ 		Member member = memberService.selectMemberByEmail(emailForm.getEmail());  
+ 		logger.debug("3. 오류 이후 searchPassword의 Member값은 : " + member.toString());
+ 		
+ 		String token  = UUID.randomUUID().toString();
+ 		logger.debug("4. token의 uuid 값은 : " + token);
+ 	    session.setAttribute("persistToken", token);
+ 		
+ 		memberService.sendPasswordChangeURLByEmail(member, token);
+ 		// 메일전송 후, 메일에서 온 URL을 받을 수 잇는 것이 필요. SESSION에 담는 것 보다는 메일로 
+ 		// 전송된 ID값을 다시 꺼내는게 좋다. 
+ 		
+ 		return "redirect:/"; 
  	}
- 	
- 	
- 	
+
+ 	@GetMapping("change-password/{token}")
+    public String changePassword(@PathVariable String token
+                      ,@SessionAttribute(value = "persistToken", required = false) String persistToken
+                      ,@SessionAttribute(value = "persistUser", required = false) JoinForm form
+                      ,HttpSession session
+                      ,RedirectAttributes redirectAttrs) {
+       System.out.println(form);
+       if(!token.equals(persistToken)) {
+          throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
+       }
+       
+       if(form.getSocialId() != null) {
+     	  memberService.insertSocialMember(form);
+     	  return "redirect:/member/login";
+       }
+       
+       
+       memberService.insertMember(form);
+       redirectAttrs.addFlashAttribute("message", "회원가입을 환영합니다. 로그인 해주세요");
+       session.removeAttribute("persistToken");
+       session.removeAttribute("persistUser");
+       
+       return "redirect:/member/login";
+    }
  	
  }
    

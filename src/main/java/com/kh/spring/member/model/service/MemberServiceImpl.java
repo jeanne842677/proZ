@@ -228,4 +228,26 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.selectProfileImgFilebyMemberIdx(dummyMember);
 	}
 
+	@Override
+	public void sendPasswordChangeURLByEmail(Member member, String token) {
+		// 이메일 전송 필요 
+		// 이메일만 보낸다면 ~~님 등의 조회결과입니다. 이런 것을 못쓰게 된다. 
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		// body로 보내는 것은 parameter값으로 뽑을 수 잇는 값들
+		// 새로운 MailTemplate 필요 
+		body.add("mailTemplate", "change-password-mail");
+		body.add("nickname", member.getNickname());
+		body.add("persistToken", token);
+
+		// RestTemplate의 기본 Content-type : application/json
+		RequestEntity<MultiValueMap<String, String>> request = RequestEntity.post(Config.DOMAIN.DESC + "/mail")
+				.accept(MediaType.APPLICATION_FORM_URLENCODED).body(body);
+
+		String htmlTxt = http.exchange(request, String.class).getBody();
+		mailSender.send(member.getEmail(), "[PROZ] 비밀번호 변경 페이지입니다.", htmlTxt);
+		
+	}
+
+	
+
 }

@@ -873,7 +873,7 @@
 	let addPost = function () {
 			
 			let bdidx = $(this).parents('.board').attr('id');
-			location.href="/board/post/${project.projectIdx}?bdidx="+ bdidx;
+			location.href="/board/posting/${project.projectIdx}?bdidx="+ bdidx;
 			
 			
 			
