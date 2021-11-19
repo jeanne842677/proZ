@@ -264,12 +264,26 @@
         
         <script type="text/javascript">
         
+        
+        //수정
+       $("#revise").click(function () {
+            $("#text").prepend('<div id="summernote">');
+            $("#text").append('</div>');    
+            $(".user-aut-editor").hide();
+            let showeditor=' <div id="editor"><div id="back-color"><i class="fas fa-palette "></i></div> <div id="save"><i class="fas fa-save "></i></div></div>';
+			$("#text").append(showeditor);
+		})
+        
+        
+        
       //div 추가
         $("#save").click(function () {
-        
+        	
+        		let memoIdx = "";
         	   	let markupStr = $('#summernote').summernote('code');
               	console.dir(markupStr);
               	let color = $("#write-memo").css('background-color');
+              	
               	
               	
               	fetch("/memo/add/memo" , {
@@ -280,32 +294,63 @@
               			wsIdx : "${wsIdx}" ,
               			bgColor : color
               		})
-              	}).then(res=>res.text())
-              	.then(text=>{
+              	}).then(res=>res.json())
+              	.then(memo=>{
+              		console.dir(memo);
+              		memoIdx = memo.memoIdx;
               		
-              		console.dir(text);
+              		$("#modal").hide();
+                    let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
+                    $("#memo").prepend(newMemo);
+                    /* newMemo.find('.textvalue').text($(".note-editable").text()); */
+                    newMemo.find('.textvalue').html(markupStr);
+                    newMemo.css("background-color", color);
+                    $(".note-editable").text("");
+                    changeColor("#fff3cd");
+                     
+                    
+                    newMemo.click(function(){
+                        $(".modal-yellow").css('display','flex');
+                        $(".modal-yellow").find("#write-memo").css('background-color', color);
+                        $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
+                        newMemo.data("memo-idx", memoIdx);
+                        
+                       
+                          	$(".user-aut-editor").show();
+                          	
+                          	let thisMemoIdx = $(this).data("memo-idx");
+                          	
+                          	$("#trash").click(function () {//삭제 처리시
+                          		
+                          		console.log("클릭 되냐?")
+                          		fetch("/memo/delete/memo" , {
+                                		method : "POST" ,
+                                		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
+                                		body : JSON.stringify({
+                                			"memoIdx" : thisMemoIdx
+                                		})
+                                	});
+                                	
+                          		$(".modal-yellow").hide();
+                          		newMemo.remove();
+                          	
+                          	
+        						})
+                          	
+                          
+                          
+                        
+                    });
+                    $(".close").click(function(){
+                        $(".modal-yellow").hide();
+                    });
+              		
               		
               	});
               	
-                  $("#modal").hide();
-                  let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
-                  $("#memo").prepend(newMemo);
-                  /* newMemo.find('.textvalue').text($(".note-editable").text()); */
-                  newMemo.find('.textvalue').html(markupStr);
-                  newMemo.css("background-color", color);
-                  $(".note-editable").text("");
-                  changeColor("#fff3cd");
                   
-                  newMemo.click(function(){
-                      $(".modal-yellow").css('display','flex');
-                      $(".modal-yellow").find("#write-memo").css('background-color', color);
-                      $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
-                  });
-                  $(".close").click(function(){
-                      $(".modal-yellow").hide();
-                  });
                   
-               
+ 
               });
 
         

@@ -53,4 +53,6 @@ public interface MemberService {
 
 	FileDTO selectProfileImgFilebyMemberIdx(Member dummyMember);
 
+	void sendPasswordChangeURLByEmail(Member member, String token);
+
 }

@@ -78,7 +78,7 @@ input {
                             
                             </form>
                             
-                            <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="#">비밀번호 재설정</a></div>
+                            <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="/member/searchPassword">비밀번호 재설정</a></div>
                             <div class="social">다른 서비스 계정으로 로그인</div>
                             <div class="btn-wrap">
                             <button id="kakao-btn" class="btn  btn-primary" type="button" >

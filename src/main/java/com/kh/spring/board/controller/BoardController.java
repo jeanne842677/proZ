@@ -118,18 +118,18 @@ public class BoardController {
 	}
 	
 	
-	@GetMapping("post/{projectIdx}")
+	@GetMapping("posting/{projectIdx}")
 	public String postForm(@RequestParam(required = false) String bdidx ,
 			Model model,
 			@PathVariable String projectIdx) {
 		
 		
-		Board board = boardService.selectBoardByBdIdx(bdidx);
-		model.addAttribute("wsIdx" , board.getWsIdx())
-		.addAttribute(projectIdx);
-		
-		return "board/post";
-		
+//		Board board = boardService.selectBoardByBdIdx(bdidx);
+//		model.addAttribute("wsIdx" , board.getWsIdx())
+//		.addAttribute(projectIdx); 
+//		
+		// ADD한 이후에는 POST전문을 보여주는것이 좋을듯? 의견제시 
+		return "/board/posting";
 	} 
 	
 	
