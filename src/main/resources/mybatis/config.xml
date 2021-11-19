@@ -17,6 +17,8 @@
 		  <typeAlias alias="Board" type="com.kh.spring.board.model.dto.Board"/>
 		  <typeAlias alias="ProjectMember" type="com.kh.spring.project.model.dto.ProjectMember"/>
 		  <typeAlias alias="Post" type="com.kh.spring.board.model.dto.Post"/>
+		  <typeAlias alias="Memo" type="com.kh.spring.memo.model.dto.Memo"/>
+		  
 	</typeAliases>
 	
 	

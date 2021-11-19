@@ -1,5 +1,10 @@
 package com.kh.spring.memo.controller;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.kh.spring.common.util.json.JsonMaker;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.memo.model.service.MemoService;
@@ -66,12 +72,14 @@ public class MemoController {
    @ResponseBody
    public String addMemo(@RequestBody Memo memo , @SessionAttribute("authentication") Member member) {
 	   
-	   System.out.println(memo);
-	   memoService.insertMemo(memo, member);
+	   System.out.println("오기 전" + memo);
+	   Memo insertedMemo = memoService.insertMemo(memo, member);
+	   
+	 ;
+	   
+	   return JsonMaker.json(memo) ;
 	   
 	   
-	   
-	   return "complete" ;
 	   
    }
    
