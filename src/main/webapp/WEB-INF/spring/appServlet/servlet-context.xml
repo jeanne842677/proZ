@@ -19,7 +19,7 @@
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" /> <!-- 우리 리소스를 간단하게 매핑하기 위해 넣음 -->
 	<!--  파일 업로드 경로 설정  : file로 들어오는 모든 경로를 c:/code/upload로 매핑 -->
-	<resources mapping="/file/**" location="file:///c:/code/upload"></resources>
+	<resources mapping="/file/**" location="file:///c:/code/upload/"></resources>
 	
 	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->

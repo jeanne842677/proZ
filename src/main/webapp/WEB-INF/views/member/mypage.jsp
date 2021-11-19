@@ -4,6 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 <link type="text/css" rel="stylesheet" href="/resources/css/bootstrap.css">
 <link type="text/css" rel="stylesheet" href="/resources/css/member/mypage.css">
@@ -36,7 +37,7 @@
                     <div class="content-wrapper" id="profileImg-wrapper">
                     	<a name="userProfile"></a>
                         <button id="profile-banner-btn" style="background-color: ${authentication.profileColor}"></button>
-                        <button id="profile-img"><img class="profileImg" src="http://localhost:9090/resources/upload/${profileImg}"></button>
+                        <button id="profile-img"><img class="profileImg" src="<spring:url value='/file/${profileImg}'/>"></button>
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
                     </div>
                     <div class="content-wrapper" id="profile">
