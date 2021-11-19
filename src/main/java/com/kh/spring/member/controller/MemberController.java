@@ -1,6 +1,7 @@
 package com.kh.spring.member.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,24 +11,17 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.oauth2.GrantType;
 import org.springframework.social.oauth2.OAuth2Operations;
 import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,29 +29,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.file.FileDTO;
+import com.kh.spring.common.util.file.FileUtil;
 import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.validator.JoinForm;
 import com.kh.spring.member.validator.JoinFormValidator;
+import com.kh.spring.member.validator.MypageForm;
+import com.kh.spring.member.validator.MypageValidator;
 import com.kh.spring.myPage.model.service.MypageService;
-import com.kh.spring.myPage.validator.MypageForm;
-
-
-
-
-
 
 @Controller
 @RequestMapping("member")
@@ -77,6 +65,8 @@ public class MemberController {
    private OAuth2Parameters googleOAuth2Parameters;
    @Autowired
    private MypageService mypageService; 
+   @Autowired
+   private MypageValidator mypageValidator; 
    
    public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
       super();
@@ -85,13 +75,16 @@ public class MemberController {
    }
    
  
-   
    @InitBinder(value = "joinForm") //model의 속성 중 속성명이 joinForm인 속성이 있는 경우 initBinder 메서드 실행
    public void initBinder(WebDataBinder webDataBinder) {
       webDataBinder.addValidators(joinFormValidator);
    }
 
-
+   @InitBinder(value = "mypageForm")
+	public void initBinderMypage(WebDataBinder webDataBinder) {
+	   webDataBinder.addValidators(mypageValidator);
+	}
+   
    @GetMapping("join")
    public void joinForm(Model model) {
       model.addAttribute(new JoinForm()).addAttribute("error",new ValidateResult().getError());
@@ -377,14 +370,14 @@ public class MemberController {
        return "redirect:/";
  }
 
- 	//Mypage 접근하는 경로
+ 	//**********Mypage Code***********
  	@GetMapping("mypage") 
 	public String mypage(HttpSession session, Model model) {
 		
 		Member member = (Member) session.getAttribute("authentication");
 		logger.debug(member.toString());
 		//프로필 사진 추출
-		FileDTO fileDTO = mypageService.selectProfileImgFilebyMemberIdx(member);
+		FileDTO fileDTO = memberService.selectProfileImgFilebyMemberIdx(member);
 		
 		session.setAttribute("authentication", member);
 		
@@ -400,8 +393,165 @@ public class MemberController {
 		return "member/mypage"; 
 	}
  
+ 	@PostMapping("profileColor")
+	@ResponseBody 
+	public String changeProfileColor(@Validated MypageForm mypageForm
+			,Errors errors 
+			,HttpSession session) {
+		
+		try {
+			//1) 값 Validate 검증
+			if(errors.hasErrors()) {
+				return "failed"; 
+			}
+			//2) 색 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update 
+			String profileColor = "#" + mypageForm.getProfileColor();
+			Member tempMember = (Member) session.getAttribute("authentication");
+			tempMember.setProfileColor(profileColor); 
+			
+			int res = memberService.updateMypageMemberByProfileColor(tempMember);
+			session.setAttribute("authentication", tempMember);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failed";
+		}
+			//3) color값 반환 
+			return "#" + mypageForm.getProfileColor(); 
+	}
+	
+	@PostMapping("profileImg")
+	@ResponseBody
+	public String changeProfileImg(@RequestParam List<MultipartFile> files
+			,HttpSession session) {
+		
+		//1) 파일 추출 및 DB저장 
+		FileUtil fileUtil = new FileUtil(); 
+		FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
+	
+		try {
+			Member member = (Member) session.getAttribute("authentication");
+			System.out.println(member.getUserIdx());
+			int res = memberService.insertMemberProfileImg(fileUploaded, member.getUserIdx()); 
+		} catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		//2) profileImg는 join을 통해 추출, session 업데이트 불필요
+		logger.debug(fileUploaded.getSavePath());
+		logger.debug(fileUploaded.getRenameFileName());
+		return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
+	}
+	
+	@PostMapping(value= "profileNickname", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changeProfileNickname(@Validated MypageForm mypageForm
+			,Errors errors
+			,HttpSession session) {
+		
+		try {
+			//1) 값 validate 검증 
+			if(errors.hasErrors()) {
+				return "failed";
+			}
+			//2) 닉네임 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
+			String nickname = mypageForm.getNickname();
+			Member member = (Member) session.getAttribute("authentication"); 
+			member.setNickname(nickname);
+			
+			int res = memberService.updateMypageMemberByNickname(member);
+			session.setAttribute("authentication", member);
+		} catch(Exception e) {
+			e.printStackTrace(); 
+			return "failed";
+		}
+			//3) nickname 반환 
+			return mypageForm.getNickname(); 
+	}
+	
+	@PostMapping(value= "profileGitRepo", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changeProfileGitRepo(@Validated MypageForm mypageForm
+			,Errors errors
+			,HttpSession session) {
+		
+		try {
+			//1) 값 validate 검증 
+			if(errors.hasErrors()) {
+				return "failed";
+			} 
+			Member member = (Member) session.getAttribute("authentication"); 
+			member.setGit(mypageForm.getGit());
+			
+			
+			//2) git 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
+			int res = memberService.updateMypageMemberByGit(member); 
+			session.setAttribute("authentication", member);
+		} catch(Exception e) {
+			e.printStackTrace(); 
+			return "failed"; 
+		}
+			//3) git 반환 
+			return mypageForm.getGit(); 
+	}
+	
+	@PostMapping("profilePassword")
+	@ResponseBody
+	public String changeProfilePassword(@Validated MypageForm mypageForm
+			,Errors errors
+			,HttpSession session) {
+		try {
+			//1) 값 validate 검증 
+			if(errors.hasErrors()) {
+				return "failed";
+			} 
+			
+			// 맴버를 꺼낸다.  
+			Member member = (Member) session.getAttribute("authentication");
+			// 맴버를 보낸다 ( service단에서 password 변경까지 처리 ) 
+			String password = mypageForm.getPassword(); 
+			member.setPassword(password);
+			// 변경된 패스워드 추가까지 마무리 
+			Member resMember = memberService.updateMypageMemberByPassword(member); 
+			member.setPassword(resMember.getPassword());
+			
+			session.setAttribute("authentication", member);
+		} catch(Exception e) {
+			e.printStackTrace(); 
+			return "failed"; 
+		}
+			//3) 성공 반환   
+			return "success";  
+	}
+	
+	
+	@PostMapping("isleave")
+	@ResponseBody
+	public String changeMemberIsleave(HttpSession session) {
+			
+		//1. session에서 member추출, isLeave 변경 
+		try {
+			Member member = (Member) session.getAttribute("authentication"); 
+			int res = memberService.memberIsleave(member); 
+			session.removeAttribute("authentication");
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failed"; 
+		}
+		//2. return "success"
+		return "success"; 
+	}
  
- 
+ 	
+ 	//*********아이디, 비밀번호 찾기 페이지*********
+ 	@GetMapping("searchEmail")
+ 	public String searchEmail() {
+		
+ 		return "member/";
+ 	}
+ 	
+ 	
+ 	
+ 	
  }
    
    

@@ -152,6 +152,17 @@
 			    border: none;
 			    background:transparent;
 			}
+			.user-aut-editor{
+				width: 100%;
+			    display: flex;
+			    justify-content: flex-end;
+			}
+			
+			#trash,#revise{
+			margin: 5px 10px 5px 5px;
+			cursor:pointer;
+
+			}
 
 
             
@@ -200,7 +211,7 @@
         
          <c:forEach items="${ memoList }" var="memo" > 
          <!-- 여기있는 애들 싹다 클래스로 바꾸고  -->
-        <div id="memo-yellow" >
+        <div class="memo-yellow"  style="background-color : ${memo.bgColor}" data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}" data-memo-idx="${memo.memoIdx}">
             <div id="content">
                 <div class="textvalue"> ${ memo.content }</div>
             </div>
@@ -219,7 +230,7 @@
                 
             
                 <div id="editor">
-                    <div id="back-color"><i class="fas fa-palette "></i></i></div>
+                    <div id="back-color"><i class="fas fa-palette "></i></div>
                    
                     <div id="save"><i class="fas fa-save "></i></div>
                 </div> 
@@ -233,11 +244,14 @@
             </div>
         </div>
     
-        <div id="modal-yellow">
+        <div class="modal-yellow">
             <div id = "write-memo">
                 <!--메모지 모달 창 띄우면 보여지는 거-->
                 <div id="close" class="close"><i class="fas fa-times "></i></div>
-                <div id="text"><textarea style="resize: none; border: none;"></textarea>
+                <div id="text"></div>
+                <div class="user-aut-editor">
+	                <div id="trash" ><i class="fas fa-trash-alt"></i></div>
+	                <div id="revise"><i class="fas fa-edit"></i></div>
                 </div>
             </div>
            
@@ -271,28 +285,28 @@
               		
               		console.dir(text);
               		
-              	})
-              	
-              	
-              	
-              	
-              	
-              	
-              	
-              	
+              	});
               	
                   $("#modal").hide();
-                  let newMemo = $('<div id = "memo-yellow"><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
+                  let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
                   $("#memo").prepend(newMemo);
-                  newMemo.find('.textvalue').text($(".note-editable").text());
-                  $("#memo-yellow").css("background-color", $("#write-memo").css("background-color"));
+                  /* newMemo.find('.textvalue').text($(".note-editable").text()); */
+                  newMemo.find('.textvalue').html(markupStr);
+                  newMemo.css("background-color", color);
                   $(".note-editable").text("");
+                  changeColor("#fff3cd");
                   
-
+                  newMemo.click(function(){
+                      $(".modal-yellow").css('display','flex');
+                      $(".modal-yellow").find("#write-memo").css('background-color', color);
+                      $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
+                  });
+                  $(".close").click(function(){
+                      $(".modal-yellow").hide();
+                  });
+                  
                
-
-               
-              })
+              });
 
         
         
@@ -308,11 +322,44 @@
                 });
             })
             $(document).ready(function (){
-                $("#memo-yellow").click(function(){
-                    $("#modal-yellow").css('display','flex');
+                $(".memo-yellow").click(function(){//매모 상세보기
+                	
+                	let memo = $(this);
+                	$(".user-aut-editor").hide();
+                    $(".modal-yellow").css('display','flex');
+                    $(".modal-yellow").find("#write-memo").css('background-color',$(this).data('bg-color'));
+                    $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
+                    
+                    if($(this).data("pm-idx") == ${userPmIdx}) {//본인이 만든 메모일시 수정/삭제 띄우기
+                    	$(".user-aut-editor").show();
+                    	
+                    	let thisMemoIdx = $(this).data("memo-idx");
+                    	
+                    	$("#trash").click(function () {//삭제 처리시
+                    		
+                    		console.log("클릭 되냐?")
+                    		fetch("/memo/delete/memo" , {
+                          		method : "POST" ,
+                          		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
+                          		body : JSON.stringify({
+                          			"memoIdx" : thisMemoIdx
+                          		})
+                          	});
+                          	
+                    		$(".modal-yellow").hide();
+                    		memo.remove();
+                    	
+                    	
+						})
+                    	
+                    }
+                    
+                    
+                    	
                 });
                 $(".close").click(function(){
-                    $("#modal-yellow").hide();
+                	$(".user-aut-editor").hide();
+                    $(".modal-yellow").hide();
                 });
             })
         

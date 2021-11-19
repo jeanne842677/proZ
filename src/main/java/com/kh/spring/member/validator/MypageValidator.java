@@ -1,4 +1,4 @@
-package com.kh.spring.myPage.validator;
+package com.kh.spring.member.validator;
 
 import java.util.regex.Pattern;
 

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.validator.JoinForm;
+import com.kh.spring.member.validator.MypageForm;
 import com.kh.spring.myPage.model.repository.MypageRepository;
-import com.kh.spring.myPage.validator.MypageForm;
 
 @Service
 public class MypageServiceImpl implements MypageService{
