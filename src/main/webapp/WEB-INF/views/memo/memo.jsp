@@ -298,7 +298,6 @@
             $("#text").prepend('<div id="summernote">');
             $("#text").append('</div>');    
             $(".user-aut-editor").hide();
-            $("#editor").show();
             let showeditor=' <div id="editor"><div id="back-color"><i class="fas fa-palette "></i></div> <div id="save"><i class="fas fa-save "></i></div></div>';
 			$("#text").append(showeditor);
 		})
