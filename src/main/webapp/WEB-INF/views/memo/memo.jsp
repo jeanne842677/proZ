@@ -279,8 +279,7 @@
       //div 추가
         $("#save").click(function () {
         	
-        		
-        		let insertedMemo;
+        		let memoIdx = "";
         	   	let markupStr = $('#summernote').summernote('code');
               	console.dir(markupStr);
               	let color = $("#write-memo").css('background-color');
@@ -297,55 +296,59 @@
               		})
               	}).then(res=>res.json())
               	.then(memo=>{
-              		insertedMemo=memo;
               		console.dir(memo);
+              		memoIdx = memo.memoIdx;
+              		
+              		$("#modal").hide();
+                    let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
+                    $("#memo").prepend(newMemo);
+                    /* newMemo.find('.textvalue').text($(".note-editable").text()); */
+                    newMemo.find('.textvalue').html(markupStr);
+                    newMemo.css("background-color", color);
+                    $(".note-editable").text("");
+                    changeColor("#fff3cd");
+                     
+                    
+                    newMemo.click(function(){
+                        $(".modal-yellow").css('display','flex');
+                        $(".modal-yellow").find("#write-memo").css('background-color', color);
+                        $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
+                        newMemo.data("memo-idx", memoIdx);
+                        
+                       
+                          	$(".user-aut-editor").show();
+                          	
+                          	let thisMemoIdx = $(this).data("memo-idx");
+                          	
+                          	$("#trash").click(function () {//삭제 처리시
+                          		
+                          		console.log("클릭 되냐?")
+                          		fetch("/memo/delete/memo" , {
+                                		method : "POST" ,
+                                		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
+                                		body : JSON.stringify({
+                                			"memoIdx" : thisMemoIdx
+                                		})
+                                	});
+                                	
+                          		$(".modal-yellow").hide();
+                          		newMemo.remove();
+                          	
+                          	
+        						})
+                          	
+                          
+                          
+                        
+                    });
+                    $(".close").click(function(){
+                        $(".modal-yellow").hide();
+                    });
+              		
               		
               	});
-              	console.dir("이것이 인설티드메모"+insertedMemo);
-                  $("#modal").hide();
-                  let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
-                  $("#memo").prepend(newMemo);
-                  /* newMemo.find('.textvalue').text($(".note-editable").text()); */
-                  newMemo.find('.textvalue').html(markupStr);
-                  newMemo.css("background-color", color);
-                  $(".note-editable").text("");
-                  changeColor("#fff3cd");
-                   
+              	
                   
-                  newMemo.click(function(){
-                      $(".modal-yellow").css('display','flex');
-                      $(".modal-yellow").find("#write-memo").css('background-color', color);
-                      $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
-                      
-                     
-                        	$(".user-aut-editor").show();
-                        	
-                        	let thisMemoIdx = $(this).data("memo-idx");
-                        	
-                        	$("#trash").click(function () {//삭제 처리시
-                        		
-                        		console.log("클릭 되냐?")
-                        		fetch("/memo/delete/memo" , {
-                              		method : "POST" ,
-                              		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
-                              		body : JSON.stringify({
-                              			"memoIdx" : thisMemoIdx
-                              		})
-                              	});
-                              	
-                        		$(".modal-yellow").hide();
-                        		memo.remove();
-                        	
-                        	
-      						})
-                        	
-                        
-                        
-                      
-                  });
-                  $(".close").click(function(){
-                      $(".modal-yellow").hide();
-                  });
                   
  
               });

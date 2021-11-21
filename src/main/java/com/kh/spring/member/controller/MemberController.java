@@ -1,10 +1,14 @@
 package com.kh.spring.member.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +47,7 @@ import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.validator.EmailForm;
+import com.kh.spring.member.validator.EmailValidator;
 import com.kh.spring.member.validator.JoinForm;
 import com.kh.spring.member.validator.JoinFormValidator;
 import com.kh.spring.member.validator.MypageForm;
@@ -63,12 +69,14 @@ public class MemberController {
    @Autowired
    RestTemplate http;
    @Autowired
-   private OAuth2Parameters googleOAuth2Parameters;
-   @Autowired
-   private MypageService mypageService; 
+   private OAuth2Parameters googleOAuth2Parameters; 
    @Autowired
    private MypageValidator mypageValidator; 
-   
+   @Autowired
+   private EmailValidator emailValidator; 
+   @Autowired
+   ServletContext context; 
+
    public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
       super();
       this.memberService = memberService;
@@ -85,6 +93,12 @@ public class MemberController {
 	public void initBinderMypage(WebDataBinder webDataBinder) {
 	   webDataBinder.addValidators(mypageValidator);
 	}
+   
+   @InitBinder(value = "emailForm")
+	public void initBinderSearchPassword(WebDataBinder webDataBinder) {
+	   webDataBinder.addValidators(emailValidator);
+	}
+  
    
    @GetMapping("join")
    public void joinForm(Model model) {
@@ -554,49 +568,90 @@ public class MemberController {
  			,RedirectAttributes redirectAttr 
  			) {
  		
- 		if(errors.hasErrors()) {
- 			redirectAttr.addFlashAttribute("message", "잘못된 이메일 값입니다. 다시 입력하세요");
- 			return "redirect:/member/searchPassword"; 
+ 			logger.debug(emailForm.toString());
+ 			System.out.println("1. date 값은 : " + emailForm.getProzSendDate());
+ 		try {
+ 			if(errors.hasErrors()) {
+ 	 			redirectAttr.addFlashAttribute("message", "잘못된 이메일 값입니다. 다시 입력하세요");
+ 	 			return "redirect:/member/searchPassword"; 
+ 	 		}
+ 			logger.debug("2. 이메일 폼의 내용은 : " + emailForm.toString());
+ 			Member member = memberService.selectMemberByEmail(emailForm.getEmail());  
+ 	 		
+ 	 		if(member == null) {
+ 	 			redirectAttr.addFlashAttribute("message", "존재하지 않는 이메일입니다. 다시 입력하세요");
+ 	 			logger.debug("3-2. 맴버가 Null이라면 : " + member);
+ 	 			return "redirect:/member/searchPassword"; 
+ 	 		}
+ 	 		
+ 	 		logger.debug("3. 오류 이후 searchPassword의 Member값은 : " + member.toString());
+ 	 		
+ 	 		String token  = UUID.randomUUID().toString();
+ 	 		logger.debug("4. token의 uuid 값은 : " + token);
+ 	 	    session.setAttribute("persistToken", token);
+ 	 	    session.setAttribute("persistUser", member);
+ 	 		
+ 	 	    memberService.sendPasswordChangeURLByEmail(member, token, emailForm.getProzSendDate());
+ 	 		
+ 	 		// session에 저장할 때 제한시간을 두고 싶다  
+ 	 		
+ 		} catch(Exception e) {
+ 			e.printStackTrace();
+ 			return "redirect:/member/searchPassword";
  		}
- 		
- 		Member member = memberService.selectMemberByEmail(emailForm.getEmail());  
- 		logger.debug("3. 오류 이후 searchPassword의 Member값은 : " + member.toString());
- 		
- 		String token  = UUID.randomUUID().toString();
- 		logger.debug("4. token의 uuid 값은 : " + token);
- 	    session.setAttribute("persistToken", token);
- 		
- 		memberService.sendPasswordChangeURLByEmail(member, token);
+
+ 		redirectAttr.addFlashAttribute("message", "비밀번호 찾기 메일 발송이 완료되었습니다.");
+ 		return "redirect:/";
  		// 메일전송 후, 메일에서 온 URL을 받을 수 잇는 것이 필요. SESSION에 담는 것 보다는 메일로 
  		// 전송된 ID값을 다시 꺼내는게 좋다. 
- 		
- 		return "redirect:/"; 
  	}
 
+ 	// 아직 미완성 작업 
  	@GetMapping("change-password/{token}")
     public String changePassword(@PathVariable String token
-                      ,@SessionAttribute(value = "persistToken", required = false) String persistToken
-                      ,@SessionAttribute(value = "persistUser", required = false) JoinForm form
+    				  ,@RequestParam String prozSendDate
+    				  ,@SessionAttribute(value = "persistToken", required = false) String persistToken
+                      ,@SessionAttribute(value = "persistUser", required = false) Member member
                       ,HttpSession session
                       ,RedirectAttributes redirectAttrs) {
-       System.out.println(form);
-       if(!token.equals(persistToken)) {
-          throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
-       }
        
-       if(form.getSocialId() != null) {
-     	  memberService.insertSocialMember(form);
-     	  return "redirect:/member/login";
-       }
-       
-       
-       memberService.insertMember(form);
-       redirectAttrs.addFlashAttribute("message", "회원가입을 환영합니다. 로그인 해주세요");
-       session.removeAttribute("persistToken");
-       session.removeAttribute("persistUser");
-       
-       return "redirect:/member/login";
+       return "redirect:/member/searchPasswordCheck?prozSendDate=" + prozSendDate;
     }
+ 	
+ 	@GetMapping("searchPasswordCheck")
+ 	public String searchPasswordCheck(@RequestParam String prozSendDate) {
+ 		logger.debug(prozSendDate);
+ 		
+ 		return "redirect:/member/changePassword?prozSendDate=" + prozSendDate; 
+ 	}
+ 	
+ 	@GetMapping("changePassword")
+ 	public String changePassword(@RequestParam String prozSendDate
+ 			,RedirectAttributes redirectAttr) {
+ 		// 마지막으로, changePassword에서 해야할 일 
+ 		// 1. 시간을 비교하여 만료시간인지 아닌지를 체크한다 
+ 		logger.debug("최종값은 : " + prozSendDate);
+ 		// 만료시간이라면 flashAttr + indexPage
+ 		long second = Long.parseLong(prozSendDate)/1000;
+ 		logger.debug("최종값은 : " + second + "초 입니다.");
+ 		Date date = new Date(); 
+ 		long currentSecond = date.getTime()/1000; 
+ 		logger.debug("현제 시각은 : " + prozSendDate + "초입니다. ");
+ 		
+ 		long passedTime = currentSecond - second;
+ 		logger.debug("지난 시각은 : " + passedTime);
+ 		
+ 		if(passedTime > 300) {
+ 			logger.debug("5분이 지났습니다");
+ 			redirectAttr.addFlashAttribute("message", "만료된 링크입니다");
+ 			return "redirect:/"; 
+ 		}
+ 		// 뒤로가기를 막기 
+ 		
+ 		return "member/changePassword"; 
+ 		// 만료시간이 아니라면 정상적인 changePassword PAGE 
+ 		
+ 	}
  	
  }
    
