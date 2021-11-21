@@ -3,9 +3,11 @@ package com.kh.spring.member.validator;
 import java.util.regex.Pattern;
 
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@Component
 public class EmailValidator implements Validator{
 
 	@Override

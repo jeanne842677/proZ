@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,7 +230,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void sendPasswordChangeURLByEmail(Member member, String token) {
+	public void sendPasswordChangeURLByEmail(Member member, String token, String prozSendDate) {
 		// 이메일 전송 필요 
 		// 이메일만 보낸다면 ~~님 등의 조회결과입니다. 이런 것을 못쓰게 된다. 
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
@@ -237,6 +238,7 @@ public class MemberServiceImpl implements MemberService {
 		// 새로운 MailTemplate 필요 
 		body.add("mailTemplate", "change-password-mail");
 		body.add("nickname", member.getNickname());
+		body.add("prozSendDate", prozSendDate);
 		body.add("persistToken", token);
 
 		// RestTemplate의 기본 Content-type : application/json

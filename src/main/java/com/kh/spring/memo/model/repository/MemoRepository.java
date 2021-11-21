@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
@@ -22,12 +23,17 @@ public interface MemoRepository {
 	
 	int insertMemo(Memo memo);
 	
-	@Select("select * from memo where ws_idx = #{wsIdx} order by memo_idx desc")
+	@Select("select * from memo where ws_idx = #{wsIdx} order by memo_idx desc") //내림차순
 	List<Memo> selectMemoByWsIdx(String wsIdx);
+	
+	@Select("select * from memo where ws_idx = #{wsIdx} order by memo_idx asc") //오름차순
+	List<Memo> selectMemoByWsIdxAsc(String wsIdx);
 
 	@Delete("delete from memo where memo_idx = #{memoIdx}")
 	void deleteMemoByMemoIdx(String memoIdx);
 	
+	@Update("update memo set CONTENT = #{content}, BG_COLOR = #{bgColor}, REG_DATE = current_date where MEMO_IDX = #{memoIdx}")
+	void updateMemoByMemoIdx(Memo memo);
 
 	
 }

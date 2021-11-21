@@ -17,13 +17,13 @@
         <div class="con">
             <section>
             <!-- 작업 공간 -->
-                <form action="/member/searchPassword" method="post">
+                <form id="form" action="/member/searchPassword" method="post">
                     <div class="login-box">
                         <img id="login-logo" src="/resources/img/logo-white.png">
                         <div class="login-content">
                             <div id="sign-title">비밀번호 찾기</div>
                             <div id="sign-text">가입한 이메일주소를 입력하여 임시주소를<br> 발급받아 새로운 비밀번호를 설정하세요.</div>
-                            <input type="text" id="userId" class="form-control" placeholder="이메일을 입력하세요">
+                            <input type="text" id="userId" name="email" class="form-control" placeholder="이메일을 입력하세요">
                             <div class="btn-wrap">
                                 <button id="back-btn" class="btn  btn-primary" type="button" onclick="location.href='/';">뒤로가기</button>
                                 <button id="progress-btn" class="btn  btn-primary" type="submit" >진행하기</button>    
@@ -39,9 +39,17 @@
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-<script src="validateMachine1.1.js"></script>
+<script src="/resources/js/validator/validateMachine1.1.js"></script>
+<script type="text/javascript">
+	//FlashMsg 출력 
+	var result = '${message}'; 
+	console.log(result); 
+	if(result) {
+		alert(result);
+	}
+</script>
 <script>
-    //jquery 사용불가 
+    //ValidatorMachin 적용
     var userId = document.querySelector('#userId'); 
     var v = new ValidateMachine(); 
     v.addValidator(userId); 
@@ -52,5 +60,23 @@
         "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$" :
         "적합한 이메일 형식이 아닙니다."
     })
+</script>
+<script type="text/javascript">
+
+	//즉 localStorage에 데이터를 저장하고 이후 접근할 때 localStorage의 cookie를 
+	//가져온다.
+	//1. localStorage 값 저장 
+	var ProzSendDate = new Date().getTime();
+	window.localStorage.setItem('ProzSendDate', ProzSendDate); 
+	
+	
+	//2. 전송 시 localStorage값을 포함하여 전송 
+	$("#form").submit( function(eventObj) {
+	    $("<input />").attr("type", "hidden")
+	        .attr("name",'ProzSendDate')
+	    	.attr("value", ProzSendDate)
+	        .appendTo("#form");
+	    return true;
+	});
 </script>
 </html>
