@@ -27,14 +27,14 @@
     display: flex;
 
 }
-#old{
+.oldBtn{
     margin-left: 10px;
     background : none;
     border: 0;
     font-weight: bold;
     color: #A4A4A4;
 }
-#new{
+.newBtn{
     background : none;
     border: 0;
     font-weight: bold;

@@ -62,7 +62,7 @@ public class MemoController {
 	   model.addAttribute(memoList);
 	   model.addAttribute("wsIdx",wsIdx);
 	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
-	   
+	   model.addAttribute("order",order);
 	   
 	   
 	   return "/memo/memo" ;

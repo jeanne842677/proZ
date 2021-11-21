@@ -187,7 +187,10 @@
 			hr{
 			margin:0px 10px 25px 10px;
 			}
-
+			.on{
+			 color : #8F7AE5;
+			}
+		
             
         </style>
        
@@ -221,8 +224,15 @@
     
             <div id="top">
                 <div id="range">
-                    <button id="new" class="newBtn"><a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=0">최신순</a></button>
-                    <button id="old" class="oldBtn" ><a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=1">오래된순</a></button>
+                    <button id="new" class="newBtn">
+                    <c:if test ="${order == 0}" >
+                    <a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=0" style="color: #8F7AE5">최신순</a></button>
+                    <button id="old" class="oldBtn" ><a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=1" style="color: #A4A4A4">오래된순</a></button>
+                	 </c:if>
+                	   <c:if test ="${order == 1}" >
+                    <a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=0" style="color: #A4A4A4">최신순</a></button>
+                    <button id="old" class="oldBtn" ><a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=1" style="color:#8F7AE5 ">오래된순</a></button>
+                	 </c:if>
                 </div>
 
 
@@ -291,8 +301,9 @@
         </div>
         
         <script type="text/javascript">
-        
-        
+        $(".newBtn").click(function(){
+            $(this).toggleClass("on");
+        });
         //수정
        $("#revise").click(function () {
             $("#text").prepend('<div id="summernote">');
