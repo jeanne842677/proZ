@@ -2,6 +2,7 @@ package com.kh.spring.member.model.service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Date;
 import java.util.Map;
 
 import org.json.simple.parser.ParseException;
@@ -53,6 +54,6 @@ public interface MemberService {
 
 	FileDTO selectProfileImgFilebyMemberIdx(Member dummyMember);
 
-	void sendPasswordChangeURLByEmail(Member member, String token);
+	void sendPasswordChangeURLByEmail(Member member, String token, String string);
 
 }
