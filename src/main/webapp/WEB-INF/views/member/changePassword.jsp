@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <link type="text/css" rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="/resources/css/member/searchPassword.css">    
+<link type="text/css" rel="stylesheet" href="/resources/css/member/changePassword.css">    
 </head>
 <body>
 <c:if test="${not empty message}">
