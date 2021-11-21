@@ -69,6 +69,7 @@
 	var ProzSendDate = new Date().getTime();
 	window.localStorage.setItem('ProzSendDate', ProzSendDate); 
 	
+	
 	//2. 전송 시 localStorage값을 포함하여 전송 
 	$("#form").submit( function(eventObj) {
 	    $("<input />").attr("type", "hidden")
