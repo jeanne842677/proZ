@@ -163,7 +163,7 @@
                             //valid조작
                             divList[1].style.display = "block"; 
                             divList[1].style.color = this.passedColor;
-                            divList[1].innerHTML =  this.passedMsg; 
+                            divList[1].innerHTML =  '<i class="fas fa-times-circle"></i>&nbsp&nbsp중복 입력한 값과 일치합니다.'; 
                             //invalid조작 
                             divList[2].style.display = "none";
                         } else {

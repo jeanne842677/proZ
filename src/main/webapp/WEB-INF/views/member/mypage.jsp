@@ -164,7 +164,7 @@
 		.then(response => response.text())
     	.then(text=>{
     		if(text != 'failed'){ 
-    			$('.profileImg').attr('src', 'http://localhost:9090/resources/upload/' + text);
+    			$('.profileImg').attr('src', '/file/' + text);
     		} else {
     			alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
     		}
