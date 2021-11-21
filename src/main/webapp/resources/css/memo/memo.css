@@ -4,6 +4,8 @@
     justify-content: flex-start;
     align-items: center;
     height: 100px;
+    width:100%;
+    margin:44px 0px 0px 0px;
 }
 #title{
     font-size: 30px;
@@ -13,27 +15,26 @@
 #top{
     display: flex;
     height: 50px;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+    width:80%;
+    margin:20px;
     
   
 }
 
 #range{
     display: flex;
-    position:relative;
-   right:35%;
 
 }
-#old{
+.oldBtn{
     margin-left: 10px;
     background : none;
     border: 0;
     font-weight: bold;
     color: #A4A4A4;
 }
-#new{
+.newBtn{
     background : none;
     border: 0;
     font-weight: bold;
@@ -41,9 +42,6 @@
 }
 #search-form{
     display: flex;
-    position:relative;
-    right:10.8%;
-    width: 220px;
     align-items: center;
     font-weight: bold;
    
@@ -60,26 +58,26 @@
 }
 #memo-btn{
     display: flex;
-    position:relative;
-    right:10.6%;
-    height:30px;
     background-color:RGB(143, 122, 229);
     color: white;
     border: white;
     border-radius: 5px;
-    margin-right: 175px;
-    margin-left: 10px;
     align-items: center;
 }
-#memo{
+.memocon{
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    width: 850px;
-    margin:auto;
-    position: relative;
-    top:20px;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items:center;
+    width:77%;
+    
+}
+
+#memo{
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:flex-start;
+	max-width:810px;
+	min-width:810px;
 }
 
 #content{
@@ -93,7 +91,6 @@
 #profile{
     margin-right: 10px;
     margin-bottom: 10px;
-    position:absolute;
 }
 
 .memo-yellow{
@@ -173,9 +170,9 @@
 #text{
     display: flex;
     position:relative;
-    width: 100%; height:100%;
-    padding: 20px;
-   
+    width: 100%; height:78%;
+    padding: 10px 30px 10px 30px;
+   justify-content:flex-start;
 }
 
 
@@ -192,8 +189,8 @@
 #close{
 	width : 97%;
     display: flex;  
-    margin-top: 5px;
-    margin-right: 5px;
+    margin-top: 10px;
+    margin-right: 10px;
     font-size: 20px;
     justify-content: flex-end;
 }
@@ -203,7 +200,7 @@
     justify-content: space-around;
     align-items: center;
     top: 580px;
-    padding-bottom: 13px;
+    padding-bottom: 10px;
 }
 
 #editor>div{
@@ -303,14 +300,7 @@
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-#editor{
-    display: flex;
-    width: 370px;
-    justify-content: space-around;
-    align-items: center;
-    position: absolute;
-    top: 580px;
-}
+
 #revise{
     display: inline-flex;
     position: relative;
@@ -352,5 +342,9 @@
     z-index: 999;
 }
 
-
+#rightzone{
+	display:flex;
+	justify-content:space-between;
+	width:303px;
+}
 

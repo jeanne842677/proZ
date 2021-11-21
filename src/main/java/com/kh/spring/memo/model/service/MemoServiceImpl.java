@@ -51,4 +51,15 @@ public class MemoServiceImpl implements MemoService{
 		
 	}
 
+	@Override
+	public List<Memo> selectMemoByWsIdxAsc(String wsIdx) {
+		// TODO Auto-generated method stub
+		return memoRepository.selectMemoByWsIdxAsc(wsIdx);
+	}
+	
+	   @Override
+	   public void updateMemoByMemoIdx(Memo memo) {
+	      memoRepository.updateMemoByMemoIdx(memo);
+	   }
+
 }
