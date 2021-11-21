@@ -37,9 +37,24 @@
     
                 width: 100%;
                 height: 100%;
-                min-width: 1000px;
+                min-width: 1450px;
     
             }
+            
+              a{
+            	color:#A4A4A4;
+            	text-decoration: none;
+            }
+            
+            a:hover {
+			  color : #8F7AE5;
+			  text-decoration: none;
+			}
+			a:active {
+			  color : #8F7AE5;
+			  text-decoration: none;
+			}
+            
         
             .wrap {
                 height: 100%;
@@ -80,8 +95,10 @@
                 height: 100%;
                 width: 100%;
                 overflow-y: auto;
-    
                 background: RGB(245, 246, 247);
+                display:flex;
+                align-items:center;
+                flex-direction:column;
     
     
     
@@ -112,6 +129,7 @@
             
             .note-editable{
                 background-color: #fff3cd;
+                width:300px;
                 
             }
             
@@ -155,7 +173,8 @@
 			.user-aut-editor{
 				width: 100%;
 			    display: flex;
-			    justify-content: flex-end;
+			    justify-content: space-around;
+			    padding:10px;
 			}
 			
 			#trash,#revise{
@@ -164,6 +183,10 @@
 
 			}
 
+
+			hr{
+			margin:0px 10px 25px 10px;
+			}
 
             
         </style>
@@ -190,36 +213,41 @@
                    # <i class="fas fa-user-edit"></i> proZ 메모 
                 </div>
             </div>
-            <div style="display: flex;
-            justify-content:center;">
-            <hr width="90%" ></div>
+            
+            <div style="width:90%;margin:40px 0px 0px 0px; display:flex; justify-content:center;">
+            <hr width="90%">
+            </div>
             
     
             <div id="top">
                 <div id="range">
-                    <button id="new" class="newBtn">최신순</button>
-                    <button id="old" class="oldBtn">오래된순</button>
+                    <button id="new" class="newBtn"><a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=0">최신순</a></button>
+                    <button id="old" class="oldBtn" ><a href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=1">오래된순</a></button>
                 </div>
 
-                <div id="search-form">
-                    <img class="search-icon" src="/resources/img/search.png">
-                    <input class="form-control" id="search" type="text" placeholder="검색하기" >  
-                </div>
-                <button type="button"  id="memo-btn" class="memo-btn">메모 작성</button>
-            </div>
-        <div id="memo">        
-        
-         <c:forEach items="${ memoList }" var="memo" > 
-         <!-- 여기있는 애들 싹다 클래스로 바꾸고  -->
-        <div class="memo-yellow"  style="background-color : ${memo.bgColor}" data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}" data-memo-idx="${memo.memoIdx}">
-            <div id="content">
-                <div class="textvalue"> ${ memo.content }</div>
-            </div>
-            <div id="profile"><i class="fas fa-user-circle fa-2x"></i></div>
-        </div>
-         </c:forEach>
 
-               
+				<div id="rightzone">
+	                <div id="search-form">
+	                    <img class="search-icon" src="/resources/img/search.png">
+	                    <input class="form-control" id="search" type="text" placeholder="검색하기" >  
+	                </div>
+	                
+	                <button type="button"  id="memo-btn" class="memo-btn">메모 작성</button>
+                </div>
+            </div>
+            <div class="memocon">
+		        <div id="memo">        
+		        	
+		         <c:forEach items="${ memoList }" var="memo" > 
+		         <!-- 여기있는 애들 싹다 클래스로 바꾸고  -->
+		        <div class="memo-yellow"  style="background-color : ${memo.bgColor}" data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}" data-memo-idx="${memo.memoIdx}">
+		            <div id="content">
+		                <div class="textvalue"> ${ memo.content }</div>
+		            </div>
+		            <div id="profile"><i class="fas fa-user-circle fa-2x"></i></div>
+		        </div>
+		         </c:forEach>
+			</div>
          </div>
          <div id="modal">
             <div id = "write-memo">
@@ -270,6 +298,7 @@
             $("#text").prepend('<div id="summernote">');
             $("#text").append('</div>');    
             $(".user-aut-editor").hide();
+            $("#editor").show();
             let showeditor=' <div id="editor"><div id="back-color"><i class="fas fa-palette "></i></div> <div id="save"><i class="fas fa-save "></i></div></div>';
 			$("#text").append(showeditor);
 		})
@@ -320,21 +349,8 @@
                           	
                           	let thisMemoIdx = $(this).data("memo-idx");
                           	
-                          	$("#trash").click(function () {//삭제 처리시
-                          		
-                          		console.log("클릭 되냐?")
-                          		fetch("/memo/delete/memo" , {
-                                		method : "POST" ,
-                                		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
-                                		body : JSON.stringify({
-                                			"memoIdx" : thisMemoIdx
-                                		})
-                                	});
-                                	
-                          		$(".modal-yellow").hide();
-                          		newMemo.remove();
-                          	
-                          	
+                          	$("#trash").click(function () {//메모모 삭제
+                          		deleteMemo(thisMemoIdx,newMemo);
         						})
                           	
                           
@@ -381,20 +397,7 @@
                     	let thisMemoIdx = $(this).data("memo-idx");
                     	
                     	$("#trash").click(function () {//삭제 처리시
-                    		
-                    		console.log("클릭 되냐?")
-                    		fetch("/memo/delete/memo" , {
-                          		method : "POST" ,
-                          		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
-                          		body : JSON.stringify({
-                          			"memoIdx" : thisMemoIdx
-                          		})
-                          	});
-                          	
-                    		$(".modal-yellow").hide();
-                    		memo.remove();
-                    	
-                    	
+                    		deleteMemo(thisMemoIdx,memo);
 						})
                     	
                     }
@@ -483,6 +486,21 @@
             });
             
             
+            
+			function deleteMemo(thisMemoIdx,newMemo) {//삭제 처리함수
+         		
+         		fetch("/memo/delete/memo" , {
+               		method : "POST" ,
+               		headers : {"Content-type" : "application/json; charset=UTF-8"} ,
+               		body : JSON.stringify({
+               			"memoIdx" : thisMemoIdx
+               		})
+               	});
+               	
+         		$(".modal-yellow").hide();
+         		newMemo.remove();
+    			}
+
 
 
 
