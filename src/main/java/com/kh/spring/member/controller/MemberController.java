@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -46,6 +47,8 @@ import com.kh.spring.common.util.file.FileUtil;
 import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.validator.ChangePasswordForm;
+import com.kh.spring.member.validator.ChangePasswordValidator;
 import com.kh.spring.member.validator.EmailForm;
 import com.kh.spring.member.validator.EmailValidator;
 import com.kh.spring.member.validator.JoinForm;
@@ -75,6 +78,8 @@ public class MemberController {
    @Autowired
    private EmailValidator emailValidator; 
    @Autowired
+   private ChangePasswordValidator changePasswordValidator; 
+   @Autowired
    ServletContext context; 
 
    public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
@@ -97,6 +102,11 @@ public class MemberController {
    @InitBinder(value = "emailForm")
 	public void initBinderSearchPassword(WebDataBinder webDataBinder) {
 	   webDataBinder.addValidators(emailValidator);
+	}
+   
+   @InitBinder(value = "changePasswordForm")
+   public void initBinderchangePassword(WebDataBinder webDataBinder) {
+	   webDataBinder.addValidators(changePasswordValidator);
 	}
   
    
@@ -558,9 +568,11 @@ public class MemberController {
  
  	
  	//*********아이디, 비밀번호 찾기 페이지*********
+	// 1. searchPassword로 forwarding 
  	@GetMapping("searchPassword")
  	public void searchPassword() {}
  	
+ 	// 2. searchPassword에서 이메일 값 입력, 처리 
  	@PostMapping("searchPassword") 
  	public String searchMemberPassword(@Validated EmailForm emailForm
  			,Errors errors 
@@ -568,32 +580,26 @@ public class MemberController {
  			,RedirectAttributes redirectAttr 
  			) {
  		
- 			logger.debug(emailForm.toString());
- 			System.out.println("1. date 값은 : " + emailForm.getProzSendDate());
  		try {
  			if(errors.hasErrors()) {
  	 			redirectAttr.addFlashAttribute("message", "잘못된 이메일 값입니다. 다시 입력하세요");
  	 			return "redirect:/member/searchPassword"; 
  	 		}
- 			logger.debug("2. 이메일 폼의 내용은 : " + emailForm.toString());
  			Member member = memberService.selectMemberByEmail(emailForm.getEmail());  
  	 		
  	 		if(member == null) {
  	 			redirectAttr.addFlashAttribute("message", "존재하지 않는 이메일입니다. 다시 입력하세요");
- 	 			logger.debug("3-2. 맴버가 Null이라면 : " + member);
  	 			return "redirect:/member/searchPassword"; 
  	 		}
- 	 		
- 	 		logger.debug("3. 오류 이후 searchPassword의 Member값은 : " + member.toString());
- 	 		
+
  	 		String token  = UUID.randomUUID().toString();
- 	 		logger.debug("4. token의 uuid 값은 : " + token);
- 	 	    session.setAttribute("persistToken", token);
- 	 	    session.setAttribute("persistUser", member);
+ 	 	    Date date = new Date(); 
  	 		
+ 	 		session.setAttribute("persistToken", token); 
+ 	 		session.setAttribute("emailSendMember", member);
+ 	 		session.setAttribute("emailSendTime", date.getTime());
  	 	    memberService.sendPasswordChangeURLByEmail(member, token, emailForm.getProzSendDate());
- 	 		
- 	 		// session에 저장할 때 제한시간을 두고 싶다  
+ 	 		 
  	 		
  		} catch(Exception e) {
  			e.printStackTrace();
@@ -602,54 +608,72 @@ public class MemberController {
 
  		redirectAttr.addFlashAttribute("message", "비밀번호 찾기 메일 발송이 완료되었습니다.");
  		return "redirect:/";
- 		// 메일전송 후, 메일에서 온 URL을 받을 수 잇는 것이 필요. SESSION에 담는 것 보다는 메일로 
- 		// 전송된 ID값을 다시 꺼내는게 좋다. 
  	}
 
- 	// 아직 미완성 작업 
+ 	//3. 전송된 email에서 동적 URL 을 활용하여 접근 
  	@GetMapping("change-password/{token}")
     public String changePassword(@PathVariable String token
-    				  ,@RequestParam String prozSendDate
     				  ,@SessionAttribute(value = "persistToken", required = false) String persistToken
-                      ,@SessionAttribute(value = "persistUser", required = false) Member member
-                      ,HttpSession session
-                      ,RedirectAttributes redirectAttrs) {
-       
-       return "redirect:/member/searchPasswordCheck?prozSendDate=" + prozSendDate;
+                      ,RedirectAttributes redirectAttr
+    				  ,HttpSession session
+                      ) {
+ 		if(!token.equals(persistToken)) {
+ 			redirectAttr.addFlashAttribute("message", "만료된 페이지입니다. 패스워드 변경 이메일을 다시 보내주세요.");
+	 		return "redirect:/"; 
+ 	    }
+
+       return "redirect:/member/changePassword";
     }
  	
- 	@GetMapping("searchPasswordCheck")
- 	public String searchPasswordCheck(@RequestParam String prozSendDate) {
- 		logger.debug(prozSendDate);
- 		
- 		return "redirect:/member/changePassword?prozSendDate=" + prozSendDate; 
- 	}
- 	
+ 	//4. Email 발송시각과 접근시각을 비교하여 만료시간 검증 
  	@GetMapping("changePassword")
- 	public String changePassword(@RequestParam String prozSendDate
- 			,RedirectAttributes redirectAttr) {
- 		// 마지막으로, changePassword에서 해야할 일 
- 		// 1. 시간을 비교하여 만료시간인지 아닌지를 체크한다 
- 		logger.debug("최종값은 : " + prozSendDate);
- 		// 만료시간이라면 flashAttr + indexPage
- 		long second = Long.parseLong(prozSendDate)/1000;
- 		logger.debug("최종값은 : " + second + "초 입니다.");
+ 	public String changePassword(RedirectAttributes redirectAttr
+ 			,HttpSession session) {
+ 		
+ 		long second = (long) session.getAttribute("emailSendTime")/1000;
+ 		logger.debug("1. 이메일을 보낸 시각은 : " + second);
  		Date date = new Date(); 
- 		long currentSecond = date.getTime()/1000; 
- 		logger.debug("현제 시각은 : " + prozSendDate + "초입니다. ");
- 		
+ 		long currentSecond = date.getTime()/1000;
+ 		logger.debug("2. 현재 시각은 : " + currentSecond);
  		long passedTime = currentSecond - second;
- 		logger.debug("지난 시각은 : " + passedTime);
+ 		logger.debug("3. 지난 시각은 :  " + passedTime + "초 입니다.");
  		
+ 		// 만료되었을 경우 index로 redirect 
  		if(passedTime > 300) {
- 			logger.debug("5분이 지났습니다");
- 			redirectAttr.addFlashAttribute("message", "만료된 링크입니다");
+ 			redirectAttr.addFlashAttribute("message", "메일 발송 이후 5분이 지났습니다. 패스워드 변경 이메일을 다시 보내주세요.");
  			return "redirect:/"; 
  		}
- 		// 뒤로가기를 막기 
  		
+ 		// 만료 전일 경우 정상적인 changePassword 사이트로 forward 
  		return "member/changePassword"; 
- 		// 만료시간이 아니라면 정상적인 changePassword PAGE 
+
+ 	}
+ 	
+ 	//5. changePassword.jsp에서 발송한 값을 DB에 입력 
+ 	@PostMapping("changePassword")
+ 	public String passwordChange(@Validated ChangePasswordForm changePasswordForm
+ 			,Errors errors
+ 			,HttpSession session
+ 			,RedirectAttributes redirectAttr) {
+ 		
+ 		try {
+ 			if(errors.hasErrors()) {
+ 	 			redirectAttr.addFlashAttribute("message", "잘못된 패스워드 값입니다. 다시 입력하세요");
+ 	 			return "redirect:/member/changePassword"; 
+ 	 		}
+ 			
+ 			Member member = (Member) session.getAttribute("emailSendMember"); 
+ 			member.setPassword(changePasswordForm.getPassword());
+ 			// 자동 protect 전환 및 update, 맴버 반환까지 처리 
+ 			Member changedMember = memberService.updateMypageMemberByPassword(member);  
+ 		} catch(Exception e) {
+ 			e.printStackTrace();
+ 			redirectAttr.addFlashAttribute("message", "비밀번호 찾기 이메일이 만료되었습니다. 재발급 받아주세요");
+ 			return "redirect:/member/searchPassword";
+ 		}
+
+ 		redirectAttr.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+ 		return "redirect:/member/login";
  		
  	}
  	

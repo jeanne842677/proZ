@@ -11,6 +11,11 @@
 </head>
 <head>
 <body>
+<c:if test="${not empty message}">
+	<script type="text/javascript">
+		alert("${message}");
+	</script>
+</c:if>
     <div class="wrap">
         <header>
         </header>
@@ -60,23 +65,5 @@
         "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$" :
         "적합한 이메일 형식이 아닙니다."
     })
-</script>
-<script type="text/javascript">
-
-	//즉 localStorage에 데이터를 저장하고 이후 접근할 때 localStorage의 cookie를 
-	//가져온다.
-	//1. localStorage 값 저장 
-	var ProzSendDate = new Date().getTime();
-	window.localStorage.setItem('ProzSendDate', ProzSendDate); 
-	
-	
-	//2. 전송 시 localStorage값을 포함하여 전송 
-	$("#form").submit( function(eventObj) {
-	    $("<input />").attr("type", "hidden")
-	        .attr("name",'ProzSendDate')
-	    	.attr("value", ProzSendDate)
-	        .appendTo("#form");
-	    return true;
-	});
 </script>
 </html>
