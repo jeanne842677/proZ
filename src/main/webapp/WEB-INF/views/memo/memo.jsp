@@ -177,7 +177,7 @@
 			    padding:10px;
 			}
 			
-			#trash,#revise{
+			#trash,#modify{
 			margin: 5px 10px 5px 5px;
 			cursor:pointer;
 
@@ -189,6 +189,10 @@
 			}
 			.on{
 			 color : #8F7AE5;
+			}
+			
+			.modify-text {
+				height: 100%;
 			}
 		
             
@@ -270,7 +274,8 @@
                 <div id="editor">
                     <div id="back-color"><i class="fas fa-palette "></i></div>
                    
-                    <div id="save"><i class="fas fa-save "></i></div>
+                    <div class="save"><i class="fas fa-save "></i></div>
+                    <div class="modify-save"><i class="fas fa-save "></i></div>
                 </div> 
             </div>
             <div id="memocolor" style="display:none;" >
@@ -289,7 +294,7 @@
                 <div id="text" class="modify-text"></div>
                 <div class="user-aut-editor">
 	                <div id="trash" ><i class="fas fa-trash-alt"></i></div>
-	                <div id="revise"><i class="fas fa-edit"></i></div>
+	                <div id="modify"><i class="fas fa-edit"></i></div>
                 </div>
                 
             </div>
@@ -303,52 +308,14 @@
         
                 <script type="text/javascript">
 
-        //수정
-       $("#revise").click(function () {
-            
-            
-            let beforeModify = $(this).closest(".user-aut-editor").siblings(".modify-text").html();
-            $(".modify-text").append('<div id="summernote2">');
-            $(".modify-text").prepend('</div>'); 
-            
-            
-            console.dir(beforeModify);
-            $(".note-editable").text(beforeModify);
-            
-            $('#summernote2').summernote({
-                // airMode: true,
-                placeholder : '내용을 입력하세여',
-            height: 220,                 // set editor height
-            width:"auto",
-            focus: true,                  // set focus to editable area after initializing summernote
-            disableDragAndDrop: true,
+      //새 메모 추가
+        $(".save").click(function () {
 
-            toolbar: [
-                // [groupName, [list of button]]
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['font', ['strikethrough']],
-                ['fontsize'],
-                ['color', ['color']]
-            ]
-        });
-            
-            
-            
-            $(".user-aut-editor").hide();
-            let showeditor=' <div id="editor"><div id="back-color"><i class="fas fa-palette "></i></div> <div id="save"><i class="fas fa-save "></i></div></div>';
-         $(".modify-text").append(showeditor);
-      })
-        
-        
-        
-      //div 추가
-        $("#save").click(function () {
-           
+        	console.log("클래스 지웠다");
               let memoIdx = "";
                  let markupStr = $('#summernote').summernote('code');
                  console.dir(markupStr);
                  let color = $("#write-memo").css('background-color');
-                 
                  
                  
                  fetch("/memo/add/memo" , {
@@ -412,6 +379,8 @@
         
             $(document).ready(function (){
                 $(".memo-btn").click(function(){
+                	$(".save").show();
+                	$(".modify-save").hide();
                     $("#modal").css('display','flex');
                 });
                 $(".close").click(function(){
@@ -419,7 +388,7 @@
                 });
             })
             $(document).ready(function (){
-                $(".memo-yellow").click(function(){//매모 상세보기
+                $(".memo-yellow").click(function(){//메모 상세보기
                    
                    let memo = $(this);
                    $(".user-aut-editor").hide();
@@ -434,16 +403,53 @@
                        
                        $("#trash").click(function () {//삭제 처리시
                           deleteMemo(thisMemoIdx,memo);
-                  })
+                  	})
                        
+				       $("#modify").click(function () {//수정 처리
+				    	   
+				    	   $(".modify-save").show();
+				    	   $(".save").hide();
+				    	   $(".modal-yellow").hide();
+				    	   $("#modal").css("display", "flex");
+				            let beforeModify = $(this).closest(".user-aut-editor").siblings(".modify-text").html();
+				           let thisColor = $(this).closest("#write-memo").css("background-color");
+				           $('#summernote').summernote('code', beforeModify);
+				           changeColor(thisColor);
+				            $(".user-aut-editor").hide();
+				            
+				            
+				            $(".modify-save").click(function () {//수정 fetch
+				            	 let afterModify = $('#summernote').summernote('code');
+				            	
+				            	 fetch("/memo/modify/memo" , {
+				                     method : "POST" ,
+				                     headers : {"Content-type" : "application/json; charset=UTF-8"} ,
+				                     body : JSON.stringify({
+				                        memoIdx : thisMemoIdx,
+				                        bgColor : thisColor,
+				                        content : afterModify
+				                     })
+				                  });
+				            	
+							})
+							
+							
+							
+				      })
+				                  	
+                  	
                     }
+                    
+                    
+                    
                     
                     
                        
                 });
                 $(".close").click(function(){
-                   $(".user-aut-editor").hide();
-                    $(".modal-yellow").hide();
+                	$(".note-editable").text("");
+                   	$(".user-aut-editor").hide();
+                  	$(".modal-yellow").hide();
                 });
             })
         
