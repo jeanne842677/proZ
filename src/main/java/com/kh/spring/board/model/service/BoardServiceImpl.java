@@ -11,8 +11,8 @@ import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.board.model.repository.BoardRepository;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.ProjectMember;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.repository.ProjectRepository;
-import com.kh.spring.workspace.model.dto.Workspace;
 
 @Service
 public class BoardServiceImpl implements BoardService {

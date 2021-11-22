@@ -22,6 +22,7 @@ import com.kh.spring.member.model.repository.MemberRepository;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.repository.ProjectRepository;
 
 @Service
@@ -268,6 +269,11 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public Project selectProjectExist(String projectIdx) {
 		return projectRepository.selectProjectExist(projectIdx);
+	}
+
+	@Override
+	public List<Workspace> selectWorkspaceByProjectIdx(String projectIdx) {
+		return projectRepository.selectWorkspaceByProjectIdx(projectIdx);
 	}
 
 

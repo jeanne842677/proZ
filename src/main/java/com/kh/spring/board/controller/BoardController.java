@@ -27,8 +27,8 @@ import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
-import com.kh.spring.workspace.model.dto.Workspace;
 
 @Controller
 @RequestMapping("board")
