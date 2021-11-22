@@ -206,7 +206,7 @@
 #editor>div{
 	cursor:pointer;
 }
-#revise{
+#modify{
     display: inline-flex;
     position: relative;
     
@@ -245,7 +245,7 @@
     position:relative;
     font-size: 22px;
 }
-#save{
+.save ,.modify-save{
     display: inline-block;
     position:relative;
     font-size: 30px;
@@ -301,7 +301,7 @@
 }
 
 
-#revise{
+#modify{
     display: inline-flex;
     position: relative;
     
@@ -321,7 +321,7 @@
 }
 
 
-#save{
+.save,.modify-save{
     display: inline-block;
     position:relative;
     font-size: 30px;
