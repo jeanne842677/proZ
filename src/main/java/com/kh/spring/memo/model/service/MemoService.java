@@ -19,4 +19,6 @@ public interface MemoService {
 	void deleteMemoByMemoIdx(String memoIdx);
 
 	void updateMemoByMemoIdx(Memo memo);
+
+	List<Memo> selectMemoBySearch(String wsIdx,String search);
 }
