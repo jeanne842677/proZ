@@ -11,6 +11,7 @@ public class Cash {
 	private Date dateMember;
 	private Date dateStorage;
 	private Date dateAlarm;
+	
 	public String getProjectIdx() {
 		return projectIdx;
 	}
