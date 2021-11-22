@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
-import com.kh.spring.workspace.model.dto.Workspace;
+import com.kh.spring.project.model.dto.Workspace;
 
 @Mapper
 public interface BoardRepository {

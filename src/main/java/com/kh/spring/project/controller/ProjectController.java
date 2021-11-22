@@ -34,6 +34,7 @@ import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
 
 @Controller
@@ -315,10 +316,6 @@ public class ProjectController {
 	public String enterProjectList(@SessionAttribute(required = false, name = "authentication") Member member,
 			Model model, HttpSession session) {
 
-		// (추후 추가할 코드) 만약 로그인을 하지 않고 접근을 한다면, 로그인 페이지로 or 로그인 페이지로 이동해달라고 하기
-
-		System.out.println("project-list접근!");
-
 		if (member == null) {
 			return "redirect:/"; // 지영 추가 코드
 		}
@@ -326,9 +323,6 @@ public class ProjectController {
 		// member가 속한 프로젝트 list 정보를 보내기
 		String userIdx = member.getUserIdx();
 
-//      //member가 속한 프로젝트 list
-//      List<String> projectIdxList = projectService.selectProjectIdxByUserIdx(userIdx);
-//      
 		// member가 속한 프로젝트 list (11월16일)
 		List<Project> projectList = new ArrayList<Project>();
 		projectList = projectService.selectProjectByUserIdx(userIdx);
@@ -391,7 +385,7 @@ public class ProjectController {
 			throw new HandlableException(ErrorCode.NEED_LOGIN);
 		}
 
-		// 프로젝트 멤버가 아닐 경우
+		// 프로젝트 멤버가 아닐 경우 //////////////////////수정 해야함.
 		List<Project> projectMember = new ArrayList<Project>();
 		projectMember = projectService.selectProjectByUserIdx(userIdx);
 		if (projectMember == null) {
@@ -402,6 +396,49 @@ public class ProjectController {
 
 		return "project/project-main";
 	}
+	
+	///////은비 11월 19일 워크스페이스 작업
+	
+	@GetMapping("setting/workspace-management/{projectIdx}")
+	public String settingWorkspace(Model model, @PathVariable String projectIdx,
+			@SessionAttribute(value = "authentication") Member member) {
+
+		System.out.println("프로젝트 여기 들어오나?" + projectIdx);
+		
+		List<Workspace> workspaceList = projectService.selectWorkspaceByProjectIdx(projectIdx);
+		
+		System.out.println(workspaceList);
+		model.addAttribute(workspaceList);
+		
+		return "project/setting/workspace-management";
+	}
+	
+	@PostMapping("setting/workspace-management/{projectIdx}")
+	public void updateWorkspace(@RequestBody List<Map<String, String>> workspaceList,
+			 					@PathVariable String projectIdx) {
+		
+		// 화요일 저녁까지 : 메모 +프로젝트 세팅 프로젝트 메인(디자인 예진), 실시간 온라인유무, 알림,  
+		// 민협 오빠 인터셉터.
+		// 수요일오전 => 채팅, 알림. 오우.
+		
+		//jsp에서 드래그가 끝난 시점에, state-sort-number가 변경이 되야하고 
+		// json에서 parma으로 값 list를 넘겨지는걸 받아야겠다.(workspaceList)
+		
+		for (Map<String, String> map : workspaceList) {
+
+			if (map.get("state").equals("update")) {// 변경된 내역이 있다면, 변경되었다고. (UPDATE)
+				System.out.println("변경되면 지나가는 곳");
+				//projectService.updateWorkspaceByWsIdx(map);
+			} else if (map.get("state").equals("del")) {// 리스트가 hide된게 있으면, (DELETE)
+				System.out.println("삭제되면 지나가는 곳");
+				//projectService.deleteWorkspaceByWsIdx(map);
+			} else if (map.get("state").equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
+				//projectService.insertWorkspaceByProjectIdx(map);
+			}
+		}
+
+	}
+	
 
 	// ========================================은비 작업 끝=========================
 

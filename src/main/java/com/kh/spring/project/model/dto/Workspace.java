@@ -1,4 +1,4 @@
-package com.kh.spring.workspace.model.dto;
+package com.kh.spring.project.model.dto;
 
 import java.sql.Date;
 
