@@ -310,7 +310,7 @@
             let beforeModify = $(this).closest(".user-aut-editor").siblings(".modify-text").html();
             $(".modify-text").append('<div id="summernote2">');
             $(".modify-text").prepend('</div>'); 
-            $(".note-editable").html(beforeModify);
+            
             
             console.dir(beforeModify);
             $(".note-editable").text(beforeModify);
@@ -331,6 +331,8 @@
                 ['color', ['color']]
             ]
         });
+            
+            
             
             $(".user-aut-editor").hide();
             let showeditor=' <div id="editor"><div id="back-color"><i class="fas fa-palette "></i></div> <div id="save"><i class="fas fa-save "></i></div></div>';
