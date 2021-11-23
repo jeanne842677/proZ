@@ -347,7 +347,7 @@ public class ProjectController {
 		String proDescription = project.getProDescription();
 		String userIdx = member.getUserIdx();
 
-		System.out.println("userIdx : " + userIdx);
+		System.out.println("userIdx : " + userIdx); 
 
 		// 새로운 프로젝트의 초대코드 생성
 		String inviteCode = UUID.randomUUID().toString();
