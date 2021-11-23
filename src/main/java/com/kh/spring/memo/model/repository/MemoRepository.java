@@ -35,5 +35,8 @@ public interface MemoRepository {
 	@Update("update memo set CONTENT = #{content}, BG_COLOR = #{bgColor}, REG_DATE = current_date where MEMO_IDX = #{memoIdx}")
 	void updateMemoByMemoIdx(Memo memo);
 
+	@Select("select * from memo where ws_idx = #{wsIdx} and content like '%'||#{search}||'%'")
+	List<Memo> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
+
 	
 }
