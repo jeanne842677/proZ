@@ -46,6 +46,7 @@ public class ProjectController {
 
 	@Autowired
 	MemberService memberSerivce;
+	
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -346,7 +347,7 @@ public class ProjectController {
 		String proDescription = project.getProDescription();
 		String userIdx = member.getUserIdx();
 
-		System.out.println("userIdx : " + userIdx);
+		System.out.println("userIdx : " + userIdx); 
 
 		// 새로운 프로젝트의 초대코드 생성
 		String inviteCode = UUID.randomUUID().toString();
@@ -394,6 +395,13 @@ public class ProjectController {
 
 		model.addAttribute(projectIdx); // 지영 추가 코드
 
+		////////////윤지가 작성할 코드(main에서 불러올 거)/////////
+		// 메모 리스트를 불러오는. 
+		
+		
+		
+		
+		//////////////////////////////////////////////////
 		return "project/project-main";
 	}
 	
