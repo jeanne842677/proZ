@@ -47,6 +47,8 @@ public class MemoController {
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
 		   				   @SessionAttribute("authentication") Member member,
 		   				   @RequestParam(value = "order") int order
+		   
+		   				   
 		   				) {
 	   List<Memo> memoList =  new ArrayList<Memo>();
 	   if(order == 0) { //desc 내림차순
@@ -54,6 +56,8 @@ public class MemoController {
 	   }else{  //asc 오름차순
 		  memoList = memoService.selectMemoByWsIdxAsc(wsIdx);
 	   }
+	   
+	
 	   System.out.println(wsIdx);
 	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
 	   System.out.println("projectMember : " + projectMember);
@@ -63,7 +67,32 @@ public class MemoController {
 	   model.addAttribute("wsIdx",wsIdx);
 	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
 	   model.addAttribute("order",order);
+	 
 	   
+	   return "/memo/memo" ;
+	   
+	   
+   };
+   
+   
+   //검색할 때 
+   @GetMapping("{prjectIdx}/{search}")
+   public String searchForm(@PathVariable String prjectIdx , Model model,
+		   				   @RequestParam(value = "wsIdx") String wsIdx,
+		   				   @SessionAttribute("authentication") Member member,
+		   				   @PathVariable String  search
+		   				   
+		   				) {
+	   List<Memo> memoList = memoService.selectMemoBySearch(wsIdx,search);
+	 
+	   System.out.println(wsIdx);
+	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
+	   System.out.println("projectMember : " + projectMember);
+	   System.out.println(memoList);
+	   
+	   model.addAttribute(memoList);
+	   model.addAttribute("wsIdx",wsIdx);
+	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
 	   
 	   return "/memo/memo" ;
 	   

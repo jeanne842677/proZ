@@ -62,4 +62,10 @@ public class MemoServiceImpl implements MemoService{
 	      memoRepository.updateMemoByMemoIdx(memo);
 	   }
 
+	@Override
+	public List<Memo> selectMemoBySearch(String wsIdx, String search) {
+		// TODO Auto-generated method stub
+		return memoRepository.selectMemoBySearch(wsIdx,search);
+	}
+
 }
