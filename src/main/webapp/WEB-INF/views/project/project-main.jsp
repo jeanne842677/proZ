@@ -323,8 +323,27 @@
             margin:10px;
             background-color: #fff3cd;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+       
         }
 
+		#content{
+		    display: flex; 
+		    justify-content: flex-start;
+		    align-items: baseline;
+		     font-size: 14px;
+		     height: 80%;
+		     width: 100%;
+		     margin-top:10px;
+		     margin-left:5px;
+		}
+		.profile{
+			display:flex;
+			justify-content: flex-end;
+			align-content: flex-end;
+		}
+		.profileImg{
+			margin-right:10px;
+		}
     </style>
 </head>
 <body>
@@ -379,15 +398,22 @@
                         </div>
                     </div>
                     <div id="right2">
-                        <div class="memoarea" onclick="location.href='#';">memo > </div>
+                        <div class="memoarea" onclick='location.href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"'>memo > </div>
                         <div class="memocon">
                             <div class="memowrap">
-                                <div class="memo"></div>
-                                <div class="memo"></div>
-                                <div class="memo"></div>
-                                <div class="memo"></div>
-                                <div class="memo"></div>
-                                <div class="memo"></div>
+                            	<c:forEach items="${mainMemoList }" var="memo">
+	                               <div class="memo"
+										style="background-color : ${memo.bgColor}"
+										data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
+										data-memo-idx="${memo.memoIdx}">
+										<div id="content">
+											<div class="textvalue">${ memo.content }</div>
+										</div>
+										<div class="profile">
+											<div class="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
+										</div>
+									</div>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>

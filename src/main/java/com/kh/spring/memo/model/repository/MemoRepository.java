@@ -38,5 +38,9 @@ public interface MemoRepository {
 	@Select("select * from memo where ws_idx = #{wsIdx} and content like '%'||#{search}||'%'")
 	List<Memo> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
 
+	@Select("select rownum, a.* from (select * from memo where ws_idx = #{wsIdx} order by memo_idx desc) a "
+			+ " where rownum <= 6 ")
+	List<Memo> selectMemoByTop(String wsIdx);
+
 	
 }

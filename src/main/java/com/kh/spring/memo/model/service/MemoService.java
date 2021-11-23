@@ -21,4 +21,6 @@ public interface MemoService {
 	void updateMemoByMemoIdx(Memo memo);
 
 	List<Memo> selectMemoBySearch(String wsIdx,String search);
+
+	List<Memo> selectMemoByTop(String wsIdx);
 }
