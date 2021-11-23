@@ -31,6 +31,8 @@ import com.kh.spring.common.util.json.JsonMaker;
 import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.memo.model.dto.Memo;
+import com.kh.spring.memo.model.service.MemoService;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
@@ -46,7 +48,12 @@ public class ProjectController {
 
 	@Autowired
 	MemberService memberSerivce;
+	
 
+	//윤지코드
+	@Autowired
+	MemoService memoService;
+	//윤지코드 끝
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@GetMapping("welcome")
@@ -346,7 +353,7 @@ public class ProjectController {
 		String proDescription = project.getProDescription();
 		String userIdx = member.getUserIdx();
 
-		System.out.println("userIdx : " + userIdx);
+		System.out.println("userIdx : " + userIdx); 
 
 		// 새로운 프로젝트의 초대코드 생성
 		String inviteCode = UUID.randomUUID().toString();
@@ -370,7 +377,8 @@ public class ProjectController {
 	// 프로젝트 상세로 이동
 	@GetMapping("{projectIdx}")
 	public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member,
-			HttpSession session, Model model) {
+			HttpSession session, Model model,
+			@RequestParam(value = "wsIdx") String wsIdx) {
 
 		String userIdx = member.getUserIdx();
 		Project project = projectService.selectProjectExist(projectIdx);
@@ -394,6 +402,16 @@ public class ProjectController {
 
 		model.addAttribute(projectIdx); // 지영 추가 코드
 
+		////////////윤지가 작성할 코드(main에서 불러올 거)/////////
+		// 메모 리스트를 불러오는. 
+		 List<Memo> mainMemoList =  new ArrayList<Memo>();
+		 
+		 mainMemoList = memoService.selectMemoByTop(wsIdx);
+		 model.addAttribute("mainMemoList",mainMemoList);
+		 model.addAttribute("wsIdx",wsIdx);
+		System.out.println(mainMemoList);
+		
+		//////////////////////////////////////////////////
 		return "project/project-main";
 	}
 	

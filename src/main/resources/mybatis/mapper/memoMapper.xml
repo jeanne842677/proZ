@@ -17,6 +17,25 @@
 		
 		
   	 </insert>
+  	 
+  	 
+  	 <!-- 민협 11/23 -->
+<!--   	 <select id="selectMemoAndWriterByWsIdx" resultMap="memoMap">
+	  	select A.MEMO_IDX, A.WS_IDX, PM_IDX, A.BG_COLOR, A.CONTENT, A.REG_DATE,B.NICKNAME
+		from memo A
+		inner join project_member B USING (PM_IDX)
+		where ws_idx = '#{wsIdx}' order by memo_idx asc;
+  	 </select>
+  	 
+  	 <resultMap type="java.util.Map" id="memoMap">
+  	 	<result column="MEMO_IDX" property="memoIdx"/>
+  	 	<result column="WS_IDX" property="wsIdx"/>
+  	 	<result column="PM_IDX" property="pmIdx"/>
+  	 	<result column="BG_COLOR" property="bgColor"/>
+  	 	<result column="CONTENT" property="content"/>
+  	 	<result column="REG_DATE" property="regDate"/>
+  	 	<result column="NICKNAME" property="nickname"/>
+  	 </resultMap> -->
   	
   	
   	
