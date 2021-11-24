@@ -24,6 +24,10 @@
     font-style: normal;
 }
 
+p{
+margin-top:0;
+margin-bottom:0;
+}
 
 
         html,body{
@@ -39,18 +43,22 @@
             min-width:800px;
             height:100%;
             background-color: #F5F6F7;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         #top{
-            width:100%;
+            width:93%;
             height:20%;
             display:flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
         }
 
         #top1{
-            width:20%;
+            width:27%;
             height:80%;
             display:flex;
             flex-direction: column;
@@ -114,11 +122,11 @@
         }
 
         #left{
-            width:35%;
+            width: 30%;
             height:100%;
             display:flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-around;
         }
 
@@ -152,6 +160,75 @@
             border-radius: 10px;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
             background-color: #fff;
+            display:flex;
+            justify-content: space-around;
+            align-items: center;
+            color:#fff;
+        }
+
+        .weather-left{
+            width:40%;
+            height:80%;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .weather-left-top{
+            width:100%;
+            height:30%;
+            display: flex;
+        }
+
+        .CurrIcon{
+            width:25%;
+            height:100%;
+            font-size : 20px;
+            font-weight: 900;
+            display:flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-right:10px;
+        }
+
+        .weather-name{
+            width:20%;
+            height:100%;
+            font-size : 15px;
+            font-weight: 900;
+            display:flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: 10px;
+        }
+
+        .CurrTemp{
+            width:100%;
+            height:70%;
+            font-size : 70px;
+            font-weight: 900;
+            display:flex;
+            align-items: center;
+            justify-content: flex-start;
+            
+        }
+        
+        .weather-right{
+            width:40%;
+            height:80%;
+            display:flex;
+            justify-content: flex-end;
+
+        }
+
+        .City{
+            width:100%;
+            height: 88%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
         }
 
         #left2{
@@ -181,7 +258,7 @@
         }
 
         .board{
-            width:45%;
+            width:47%;
             height:100%;
             background-color:#fff;
             border-radius: 10px;
@@ -223,7 +300,7 @@
         
 
         .comment{
-            width:45%;
+            width:47%;
             height:100%;
             background-color:#fff;
             border-radius: 10px;
@@ -323,27 +400,7 @@
             margin:10px;
             background-color: #fff3cd;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-       
         }
-
-		#content{
-		    display: flex; 
-		    justify-content: flex-start;
-		    align-items: baseline;
-		     font-size: 14px;
-		     height: 80%;
-		     width: 100%;
-		     margin-top:10px;
-		     margin-left:5px;
-		}
-		.profile{
-			display:flex;
-			justify-content: flex-end;
-			align-content: flex-end;
-		}
-		.profileImg{
-			margin-right:10px;
-		}
     </style>
 </head>
 <body>
@@ -358,8 +415,8 @@
             <div id="top">
                 <div id="top1">
                     <div id="my"><div class="myprofile"></div></div>
-                    <div class="myname">예진ㅇ_<</div>
-                    <div class="myrole">노예</div>
+                    <div class="myname">${nickname}</div>
+                    <div class="myrole">${authName}</div>
                 </div>
                 <div id="top2">팀정보</div>
             </div>
@@ -370,7 +427,15 @@
                             <p id="usingFunction">2021. 11. 2. 오전 1:55:27</p>
                         </div>
                         <div class="weather">
-                            
+                            <div class="weather-left">
+                                <div class="weather-left-top">
+                                    <div class="CurrIcon"></div>
+                                </div>
+                                <div class="CurrTemp"></div>
+                            </div>
+                            <div class="weather-right">
+                                <div class="City"></div>
+                            </div>  
                         </div>     
                     </div>
                     
@@ -434,6 +499,102 @@
     function locale (){ 	 return new Date().toLocaleString(); 	 } 
     document.getElementById( 'usingFunction' ).innerHTML = locale(); 
     setInterval ( function() { document.getElementById("usingFunction").innerHTML = locale(); } , 1000 );
+    
+  //날씨
+    $(document).ready(function() {
+    function success(position) {
+        let weatherIcon = {
+                  '01' : 'fas fa-sun',
+                  '02' : 'fas fa-cloud-sun',
+                  '03' : 'fas fa-cloud',
+                  '04' : 'fas fa-cloud-meatball',
+                  '09' : 'fas fa-cloud-sun-rain',
+                  '10' : 'fas fa-cloud-showers-heavy',
+                  '11' : 'fas fa-poo-storm',
+                  '13' : 'fas fa-snowflake',
+                  '50' : 'fas fa-smog'
+                };
+
+                let weathername = {
+                  '01' : 'sunny',
+                  '02' : 'cloudSun',
+                  '03' : 'cloudy',
+                  '04' : 'cloudy',
+                  '09' : 'cloudSunRain',
+                  '10' : 'cloud-showers-heavy',
+                  '11' : 'poo-storm',
+                  '13' : 'snowflake',
+                  '50' : 'smog'
+                };
+
+                let weatherImg = {
+                  '01' : 'sunny.png',
+                  '02' : 'cloudy.png',
+                  '03' : 'cloudy.png',
+                  '04' : 'cloudy.png',
+                  '09' : 'heavyrain.png',
+                  '10' : 'heavyrain.png',
+                  '11' : 'heavyrain.png',
+                  '13' : 'snowing.png',
+                  '50' : 'snow.png'
+                }
+
+
+
+
+        const latitude  = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const API_KEY = "16cb45b73013edf5a37346f24ea3b990";
+
+        // status.textContent = '';
+
+        console.dir("latitude : " + latitude)
+        console.dir("longitude : " + longitude)
+
+        $.ajax({
+                  url:'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + API_KEY + '&units=metric',
+                  dataType:'json',
+                  type:'GET',
+                  success:function(data){
+                  var $Icon = (data.weather[0].icon).substr(0,2);
+                  var $Temp = Math.floor(data.main.temp) + '°';
+                  var $city = data.name;
+                  $('.CurrIcon').append('<i class="' + weatherIcon[$Icon] + '"></i><div class="weather-name">'+ weathername[$Icon] + '</div>');
+                  $('.CurrTemp').prepend($Temp);
+                  $('.City').append($city);
+                  $('.weather').css({"background":"url(/resources/img/"+ weatherImg[$Icon] +")","background-size":"cover"});
+                // $('.weather').css({"background":"url(resources/image/heavyrain.png)","background-size":"cover"});
+
+
+                 
+
+
+
+                  }
+                
+                
+                })
+
+
+    }
+
+    function error() {
+        status.textContent = 'Unable to retrieve your location';
+    }
+
+    if(!navigator.geolocation) {
+        status.textContent = 'Geolocation is not supported by your browser';
+    } else {
+        status.textContent = 'Locating…';
+        navigator.geolocation.getCurrentPosition(success, error);
+    }
+
+
+
+
+    })
+    
+    
     </script>
 </body>
 </html>
