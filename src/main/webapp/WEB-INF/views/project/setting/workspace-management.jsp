@@ -4,27 +4,36 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
-<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=1">
-<link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
- <link type="text/css" rel="stylesheet" href="/resources/css/setting/workspace_management.css">
+
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=6">
+<link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css" />
+ <link type="text/css" rel="stylesheet" href="/resources/css/setting/workspace-management.css">
 <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
+<script type="text/javascript" src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript"src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> 
+
 
 </head>
 
 <body>
 
     <div class="wrap">
-        <header> </header>
+        <header>
+        	<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
+        </header>
 
         <div class="con">
-            <nav></nav>
+            <nav>
+            	<%@ include file="/WEB-INF/views/include/nav/setting-nav.jsp"%>
+            </nav>
             <section>
                 <!--여기서만 작업-->
                 <div class="need-section-padding">
                     <!-- top -->
                     <div class="member-manage-top">
                         <div class="top-title">
-                            <div class="title-img"><img src="resource/img/maintenance.png"></div>
+                            <div class="title-img"><img src="/resources/img/maintenance.png"></div>
                             <div class="title">워크스페이스 관리</div>
                         </div>
                         <div class="title-hr">
@@ -80,13 +89,13 @@
                                 <div class="category-name-wrap category-shadow">
                                     <div class="category-imgs">
                                         <!-- 첫번째 div-->
-                                        <img class="square-icon" src="resource/img/square.png">
-                                        <img class="search-icon" src="resource/img/premium-icon-calendar-5175870.png"> <!-- 여기 나중에 c:if test-->
+                                        <img class="square-icon" src="/resources/img/square.png">
+                                        <img class="search-icon" src="/resources/img/premium-icon-calendar-5175870.png"> <!-- 여기 나중에 c:if test-->
                                     </div>
 
                                     <div class="category-input">
                                         <!-- 두번째 div -->
-                                        <input class="category-input-text form-control" type="text" placeholder="원래값" value="1"> <!--${}-->
+                                        <input class="category-input-text form-control" type="text" placeholder="원래값" value="1"> 
                                     </div>
                                 </div>
                                 <div id="delete-button">
@@ -104,13 +113,13 @@
                                 <div class="category-name-wrap category-shadow">
                                     <div class="category-imgs">
                                         <!-- 첫번째 div-->
-                                        <img class="square-icon" src="resource/img/square.png">
-                                        <img class="search-icon" src="resource/img/premium-icon-calendar-5175870.png"> <!-- 여기 나중에 c:if test-->
+                                        <img class="square-icon" src="/resources/img/square.png">
+                                        <img class="search-icon" src="/resources/img/premium-icon-calendar-5175870.png"> <!-- 여기 나중에 c:if test-->
                                     </div>
 
                                     <div class="category-input">
                                         <!-- 두번째 div -->
-                                        <input class="category-input-text form-control" type="text" placeholder="" value=""> <!--${}-->
+                                        <input class="category-input-text form-control" type="text" placeholder="" value=""> 
                                     </div>
                                 </div>
 
@@ -142,7 +151,7 @@
     </div>
 </body>
 
-<script type="text/javascript" src="resource/js/workspace_management.js"></script>
+<script type="text/javascript" src="/resources/js/setting/workspace-management.js"></script>
 
 </html>
 

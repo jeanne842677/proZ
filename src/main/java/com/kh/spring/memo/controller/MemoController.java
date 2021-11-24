@@ -2,6 +2,7 @@ package com.kh.spring.memo.controller;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.GregorianCalendar;
@@ -44,11 +45,47 @@ public class MemoController {
    @GetMapping("{prjectIdx}")
    public String boardForm(@PathVariable String prjectIdx , Model model,
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
-		   				   @SessionAttribute("authentication") Member member
+		   				   @SessionAttribute("authentication") Member member,
+		   				   @RequestParam(value = "order") int order
+		   
+		   				   
 		   				) {
-	
+	   List<Memo> memoList =  new ArrayList<Memo>();
+	   List<Map<String,String>> memoMap = new ArrayList<Map<String,String>>();
 	   
-	   List<Memo> memoList = memoService.selectMemoByWsIdx(wsIdx);
+	   
+	   if(order == 0) { //desc 내림차순
+		  memoList = memoService.selectMemoByWsIdx(wsIdx);
+	   }else{  //asc 오름차순
+		  memoList = memoService.selectMemoByWsIdxAsc(wsIdx);
+	   }
+	   
+	   System.out.println("memoMap ======= " + memoMap);
+	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
+	   
+	   model.addAttribute(memoList);
+	   model.addAttribute("wsIdx",wsIdx);
+	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
+	   model.addAttribute("order",order);
+	   
+	 
+	   
+	   return "/memo/memo" ;
+	   
+	   
+   };
+   
+   
+   //검색할 때 
+   @GetMapping("{prjectIdx}/{search}")
+   public String searchForm(@PathVariable String prjectIdx , Model model,
+		   				   @RequestParam(value = "wsIdx") String wsIdx,
+		   				   @SessionAttribute("authentication") Member member,
+		   				   @PathVariable String  search
+		   				   
+		   				) {
+	   List<Memo> memoList = memoService.selectMemoBySearch(wsIdx,search);
+	 
 	   System.out.println(wsIdx);
 	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
 	   System.out.println("projectMember : " + projectMember);
@@ -57,8 +94,6 @@ public class MemoController {
 	   model.addAttribute(memoList);
 	   model.addAttribute("wsIdx",wsIdx);
 	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
-	   
-	   
 	   
 	   return "/memo/memo" ;
 	   
@@ -75,7 +110,7 @@ public class MemoController {
 	   System.out.println("오기 전" + memo);
 	   Memo insertedMemo = memoService.insertMemo(memo, member);
 	   
-	 ;
+	 
 	   
 	   return JsonMaker.json(memo) ;
 	   
@@ -95,7 +130,13 @@ public class MemoController {
    }
    
    
-   
+   @PostMapping("modify/memo")
+   public String modifyMemo(@RequestBody Memo memo , @SessionAttribute("authentication") Member member) {
+      
+      memoService.updateMemoByMemoIdx(memo);
+      
+      return "complete" ;
+   }
    
    
 }

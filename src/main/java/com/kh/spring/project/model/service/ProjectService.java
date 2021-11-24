@@ -7,6 +7,7 @@ import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
+import com.kh.spring.project.model.dto.Workspace;
 
 public interface ProjectService {
 
@@ -69,6 +70,8 @@ public interface ProjectService {
 	String updateProjectByProjectIdx(Map<String, String> project);
 
 	ProjectRole selectProjectRoleByProjectIdxAndUserIdx(String projectIdx, String userIdx);
+
+	List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
 
 

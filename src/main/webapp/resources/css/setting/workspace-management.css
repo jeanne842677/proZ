@@ -71,7 +71,7 @@
 
         .member-manage-main {
             width: 100%;
-            height: 500px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             width: 90%;
@@ -82,7 +82,8 @@
         .member-manage-bottom {
             display: flex;
             justify-content: center;
-            height: 60px;
+            height: 50px;
+            margin-top : 20px;
 
         }
 

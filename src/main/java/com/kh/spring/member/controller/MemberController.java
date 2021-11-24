@@ -1,11 +1,16 @@
 package com.kh.spring.member.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -20,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +47,10 @@ import com.kh.spring.common.util.file.FileUtil;
 import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.validator.ChangePasswordForm;
+import com.kh.spring.member.validator.ChangePasswordValidator;
 import com.kh.spring.member.validator.EmailForm;
+import com.kh.spring.member.validator.EmailValidator;
 import com.kh.spring.member.validator.JoinForm;
 import com.kh.spring.member.validator.JoinFormValidator;
 import com.kh.spring.member.validator.MypageForm;
@@ -63,12 +72,16 @@ public class MemberController {
    @Autowired
    RestTemplate http;
    @Autowired
-   private OAuth2Parameters googleOAuth2Parameters;
-   @Autowired
-   private MypageService mypageService; 
+   private OAuth2Parameters googleOAuth2Parameters; 
    @Autowired
    private MypageValidator mypageValidator; 
-   
+   @Autowired
+   private EmailValidator emailValidator; 
+   @Autowired
+   private ChangePasswordValidator changePasswordValidator; 
+   @Autowired
+   ServletContext context; 
+
    public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
       super();
       this.memberService = memberService;
@@ -85,6 +98,17 @@ public class MemberController {
 	public void initBinderMypage(WebDataBinder webDataBinder) {
 	   webDataBinder.addValidators(mypageValidator);
 	}
+   
+   @InitBinder(value = "emailForm")
+	public void initBinderSearchPassword(WebDataBinder webDataBinder) {
+	   webDataBinder.addValidators(emailValidator);
+	}
+   
+   @InitBinder(value = "changePasswordForm")
+   public void initBinderchangePassword(WebDataBinder webDataBinder) {
+	   webDataBinder.addValidators(changePasswordValidator);
+	}
+  
    
    @GetMapping("join")
    public void joinForm(Model model) {
@@ -544,9 +568,11 @@ public class MemberController {
  
  	
  	//*********아이디, 비밀번호 찾기 페이지*********
+	// 1. searchPassword로 forwarding 
  	@GetMapping("searchPassword")
  	public void searchPassword() {}
  	
+ 	// 2. searchPassword에서 이메일 값 입력, 처리 
  	@PostMapping("searchPassword") 
  	public String searchMemberPassword(@Validated EmailForm emailForm
  			,Errors errors 
@@ -554,49 +580,102 @@ public class MemberController {
  			,RedirectAttributes redirectAttr 
  			) {
  		
- 		if(errors.hasErrors()) {
- 			redirectAttr.addFlashAttribute("message", "잘못된 이메일 값입니다. 다시 입력하세요");
- 			return "redirect:/member/searchPassword"; 
+ 		try {
+ 			if(errors.hasErrors()) {
+ 	 			redirectAttr.addFlashAttribute("message", "잘못된 이메일 값입니다. 다시 입력하세요");
+ 	 			return "redirect:/member/searchPassword"; 
+ 	 		}
+ 			Member member = memberService.selectMemberByEmail(emailForm.getEmail());  
+ 	 		
+ 	 		if(member == null) {
+ 	 			redirectAttr.addFlashAttribute("message", "존재하지 않는 이메일입니다. 다시 입력하세요");
+ 	 			return "redirect:/member/searchPassword"; 
+ 	 		}
+
+ 	 		String token  = UUID.randomUUID().toString();
+ 	 	    Date date = new Date(); 
+ 	 		
+ 	 		session.setAttribute("persistToken", token); 
+ 	 		session.setAttribute("emailSendMember", member);
+ 	 		session.setAttribute("emailSendTime", date.getTime());
+ 	 	    memberService.sendPasswordChangeURLByEmail(member, token, emailForm.getProzSendDate());
+ 	 		 
+ 	 		
+ 		} catch(Exception e) {
+ 			e.printStackTrace();
+ 			return "redirect:/member/searchPassword";
  		}
- 		
- 		Member member = memberService.selectMemberByEmail(emailForm.getEmail());  
- 		logger.debug("3. 오류 이후 searchPassword의 Member값은 : " + member.toString());
- 		
- 		String token  = UUID.randomUUID().toString();
- 		logger.debug("4. token의 uuid 값은 : " + token);
- 	    session.setAttribute("persistToken", token);
- 		
- 		memberService.sendPasswordChangeURLByEmail(member, token);
- 		// 메일전송 후, 메일에서 온 URL을 받을 수 잇는 것이 필요. SESSION에 담는 것 보다는 메일로 
- 		// 전송된 ID값을 다시 꺼내는게 좋다. 
- 		
- 		return "redirect:/"; 
+
+ 		redirectAttr.addFlashAttribute("message", "비밀번호 찾기 메일 발송이 완료되었습니다.");
+ 		return "redirect:/";
  	}
 
+ 	//3. 전송된 email에서 동적 URL 을 활용하여 접근 
  	@GetMapping("change-password/{token}")
     public String changePassword(@PathVariable String token
-                      ,@SessionAttribute(value = "persistToken", required = false) String persistToken
-                      ,@SessionAttribute(value = "persistUser", required = false) JoinForm form
-                      ,HttpSession session
-                      ,RedirectAttributes redirectAttrs) {
-       System.out.println(form);
-       if(!token.equals(persistToken)) {
-          throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
-       }
-       
-       if(form.getSocialId() != null) {
-     	  memberService.insertSocialMember(form);
-     	  return "redirect:/member/login";
-       }
-       
-       
-       memberService.insertMember(form);
-       redirectAttrs.addFlashAttribute("message", "회원가입을 환영합니다. 로그인 해주세요");
-       session.removeAttribute("persistToken");
-       session.removeAttribute("persistUser");
-       
-       return "redirect:/member/login";
+    				  ,@SessionAttribute(value = "persistToken", required = false) String persistToken
+                      ,RedirectAttributes redirectAttr
+    				  ,HttpSession session
+                      ) {
+ 		if(!token.equals(persistToken)) {
+ 			redirectAttr.addFlashAttribute("message", "만료된 페이지입니다. 패스워드 변경 이메일을 다시 보내주세요.");
+	 		return "redirect:/"; 
+ 	    }
+
+       return "redirect:/member/changePassword";
     }
+ 	
+ 	//4. Email 발송시각과 접근시각을 비교하여 만료시간 검증 
+ 	@GetMapping("changePassword")
+ 	public String changePassword(RedirectAttributes redirectAttr
+ 			,HttpSession session) {
+ 		
+ 		long second = (long) session.getAttribute("emailSendTime")/1000;
+ 		logger.debug("1. 이메일을 보낸 시각은 : " + second);
+ 		Date date = new Date(); 
+ 		long currentSecond = date.getTime()/1000;
+ 		logger.debug("2. 현재 시각은 : " + currentSecond);
+ 		long passedTime = currentSecond - second;
+ 		logger.debug("3. 지난 시각은 :  " + passedTime + "초 입니다.");
+ 		
+ 		// 만료되었을 경우 index로 redirect 
+ 		if(passedTime > 300) {
+ 			redirectAttr.addFlashAttribute("message", "메일 발송 이후 5분이 지났습니다. 패스워드 변경 이메일을 다시 보내주세요.");
+ 			return "redirect:/"; 
+ 		}
+ 		
+ 		// 만료 전일 경우 정상적인 changePassword 사이트로 forward 
+ 		return "member/changePassword"; 
+
+ 	}
+ 	
+ 	//5. changePassword.jsp에서 발송한 값을 DB에 입력 
+ 	@PostMapping("changePassword")
+ 	public String passwordChange(@Validated ChangePasswordForm changePasswordForm
+ 			,Errors errors
+ 			,HttpSession session
+ 			,RedirectAttributes redirectAttr) {
+ 		
+ 		try {
+ 			if(errors.hasErrors()) {
+ 	 			redirectAttr.addFlashAttribute("message", "잘못된 패스워드 값입니다. 다시 입력하세요");
+ 	 			return "redirect:/member/changePassword"; 
+ 	 		}
+ 			
+ 			Member member = (Member) session.getAttribute("emailSendMember"); 
+ 			member.setPassword(changePasswordForm.getPassword());
+ 			// 자동 protect 전환 및 update, 맴버 반환까지 처리 
+ 			Member changedMember = memberService.updateMypageMemberByPassword(member);  
+ 		} catch(Exception e) {
+ 			e.printStackTrace();
+ 			redirectAttr.addFlashAttribute("message", "비밀번호 찾기 이메일이 만료되었습니다. 재발급 받아주세요");
+ 			return "redirect:/member/searchPassword";
+ 		}
+
+ 		redirectAttr.addFlashAttribute("message", "비밀번호 변경이 완료되었습니다.");
+ 		return "redirect:/member/login";
+ 		
+ 	}
  	
  }
    

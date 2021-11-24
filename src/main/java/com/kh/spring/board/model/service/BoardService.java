@@ -6,7 +6,7 @@ import java.util.Map;
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.member.model.dto.Member;
-import com.kh.spring.workspace.model.dto.Workspace;
+import com.kh.spring.project.model.dto.Workspace;
 
 public interface BoardService {
 
