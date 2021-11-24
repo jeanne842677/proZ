@@ -397,7 +397,7 @@ hr {
     $("input[name='searchKeyword']").keydown(function(e){
        if(e.keyCode == 13){
           var valueBySearch = $('#search').val();
-          location.replace("http://localhost:9090/memo/${prjectIdx}/"+valueBySearch+"?wsIdx=${wsIdx}&order=0")
+          location.replace("http://localhost:9090/memo/${projectIdx}/"+valueBySearch+"?wsIdx=${wsIdx}&order=0")
        }
     })
 
