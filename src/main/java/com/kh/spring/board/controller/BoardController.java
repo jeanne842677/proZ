@@ -138,16 +138,14 @@ public class BoardController {
 	public String addPost(@RequestBody Map<String, String> map,
 			@SessionAttribute(required = false , value="authentication") Member member
 			,Model model) {
-
-		logger.debug((String) model.getAttribute("hi"));
 		
 		System.out.println(member);
-		
 		System.out.println(map);
+		
 		boardService.insertPost(map , member);
 		
-
-		// redirect : 번호필요 
+		
+		
 		return "complete";
 		
 	}
