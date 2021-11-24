@@ -11,8 +11,8 @@ import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.board.model.repository.BoardRepository;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.ProjectMember;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.repository.ProjectRepository;
-import com.kh.spring.workspace.model.dto.Workspace;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -82,7 +82,9 @@ public class BoardServiceImpl implements BoardService {
 		map.put("userIdx", member.getUserIdx());
 
 		ProjectMember projectMember = projectRepository.selectProjectMemberByMap(map);
-		map.put("pmIdx", projectMember.getPmIdx());
+		//임시 pmIdx(),100108 
+		map.put("pmIdx", "100108");
+		//map.put("pmIdx", projectMember.getPmIdx());
 
 		System.out.println(projectMember);
 		boardRepository.insertPost(map);

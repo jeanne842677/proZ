@@ -26,14 +26,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.json.JsonMaker;
 import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.memo.model.dto.Memo;
+import com.kh.spring.memo.model.service.MemoService;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
 
 @Controller
@@ -45,7 +49,12 @@ public class ProjectController {
 
 	@Autowired
 	MemberService memberSerivce;
+	
 
+	//윤지코드
+	@Autowired
+	MemoService memoService;
+	//윤지코드 끝
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@GetMapping("welcome")
@@ -315,10 +324,6 @@ public class ProjectController {
 	public String enterProjectList(@SessionAttribute(required = false, name = "authentication") Member member,
 			Model model, HttpSession session) {
 
-		// (추후 추가할 코드) 만약 로그인을 하지 않고 접근을 한다면, 로그인 페이지로 or 로그인 페이지로 이동해달라고 하기
-
-		System.out.println("project-list접근!");
-
 		if (member == null) {
 			return "redirect:/"; // 지영 추가 코드
 		}
@@ -326,9 +331,6 @@ public class ProjectController {
 		// member가 속한 프로젝트 list 정보를 보내기
 		String userIdx = member.getUserIdx();
 
-//      //member가 속한 프로젝트 list
-//      List<String> projectIdxList = projectService.selectProjectIdxByUserIdx(userIdx);
-//      
 		// member가 속한 프로젝트 list (11월16일)
 		List<Project> projectList = new ArrayList<Project>();
 		projectList = projectService.selectProjectByUserIdx(userIdx);
@@ -352,7 +354,7 @@ public class ProjectController {
 		String proDescription = project.getProDescription();
 		String userIdx = member.getUserIdx();
 
-		System.out.println("userIdx : " + userIdx);
+		System.out.println("userIdx : " + userIdx); 
 
 		// 새로운 프로젝트의 초대코드 생성
 		String inviteCode = UUID.randomUUID().toString();
@@ -373,34 +375,54 @@ public class ProjectController {
 		return "project/project-main";
 	};
 
-	// 프로젝트 상세로 이동
+	// 프로젝트 상세로 이동 알고리즘?
 	@GetMapping("{projectIdx}")
 	public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member,
-			HttpSession session, Model model) {
-
-		String userIdx = member.getUserIdx();
-		Project project = projectService.selectProjectExist(projectIdx);
-
-		// 프로젝트가 없을 경우
-		if (project == null) {
-			throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-		}
-
-		// 로그인 하지 않았을 경우
-		if (userIdx == null) {
-			throw new HandlableException(ErrorCode.NEED_LOGIN);
-		}
-
-		// 프로젝트 멤버가 아닐 경우
-		List<Project> projectMember = new ArrayList<Project>();
-		projectMember = projectService.selectProjectByUserIdx(userIdx);
-		if (projectMember == null) {
-			throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
-		}
-
+			HttpSession session, Model model) {		
+		
+		//프로젝트에 속한 워크스페이스
+		List<Map<String,Object>> workspace = new ArrayList<Map<String,Object>>();
+		workspace = projectService.selectWorkspaceListByProjectIdx(projectIdx);
+		CamelMap.changeListMap(workspace);
+		
+		
+		
+		//메모. 댓글. 게시글.=> workspace
+		// proejtService.selectMemo(projectIdx, wsType);
 		model.addAttribute(projectIdx); // 지영 추가 코드
+		System.out.println("************workspace 리스트는!!!" + workspace.toString());
+		model.addAttribute(workspace);
+		////////////윤지가 작성할 코드(main에서 불러올 거)/////////
+		
+		//////////////////////////////////////////////////
+		return "project/project-main"; 
+	}
+	
+	///////은비 11월 19일 워크스페이스 작업
+	
+	@GetMapping("setting/workspace-management/{projectIdx}")
+	public String settingWorkspace(Model model, @PathVariable String projectIdx,
+			@SessionAttribute(value = "authentication") Member member) {
 
-		return "project/project-main";
+		System.out.println("프로젝트 여기 들어오나?" + projectIdx);
+		
+		List<Workspace> workspaceList = projectService.selectWorkspaceByProjectIdx(projectIdx);
+		
+		System.out.println(workspaceList);
+		model.addAttribute(workspaceList);
+		
+		return "project/setting/workspace-management";
+	}
+	
+	@PostMapping("setting/workspace-management/{projectIdx}")
+	@ResponseBody
+	public void updateWorkspace(@RequestBody List<Map<String, String>> workspaceList,
+			 					@PathVariable String projectIdx) {
+		
+		System.out.println("저장버튼 눌렀을때 여길 지나가");
+
+		projectService.settingWorkspace(workspaceList, projectIdx);
+		
 	}
 
 	// ========================================은비 작업 끝=========================

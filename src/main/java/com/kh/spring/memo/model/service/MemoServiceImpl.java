@@ -1,6 +1,7 @@
 package com.kh.spring.memo.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,5 +62,28 @@ public class MemoServiceImpl implements MemoService{
 	   public void updateMemoByMemoIdx(Memo memo) {
 	      memoRepository.updateMemoByMemoIdx(memo);
 	   }
+
+	@Override
+	public List<Memo> selectMemoBySearch(String wsIdx, String search) {
+		// TODO Auto-generated method stub
+		return memoRepository.selectMemoBySearch(wsIdx,search);
+	}
+
+	@Override
+	public List<Memo> selectMemoByTop(String wsIdx) {
+		// TODO Auto-generated method stub
+		return memoRepository.selectMemoByTop(wsIdx);
+	}
+	
+	
+	  @Override public List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx) { 
+		  return memoRepository.selectMemoAndWriterByWsIdxAsc(wsIdx); 
+		  }
+
+	@Override
+	public List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx) {
+		return memoRepository.selectMemoAndWriterByWsIdxDesc(wsIdx);
+	}
+	 
 
 }

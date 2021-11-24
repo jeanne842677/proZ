@@ -88,6 +88,7 @@ public class MemberController {
       this.joinFormValidator = joinFormValidator;
    }
    
+   
  
    @InitBinder(value = "joinForm") //model의 속성 중 속성명이 joinForm인 속성이 있는 경우 initBinder 메서드 실행
    public void initBinder(WebDataBinder webDataBinder) {

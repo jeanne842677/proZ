@@ -19,6 +19,7 @@
                     </ul>
                 </div>
                 <div class="private">
+                			<div class="cash"><i class="fas fa-dollar-sign"></i>결제</div>
                             <div class="reload" onClick="window.location.reload()"><i class="fas fa-sync"></i>동기화</div>
                 </div>
                 
@@ -27,6 +28,10 @@
                 
                 $('.search').find('.setting').on('click' , function() {
                 	location.href="/project/setting/role-management/${projectIdx}";
+                })
+                
+                 $('.private').find('.cash').on('click' , function() {
+                	location.href="/cash/${projectIdx}";
                 })
                 
                 </script>

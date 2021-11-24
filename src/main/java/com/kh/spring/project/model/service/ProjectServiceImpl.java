@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.kh.spring.common.code.Config;
 import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.mail.MailSender;
 import com.kh.spring.common.util.map.CamelMap;
@@ -22,6 +23,7 @@ import com.kh.spring.member.model.repository.MemberRepository;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
+import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.repository.ProjectRepository;
 
 @Service
@@ -270,6 +272,61 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.selectProjectExist(projectIdx);
 	}
 
+	@Override
+	public List<Workspace> selectWorkspaceByProjectIdx(String projectIdx) {
+		return projectRepository.selectWorkspaceByProjectIdx(projectIdx);
+	}
+
+
+	//11월 24일 은비 추가
+	@Override
+	public void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx) {
+		int sort = 1;
+		for (Map<String, String> map : workspaceList) {
+			
+			String wsIdx = map.get("workWsIdx");
+			String wsType = map.get("workOption");
+			String wsName = map.get("workWrite");
+			String wsState = map.get("workState");
+			
+			switch(wsType) {
+				case "메모" :
+					wsType = WorkspaceType.ME.toString();//화이팅! /////////////////////////나중에 확인/////////////////
+					break;
+				case "로드맵" :
+					wsType = "LD";
+					break;
+				case "채팅" :
+					wsType = "CH";
+					break;
+				case "게시판" :
+					wsType = "BO";
+			}
+			
+			if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경되었다고. (UPDATE)
+				System.out.println("변경되면 지나가는 곳");
+	            projectRepository.updateWorkspace(wsIdx, wsName,sort);
+	            sort++;
+	         } else if (wsState.equals("hide") && wsIdx=="none") {// 리스트가 hide된게 있으면, (DELETE)
+	            System.out.println("삭제되면 지나가는 곳");
+	            projectRepository.deleteWorkspace(wsIdx);
+	         } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
+	            System.out.println("삽입되면 지나가는 곳");
+	            projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
+	            sort++;
+	         }else { //기존 데이터가 아닌데 hide 한 경우
+	        	 continue;
+	         }
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx) {
+		
+		return projectRepository.selectWorkspaceListByProjectIdx(projectIdx);
+	}
+	}
+
 
 
 
@@ -283,4 +340,3 @@ public class ProjectServiceImpl implements ProjectService {
 
 //은비가 작성한 코드 끝
 
-}
