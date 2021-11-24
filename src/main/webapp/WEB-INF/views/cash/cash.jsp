@@ -125,9 +125,9 @@ section{
 		IMP.init('imp28553074');
 		
 		IMP.request_pay({
-			pg : "html5_inicis",
+			pg : "inicis",
 			pay_method : "card",
-			merchant_uid : "merchant" + item,
+			merchant_uid : "merchant_" + new Date().getTime(),
 			name : item_name,
 			amount : charge,
 			buyer_tel : '010-1111-1111',
@@ -136,16 +136,18 @@ section{
 		}, function(rsp){
 			console.log(rsp);
 			if(rsp.success){
+				
 				$.ajax({
-					url : "http://localhost:9090/cash/100474",
-					type : "POST",
-					dataType : 'json',
+					url : "/cash/" + ${projectIdx},
+					method : "POST",
+					headers: {"Content-Type": "application/json"},
+					dataType : "json",
 					data : {
-						merchant_uid : merchant_uid,
-						amount : charge
+						'item_name' : item_name,
+						'amount' : charge
 					}
 				}).done(function(data){
-					alert("결제 성공")
+					alert("결제가 성공적으로 진행되었습니다.");
 				})
 			}else{
 				alert("결제에 실패하였습니다.");

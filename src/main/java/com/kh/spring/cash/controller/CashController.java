@@ -23,7 +23,8 @@ public class CashController {
 	
 	@GetMapping("{projectIdx}")
 	public String cashPage(Model model, @PathVariable String projectIdx) {
-		
+		System.out.println("projectIdx는" + projectIdx);
+		model.addAttribute(projectIdx);
 		return "cash/cash";
 	}
 	
@@ -31,6 +32,7 @@ public class CashController {
 	@ResponseBody
 	public String cashPage(@PathVariable String projectIdx,
 							@RequestBody Map<String,String> map) {
+		
 		System.out.println(map);
 		System.out.println("지나가나요?");
 		
