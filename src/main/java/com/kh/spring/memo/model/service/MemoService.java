@@ -25,5 +25,7 @@ public interface MemoService {
 
 	List<Memo> selectMemoByTop(String wsIdx);
 
-	/* List<Map<String, String>> selectMemoAndWriterByWsIdx(String wsIdx); */
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
+
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx); 
 }

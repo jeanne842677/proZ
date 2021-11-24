@@ -42,8 +42,10 @@ public interface MemoRepository {
 	@Select("select rownum, a.* from (select * from memo where ws_idx = #{wsIdx} order by memo_idx desc) a "
 			+ " where rownum <= 6 ")
 	List<Memo> selectMemoByTop(String wsIdx);
+	
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
 
-	/* List<Map<String, String>> selectMemoAndWriterByWsIdx(String wsIdx); */
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
 
 	
 }

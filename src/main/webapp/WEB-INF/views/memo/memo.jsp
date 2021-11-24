@@ -246,23 +246,23 @@ hr {
 						<button id="new" class="newBtn">
 							<c:if test="${order == 0}">
 								<a
-									href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=0"
+									href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"
 									style="color: #8F7AE5">최신순</a>
 						</button>
 						<button id="old" class="oldBtn">
 							<a
-								href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=1"
+								href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=1"
 								style="color: #A4A4A4">오래된순</a>
 						</button>
 						</c:if>
 						<c:if test="${order == 1}">
 							<a
-								href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=0"
+								href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"
 								style="color: #A4A4A4">최신순</a>
 							</button>
 							<button id="old" class="oldBtn">
 								<a 
-								href="http://localhost:9090/memo/${prjectIdx}?wsIdx=${wsIdx}&order=1"
+								href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=1"
 									style="color: #8F7AE5">오래된순</a>
 							</button>
 						</c:if>
@@ -282,13 +282,13 @@ hr {
 				<div class="memocon">
 					<div id="memo">
 
-						<c:forEach items="${ memoList }" var="memo">
+						<c:forEach items="${memoList}" var="memo">
 							<!-- 여기있는 애들 싹다 클래스로 바꾸고  -->
 							<div class="memo-yellow"
 								style="background-color : ${memo.bgColor}"
 								data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
 								data-memo-idx="${memo.memoIdx}"
-								data-memo-writer=""
+								data-memo-writer="${memo.nickname}"
 								data-memo-reg-date="${memo.regDate}"
 								
 								>
@@ -373,6 +373,20 @@ hr {
 
 	<script type="text/javascript">
 	
+	function timeNow() {
+		var today = new Date();
+	  	var year = today.getFullYear();
+	  	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	 	var day = ('0' + today.getDate()).slice(-2);
+	  	var hours = ('0' + today.getHours()).slice(-2); 
+	  	var minutes = ('0' + today.getMinutes()).slice(-2);
+		var dateString = year + '-' + month  + '-' + day + " " + hours + ":" + minutes;
+		
+		return dateString;
+	}
+	
+
+	
 	$(document).keydown(function(event) {//esc키로 상세메모 종료
 	       if ( event.keyCode == 27 || event.which == 27 ) {
 	           $(".modal-yellow").hide();
@@ -390,7 +404,7 @@ hr {
 
       //새 메모 추가
         $(".save").click(function () {
-
+			  
               let memoIdx = "";
               let markupStr = $('#summernote').summernote('code');
               console.dir(markupStr);
@@ -421,20 +435,18 @@ hr {
                      
                     
                newMemo.off().on('click',function(){
-            	   var today = new Date();
-            	   var year = today.getFullYear();
-            	   var month = ('0' + (today.getMonth() + 1)).slice(-2);
-            	   var day = ('0' + today.getDate()).slice(-2);
-
-            	   var dateString = year + '-' + month  + '-' + day;
             	   
                    $(".modal-yellow").css('display','flex');
-                   $(".modal-yellow").find("#write-memo").css('background-color', color);
+				   $(".modal-yellow").find("#write-memo").css('background-color', newMemo.css('background-color'));
                    $(".modal-yellow").find("#text").html($(this).find(".textvalue").html());
-                   $(".modal-yellow").find(".reg-date").html("최근 수정일 : " + dateString);
+                   
+                   if(newMemo.data("memo-reg-date")){
+                	   $(".modal-yellow").find(".reg-date").html("최근 수정일 : " + newMemo.data("memo-reg-date"));
+                   }else {
+                	   $(".modal-yellow").find(".reg-date").html("최근 수정일 : " + timeNow());
+                   }
                    $(".modal-yellow").find(".writer").html("작성자 : " + "${authentication.nickname}");
                    newMemo.data("memo-idx", memoIdx);
-                   
                   
                    $(".user-aut-editor").show();
                    
@@ -473,6 +485,8 @@ hr {
                 	$(".save").show();
                 	$(".modify-save").hide();
                     $("#modal").css('display','flex');
+                    changeColor("#fff3cd");
+                    
                 });
                 $(".close").click(function(){
                     $("#modal").hide();
@@ -561,6 +575,11 @@ hr {
 
 
         // summernote
+        
+        $("#summernote").on("summernote.enter", function(we, e) {
+	     $(this).summernote("pasteHTML", "<br><br>");
+	     e.preventDefault();
+	});
 
         $('#summernote').summernote({
             // airMode: true,
@@ -634,14 +653,15 @@ hr {
 	                     headers : {"Content-type" : "application/json; charset=UTF-8"} ,
 	                     body : JSON.stringify({
 	                        memoIdx : thisMemoIdx,
-	                        bgColor : thisColor,
+	                        bgColor : afterColor,
 	                        content : afterModify
 	                     })
 	                  });
 	            	
-	            	newMemo.find(".memo-yellow").css("background-color",afterColor);
+	            	newMemo.css("background-color",afterColor);
 	            	newMemo.data("bg-color",afterColor);
 	            	newMemo.find(".textvalue").html(afterModify);
+	            	newMemo.data("memo-reg-date",timeNow());
 			        $("#modal").hide();
 			            	 
 						});

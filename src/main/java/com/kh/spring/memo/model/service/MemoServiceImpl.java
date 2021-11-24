@@ -75,9 +75,15 @@ public class MemoServiceImpl implements MemoService{
 		return memoRepository.selectMemoByTop(wsIdx);
 	}
 	
-	/*
-	 * @Override public List<Map<String, String>> selectMemoAndWriterByWsIdx(String
-	 * wsIdx) { return memoRepository.selectMemoAndWriterByWsIdx(wsIdx); }
-	 */
+	
+	  @Override public List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx) { 
+		  return memoRepository.selectMemoAndWriterByWsIdxAsc(wsIdx); 
+		  }
+
+	@Override
+	public List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx) {
+		return memoRepository.selectMemoAndWriterByWsIdxDesc(wsIdx);
+	}
+	 
 
 }

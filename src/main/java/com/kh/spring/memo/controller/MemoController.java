@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.kh.spring.common.util.json.JsonMaker;
+import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.memo.model.service.MemoService;
@@ -42,30 +43,38 @@ public class MemoController {
    
    
    //첫 진입했을 때 뿌려주는곳 
-   @GetMapping("{prjectIdx}")
-   public String boardForm(@PathVariable String prjectIdx , Model model,
+   @GetMapping("{projectIdx}")
+   public String boardForm(@PathVariable String projectIdx , Model model,
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
 		   				   @SessionAttribute("authentication") Member member,
 		   				   @RequestParam(value = "order") int order
 		   
 		   				   
 		   				) {
-	   List<Memo> memoList =  new ArrayList<Memo>();
-	   List<Map<String,String>> memoMap = new ArrayList<Map<String,String>>();
 	   
-	   
+	   List<Map<String,Object>> memoList =  new ArrayList<Map<String,Object>>();
+		 
 	   if(order == 0) { //desc 내림차순
-		  memoList = memoService.selectMemoByWsIdx(wsIdx);
+		  memoList = memoService.selectMemoAndWriterByWsIdxDesc(wsIdx);
 	   }else{  //asc 오름차순
-		  memoList = memoService.selectMemoByWsIdxAsc(wsIdx);
+		  memoList = memoService.selectMemoAndWriterByWsIdxAsc(wsIdx);
 	   }
 	   
-	   System.out.println("memoMap ======= " + memoMap);
+	   memoList = CamelMap.changeListMap(memoList);
+	   
+	   for (Map<String, Object> map : memoList) {
+		  map.replace("regDate", map.get("regDate").toString().substring(0,16));
+	}
+	   System.out.println("memoList -------------------"+memoList);
 	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
 	   
-	   model.addAttribute(memoList);
+	   
+	   
+	   
+	   model.addAttribute("memoList",memoList);
 	   model.addAttribute("wsIdx",wsIdx);
 	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
+	   model.addAttribute("projectIdx",projectIdx);
 	   model.addAttribute("order",order);
 	   
 	 
@@ -77,8 +86,8 @@ public class MemoController {
    
    
    //검색할 때 
-   @GetMapping("{prjectIdx}/{search}")
-   public String searchForm(@PathVariable String prjectIdx , Model model,
+   @GetMapping("{projectIdx}/{search}")
+   public String searchForm(@PathVariable String projectIdx , Model model,
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
 		   				   @SessionAttribute("authentication") Member member,
 		   				   @PathVariable String  search
