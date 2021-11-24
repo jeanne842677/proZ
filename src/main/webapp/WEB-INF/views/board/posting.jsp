@@ -35,14 +35,17 @@
                                 <div class="br-line" id="br-line80"></div>
                                 <div class="footer-content-wrapper">
                                     <div class="editor-content-cover">
-                                        <div class="editor-message">커버</div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
+                                        <div class="editor-content-cover-wrapper">
+                                            <div class="editor-message">커버</div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                        </div>
+                                        <button type="button" id="editor-submit-btn" class="btn btn-primary">POST</button>
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
@@ -89,14 +92,16 @@
 </html>
 <script type="text/javascript">
 	
+	let bd = ${param.bdidx}; 
+	console.log(bd); 
 	// 임시 SUBMIT 버튼 
-	$('.submit').on('click' , function() {
-			let subject = $('.subject').val();
-			let content = $('.content').val();
+	$('#editor-submit-btn').on('click' , function() {
+			let subject = $('.editor-title').val();
+			//let content = $('.content').val();
+			console.log(subject); 
 		
+			
 		fetch("/board/add-post" , {
-			
-			
 			method : "POST",
 			headers :  {"Content-type" : "application/json; charset=UTF-8"},
 			body : JSON.stringify({

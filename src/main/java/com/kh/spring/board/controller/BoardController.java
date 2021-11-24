@@ -123,12 +123,12 @@ public class BoardController {
 			Model model,
 			@PathVariable String projectIdx) {
 		
+		// 임시 bdidx, 100437
+		Board board = boardService.selectBoardByBdIdx("100437");
+		model.addAttribute("wsIdx" , board.getWsIdx())
+		.addAttribute(projectIdx); 
 		
-//		Board board = boardService.selectBoardByBdIdx(bdidx);
-//		model.addAttribute("wsIdx" , board.getWsIdx())
-//		.addAttribute(projectIdx); 
-//		
-		// ADD한 이후에는 POST전문을 보여주는것이 좋을듯? 의견제시 
+		// ADD한 이후에는 board쪽으로 돌아간다. (수정필요)   
 		return "/board/posting";
 	} 
 	
@@ -136,8 +136,10 @@ public class BoardController {
 	@PostMapping("add-post")
 	@ResponseBody
 	public String addPost(@RequestBody Map<String, String> map,
-			@SessionAttribute(required = false , value="authentication") Member member) {
+			@SessionAttribute(required = false , value="authentication") Member member
+			,Model model) {
 
+		logger.debug((String) model.getAttribute("hi"));
 		
 		System.out.println(member);
 		
@@ -145,6 +147,7 @@ public class BoardController {
 		boardService.insertPost(map , member);
 		
 
+		// redirect : 번호필요 
 		return "complete";
 		
 	}

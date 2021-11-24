@@ -157,6 +157,12 @@ aside {
                     }
             /* 커버 색상 조정  */
             .editor-content-cover{
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .editor-content-cover-wrapper{
                 display: flex;
                 align-items: center;
             }
@@ -181,4 +187,10 @@ aside {
             #br-line80{
                 width: 100%;
                 margin-bottom: 10px;
+            }
+
+            /* SUBMTI 버튼 */
+
+            #editor-submit-btn{
+                margin-right: 10px;
             }
