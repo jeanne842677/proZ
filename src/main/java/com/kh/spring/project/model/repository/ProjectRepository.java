@@ -113,9 +113,25 @@ public interface ProjectRepository {
 	@Select("select * from project where project_idx = #{projectIdx}")
 	Project selectProjectExist(String projectIdx);
 
+	//워크스페이스 관련 부분
 	@Select("select * from workspace where project_idx = #{projectIdx} order by sort asc")
 	List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
+	@Update("update workspace set wsName = #{wsName}, sort = #{sort} where wsIdx=#{wsIdx}")
+	void updateWorkspace(String wsIdx, String wsName, int sort);
+
+	@Delete("delete from workspace where wsIdx=#{wsIdx}")
+	void deleteWorkspace(String wsIdx);
+
+	@Insert("insert into workspace(ws_idx, project_idx, ws_type, ws_name, sort) "
+			+" values(sc_proz_idx.nextval, #{projectIdx}, #{wsType}, #{wsName}, #{sort})")
+	void insertWorkspace(String wsIdx, String wsType, String wsName, int sort, String projectIdx);
+
+	@Select("select * from workspace where project_idx = #{projectIdx}")
+	List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
+
+	
+	
 	// 은비가 작성한 코드 끝
 
 }

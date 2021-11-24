@@ -1,6 +1,7 @@
 package com.kh.spring.memo.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
@@ -21,4 +22,10 @@ public interface MemoService {
 	void updateMemoByMemoIdx(Memo memo);
 
 	List<Memo> selectMemoBySearch(String wsIdx,String search);
+
+	List<Memo> selectMemoByTop(String wsIdx);
+
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
+
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx); 
 }

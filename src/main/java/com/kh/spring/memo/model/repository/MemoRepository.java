@@ -1,6 +1,7 @@
 package com.kh.spring.memo.model.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -37,6 +38,14 @@ public interface MemoRepository {
 
 	@Select("select * from memo where ws_idx = #{wsIdx} and content like '%'||#{search}||'%'")
 	List<Memo> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
+
+	@Select("select rownum, a.* from (select * from memo where ws_idx = #{wsIdx} order by memo_idx desc) a "
+			+ " where rownum <= 6 ")
+	List<Memo> selectMemoByTop(String wsIdx);
+	
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
+
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
 
 	
 }

@@ -26,11 +26,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.json.JsonMaker;
 import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.memo.model.dto.Memo;
+import com.kh.spring.memo.model.service.MemoService;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
@@ -46,7 +49,12 @@ public class ProjectController {
 
 	@Autowired
 	MemberService memberSerivce;
+	
 
+	//윤지코드
+	@Autowired
+	MemoService memoService;
+	//윤지코드 끝
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@GetMapping("welcome")
@@ -346,7 +354,7 @@ public class ProjectController {
 		String proDescription = project.getProDescription();
 		String userIdx = member.getUserIdx();
 
-		System.out.println("userIdx : " + userIdx);
+		System.out.println("userIdx : " + userIdx); 
 
 		// 새로운 프로젝트의 초대코드 생성
 		String inviteCode = UUID.randomUUID().toString();
@@ -367,34 +375,27 @@ public class ProjectController {
 		return "project/project-main";
 	};
 
-	// 프로젝트 상세로 이동
+	// 프로젝트 상세로 이동 알고리즘?
 	@GetMapping("{projectIdx}")
 	public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member,
-			HttpSession session, Model model) {
-
-		String userIdx = member.getUserIdx();
-		Project project = projectService.selectProjectExist(projectIdx);
-
-		// 프로젝트가 없을 경우
-		if (project == null) {
-			throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-		}
-
-		// 로그인 하지 않았을 경우
-		if (userIdx == null) {
-			throw new HandlableException(ErrorCode.NEED_LOGIN);
-		}
-
-		// 프로젝트 멤버가 아닐 경우 //////////////////////수정 해야함.
-		List<Project> projectMember = new ArrayList<Project>();
-		projectMember = projectService.selectProjectByUserIdx(userIdx);
-		if (projectMember == null) {
-			throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
-		}
-
+			HttpSession session, Model model) {		
+		
+		//프로젝트에 속한 워크스페이스
+		List<Map<String,Object>> workspace = new ArrayList<Map<String,Object>>();
+		workspace = projectService.selectWorkspaceListByProjectIdx(projectIdx);
+		CamelMap.changeListMap(workspace);
+		
+		
+		
+		//메모. 댓글. 게시글.=> workspace
+		// proejtService.selectMemo(projectIdx, wsType);
 		model.addAttribute(projectIdx); // 지영 추가 코드
-
-		return "project/project-main";
+		System.out.println("************workspace 리스트는!!!" + workspace.toString());
+		model.addAttribute(workspace);
+		////////////윤지가 작성할 코드(main에서 불러올 거)/////////
+		
+		//////////////////////////////////////////////////
+		return "project/project-main"; 
 	}
 	
 	///////은비 11월 19일 워크스페이스 작업
@@ -414,31 +415,15 @@ public class ProjectController {
 	}
 	
 	@PostMapping("setting/workspace-management/{projectIdx}")
+	@ResponseBody
 	public void updateWorkspace(@RequestBody List<Map<String, String>> workspaceList,
 			 					@PathVariable String projectIdx) {
 		
-		// 화요일 저녁까지 : 메모 +프로젝트 세팅 프로젝트 메인(디자인 예진), 실시간 온라인유무, 알림,  
-		// 민협 오빠 인터셉터.
-		// 수요일오전 => 채팅, 알림. 오우.
-		
-		//jsp에서 드래그가 끝난 시점에, state-sort-number가 변경이 되야하고 
-		// json에서 parma으로 값 list를 넘겨지는걸 받아야겠다.(workspaceList)
-		
-		for (Map<String, String> map : workspaceList) {
+		System.out.println("저장버튼 눌렀을때 여길 지나가");
 
-			if (map.get("state").equals("update")) {// 변경된 내역이 있다면, 변경되었다고. (UPDATE)
-				System.out.println("변경되면 지나가는 곳");
-				//projectService.updateWorkspaceByWsIdx(map);
-			} else if (map.get("state").equals("del")) {// 리스트가 hide된게 있으면, (DELETE)
-				System.out.println("삭제되면 지나가는 곳");
-				//projectService.deleteWorkspaceByWsIdx(map);
-			} else if (map.get("state").equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
-				//projectService.insertWorkspaceByProjectIdx(map);
-			}
-		}
-
+		projectService.settingWorkspace(workspaceList, projectIdx);
+		
 	}
-	
 
 	// ========================================은비 작업 끝=========================
 
