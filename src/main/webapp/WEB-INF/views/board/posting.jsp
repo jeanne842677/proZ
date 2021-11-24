@@ -115,7 +115,6 @@
 			//location.href="/board/${wsIdx}";
 			
 		})
-		
 	})
 </script>
 </body>
