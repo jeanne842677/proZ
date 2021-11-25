@@ -78,20 +78,36 @@
                             </div>
                         </div>
                         <div class="all-category-list">
+                        <c:forEach var="workspace" items="${workspaceList}" varStatus="i">
                             <div class="origin-category-list commonList">
+                            
                             <!-- ********************* 기존 카테고리 -->
-                            <div class="category-wrapper my" data-state="none" data-option="none" data-wsidx="none">
+                            <div class="category-wrapper my" data-state="none" data-option="${workspace.wsType}" data-wsidx="${workspace.wsIdx}">
                                 
                                 <div class="category-name-wrap category-shadow">
                                     <div class="category-imgs">
                                         <!-- 첫번째 div-->
                                         <img class="square-icon" src="/resources/img/square.png">
-                                        <img class="search-icon" src="/resources/img/premium-icon-calendar-5175870.png"> <!-- 여기 나중에 c:if test-->
+                                        <c:choose>
+                                        	<c:when test="${workspace.wsType == 'ME'}">
+                                        		<i class="far fa-sticky-note fa-2x search-icon"></i>
+                                        	</c:when>
+                                        	<c:when test= "${workspace.wsType=='LD'}">
+                                        		<i class="fas fa-map-signs fa-2x search-icon"></i>
+                                        	</c:when>
+                                        	<c:when test="${workspace.wsType =='CH'}">
+                                        		<i class="far fa-comments fa-2x search-icon"></i>
+                                        	</c:when>
+                                        	<c:otherwise> <!-- 게시판  -->
+                                        		<i class="far fa-clipboard fa-2x search-icon"></i>
+                                        	</c:otherwise>
+                                        </c:choose>
+                                  
                                     </div>
 
                                     <div class="category-input">
                                         <!-- 두번째 div -->
-                                        <input class="category-input-text form-control" type="text" placeholder="원래값" value="1"> 
+                                        <input class="category-input-text form-control" type="text" placeholder="원래값" value="${workspace.wsName}"> 
                                     </div>
                                 </div>
                                 <div id="delete-button">
@@ -100,17 +116,19 @@
                                 </div>
                                 
                             </div>
+                            
                             </div>
-
+							</c:forEach>
                             <div class="clone-category-list commonList">
                             <!-- ***************** 복제할 카테고리-->
-                            <div class="category-wrapper new-category " data-state="none" data-option="none" data-wsidx="none">
+                            <div class="category-wrapper new-category " data-state="insert" data-option="none" data-wsidx="none">
 
                                 <div class="category-name-wrap category-shadow">
                                     <div class="category-imgs">
                                         <!-- 첫번째 div-->
                                         <img class="square-icon" src="/resources/img/square.png">
-                                        <img class="search-icon" src="/resources/img/premium-icon-calendar-5175870.png"> <!-- 여기 나중에 c:if test-->
+                                       	<i class="search-icon"></i>
+                                       
                                     </div>
 
                                     <div class="category-input">
@@ -153,8 +171,10 @@
 //1. (기존 존재항목) 삭제 버튼을 누르면 -> 모달 '삭제하시겠습니까?' -> 비동기로 반영
 $(".category-delete-button").click(function(){
   deleteModal.modal.find('.first-button').on('click', () => { 
-    $(this).closest(".category-wrapper").hide(); 
-    thisCategory.data('state','hide');
+	  window.alert("여기지나가?");
+	  $(this).closest(".category-wrapper").data('state','hide');
+	  $(this).closest(".category-wrapper").hide(); 
+    
   })
 })
 
@@ -176,7 +196,6 @@ function addCategory(){
   input = $(".category-name-input").val();
   selectOption = $('#chooseSelect').val();
 
-  console.log(selectOption);
   //카테고리를 미지정할 경우에 추가X
   if(selectOption == null){
     needCategoryModal.viewModal();
@@ -184,13 +203,28 @@ function addCategory(){
   }
 
   if(input!=""){// 워크스페이스 이름을 입력
-  window.alert(input);
   newCategory = $(".new-category").clone();
   newCategory.find(".category-input-text").attr('value',input);
   newCategory.data('option',selectOption);
-  newCategory.data('state','insert');
+  window.alert(selectOption);
+  switch(selectOption){
+  case '메모' :
+	  newCategory.find(".search-icon").addClass("far fa-sticky-note fa-2x");
+	  break;
+  case '로드맵' :
+	  newCategory.find(".search-icon").addClass("fas fa-map-signs fa-2x");
+	  break;
+  case '채팅' :
+	  newCategory.find(".search-icon").addClass("far fa-comments fa-2x");
+	  break;
+  default :
+	  newCategory.find(".search-icon").addClass("far fa-clipboard fa-2x");
+	  break;
+  }
   
-  newCategory.appendTo(".origin-category-list");
+  newCategory.find(".search-icon").addClass
+  
+  newCategory.appendTo(".all-category-list");
   newCategory.removeClass("new-category");
 
 
@@ -219,12 +253,14 @@ $(".select-input").on("keyup", function(key){
 // 3. 저장 버튼을 누르면 -> 모달 '저장하시겠습니까?' -> 비동기 POST 요청
 beforeSaveModal.modal.find(".first-button").on('click', function() {
 	let workspaceList = [];
-	// state가 hide라면 => delete
-	// state가 newMade라면 insert + wsIdx도 부여(시퀀스) => insert
-	// state가 none이라면 속성 내용 => update
 	
-	$('.origin-category-list').find('.category-wrapper').each(function() {
+	//clone-category-list 삭제(back으로 넘어갈 때 넘기는 것 방지)
+	$('.clone-category-list').remove(); 
+	
+	
+	$('.all-category-list').find('.category-wrapper').each(function() {
 		
+		console.log($(this));
 		let workState = $(this).data("state");
 		let workOption = $(this).data("option");
 		let workWrite = $(this).children().find(".category-input-text").val();
@@ -242,6 +278,8 @@ beforeSaveModal.modal.find(".first-button").on('click', function() {
 		method: "POST",
 		headers: { "Content-type": "application/json; charset=UTF-8" },
 		body: JSON.stringify(workspaceList)
+	}).then(function(){
+		window.location.reload();
 	});
 });
 
@@ -249,13 +287,15 @@ beforeSaveModal.modal.find(".first-button").on('click', function() {
 
 // 4. jQuey로 이동 가능하게끔 만들기
 $('.all-category-list').sortable({
-  connectWith : ".clone-category-list, .origin-category-list",
+  //connectWith : ".",
   cancel : ".category-subheading, .category-input-text, .category-hr",
   //드래그 시작됬을 때 발생
-  start : (e, ui) => {
+   start : (e, ui) => {
     let height = ui.item.css('height');
     $(".category-wrapper").css('height', height);
-  }
+    ui.placeholder.height(height);
+    
+  } 
   
 }).disableSelection();
 </script>

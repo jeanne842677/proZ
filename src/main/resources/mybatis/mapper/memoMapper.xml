@@ -35,6 +35,8 @@
 		where ws_idx = #{wsIdx} order by reg_date desc,memo_idx desc
   	 </select>
   	 
+  	 
+  	 
 <!--   	 
   	 <resultMap type="map" id="memoMap">
   	 	<result column="MEMO_IDX" property="memoIdx"/>

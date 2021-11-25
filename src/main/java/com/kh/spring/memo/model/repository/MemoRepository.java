@@ -36,16 +36,20 @@ public interface MemoRepository {
 	@Update("update memo set CONTENT = #{content}, BG_COLOR = #{bgColor}, REG_DATE = current_date where MEMO_IDX = #{memoIdx}")
 	void updateMemoByMemoIdx(Memo memo);
 
-	@Select("select * from memo where ws_idx = #{wsIdx} and content like '%'||#{search}||'%'")
-	List<Memo> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
+	@Select("	  	select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR ,memo.reg_date,content,member.NICKNAME"
+			+ "		from memo memo"
+			+ "		inner join project_member member USING (PM_IDX)"
+			+ "		where ws_idx = #{wsIdx} and (content like '%'||#{search}||'%' or member.NICKNAME like '%'||#{search}||'%')"
+			+ "     order by reg_date desc, memo_idx desc")
+	List<Map<String, Object>> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
 
-	@Select("select rownum, a.* from (select * from memo where ws_idx = #{wsIdx} order by memo_idx desc) a "
-			+ " where rownum <= 6 ")
-	List<Memo> selectMemoByTop(String wsIdx);
+	List<String> selectMemoByTop(String wsIdx);
 	
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
+
+	/* List<Map<String, String>> selectMemoAndWriterByWsIdx(String wsIdx); */
 
 	
 }
