@@ -127,8 +127,7 @@ public class BoardController {
 		Board board = boardService.selectBoardByBdIdx("100437");
 		model.addAttribute("wsIdx" , board.getWsIdx())
 		.addAttribute(projectIdx); 
-		
-		// ADD한 이후에는 board쪽으로 돌아간다. (수정필요)   
+		 
 		return "/board/posting";
 	} 
 	
