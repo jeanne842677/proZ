@@ -117,18 +117,21 @@ public interface ProjectRepository {
 	@Select("select * from workspace where project_idx = #{projectIdx} order by sort asc")
 	List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
-	@Update("update workspace set wsName = #{wsName}, sort = #{sort} where wsIdx=#{wsIdx}")
-	void updateWorkspace(String wsIdx, String wsName, int sort);
+	@Update("update workspace set ws_name = #{wsName}, sort = #{sort} where ws_idx=#{wsIdx}")
+	void updateWorkspace(@Param("wsIdx")String wsIdx, @Param("wsName")String wsName, @Param("sort")int sort);
 
-	@Delete("delete from workspace where wsIdx=#{wsIdx}")
+	@Delete("delete from workspace where ws_idx=#{wsIdx}")
 	void deleteWorkspace(String wsIdx);
 
 	@Insert("insert into workspace(ws_idx, project_idx, ws_type, ws_name, sort) "
 			+" values(sc_proz_idx.nextval, #{projectIdx}, #{wsType}, #{wsName}, #{sort})")
-	void insertWorkspace(String wsIdx, String wsType, String wsName, int sort, String projectIdx);
+	void insertWorkspace(@Param("wsIdx")String wsIdx, @Param("wsType")String wsType, @Param("wsName")String wsName, @Param("sort")int sort, @Param("projectIdx")String projectIdx);
 
 	@Select("select * from workspace where project_idx = #{projectIdx}")
 	List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
+
+	@Delete("delete from workspace where sort >= #{sort}")
+	void deleteNonWorkspace(int sort);
 
 	
 	
