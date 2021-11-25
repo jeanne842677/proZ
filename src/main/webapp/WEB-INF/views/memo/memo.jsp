@@ -200,9 +200,13 @@ hr {
 
 .writer-info{
 	display: flex;
-    font-size: 15px;
+    font-size: 12px;
     width: 100%;
     flex-direction: column;
+    justify-content: center;
+    margin-left: 30px;
+    padding-top: 34px;
+    color: #777;
 }
 
 .writer-info > hr {

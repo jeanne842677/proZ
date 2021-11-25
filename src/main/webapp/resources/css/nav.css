@@ -218,7 +218,7 @@ align-content:space-between ;
 }
 
 .cate1{
-    padding:10px 10px 10px 30px;
+    padding:10px 10px 10px 0px;
     width:100%;
     cursor: pointer;
     list-style: none;
@@ -233,7 +233,7 @@ align-content:space-between ;
 }
 
 .folder>li{
-    padding:10px 10px 10px 50px;
+    padding:10px 10px 10px 0px;
     cursor: pointer;
 }
 

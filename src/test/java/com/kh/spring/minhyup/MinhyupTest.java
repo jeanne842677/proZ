@@ -86,6 +86,5 @@ public class MinhyupTest {
 					.sessionAttr("authentication", member))
 			.andExpect(status().isOk())
 			.andDo(print());
-		  
 	  }
 }

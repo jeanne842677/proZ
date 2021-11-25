@@ -36,6 +36,17 @@
   	 </select>
   	 
   	 
+  	<!-- 윤지 코드 시작 -->
+  	 <select id="selectMemoByTop" resultType="map">
+  	 select * from memo 
+  	 where ws_idx in
+  	 <foreach collection="mainMemoList" item="mainMemoList" index ="index" open="" close="" separator="or">
+  	 	#{mainMemoList}
+  	 </foreach> 
+  	 order by reg_date desc
+  	 </select>
+ 
+  	 <!--   윤지 코드 끝  -->
   	 
 <!--   	 
   	 <resultMap type="map" id="memoMap">

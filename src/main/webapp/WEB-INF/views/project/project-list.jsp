@@ -43,7 +43,7 @@
                 </div>
             </header>
 
-                <div id="tem-contents">
+                <div id="tem-contents" style="min-height : 1111px">
                     
                 <div class="temtit">
                     <div class="line"><hr></div>
@@ -81,7 +81,7 @@
 			</section>
 
 
-			<footer>
+			<footer style="margin-top : 200px">
                 <div class="footleft">
                     <div class="footdes1">project by DragonBall.</div>
                     <div class="footdes2">Lim Ji-young , Kang Min-hyeop ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yoon-ji</div>
