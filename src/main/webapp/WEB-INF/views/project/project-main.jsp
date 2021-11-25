@@ -6,6 +6,8 @@
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="/resources/css/nav.css">
 <script type="text/javascript" src="/resources/js/nav.js"></script>
+
+
 <meta charset="UTF-8">
 <title>Welcome</title>
 <style>
@@ -394,13 +396,32 @@ margin-bottom:0;
             border-radius: 10px;
         }
 
-        .memo{
+         .memo{
             width:230px;
             height: 230px;
             margin:10px;
             background-color: #fff3cd;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
         }
+        .textvalue{
+           width:100%;
+        }
+        #content{
+           display:flex;
+           margin: 5px 5px 5px 5px;
+           height: 80%;
+        }
+        #profile{
+           display:flex;
+           justify-content:flex-end;
+           align-items: flex-end;
+           border-color: red;
+        }
+        #profileImg{
+           margin-right:10px;
+        }
+        
+
     </style>
 </head>
 <body>
@@ -416,7 +437,7 @@ margin-bottom:0;
                 <div id="top1">
                     <div id="my"><div class="myprofile"></div></div>
                     <div class="myname">${nickname}</div>
-                    <div class="myrole">${authName}</div>
+                    <div class="myrole">${authname}</div>
                 </div>
                 <div id="top2">팀정보</div>
             </div>
@@ -444,7 +465,7 @@ margin-bottom:0;
                 <div id="right">
                     <div id="right1">
                         <div class="board">
-                            <div class="boardarea" onclick="location.href='#';">board > </div>
+                            <div class="boardarea" onclick="location.href='#';">board</div>
                             <div class="boardwrap">
                                 <div class="boardcon"></div>
                                 <div class="boardcon"></div>
@@ -452,7 +473,7 @@ margin-bottom:0;
                             </div>
                         </div>
                         <div class="comment">
-                            <div class="commentarea" onclick="location.href='#';">comment > </div>
+                            <div class="commentarea" onclick="location.href='#';">comment</div>
                             <div class="commentwrap">
                                 <div class="commentcon"></div>
                                 <div class="commentcon"></div>
@@ -463,22 +484,26 @@ margin-bottom:0;
                         </div>
                     </div>
                     <div id="right2">
-                        <div class="memoarea" onclick='location.href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"'>memo > </div>
+                        <div class="memoarea" onclick='location.href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"'>memo</div>
                         <div class="memocon">
                             <div class="memowrap">
-                            	<c:forEach items="${mainMemoList }" var="memo">
-	                               <div class="memo"
-										style="background-color : ${memo.bgColor}"
-										data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
-										data-memo-idx="${memo.memoIdx}">
-										<div id="content">
-											<div class="textvalue">${ memo.content }</div>
-										</div>
-										<div class="profile">
-											<div class="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
-										</div>
-									</div>
-                                </c:forEach>
+                            	<c:forEach items="${memoList}" var="memo" begin="0" end="5" step="1" >
+                               <div class="memo"
+		                           style="background-color : ${memo.bgColor}"
+		                           data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
+		                           data-memo-idx="${memo.memoIdx}"
+		                           data-memo-writer="${memo.nickname}"
+		                           data-memo-reg-date="${memo.regDate}"
+		                           
+		                        >
+                       		 <div id="content">
+                           <div class="textvalue">${ memo.content }</div>
+                        </div>
+                        <div id="profile">
+                           <div id="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
+                        </div>
+                     </div>
+                  </c:forEach>
                             </div>
                         </div>
                     </div>
@@ -495,6 +520,8 @@ margin-bottom:0;
     </div>
     
     <script type="text/javascript">
+    
+    
     //시계
     function locale (){ 	 return new Date().toLocaleString(); 	 } 
     document.getElementById( 'usingFunction' ).innerHTML = locale(); 
