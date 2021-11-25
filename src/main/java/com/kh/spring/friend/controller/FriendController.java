@@ -1,24 +1,21 @@
-package com.kh.spring.chat.controller;
+package com.kh.spring.friend.controller;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.spring.chat.model.dto.Chat;
 
-
 @Controller
-public class ChatController {
-	
+public class FriendController {
+
     @MessageMapping("/message/{room}")
-    @SendTo("/subscribe/message/{room}")
+    @SendTo("/projectIdx/online/{room}")
     public Chat sendChatMessage(@DestinationVariable("room") String room
     	,Chat message, SimpMessageHeaderAccessor headerAccessor, Principal principal) {
         
@@ -31,10 +28,6 @@ public class ChatController {
         
     }
     
-
-    @RequestMapping("chat/chatting")
-    public void chatting() {};
-
 
 
 }
