@@ -21,6 +21,7 @@ public class FriendStompConfig implements WebSocketMessageBrokerConfigurer {
 		config.setApplicationDestinationPrefixes("/app");
 		//메세지 매핑에 쓰는 애
 		
+		
 
 	}
 

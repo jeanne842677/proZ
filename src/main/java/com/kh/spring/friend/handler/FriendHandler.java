@@ -16,6 +16,7 @@ public class FriendHandler implements ChannelInterceptor{
 		StompCommand command = accessor.getCommand();
 		
 		
+		
 		//System.out.println("현재 있는 사용자: " + accessorList.getAccessorList().size() + "명" );
 		
 		System.out.println("유저 세션: " + accessor.getSessionId());
