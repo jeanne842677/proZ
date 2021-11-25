@@ -23,7 +23,7 @@ public interface MemoService {
 
 	List<Map<String, Object>> selectMemoBySearch(String wsIdx,String search);
 
-	List<String> selectMemoByTop(String wsIdx);
+	List<Map<String, Object>> selectMemoByTop(List<String> mainMemoList);
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
 

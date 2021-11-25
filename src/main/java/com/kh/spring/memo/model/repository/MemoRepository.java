@@ -43,11 +43,13 @@ public interface MemoRepository {
 			+ "     order by reg_date desc, memo_idx desc")
 	List<Map<String, Object>> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
 
-	List<String> selectMemoByTop(String wsIdx);
 	
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
+	
+	
+	List<Map<String, Object>> selectMemoByTop(@Param("mainMemoList") List<String> mainMemoList);
 
 	/* List<Map<String, String>> selectMemoAndWriterByWsIdx(String wsIdx); */
 
