@@ -29,315 +29,315 @@ import com.kh.spring.project.model.repository.ProjectRepository;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-	@Autowired
-	ProjectRepository projectRepository;
+   @Autowired
+   ProjectRepository projectRepository;
 
-	@Autowired
-	private MailSender mailSender;
+   @Autowired
+   private MailSender mailSender;
 
-	@Autowired
-	private RestTemplate http;
+   @Autowired
+   private RestTemplate http;
 
-	@Override
-	public String updateProjectInviteCode(String projectIdx) {
+   @Override
+   public String updateProjectInviteCode(String projectIdx) {
 
-		String newUuid = UUID.randomUUID().toString();
-		projectRepository.updateProjectInviteCode(newUuid, projectIdx);
+      String newUuid = UUID.randomUUID().toString();
+      projectRepository.updateProjectInviteCode(newUuid, projectIdx);
 
-		return newUuid;
+      return newUuid;
 
-	}
+   }
 
-	@Override
-	public Project selectProjectByIdx(String projectIdx) {
+   @Override
+   public Project selectProjectByIdx(String projectIdx) {
 
-		return projectRepository.selectProjectByIdx(projectIdx);
-	}
+      return projectRepository.selectProjectByIdx(projectIdx);
+   }
 
-	@Override
-	public List<Map<String, Object>> selectProjectMemberByProjectIdx(String projectIdx) {
+   @Override
+   public List<Map<String, Object>> selectProjectMemberByProjectIdx(String projectIdx) {
 
-		return projectRepository.selectProjectMemberByProjectIdx(projectIdx);
-	}
+      return projectRepository.selectProjectMemberByProjectIdx(projectIdx);
+   }
 
-	@Override
-	public List<Map<String, Object>> selectProjectMemberRoleByProjectIdx(String projectIdx) {
-		return projectRepository.selectProjectMemberRoleByProjectIdx(projectIdx);
-	}
+   @Override
+   public List<Map<String, Object>> selectProjectMemberRoleByProjectIdx(String projectIdx) {
+      return projectRepository.selectProjectMemberRoleByProjectIdx(projectIdx);
+   }
 
-	// 지영 추가 코드
+   // 지영 추가 코드
 
-	@Override
-	public List<Map<String, Object>> selectUserAndMemberByEmail(String email) {
+   @Override
+   public List<Map<String, Object>> selectUserAndMemberByEmail(String email) {
 
-		return CamelMap.changeListMap(projectRepository.selectUserAndMemberByEmail(email));
+      return CamelMap.changeListMap(projectRepository.selectUserAndMemberByEmail(email));
 
-	}
+   }
 
-	@Override
-	public void inviteMemberByEmail(Member newMember, Project project) {
+   @Override
+   public void inviteMemberByEmail(Member newMember, Project project) {
 
-		Map<String, Object> defaultRole = CamelMap
-				.changeMap(projectRepository.selectDefaultOfProjectRole(project.getProjectIdx()));
-		String authIdx = (String) defaultRole.get("authIdx"); // 일반 idx가 들어있음
+      Map<String, Object> defaultRole = CamelMap
+            .changeMap(projectRepository.selectDefaultOfProjectRole(project.getProjectIdx()));
+      String authIdx = (String) defaultRole.get("authIdx"); // 일반 idx가 들어있음
 
-		ProjectMember newProjectMember = new ProjectMember();
-		newProjectMember.setProjectIdx(project.getProjectIdx());
-		newProjectMember.setUserIdx(newMember.getUserIdx());
-		newProjectMember.setAuthIdx(authIdx);
-		newProjectMember.setNickname(newMember.getNickname());
-		newProjectMember.setProfileColor(newMember.getProfileColor());
-		newProjectMember.setIsOk(0);
+      ProjectMember newProjectMember = new ProjectMember();
+      newProjectMember.setProjectIdx(project.getProjectIdx());
+      newProjectMember.setUserIdx(newMember.getUserIdx());
+      newProjectMember.setAuthIdx(authIdx);
+      newProjectMember.setNickname(newMember.getNickname());
+      newProjectMember.setProfileColor(newMember.getProfileColor());
+      newProjectMember.setIsOk(0);
 
-		projectRepository.insertProjectMember(newProjectMember);
+      projectRepository.insertProjectMember(newProjectMember);
 
-		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("mailTemplate", "project-invite-mail");
-		body.add("nickname", newMember.getNickname());
-		body.add("projectIdx", project.getProjectIdx());
-		body.add("userIdx", newMember.getUserIdx());
+      MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+      body.add("mailTemplate", "project-invite-mail");
+      body.add("nickname", newMember.getNickname());
+      body.add("projectIdx", project.getProjectIdx());
+      body.add("userIdx", newMember.getUserIdx());
 
-		// RestTemplate의 기본 Content-type : application/json
-		RequestEntity<MultiValueMap<String, String>> request = RequestEntity.post(Config.DOMAIN.DESC + "/mail")
-				.accept(MediaType.APPLICATION_FORM_URLENCODED).body(body);
+      // RestTemplate의 기본 Content-type : application/json
+      RequestEntity<MultiValueMap<String, String>> request = RequestEntity.post(Config.DOMAIN.DESC + "/mail")
+            .accept(MediaType.APPLICATION_FORM_URLENCODED).body(body);
 
-		String subject = project.getProName() + " 프로젝트에서 당신을 초대합니다.";
-		String htmlTxt = http.exchange(request, String.class).getBody();
-		mailSender.send(newMember.getEmail(), subject, htmlTxt);
+      String subject = project.getProName() + " 프로젝트에서 당신을 초대합니다.";
+      String htmlTxt = http.exchange(request, String.class).getBody();
+      mailSender.send(newMember.getEmail(), subject, htmlTxt);
 
-	}
+   }
 
-	// 이메일 클릭시
-	@Override
-	public int inviteMemberByEmailImpl(String projectIdx, String userIdx) {
+   // 이메일 클릭시
+   @Override
+   public int inviteMemberByEmailImpl(String projectIdx, String userIdx) {
 
-		return projectRepository.updateProjectMemberStatus(projectIdx, userIdx);
+      return projectRepository.updateProjectMemberStatus(projectIdx, userIdx);
 
-	}
+   }
 
-	@Override
-	public Project selectProjectByInviteCode(String inviteCode) {
-		return projectRepository.selectProjectByInviteCode(inviteCode);
+   @Override
+   public Project selectProjectByInviteCode(String inviteCode) {
+      return projectRepository.selectProjectByInviteCode(inviteCode);
 
-	}
+   }
 
-	public void inviteMemberByCode(String inviteCode, Member member) {
+   public void inviteMemberByCode(String inviteCode, Member member) {
 
-		Project project = projectRepository.selectProjectByInviteCode(inviteCode);
-		if (project == null) {
-			throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-		}
+      Project project = projectRepository.selectProjectByInviteCode(inviteCode);
+      if (project == null) {
+         throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
+      }
 
-		List<Map<String, Object>> projectMemberList = projectRepository
-				.selectProjectMemberByProjectIdx(project.getProjectIdx());
-		System.out.println(projectMemberList);
-		for (Map<String, Object> pm : projectMemberList) {
+      List<Map<String, Object>> projectMemberList = projectRepository
+            .selectProjectMemberByProjectIdx(project.getProjectIdx());
+      System.out.println(projectMemberList);
+      for (Map<String, Object> pm : projectMemberList) {
 
-			if (pm.get("USER_IDX").equals(member.getUserIdx())) {
-				System.out.println("이미 존재하는 사용자입니다.");
-				return;
+         if (pm.get("USER_IDX").equals(member.getUserIdx())) {
+            System.out.println("이미 존재하는 사용자입니다.");
+            return;
 
-			}
+         }
 
-		}
+      }
 
-		Map<String, Object> defaultRole = CamelMap
-				.changeMap(projectRepository.selectDefaultOfProjectRole(project.getProjectIdx()));
-		String authIdx = (String) defaultRole.get("authIdx"); // 일반 idx가 들어있음
+      Map<String, Object> defaultRole = CamelMap
+            .changeMap(projectRepository.selectDefaultOfProjectRole(project.getProjectIdx()));
+      String authIdx = (String) defaultRole.get("authIdx"); // 일반 idx가 들어있음
 
-		ProjectMember projectMember = new ProjectMember();
-		projectMember.setProjectIdx(project.getProjectIdx());
-		projectMember.setUserIdx(member.getUserIdx());
-		projectMember.setAuthIdx(authIdx);
-		projectMember.setNickname(member.getNickname());
-		projectMember.setProfileColor(member.getProfileColor());
-		projectMember.setIsOk(1);
+      ProjectMember projectMember = new ProjectMember();
+      projectMember.setProjectIdx(project.getProjectIdx());
+      projectMember.setUserIdx(member.getUserIdx());
+      projectMember.setAuthIdx(authIdx);
+      projectMember.setNickname(member.getNickname());
+      projectMember.setProfileColor(member.getProfileColor());
+      projectMember.setIsOk(1);
 
-		projectRepository.insertProjectMember(projectMember);
+      projectRepository.insertProjectMember(projectMember);
 
-	}
+   }
 
-	public void deleteProjectMember(Map<String, String> map) {
+   public void deleteProjectMember(Map<String, String> map) {
 
-		projectRepository.deleteProjectMember(map);
+      projectRepository.deleteProjectMember(map);
 
-	};
+   };
 
-	public void updateProjectMemberAuth(Map<String, String> map) {
+   public void updateProjectMemberAuth(Map<String, String> map) {
 
-		projectRepository.updateProjectMemberAuth(map);
+      projectRepository.updateProjectMemberAuth(map);
 
-	};
+   };
 
-	// 지영 추가코드 끝
+   // 지영 추가코드 끝
 
-	// 민협 코드 시작
-	@Override
-	public List<ProjectRole> selectProjectRoleByIdx(String projectIdx) {
+   // 민협 코드 시작
+   @Override
+   public List<ProjectRole> selectProjectRoleByIdx(String projectIdx) {
 
-		return projectRepository.selectProjectRoleByIdx(projectIdx);
-	}
-	
-	@Override
-	public void updateRoleByPrevAuthName(Map<String, String> map) {
-		projectRepository.updateRoleByPrevAuthName(map);
-		
-	}
-
-
-	@Override
-	public void insertNewRole(ProjectRole role) {
-		projectRepository.insertNewRole(role);
-
-	}
-
-	@Override
-	public void deleteRoleByAuthIdx(String authIdx) {
-		projectRepository.deleteRoleByAuthIdx(authIdx);
-
-	}
-
-	@Override
-	public void deleteRoleByProjectIdxAndAuthName(ProjectRole role) {
-		projectRepository.deleteRoleByProjectIdxAndAuthName(role);
-	}
-	
-	//11/17 민협
-	@Override
-	public String updateProjectByProjectIdx(Map<String, String> project) {
-		System.out.println("service ::" + project);
-		if(project.get("nameState").equals("update") || project.get("descriptionState").equals("update") ) {
-			projectRepository.updateProjectByProjectIdx(project);
-			return "바뀜";
-		}else {
-			return "바뀐게 없음.";		
-			}
-	}
-	//11/18 민협
-	@Override
-	public void updateIsDelProjectByProjectIdx(String projectIdx) {
-		projectRepository.updateIsDelProjectByProjectIdx(projectIdx);
-	}
-	
-	@Override
-	public int projectIsDel(String projectIdx) {
-		
-		
-		return projectRepository.projectIsDel(projectIdx);
-	}
-	
-	@Override
-	public ProjectRole selectProjectRoleByProjectIdxAndUserIdx(String projectIdx, String userIdx) {
-		return projectRepository.selectProjectRoleByProjectIdxAndUserIdx(projectIdx,userIdx);
-	}
+      return projectRepository.selectProjectRoleByIdx(projectIdx);
+   }
+   
+   @Override
+   public void updateRoleByPrevAuthName(Map<String, String> map) {
+      projectRepository.updateRoleByPrevAuthName(map);
+      
+   }
 
 
-	// 민협 코드 끝
+   @Override
+   public void insertNewRole(ProjectRole role) {
+      projectRepository.insertNewRole(role);
+
+   }
+
+   @Override
+   public void deleteRoleByAuthIdx(String authIdx) {
+      projectRepository.deleteRoleByAuthIdx(authIdx);
+
+   }
+
+   @Override
+   public void deleteRoleByProjectIdxAndAuthName(ProjectRole role) {
+      projectRepository.deleteRoleByProjectIdxAndAuthName(role);
+   }
+   
+   //11/17 민협
+   @Override
+   public String updateProjectByProjectIdx(Map<String, String> project) {
+      System.out.println("service ::" + project);
+      if(project.get("nameState").equals("update") || project.get("descriptionState").equals("update") ) {
+         projectRepository.updateProjectByProjectIdx(project);
+         return "바뀜";
+      }else {
+         return "바뀐게 없음.";      
+         }
+   }
+   //11/18 민협
+   @Override
+   public void updateIsDelProjectByProjectIdx(String projectIdx) {
+      projectRepository.updateIsDelProjectByProjectIdx(projectIdx);
+   }
+   
+   @Override
+   public int projectIsDel(String projectIdx) {
+      
+      
+      return projectRepository.projectIsDel(projectIdx);
+   }
+   
+   @Override
+   public ProjectRole selectProjectRoleByProjectIdxAndUserIdx(String projectIdx, String userIdx) {
+      return projectRepository.selectProjectRoleByProjectIdxAndUserIdx(projectIdx,userIdx);
+   }
+
+
+   // 민협 코드 끝
 ////////////은비가 작성한 코드 시작
-	@Override
-	public List<Project> selectProjectByUserIdx(String userIdx) {
+   @Override
+   public List<Project> selectProjectByUserIdx(String userIdx) {
 
-		return projectRepository.selectProjectByUserIdx(userIdx);
-	}
+      return projectRepository.selectProjectByUserIdx(userIdx);
+   }
 
-	@Override
-	public int insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
-		Project project = new Project();
-		project.setProName(proName);
-		project.setProDescription(proDescription);
-		project.setInviteCode(inviteCode);
-		int res = projectRepository.insertProject(project);
-		projectRepository.insertRole();
-		projectRepository.insertAdmin(userIdx);
-		
-		
-		System.out.println("서비스 : 제발 되어라" + project.getProjectIdx());
-		return res;
-		
-		
-	}
+   @Override
+   public int insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
+      Project project = new Project();
+      project.setProName(proName);
+      project.setProDescription(proDescription);
+      project.setInviteCode(inviteCode);
+      int res = projectRepository.insertProject(project);
+      projectRepository.insertRole();
+      projectRepository.insertAdmin(userIdx);
+      
+      
+      System.out.println("서비스 : 제발 되어라" + project.getProjectIdx());
+      return res;
+      
+      
+   }
 
-	@Override
-	public List<String> selectProjectIdxByUserIdx(String userIdx) {
-		return projectRepository.selectProjectIdxByUserIdx(userIdx);
-	}
+   @Override
+   public List<String> selectProjectIdxByUserIdx(String userIdx) {
+      return projectRepository.selectProjectIdxByUserIdx(userIdx);
+   }
 
-	@Override
-	public List<Project> selectProjectByProjectIdx(String projectIdx) {
-		return projectRepository.selectProjectByProjectIdx(projectIdx);
-	}
+   @Override
+   public List<Project> selectProjectByProjectIdx(String projectIdx) {
+      return projectRepository.selectProjectByProjectIdx(projectIdx);
+   }
 
-	@Override
-	public Project selectProjectExist(String projectIdx) {
-		return projectRepository.selectProjectExist(projectIdx);
-	}
+   @Override
+   public Project selectProjectExist(String projectIdx) {
+      return projectRepository.selectProjectExist(projectIdx);
+   }
 
-	@Override
-	public List<Workspace> selectWorkspaceByProjectIdx(String projectIdx) {
-		return projectRepository.selectWorkspaceByProjectIdx(projectIdx);
-	}
+   @Override
+   public List<Workspace> selectWorkspaceByProjectIdx(String projectIdx) {
+      return projectRepository.selectWorkspaceByProjectIdx(projectIdx);
+   }
 
 
-	//11월 24일 은비 추가
-	@Override
-	public void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx) {
-		int sort = 1;
-		System.out.println("projectIdx" + projectIdx);
-		System.out.println("workspaceList"+workspaceList);
-		for (Map<String, String> map : workspaceList) {
-			
-			String wsIdx = map.get("workWsIdx");
-			String wsType = map.get("workOption");
-			String wsName = map.get("workWrite");
-			String wsState = map.get("workState");
-			
-			System.out.println("wsIdx : " + wsIdx);
-			System.out.println("wsType : " + wsType);
-			System.out.println("wsName : " +wsName);
-			System.out.println("wsState : " +wsState);
-			switch(wsType) {
-				case "메모" :
-					wsType = "ME";
-					break;
-				case "로드맵" :
-					wsType = "LD";
-					break;
-				case "채팅" :
-					wsType = "CH";
-					break;
-				case "게시판" :
-					wsType = "BO";
-			}
-			
-			if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경. (UPDATE)
-				System.out.println("변경되면 지나가는 곳");
-	            projectRepository.updateWorkspace(wsIdx, wsName,sort);
-	            sort++;
-	         } else if (wsState.equals("hide")) {// 리스트가 hide된게 있으면, (DELETE)
-	            System.out.println("삭제되면 지나가는 곳");
-	            projectRepository.deleteWorkspace(wsIdx);
-	         } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
-	            System.out.println("삽입되면 지나가는 곳");
-	            projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
-	            sort++;
-	         }
-			}
-			// 더미 data 전부 삭제
-			projectRepository.deleteNonWorkspace(sort);
-			// 모든 wsState를 none으로 변경
-		}
+   //11월 24일 은비 추가
+   @Override
+   public void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx) {
+      int sort = 1;
+      System.out.println("projectIdx" + projectIdx);
+      System.out.println("workspaceList"+workspaceList);
+      for (Map<String, String> map : workspaceList) {
+         
+         String wsIdx = map.get("workWsIdx");
+         String wsType = map.get("workOption");
+         String wsName = map.get("workWrite");
+         String wsState = map.get("workState");
+         
+         System.out.println("wsIdx : " + wsIdx);
+         System.out.println("wsType : " + wsType);
+         System.out.println("wsName : " +wsName);
+         System.out.println("wsState : " +wsState);
+         switch(wsType) {
+            case "메모" :
+               wsType = "ME";
+               break;
+            case "로드맵" :
+               wsType = "LD";
+               break;
+            case "채팅" :
+               wsType = "CH";
+               break;
+            case "게시판" :
+               wsType = "BO";
+         }
+         
+         if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경. (UPDATE)
+            System.out.println("변경되면 지나가는 곳");
+               projectRepository.updateWorkspace(wsIdx, wsName,sort);
+               sort++;
+            } else if (wsState.equals("hide")) {// 리스트가 hide된게 있으면, (DELETE)
+               System.out.println("삭제되면 지나가는 곳");
+               projectRepository.deleteWorkspace(wsIdx);
+            } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
+               System.out.println("삽입되면 지나가는 곳");
+               projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
+               sort++;
+            }
+         }
+         // 더미 data 전부 삭제
+         projectRepository.deleteNonWorkspace(sort);
+         // 모든 wsState를 none으로 변경
+      }
 
-		@Override
-		public List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx) {
+      @Override
+      public List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx) {
 
-			return projectRepository.selectWorkspaceListByProjectIdx(projectIdx);
-		}
+         return projectRepository.selectWorkspaceListByProjectIdx(projectIdx);
+      }
 
 //은비가 작성한 코드 끝
 
 /////윤지+예진
-		@Override
-		public List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx) {
-			return projectRepository.selectProjectNickname(projectIdx, userIdx);
-		}
-	}
+      @Override
+      public List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx) {
+         return projectRepository.selectProjectNickname(projectIdx, userIdx);
+      }
+   }
