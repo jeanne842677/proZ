@@ -282,6 +282,8 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx) {
 		int sort = 1;
+		System.out.println("projectIdx" + projectIdx);
+		System.out.println("workspaceList"+workspaceList);
 		for (Map<String, String> map : workspaceList) {
 			
 			String wsIdx = map.get("workWsIdx");
@@ -289,9 +291,13 @@ public class ProjectServiceImpl implements ProjectService {
 			String wsName = map.get("workWrite");
 			String wsState = map.get("workState");
 			
+			System.out.println("wsIdx : " + wsIdx);
+			System.out.println("wsType : " + wsType);
+			System.out.println("wsName : " +wsName);
+			System.out.println("wsState : " +wsState);
 			switch(wsType) {
 				case "메모" :
-					wsType = WorkspaceType.ME.toString();//화이팅! /////////////////////////나중에 확인/////////////////
+					wsType = "ME";
 					break;
 				case "로드맵" :
 					wsType = "LD";
@@ -303,21 +309,22 @@ public class ProjectServiceImpl implements ProjectService {
 					wsType = "BO";
 			}
 			
-			if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경되었다고. (UPDATE)
+			if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경. (UPDATE)
 				System.out.println("변경되면 지나가는 곳");
 	            projectRepository.updateWorkspace(wsIdx, wsName,sort);
 	            sort++;
-	         } else if (wsState.equals("hide") && wsIdx=="none") {// 리스트가 hide된게 있으면, (DELETE)
+	         } else if (wsState.equals("hide")) {// 리스트가 hide된게 있으면, (DELETE)
 	            System.out.println("삭제되면 지나가는 곳");
 	            projectRepository.deleteWorkspace(wsIdx);
 	         } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
 	            System.out.println("삽입되면 지나가는 곳");
 	            projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
 	            sort++;
-	         }else { //기존 데이터가 아닌데 hide 한 경우
-	        	 continue;
 	         }
 		}
+		//더미 data 전부 삭제
+		projectRepository.deleteNonWorkspace(sort);
+		//모든 wsState를 none으로 변경
 	}
 
 	@Override

@@ -65,11 +65,6 @@ public class MemoServiceImpl implements MemoService {
 		return memoRepository.selectMemoBySearch(wsIdx, search);
 	}
 
-	@Override
-	public List<String> selectMemoByTop(String wsIdx) {
-		// TODO Auto-generated method stub
-		return memoRepository.selectMemoByTop(wsIdx);
-	}
 
 	@Override
 	public List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx) {
@@ -79,6 +74,12 @@ public class MemoServiceImpl implements MemoService {
 	@Override
 	public List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx) {
 		return memoRepository.selectMemoAndWriterByWsIdxDesc(wsIdx);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMemoByTop(List<String> mainMemoList) {
+		// TODO Auto-generated method stub
+		return memoRepository.selectMemoByTop(mainMemoList);
 	}
 
 }
