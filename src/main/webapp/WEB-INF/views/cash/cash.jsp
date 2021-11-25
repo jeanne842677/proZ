@@ -121,7 +121,7 @@ section{
 		console.log(item);
 		console.log(charge);
 		console.log(item_name);
-		
+		console.log(typeof(item_name));
 		IMP.init('imp28553074');
 		
 		IMP.request_pay({
@@ -135,17 +135,15 @@ section{
 			buyer_postcode : '123-456'
 		}, function(rsp){
 			console.log(rsp);
-			if(rsp.success){
-				
+			if(rsp.success){		
 				$.ajax({
-					url : "/cash/" + ${projectIdx},
+					url : "http://localhost:9090/cash/" + ${projectIdx},
 					method : "POST",
 					headers: {"Content-Type": "application/json"},
 					dataType : "json",
-					data : {
-						'item_name' : item_name,
-						'amount' : charge
-					}
+					data : JSON.stringify({
+						"item_name" : item_name
+					})
 				}).done(function(data){
 					alert("결제가 성공적으로 진행되었습니다.");
 				})
@@ -156,6 +154,6 @@ section{
 	});
 	
 	
-</script>
+</script>           
 
 </html>

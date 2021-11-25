@@ -73,6 +73,17 @@ public interface ProjectService {
 
 	List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
+	void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx);
+
+	List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
+
+	
+
+	
+
+	
+
+	
 
 
 	

@@ -21,9 +21,13 @@ public interface MemoService {
 
 	void updateMemoByMemoIdx(Memo memo);
 
-	List<Memo> selectMemoBySearch(String wsIdx,String search);
+	List<Map<String, Object>> selectMemoBySearch(String wsIdx,String search);
 
-	List<Memo> selectMemoByTop(String wsIdx);
+	List<String> selectMemoByTop(String wsIdx);
 
-	/* List<Map<String, String>> selectMemoAndWriterByWsIdx(String wsIdx); */
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
+
+	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx); 
+	
+	
 }
