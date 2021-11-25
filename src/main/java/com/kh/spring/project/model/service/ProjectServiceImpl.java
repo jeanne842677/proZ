@@ -321,29 +321,23 @@ public class ProjectServiceImpl implements ProjectService {
 	            projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
 	            sort++;
 	         }
+			}
+			// 더미 data 전부 삭제
+			projectRepository.deleteNonWorkspace(sort);
+			// 모든 wsState를 none으로 변경
 		}
-		//더미 data 전부 삭제
-		projectRepository.deleteNonWorkspace(sort);
-		//모든 wsState를 none으로 변경
-	}
 
-	@Override
-	public List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx) {
-		
-		return projectRepository.selectWorkspaceListByProjectIdx(projectIdx);
-	}
-	}
+		@Override
+		public List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx) {
 
-
-
-
-
-
-
-
-
-
-
+			return projectRepository.selectWorkspaceListByProjectIdx(projectIdx);
+		}
 
 //은비가 작성한 코드 끝
 
+/////윤지+예진
+		@Override
+		public List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx) {
+			return projectRepository.selectProjectNickname(projectIdx, userIdx);
+		}
+	}

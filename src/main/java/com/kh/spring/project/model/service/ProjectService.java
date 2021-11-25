@@ -78,9 +78,9 @@ public interface ProjectService {
 	List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
 
 	
-
+/////////////윤지 + 예진
 	
-
+	List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx);
 	
 
 	

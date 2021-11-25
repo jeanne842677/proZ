@@ -127,7 +127,7 @@ public interface ProjectRepository {
 			+" values(sc_proz_idx.nextval, #{projectIdx}, #{wsType}, #{wsName}, #{sort})")
 	void insertWorkspace(@Param("wsIdx")String wsIdx, @Param("wsType")String wsType, @Param("wsName")String wsName, @Param("sort")int sort, @Param("projectIdx")String projectIdx);
 
-	@Select("select * from workspace where project_idx = #{projectIdx}")
+	@Select("select * from workspace where project_idx = #{projectIdx} order by sort asc")
 	List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
 
 	@Delete("delete from workspace where sort >= #{sort}")
@@ -136,5 +136,10 @@ public interface ProjectRepository {
 	
 	
 	// 은비가 작성한 코드 끝
+	
+	//예진윤지 시작
+	@Select("select * from project_member PM join project_role using(auth_idx) where PM.project_idx = #{projectIdx} and PM.user_idx = #{userIdx} ")
+	   List<Map<String, String>> selectProjectNickname(@Param("projectIdx") String projectIdx, @Param("userIdx") String userIdx);
+	
 
 }

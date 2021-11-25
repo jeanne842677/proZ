@@ -382,17 +382,58 @@ public class ProjectController {
 		
 		//프로젝트에 속한 워크스페이스
 		List<Map<String,Object>> workspace = new ArrayList<Map<String,Object>>();
-		workspace = projectService.selectWorkspaceListByProjectIdx(projectIdx);
-		CamelMap.changeListMap(workspace);
+		workspace = CamelMap.changeListMap(projectService.selectWorkspaceListByProjectIdx(projectIdx));
 		
+		model.addAttribute(projectIdx);
+		model.addAttribute("workspace", workspace);
 		
-		
-		model.addAttribute(projectIdx); // 지영 추가 코드
-		System.out.println("************workspace 리스트는!!!" + workspace.toString());
-		model.addAttribute(workspace);
+	
 		////////////윤지가 작성할 코드(main에서 불러올 거)/////////
-		
-		//////////////////////////////////////////////////
+		 List<String> mainMemoList = new ArrayList<String>();
+	        for (Map<String, Object> map : workspace) {
+	           switch (map.get("wsType").toString()) {
+	           case "ME":
+	                 System.out.println("ME:"+map);
+	                 System.out.println("map.get(\"wsIdx\"): "+map.get("wsIdx"));
+	                 String wsIdx = (String) map.get("wsIdx");
+	                  mainMemoList.add(wsIdx);
+	                 
+	                 
+	              break;
+	           case "BO":
+	                 System.out.println("BO:"+map);
+	              break;
+	      
+	      
+	           default:
+	              break;
+	           }
+	        }
+	        List<Map<String, Object>> memoList =memoService.selectMemoByTop(mainMemoList);
+	        memoList= CamelMap.changeListMap(memoList);
+	        System.out.println("mainMemoList 다 불러지냐? :"+mainMemoList);
+	        System.out.println(memoList);
+	        model.addAttribute("memoList",memoList);
+	        
+	        //////////////////////////////////////////////////
+	      
+	      ///예진 코드
+	      String userIdx = member.getUserIdx();
+	      System.out.println(userIdx);
+	      System.out.println(projectIdx);
+	      List<Map<String,String>> projectMemberList = new ArrayList<Map<String,String>>();
+	      projectMemberList = projectService.selectProjectNickname(projectIdx,userIdx);
+	      System.out.println("projectMemberList :"+projectMemberList.toString());      
+	      
+	      String nickname = projectMemberList.get(0).get("NICKNAME");
+	      System.out.println(nickname);
+	      String authname = projectMemberList.get(0).get("AUTH_NAME");
+	      System.out.println(authname);
+	      
+	      model.addAttribute("nickname",nickname);
+	      model.addAttribute("authname",authname);
+	      
+	   
 		return "project/project-main"; 
 	}
 	
