@@ -27,22 +27,26 @@
                     </div>
                     <div class="editor-main-content-wrapper">
                         <div class="editor-navigation-bar"></div>
-                        <div class="editor-title" contenteditable="true" placeholder="제목을 입력하세요"></div>
+                        <div class="editor-title" contenteditable="true" placeholder="제목을 입력하세요">1111</div>
                         <div class="textArea" contenteditable="true">
+                        	<div>1234</div>
                         </div>
                         <div class="footer-wrapper">
                             <div class="footer-wrapper">
                                 <div class="br-line" id="br-line80"></div>
                                 <div class="footer-content-wrapper">
                                     <div class="editor-content-cover">
-                                        <div class="editor-message">커버</div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
-                                        <div class="editor-cover"></div>
+                                        <div class="editor-content-cover-wrapper">
+                                            <div class="editor-message">커버</div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                            <div class="editor-cover"></div>
+                                        </div>
+                                        <button type="button" id="editor-submit-btn" class="btn btn-primary">POST</button>
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
@@ -67,7 +71,7 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script>
+    <script type="text/javascript">
     
     //Title에서 Enter_FocusingChange  
     $('.editor-title').on('keypress', function(e) {
@@ -85,35 +89,36 @@
         document.execCommand("insertHTML", false,  text);
     })
     </script>
-</body>
-</html>
-<script type="text/javascript">
-	
-	// 임시 SUBMIT 버튼 
-	$('.submit').on('click' , function() {
-			let subject = $('.subject').val();
-			let content = $('.content').val();
-		
+    <script type="text/javascript">
+    
+    // SUBMIT 버튼 
+	$('#editor-submit-btn').on('click' , function() {
+			
+		let subject = $('.editor-title').text();
+		let content = $('.textArea').html();
+			
 		fetch("/board/add-post" , {
-			
-			
 			method : "POST",
 			headers :  {"Content-type" : "application/json; charset=UTF-8"},
 			body : JSON.stringify({
 				postTitle : subject,
 				postContent : content,
-				bdIdx : "${param.bdidx}"
+				// 임시 bdIdx 
+				bdIdx : "100437"
+					//"${param.bdidx}"
 
 				})
 			
 		}).then(res=>{res.text()})
 		.then(text=>{
-
-			location.href="/board/${wsIdx}";
+			alert('정상 작동함'); 
+			//location.href="/board/${wsIdx}";
 			
 		})
-		
 	})
 </script>
+</body>
+</html>
+
 </body>
 </html>

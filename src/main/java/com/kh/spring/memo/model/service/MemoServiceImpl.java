@@ -12,31 +12,27 @@ import com.kh.spring.memo.model.repository.MemoRepository;
 import com.kh.spring.project.model.dto.ProjectMember;
 
 @Service
-public class MemoServiceImpl implements MemoService{
+public class MemoServiceImpl implements MemoService {
 
 	@Autowired
-	private  MemoRepository memoRepository;
-	
+	private MemoRepository memoRepository;
+
 	@Override
 	public Memo insertMemo(Memo memo, Member member) {
-		
-		
-		ProjectMember projectmember = memoRepository.selectProjectMember(member.getUserIdx() , memo.getWsIdx());
+
+		ProjectMember projectmember = memoRepository.selectProjectMember(member.getUserIdx(), memo.getWsIdx());
 		memo.setPmIdx(projectmember.getPmIdx());
-		
-		
-		 memoRepository.insertMemo(memo);
-		
-		
+
+		memoRepository.insertMemo(memo);
+
 		System.out.println(projectmember);
-		
+
 		return memo;
-		
+
 	}
 
 	@Override
 	public List<Memo> selectMemoByWsIdx(String wsIdx) {
-		
 
 		return memoRepository.selectMemoByWsIdx(wsIdx);
 	}
@@ -49,7 +45,7 @@ public class MemoServiceImpl implements MemoService{
 	@Override
 	public void deleteMemoByMemoIdx(String memoIdx) {
 		memoRepository.deleteMemoByMemoIdx(memoIdx);
-		
+
 	}
 
 	@Override
@@ -57,27 +53,32 @@ public class MemoServiceImpl implements MemoService{
 		// TODO Auto-generated method stub
 		return memoRepository.selectMemoByWsIdxAsc(wsIdx);
 	}
-	
-	   @Override
-	   public void updateMemoByMemoIdx(Memo memo) {
-	      memoRepository.updateMemoByMemoIdx(memo);
-	   }
 
 	@Override
-	public List<Memo> selectMemoBySearch(String wsIdx, String search) {
-		// TODO Auto-generated method stub
-		return memoRepository.selectMemoBySearch(wsIdx,search);
+	public void updateMemoByMemoIdx(Memo memo) {
+		memoRepository.updateMemoByMemoIdx(memo);
 	}
 
 	@Override
-	public List<Memo> selectMemoByTop(String wsIdx) {
+	public List<Map<String, Object>> selectMemoBySearch(String wsIdx, String search) {
+		// TODO Auto-generated method stub
+		return memoRepository.selectMemoBySearch(wsIdx, search);
+	}
+
+	@Override
+	public List<String> selectMemoByTop(String wsIdx) {
 		// TODO Auto-generated method stub
 		return memoRepository.selectMemoByTop(wsIdx);
 	}
-	
-	/*
-	 * @Override public List<Map<String, String>> selectMemoAndWriterByWsIdx(String
-	 * wsIdx) { return memoRepository.selectMemoAndWriterByWsIdx(wsIdx); }
-	 */
+
+	@Override
+	public List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx) {
+		return memoRepository.selectMemoAndWriterByWsIdxAsc(wsIdx);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx) {
+		return memoRepository.selectMemoAndWriterByWsIdxDesc(wsIdx);
+	}
 
 }

@@ -72,4 +72,20 @@ public class MinhyupTest {
 		  .andExpect(status().isOk())
 		  .andDo(print());
 	  }
+	  
+	  @Test //메모정보와 작성자 받기
+	  public void selectMemoAndNickname() throws Exception {
+			Member member = new Member();
+			member.setUserIdx("100199");
+			member.setEmail("kkmh7511@naver.com");
+			member.setNickname("터틀민협");
+			
+			mockMvc.perform(get("/memo/999998")
+					.param("wsIdx", "100446")
+					.param("order", "0")
+					.sessionAttr("authentication", member))
+			.andExpect(status().isOk())
+			.andDo(print());
+		  
+	  }
 }

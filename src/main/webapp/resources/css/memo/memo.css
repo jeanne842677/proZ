@@ -171,10 +171,16 @@
 #text{
     display: flex;
     position:relative;
-    width: 100%; height:78%;
+    width: 97%; 
+    height:78%;
     padding: 10px 30px 10px 30px;
-   justify-content:flex-start;
-    overflow: auto;
+    justify-content:flex-start;
+    
+    
+}
+
+.modify-text {
+	overflow: auto;
 }
 
 

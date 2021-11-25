@@ -387,8 +387,6 @@ public class ProjectController {
 		
 		
 		
-		//메모. 댓글. 게시글.=> workspace
-		// proejtService.selectMemo(projectIdx, wsType);
 		model.addAttribute(projectIdx); // 지영 추가 코드
 		System.out.println("************workspace 리스트는!!!" + workspace.toString());
 		model.addAttribute(workspace);

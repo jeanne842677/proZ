@@ -228,6 +228,9 @@
 
         .category-name-wrap{
             display: flex;
+            width : 360px;
+            justify-content : space-between;
+            
 
         }
 
@@ -251,7 +254,7 @@
         .category-imgs {
             display: flex;
             flex-direction: row;
-            padding-right: 20px;
+            
         }
 
         .category-input {

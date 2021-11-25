@@ -20,14 +20,25 @@
   	 
   	 
   	 <!-- 민협 11/23 -->
-<!--   	 <select id="selectMemoAndWriterByWsIdx" resultMap="memoMap">
-	  	select A.MEMO_IDX, A.WS_IDX, PM_IDX, A.BG_COLOR, A.CONTENT, A.REG_DATE,B.NICKNAME
-		from memo A
-		inner join project_member B USING (PM_IDX)
-		where ws_idx = '#{wsIdx}' order by memo_idx asc;
+  	 <!-- A.MEMO_IDX, A.WS_IDX, PM_IDX, A.BG_COLOR, A.CONTENT, A.REG_DATE,B.NICKNAME -->
+  	 <select id="selectMemoAndWriterByWsIdxAsc"  resultType="map">
+	  	select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR ,memo.reg_date,content,member.NICKNAME
+		from memo memo
+		inner join project_member member USING (PM_IDX)
+		where ws_idx = #{wsIdx} order by reg_date asc,memo_idx asc
   	 </select>
   	 
-  	 <resultMap type="java.util.Map" id="memoMap">
+  	  <select id="selectMemoAndWriterByWsIdxDesc"  resultType="map">
+	  	select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR ,memo.reg_date,content,member.NICKNAME
+		from memo memo
+		inner join project_member member USING (PM_IDX)
+		where ws_idx = #{wsIdx} order by reg_date desc,memo_idx desc
+  	 </select>
+  	 
+  	 
+  	 
+<!--   	 
+  	 <resultMap type="map" id="memoMap">
   	 	<result column="MEMO_IDX" property="memoIdx"/>
   	 	<result column="WS_IDX" property="wsIdx"/>
   	 	<result column="PM_IDX" property="pmIdx"/>
