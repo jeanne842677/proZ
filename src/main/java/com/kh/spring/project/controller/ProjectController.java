@@ -435,8 +435,6 @@ public class ProjectController {
    public void updateWorkspace(@RequestBody List<Map<String, String>> workspaceList,
                          @PathVariable String projectIdx) {
       
-      System.out.println("저장버튼 눌렀을때 여길 지나가");
-
       projectService.settingWorkspace(workspaceList, projectIdx);
       
    }

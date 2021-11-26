@@ -305,6 +305,9 @@ public class ProjectServiceImpl implements ProjectService {
             case "채팅" :
                wsType = "CH";
                break;
+            case "캘린더" :
+            	wsType = "CL";
+            	break;
             case "게시판" :
                wsType = "BO";
          }
