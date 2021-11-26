@@ -31,7 +31,7 @@ public class ExceptionAdvice {
 	public String  handleableExceptionProcess(HandlableException e , Model model) {
 		
 		model.addAttribute("msg" , e.error.MESSAGE);
-		model.addAttribute("url" , e.error.URL);
+		model.addAttribute("url" , e.error.url);
 		return "error/result";
 		
 		

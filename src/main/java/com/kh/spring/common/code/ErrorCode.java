@@ -13,17 +13,18 @@ public enum ErrorCode {
 	FAILED_FILE_UPLOAD_ERROR("파일 업로드 에러가 발생했습니다.."),
 	PROJECT_URL_ERROR("존재하지 않는 프로젝트입니다."),
 	PROJECT_INVITATION_REJECTED("초대가 거부되었습니다."),
-	NEED_LOGIN("로그인을 먼저 해주세요.");
+	NEED_LOGIN("로그인을 먼저 해주세요."),
+	REDIRECT_MAIN_PAGE("","/");
 	
 	public final String MESSAGE;
-	public final String URL;
+	public String url;
 	
 	
 	
 	private ErrorCode(String msg) {
 		
 		this.MESSAGE = msg;
-		this.URL = "/";
+		this.url = "/";
 		
 	}
 	
@@ -31,9 +32,26 @@ public enum ErrorCode {
 	
 	private ErrorCode(String msg , String url) {
 		this.MESSAGE = msg;
-		this.URL = url;
+		this.url = url;
 		
 	}
+
+
+
+	public String getURL() {
+		return url;
+	}
+
+
+
+	public ErrorCode setURL(String url) {
+		this.url = url;
+		return this;
+	}
+	
+	
+	
+	
 	
 	
 }
