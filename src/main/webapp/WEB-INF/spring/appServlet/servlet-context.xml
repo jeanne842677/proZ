@@ -43,6 +43,14 @@
 	</interceptors>
 	
 	
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean class="com.kh.spring.common.interceptor.ProjectInterceptor"></beans:bean>
+		</interceptor>
+	</interceptors>
+	
+	
 	<!-- 트랜잭션 관리 Bean 등록 -->
 	
 	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >

@@ -47,9 +47,11 @@ public interface MemoRepository {
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
+
+	@Select("select * from memo where ws_idx in (select ws_idx from workspace where ws_type='ME' and project_idx=#{projectIdx}) order by memo_idx desc")
+	List<Memo> selectMemoByTop(String projectIdx);
 	
 	
-	List<Map<String, Object>> selectMemoByTop(@Param("mainMemoList") List<String> mainMemoList);
 
 	/* List<Map<String, String>> selectMemoAndWriterByWsIdx(String wsIdx); */
 

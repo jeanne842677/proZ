@@ -465,7 +465,7 @@ margin-bottom:0;
                 <div id="right">
                     <div id="right1">
                         <div class="board">
-                            <div class="boardarea" onclick="location.href='#';">board</div>
+                            <div class="boardarea" >board</div>
                             <div class="boardwrap">
                                 <div class="boardcon"></div>
                                 <div class="boardcon"></div>
@@ -473,7 +473,7 @@ margin-bottom:0;
                             </div>
                         </div>
                         <div class="comment">
-                            <div class="commentarea" onclick="location.href='#';">comment</div>
+                            <div class="commentarea" >comment</div>
                             <div class="commentwrap">
                                 <div class="commentcon"></div>
                                 <div class="commentcon"></div>
@@ -484,27 +484,32 @@ margin-bottom:0;
                         </div>
                     </div>
                     <div id="right2">
-                        <div class="memoarea" onclick='location.href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"'>memo</div>
+                    
+                        <div class="memoarea">memo</div>
                         <div class="memocon">
-                            <div class="memowrap">
-                            	<c:forEach items="${memoList}" var="memo" begin="0" end="5" step="1" >
-                               <div class="memo"
-		                           style="background-color : ${memo.bgColor}"
-		                           data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
-		                           data-memo-idx="${memo.memoIdx}"
-		                           data-memo-writer="${memo.nickname}"
-		                           data-memo-reg-date="${memo.regDate}"
-		                           
-		                        >
-                       		 <div id="content">
-                           <div class="textvalue">${ memo.content }</div>
-                        </div>
-                        <div id="profile">
-                           <div id="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
-                        </div>
-                     </div>
-                  </c:forEach>
-                            </div>
+	                           <div class="memowrap">
+	                            <c:if test="${empty mainMemoList}">
+	                             	<div id="noticeText">현재 워크스페이스에 메모가 존재하지 않습니다.</div>
+	                             </c:if>
+	                            	<c:forEach items="${mainMemoList}" var="memo" begin="0" end="5" step="1" >
+	                            	 
+	                               <div class="memo"
+			                           style="background-color : ${memo.bgColor}"
+			                           data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
+			                           data-memo-idx="${memo.memoIdx}"
+			                           data-memo-reg-date="${memo.regDate}"
+			                           data-memo-ws-idx="${memo.wsIdx}"
+			                           
+				                        >
+		                       		 <div id="content">
+		                           <div class="textvalue">${ memo.content }</div>
+		                        </div>
+		                        <div id="profile">
+		                           <div id="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
+		                        </div>
+		                     </div>
+		                  </c:forEach>
+	                            </div>
                         </div>
                     </div>
                 </div>
@@ -520,7 +525,10 @@ margin-bottom:0;
     </div>
     
     <script type="text/javascript">
-    
+    $('.memo').click(function(){
+    	var wsIdx = $(this).data('memo-ws-idx');
+    	location.href = 'http://localhost:9090/memo/${projectIdx}?wsIdx='+wsIdx+'&order=0';
+    });
     
     //시계
     function locale (){ 	 return new Date().toLocaleString(); 	 } 

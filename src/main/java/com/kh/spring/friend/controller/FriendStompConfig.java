@@ -17,7 +17,7 @@ public class FriendStompConfig implements WebSocketMessageBrokerConfigurer {
 	//메시지 브로커 관련 설정
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/projectIdx");
+		config.enableSimpleBroker("/room" , "online");
 		config.setApplicationDestinationPrefixes("/app");
 		//메세지 매핑에 쓰는 애
 		
@@ -28,13 +28,15 @@ public class FriendStompConfig implements WebSocketMessageBrokerConfigurer {
 	//온라인으로 들어옴
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/online").withSockJS();
+		registry.addEndpoint("/ws-stomp").withSockJS();
 	}
 	
 	@Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new FriendHandler());
     }
+	
+	
 	
 
 
