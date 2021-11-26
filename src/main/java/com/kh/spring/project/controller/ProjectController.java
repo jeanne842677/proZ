@@ -394,7 +394,7 @@ public class ProjectController {
       	List<Memo> mainMemoList = memoService.selectMemoByTop(projectIdx);
           
         System.out.println("mainMemoList 다 불러지냐? :"+mainMemoList);
-          
+         
         model.addAttribute("mainMemoList", mainMemoList);
            //////////////////////////////////////////////////
       
