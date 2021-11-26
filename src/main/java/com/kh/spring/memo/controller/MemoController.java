@@ -53,13 +53,15 @@ public class MemoController {
 		   				) {
 	   
 	   List<Map<String,Object>> memoList =  new ArrayList<Map<String,Object>>();
-		 
+		
 	   if(order == 0) { //desc 내림차순
 		  memoList = memoService.selectMemoAndWriterByWsIdxDesc(wsIdx);
-	   }else{  //asc 오름차순
+	   }else if(order == 1){  //asc 오름차순
 		  memoList = memoService.selectMemoAndWriterByWsIdxAsc(wsIdx);
+	   }else { //메모리스트 자체가 없을 경우
+		   memoList = memoService.selectMemoAndWriterByWsIdxDesc(wsIdx);
 	   }
-	   
+		
 	   memoList = CamelMap.changeListMap(memoList);
 	   
 	   for (Map<String, Object> map : memoList) {

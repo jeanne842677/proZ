@@ -1,6 +1,9 @@
 package com.kh.spring.friend.controller;
 
+import java.lang.reflect.Array;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -8,7 +11,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.spring.chat.model.dto.Chat;
 
@@ -30,9 +32,16 @@ public class FriendController {
         
     }
     
-    @GetMapping
+    @GetMapping("/chat/chatting")
     public String chatting() {
     	return "/chat/chatting";
+    }
+    
+    ///민협
+    
+    @GetMapping("/chat/chat2")
+    public String chatting2() {
+    	return "/chat/chat2";
     }
     
 

@@ -77,9 +77,11 @@ public class MemoServiceImpl implements MemoService {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectMemoByTop(List<String> mainMemoList) {
-		// TODO Auto-generated method stub
-		return memoRepository.selectMemoByTop(mainMemoList);
+	public List<Memo> selectMemoByTop(String projectIdx) {
+	
+		return memoRepository.selectMemoByTop(projectIdx);
 	}
+
+	
 
 }

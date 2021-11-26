@@ -48,37 +48,22 @@ public class BoardController {
 	public String board(@PathVariable String projectIdx, Model model,
 			@RequestParam String wsIdx) {
 		
-		Project project = projectService.selectProjectByIdx(projectIdx);
-		Workspace workspace = boardService.selectWorkSpaceByWsIdx(wsIdx);
-		
-		
-		if(workspace==null) {
-			return "redirect:/project/" + projectIdx;
-		}else if(project == null)
-			throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-		else if(!workspace.getProjectIdx().equals(projectIdx)) {
-			return "/project/" + projectIdx;
-		}
-		
-		
-		List<Map<String, Object>> projectMember = 
-				CamelMap.changeListMap(projectService.selectProjectMemberByProjectIdx(projectIdx));
+		if (wsIdx != null) {
+			Workspace workspace = boardService.selectWorkSpaceByWsIdx(wsIdx);
+			if (workspace == null) {
+				ErrorCode error = ErrorCode.REDIRECT_MAIN_PAGE;
+				error.setURL("/project/" + projectIdx);
+				throw new HandlableException(error);
+			}
+			
+			model.addAttribute("workspace", workspace);
 
+		}
 		
 		List<Board> boardList = boardService.selectBoardByWsIdx(wsIdx);
 		List<Post> postList = boardService.selectPostListByWsIdx(wsIdx);
-		System.out.println("프로젝트 멤버: "  + projectMember);
-		
-		model.addAttribute("projectMember" , projectMember);
-		model.addAttribute(workspace);
 		model.addAttribute("boardList" , boardList);
 		model.addAttribute("postList" , postList);
-		model.addAttribute(project);
-		
-
-		
-		System.out.println(boardList);
-		System.out.println("포스트 리스트: " + postList);
 		return "/board/board-list";
 		
 	}
@@ -87,10 +72,8 @@ public class BoardController {
 	@PostMapping("change/add-board")
 	@ResponseBody
 	public String addBoard(@RequestBody Board board) {
-		
-		
+
 		boardService.insertBoard(board);
-		
 		return JsonMaker.json(board);
 				
 		
@@ -99,9 +82,7 @@ public class BoardController {
 	@PostMapping("change/remove-board")
 	@ResponseBody
 	public String removeBoard(@RequestBody Board board) {
-		
-		
-		System.out.println(board);
+
 		boardService.deleteBoard(board);
 		
 		return "complete";
@@ -110,10 +91,9 @@ public class BoardController {
 	
 	@PostMapping("change/sort")
 	public String changeSort(@RequestBody Map<String, String> map) {
-		
-		System.out.println(map);
+
 		boardService.updateSort(map);
-		
+
 		return "complete";
 	}
 	
@@ -123,12 +103,15 @@ public class BoardController {
 			Model model,
 			@PathVariable String projectIdx) {
 		
-		// 임시 bdidx, 100437
-		Board board = boardService.selectBoardByBdIdx("100437");
-		model.addAttribute("wsIdx" , board.getWsIdx())
-		.addAttribute(projectIdx); 
+		Board board = boardService.selectBoardByBdIdx(bdidx);
+		if(board==null) {
+			
+		}
 		
-		// ADD한 이후에는 board쪽으로 돌아간다. (수정필요)   
+		model.addAttribute("wsIdx" , board.getWsIdx());
+		//.addAttribute(projectIdx); 
+		
+		
 		return "/board/posting";
 	} 
 	

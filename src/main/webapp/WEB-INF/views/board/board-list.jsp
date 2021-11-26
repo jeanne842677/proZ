@@ -368,7 +368,7 @@
 
 
 
-			<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp" %>
 
 
 
@@ -376,10 +376,7 @@
 
         <div class="con">
             <nav>
-
-				<%@ include file="/WEB-INF/views/include/nav/main-nav.jsp"%>
-            
-
+            <%@ include file="/WEB-INF/views/include/nav/main-nav.jsp" %>
             </nav>
             <section>
                 <div class="section-wrap">
@@ -555,11 +552,9 @@
 
             </section>
             <aside>
-            
 
 				<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
-            
-            
+
             </aside>
         </div>
 

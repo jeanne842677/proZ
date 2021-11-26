@@ -8,7 +8,8 @@
                 </div>
                 <div class="worktit">워크스페이스</div>
                 <div class="workspace">
-                <c:forEach var="ws" items="${workspace}" varStatus="i">
+               
+                <c:forEach var="ws" items="${workspaceList}" varStatus="i">
                 
                     <ul class="folder">
                     	<li class="cate1">
@@ -16,7 +17,7 @@
                         </li>
                     
                     </ul>
-                    </c:forEach>
+                </c:forEach>
                 </div>
                 <div class="private">
                 			<div class="cash"><i class="fas fa-dollar-sign"></i>결제</div>
