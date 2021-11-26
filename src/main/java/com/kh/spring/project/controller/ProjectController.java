@@ -81,7 +81,6 @@ public class ProjectController {
       // 멤버 리스트 불러오기
       List<Map<String, Object>> projectMemberList = projectService.selectProjectMemberRoleByProjectIdx(projectIdx);
 
-      model.addAttribute(project);
       model.addAttribute("projectRole", projectRoleList);
       model.addAttribute("projectMember", CamelMap.changeListMap(projectMemberList));
 
@@ -226,10 +225,8 @@ public class ProjectController {
          @SessionAttribute(value = "authentication") Member member) {
 
       List<ProjectRole> roleList = projectService.selectProjectRoleByIdx(projectIdx);
-      Project project = projectService.selectProjectByIdx(projectIdx);
       model.addAttribute("roleList", roleList);
       model.addAttribute("roleCnt", roleList.size());
-      model.addAttribute("project", project);
 
       return "project/setting/role-management";
 
@@ -384,7 +381,6 @@ public class ProjectController {
       List<Map<String,Object>> workspace = new ArrayList<Map<String,Object>>();
       workspace = CamelMap.changeListMap(projectService.selectWorkspaceListByProjectIdx(projectIdx));
       
-      model.addAttribute(projectIdx);
       model.addAttribute("workspace", workspace);
       
    

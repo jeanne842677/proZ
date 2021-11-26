@@ -19,10 +19,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/485bb3ceac.js"
 	crossorigin="anonymous"></script>
-
-
-
-
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -227,10 +224,16 @@ hr {
 <body>
 
 	<div class="wrap">
-		<header> </header>
+		<header> 
+
+
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp" %>
+		</header>
 
 		<div class="con">
-			<nav></nav>
+			<nav>
+			<%@ include file="/WEB-INF/views/include/nav/main-nav.jsp" %>
+	</nav>
 			<section>
 				<!--여기서만 작업-->
 				<div id="title-control">
@@ -371,7 +374,10 @@ hr {
 				</div>
 
 			</section>
-			<aside></aside>
+			<aside>
+				<%@ include file="/WEB-INF/views/include/nav/aside.jsp" %>
+			
+			</aside>
 		</div>
 	</div>
 

@@ -30,6 +30,7 @@ public class FriendController {
         
     }
     
+
     @GetMapping
     public String chatting() {
     	return "/chat/chatting";
