@@ -484,27 +484,31 @@ margin-bottom:0;
                         </div>
                     </div>
                     <div id="right2">
+                    
                         <div class="memoarea" onclick='location.href="http://localhost:9090/memo/${projectIdx}?wsIdx=${wsIdx}&order=0"'>memo</div>
                         <div class="memocon">
-                            <div class="memowrap">
-                            	<c:forEach items="${memoList}" var="memo" begin="0" end="5" step="1" >
-                               <div class="memo"
-		                           style="background-color : ${memo.bgColor}"
-		                           data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
-		                           data-memo-idx="${memo.memoIdx}"
-		                           data-memo-writer="${memo.nickname}"
-		                           data-memo-reg-date="${memo.regDate}"
-		                           
-		                        >
-                       		 <div id="content">
-                           <div class="textvalue">${ memo.content }</div>
-                        </div>
-                        <div id="profile">
-                           <div id="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
-                        </div>
-                     </div>
-                  </c:forEach>
-                            </div>
+	                           <div class="memowrap">
+	                            <c:if test="${empty mainMemoList}">
+	                             	<div id="noticeText">현재 워크스페이스에 메모가 존재하지 않습니다.</div>
+	                             </c:if>
+	                            	<c:forEach items="${mainMemoList}" var="memo" begin="0" end="5" step="1" >
+	                            	 
+	                               <div class="memo"
+			                           style="background-color : ${memo.bgColor}"
+			                           data-bg-color="${memo.bgColor}" data-pm-idx="${memo.pmIdx}"
+			                           data-memo-idx="${memo.memoIdx}"
+			                           data-memo-reg-date="${memo.regDate}"
+			                           
+				                        >
+		                       		 <div id="content">
+		                           <div class="textvalue">${ memo.content }</div>
+		                        </div>
+		                        <div id="profile">
+		                           <div id="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
+		                        </div>
+		                     </div>
+		                  </c:forEach>
+	                            </div>
                         </div>
                     </div>
                 </div>
