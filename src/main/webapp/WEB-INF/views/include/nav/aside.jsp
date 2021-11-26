@@ -16,10 +16,45 @@
                         <div class="offlinetit">오프라인</div>
                         <div class="offline">
                                 <ul id="sortable2">
-                                    <li class="member"><i class="fas fa-user-circle" style="color:#aaa;"></i>3조_길예진</li>
-                                    <li class="member"><i class="fas fa-user-circle" style="color:#aaa;"></i>3조_길예진</li>
+                                <c:forEach items="${ projectMember }" var="pm">
+                                    <li class="member">
+                                    	<i class="fas fa-user-circle" style="color:#aaa;"></i>
+                                    	${ pm.nickname }
+                                    	
+                                    </li>
+                                </c:forEach>
+                           
                                 </ul>
                             
                         
-                    </div>
+                   		 </div>
                 </div>
+                </div>
+                
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+                <script>
+
+/* 
+                var stompClient = Stomp.over(new SockJS("/online"));
+
+
+
+                	//연결
+                	stompClient.connect({}, function (frame) {
+                		
+                	    console.log("connected: " + frame);
+
+                		 let room = $('#room').val();
+                		 stompClient.subscribe('/projectIdx/online/'+ 999998,function(chat) {
+                				
+                				var content = JSON.parse(chat.body);	
+                				alert(content);
+                		});
+
+                	}); */
+                	
+                	
+                
+                
+                </script>

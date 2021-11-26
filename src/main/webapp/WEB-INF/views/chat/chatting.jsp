@@ -30,7 +30,7 @@
 <script>
 
 
-var stompClient = Stomp.over(new SockJS("/endpoint"));
+var stompClient = Stomp.over(new SockJS("/ws-stomp"));
 
 
 
@@ -40,7 +40,7 @@ var stompClient = Stomp.over(new SockJS("/endpoint"));
 	    console.log("connected: " + frame);
 
 		 let room = $('#room').val();
-		 stompClient.subscribe('/subscribe/message/'+ room,function(chat) {
+		 stompClient.subscribe('/room/msg/'+ room,function(chat) {
 				
 				var content = JSON.parse(chat.body);	
 				$('.chat').append('<div>' + content.content +'</div>')
@@ -51,24 +51,31 @@ var stompClient = Stomp.over(new SockJS("/endpoint"));
 	
 
 
-/* stompClient.send("/chat/room", {}, JSON.stringify({
-    content: "안녕",
-    name : "지영"
-}));
-
- */
  $('#send').on('click' , function() {
 	 
 	 let room = $('#room').val();
 	 let content = $('#content').val();
 
-	 stompClient.send("/app/message/" + room , {}, JSON.stringify({
+	 stompClient.send("/app/msg/" + room , {}, JSON.stringify({
 		    content: content,
 		    name : "지영"
 		}));
 	 
 	 
  })
+ 
+ 
+//연결 해제
+
+function disconnect() {
+	 if(stompClient !== null) {
+		 stompClient.send("/app/out") , {} , usersessionid.value +"is out chatroom";
+		 stompClient.disconnect();
+		 
+	 }
+	 
+	 
+ }
  
 
 

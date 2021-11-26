@@ -53,13 +53,15 @@ public class MemoController {
 		   				) {
 	   
 	   List<Map<String,Object>> memoList =  new ArrayList<Map<String,Object>>();
-		 
+		
 	   if(order == 0) { //desc 내림차순
 		  memoList = memoService.selectMemoAndWriterByWsIdxDesc(wsIdx);
-	   }else{  //asc 오름차순
+	   }else if(order == 1){  //asc 오름차순
 		  memoList = memoService.selectMemoAndWriterByWsIdxAsc(wsIdx);
+	   }else { //메모리스트 자체가 없을 경우
+		   memoList = memoService.selectMemoAndWriterByWsIdxDesc(wsIdx);
 	   }
-	   
+		
 	   memoList = CamelMap.changeListMap(memoList);
 	   
 	   for (Map<String, Object> map : memoList) {
@@ -93,14 +95,16 @@ public class MemoController {
 		   				   @PathVariable String  search
 		   				   
 		   				) {
-	   List<Memo> memoList = memoService.selectMemoBySearch(wsIdx,search);
-	 
-	   System.out.println(wsIdx);
+	   List<Map<String, Object>> memoList = memoService.selectMemoBySearch(wsIdx,search);
+	   
+	   memoList = CamelMap.changeListMap(memoList);
+	   
+	   for (Map<String, Object> map : memoList) {
+		  map.replace("regDate", map.get("regDate").toString().substring(0,16));
+	   }
 	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
 	   System.out.println("projectMember : " + projectMember);
-	   System.out.println(memoList);
-	   
-	   model.addAttribute(memoList);
+	   model.addAttribute("memoList",memoList);
 	   model.addAttribute("wsIdx",wsIdx);
 	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
 	   
