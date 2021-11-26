@@ -35,7 +35,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
                 <script>
 
-
+/* 
                 var stompClient = Stomp.over(new SockJS("/online"));
 
 
@@ -52,7 +52,7 @@
                 				alert(content);
                 		});
 
-                	});
+                	}); */
                 	
                 	
                 

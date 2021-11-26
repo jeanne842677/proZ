@@ -27,9 +27,9 @@
                     </div>
                     <div class="editor-main-content-wrapper">
                         <div class="editor-navigation-bar"></div>
-                        <div class="editor-title" contenteditable="true" placeholder="제목을 입력하세요">1111</div>
+                        <div class="editor-title" contenteditable="true" placeholder="제목을 입력하세요"></div>
                         <div class="textArea" contenteditable="true">
-                        	<div>1234</div>
+                        	<div></div>
                         </div>
                         <div class="footer-wrapper">
                             <div class="footer-wrapper">
@@ -103,16 +103,12 @@
 			body : JSON.stringify({
 				postTitle : subject,
 				postContent : content,
-				// 임시 bdIdx 
-				bdIdx : "100437"
-					//"${param.bdidx}"
-
+				bdIdx : "${param.bdidx}"
 				})
 			
 		}).then(res=>{res.text()})
 		.then(text=>{
-			alert('정상 작동함'); 
-			//location.href="/board/${wsIdx}";
+			location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
 			
 		})
 	})

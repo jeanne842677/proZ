@@ -75,6 +75,7 @@ public class ProjectInterceptor implements HandlerInterceptor {
 		request.setAttribute("projectMember", projectMember);
 		request.setAttribute("project", project);
 		request.setAttribute("workspaceList" , workspaceList);
+		request.setAttribute("projectIdx" , projectIdx);
 
 	}
 
