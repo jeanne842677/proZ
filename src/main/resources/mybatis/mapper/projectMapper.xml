@@ -58,6 +58,11 @@
             using(ws_idx)
             where bd_idx = #{bdIdx})
          </if>
+         <if test="wsIdx != null">
+         	and project_idx = (
+         	select project_idx from workspace
+         	where ws_idx = #{wsIdx})
+         </if> 
 
       </where>
    </select>

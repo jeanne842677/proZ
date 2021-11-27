@@ -56,6 +56,7 @@ public class BoardController {
 				throw new HandlableException(error);
 			}
 			
+			model.addAttribute("wsIdx",wsIdx);
 			model.addAttribute("workspace", workspace);
 
 		}
@@ -68,7 +69,7 @@ public class BoardController {
 		
 	}
 	
-	
+	//보드 추가시
 	@PostMapping("change/add-board")
 	@ResponseBody
 	public String addBoard(@RequestBody Board board) {

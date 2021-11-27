@@ -34,27 +34,50 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
                 <script>
+                
+                
+                
+/*                 var stompClient;
 
-/* 
-                var stompClient = Stomp.over(new SockJS("/online"));
-
-
-
-                	//연결
-                	stompClient.connect({}, function (frame) {
+				async function con() {
+					
+					stompClient = Stomp.over(new SockJS("/pm-stomp"));
+					let b =	await stompClient.connect({}, function (frame) {
                 		
-                	    console.log("connected: " + frame);
+               		 stompClient.subscribe('/online/project/${project.projectIdx}',function(chat) {
+               				
+               				var content = JSON.parse(chat.body);	
+               				alert(content);
+               		});
+                	return stompClient;
 
-                		 let room = $('#room').val();
-                		 stompClient.subscribe('/projectIdx/online/'+ 999998,function(chat) {
-                				
-                				var content = JSON.parse(chat.body);	
-                				alert(content);
-                		});
-
-                	}); */
+               	});
+               		
+					let c = await b.send("/app/project/${project.projectIdx}", {}, JSON.stringify({
+         			    content: "컨텐츠",
+         			    name : "지영"
+         			}));
                 	
                 	
+				}
+				
+				
+				con().then(b=>{
+					
+					console.dir('외안되1');
+					
+					 stompClient.send("/app/project/${project.projectIdx}", {}, JSON.stringify({
+         			    content: "컨텐츠",
+         			    name : "지영"
+         			}));
+
+					 console.dir('외안되2');
+					
+				})
+
+
+                	
+                	 */
                 
                 
                 </script>
