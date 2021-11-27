@@ -804,7 +804,7 @@
     				method : "POST",
     				headers :  {"Content-type" : "application/json; charset=UTF-8"},
     				body : JSON.stringify({
-    					wsIdx : "${wsIdx}",
+    					wsIdx : "${workspace.wsIdx}",
     					bdName : bdName,
     					bdSize : bdSize
     					

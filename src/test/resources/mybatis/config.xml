@@ -19,12 +19,14 @@
 			type="com.kh.spring.board.model.dto.Post" />
 	</typeAliases>
 	<mappers>
-		<mapper resource="mybatis/mapper/boardMapper.xml" />
-		<mapper resource="mybatis/mapper/chatMapper.xml" />
-		<mapper resource="mybatis/mapper/memberMapper.xml" />
-		<mapper resource="mybatis/mapper/memoMapper.xml" />
-		<mapper resource="mybatis/mapper/projectMapper.xml" />
-		<mapper resource="mybatis/mapper/workspaceMapper.xml" />
+		<mapper resource="mybatis/mapper/boardMapper.xml" />	
+		<mapper resource="mybatis/mapper/chatMapper.xml" />	
+		<mapper resource="mybatis/mapper/memberMapper.xml" />	
+		<mapper resource="mybatis/mapper/memoMapper.xml" />	
+		<mapper resource="mybatis/mapper/projectMapper.xml" />	
+		<mapper resource="mybatis/mapper/workspaceMapper.xml" />	
+		<mapper resource="mybatis/mapper/cashMapper.xml"/>
+		<mapper resource="mybatis/mapper/calendarMapper.xml"/>
 	</mappers>
 </configuration>
 
