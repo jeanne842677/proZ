@@ -120,7 +120,7 @@
     	//color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
     	profileColorHex = color.hex.slice(1);
     	
-    	fetch('/member/profileColor/cash?profileColor='+ profileColorHex, 
+    	fetch('/member/profileColor?profileColor='+ profileColorHex, 
     			{
     			method: 'POST', 	
     			credentials : 'include'
