@@ -51,7 +51,7 @@ var stompClient = Stomp.over(new SockJS("/ws-stomp"));
 	
 
 
- $('#send').on('click' , function() {
+ $('#send').on('click' , function() { // 빈 객체는 헤더.
 	 
 	 let room = $('#room').val();
 	 let content = $('#content').val();

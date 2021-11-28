@@ -5,6 +5,7 @@
                 <div class="search">
                     <div class="find"><i class="fas fa-search"></i>검색</div>
                     <div class="setting"><i class="fas fa-cog"></i>프로젝트 관리</div>
+                    <div class="projectProfile"><i class="fas fa-user-cog"></i>프로필 관리</div>
                 </div>
                 <div class="worktit">워크스페이스</div>
                 <div class="workspace">
@@ -26,6 +27,11 @@
                 
                 
                 <script>
+              
+        		document.querySelector(".projectProfile").addEventListener('click', e=>{
+        			location.href = '/project/project-profile/${projectIdx}'; 
+        		})
+        	
                 
                 $('.mypage').on('click' , function() {
                 	location.href="/project/${projectIdx}";
