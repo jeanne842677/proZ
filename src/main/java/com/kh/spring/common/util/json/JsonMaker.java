@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonMaker {
@@ -29,16 +30,17 @@ public class JsonMaker {
 	
 	
 	//제이슨을 넣으면 Map으로 반환
-	public static Map<String, String> map(String json) {
+	public static Map<String, Object> map(String json) {
 
-		Map<String, String> jsonMap;
+		Map<String, Object> jsonMap = null;
 		try {
 			
-			jsonMap = mapper.readValue(json, Map.class);
+			jsonMap = mapper.readValue(json,  new TypeReference<Map<String,Object>>(){});
+
 			
 		} catch (JsonProcessingException e) {
-
-			throw new RuntimeException("제이슨 파싱 에러");
+			
+			e.printStackTrace();
 		
 		}
 

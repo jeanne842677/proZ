@@ -4,62 +4,41 @@ import java.sql.Date;
 
 public class Cash {
 
+	private String cashIdx;
+	private String cashName;
 	private String projectIdx;
-	private String memberUpgrade;
-	private String storageUpgrade;
-	private String alarmUpgrade;
-	private Date dateMember;
-	private Date dateStorage;
-	private Date dateAlarm;
-	
+	private Date regDate;
+	public String getCashIdx() {
+		return cashIdx;
+	}
+	public void setCashIdx(String cashIdx) {
+		this.cashIdx = cashIdx;
+	}
+	public String getCashName() {
+		return cashName;
+	}
+	public void setCashName(String cashName) {
+		this.cashName = cashName;
+	}
 	public String getProjectIdx() {
 		return projectIdx;
 	}
 	public void setProjectIdx(String projectIdx) {
 		this.projectIdx = projectIdx;
 	}
-	public String getMemberUpgrade() {
-		return memberUpgrade;
+	public Date getRegDate() {
+		return regDate;
 	}
-	public void setMemberUpgrade(String memberUpgrade) {
-		this.memberUpgrade = memberUpgrade;
-	}
-	public String getStorageUpgrade() {
-		return storageUpgrade;
-	}
-	public void setStorageUpgrade(String storageUpgrade) {
-		this.storageUpgrade = storageUpgrade;
-	}
-	public String getAlarmUpgrade() {
-		return alarmUpgrade;
-	}
-	public void setAlarmUpgrade(String alarmUpgrade) {
-		this.alarmUpgrade = alarmUpgrade;
-	}
-	public Date getDateMember() {
-		return dateMember;
-	}
-	public void setDateMember(Date dateMember) {
-		this.dateMember = dateMember;
-	}
-	public Date getDateStorage() {
-		return dateStorage;
-	}
-	public void setDateStorage(Date dateStorage) {
-		this.dateStorage = dateStorage;
-	}
-	public Date getDateAlarm() {
-		return dateAlarm;
-	}
-	public void setDateAlarm(Date dateAlarm) {
-		this.dateAlarm = dateAlarm;
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
 	}
 	@Override
 	public String toString() {
-		return "Cash [projectIdx=" + projectIdx + ", memberUpgrade=" + memberUpgrade + ", storageUpgrade="
-				+ storageUpgrade + ", alarmUpgrade=" + alarmUpgrade + ", dateMember=" + dateMember + ", dateStorage="
-				+ dateStorage + ", dateAlarm=" + dateAlarm + "]";
+		return "Cash [cashIdx=" + cashIdx + ", cashName=" + cashName + ", projectIdx=" + projectIdx + ", regDate="
+				+ regDate + "]";
 	}
+	
+	
 	
 	
 	

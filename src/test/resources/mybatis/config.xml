@@ -8,24 +8,29 @@
 	</settings>
 
 	<!-- 풀네임 줄여주기 위해 별명 설정 -->
+	<!-- 별명 지정 -->
 	<typeAliases>
-		<typeAlias alias="Member"
-			type="com.kh.spring.member.model.dto.Member" />
-		<typeAlias alias="Board"
-			type="com.kh.spring.board.model.dto.Board" />
-		<typeAlias alias="ProjectMember"
-			type="com.kh.spring.project.model.dto.ProjectMember" />
-		<typeAlias alias="Post"
-			type="com.kh.spring.board.model.dto.Post" />
+		  <typeAlias alias="Member" type="com.kh.spring.member.model.dto.Member"/>
+		  <typeAlias alias="Board" type="com.kh.spring.board.model.dto.Board"/>
+		  <typeAlias alias="ProjectMember" type="com.kh.spring.project.model.dto.ProjectMember"/>
+		  <typeAlias alias="Post" type="com.kh.spring.board.model.dto.Post"/>
+		  <typeAlias alias="Memo" type="com.kh.spring.memo.model.dto.Memo"/>
+		   <typeAlias alias="Cash" type="com.kh.spring.cash.model.dto.Cash"/>
+		   <typeAlias alias="Calendar" type="com.kh.spring.calendar.model.dto.Calendar"/>
 	</typeAliases>
+	
+	
+	<!-- 매퍼틑 Dao 1개당 1개씩 있음-->
 	<mappers>
-		<mapper resource="mybatis/mapper/boardMapper.xml" />
-		<mapper resource="mybatis/mapper/chatMapper.xml" />
-		<mapper resource="mybatis/mapper/memberMapper.xml" />
-		<mapper resource="mybatis/mapper/memoMapper.xml" />
-		<mapper resource="mybatis/mapper/projectMapper.xml" />
-		<mapper resource="mybatis/mapper/workspaceMapper.xml" />
-	</mappers>
+		<mapper resource="mybatis/mapper/boardMapper.xml" />	
+		<mapper resource="mybatis/mapper/chatMapper.xml" />	
+		<mapper resource="mybatis/mapper/memberMapper.xml" />	
+		<mapper resource="mybatis/mapper/memoMapper.xml" />	
+		<mapper resource="mybatis/mapper/projectMapper.xml" />	
+		<mapper resource="mybatis/mapper/workspaceMapper.xml" />	
+		<mapper resource="mybatis/mapper/cashMapper.xml"/>
+		<mapper resource="mybatis/mapper/calendarMapper.xml"/>
+	</mappers>  
 </configuration>
 
 <!-- 매퍼등록은 root-context의 sqlSession 밑에서 함 -->

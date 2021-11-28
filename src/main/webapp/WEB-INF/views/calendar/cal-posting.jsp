@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link type="text/css" rel="stylesheet" href="/resources/css/board/posting.css">
     <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
+	<style type="text/css"> 
+		.date{
+			display:flex;
+		}
+	
+	</style>
+
 </head>
 <body>
     <div class="wrap">
@@ -50,7 +57,11 @@
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
-                                        <div>2021년 03월 03일 ~ 2021년 11월 13일</div>
+                                        <div class="date">
+                                        	<div class="start-date">2021년 03월 03일</div>
+                                        	&nbsp;~&nbsp;
+                                        	<div class="end-date">2021년 11월 13일</div>
+                                        </div>
                                     </div>
                                     <div class="editor-content-hashTag">
                                         <div class="editor-message">#인물 태그</div>
@@ -72,6 +83,24 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script type="text/javascript">
+
+    $(function() {
+    	
+    	let changeDate =function(day) {
+    		return day.getFullYear()+"년 " + (day.getMonth()+1)+"월 " + day.getDate()+"일";
+    	}
+    	
+		let start = new Date(${param.start});
+		let end = new Date(${param.end});
+		end.setDate(end.getDate()-1);
+		
+		$('.start-date').text(changeDate(start));
+		$('.end-date').text(changeDate(end));
+    	
+    })
+	
+	
+	
     
     //Title에서 Enter_FocusingChange  
     $('.editor-title').on('keypress', function(e) {
@@ -93,22 +122,26 @@
     
     // SUBMIT 버튼 
 	$('#editor-submit-btn').on('click' , function() {
-			
+		
+		
 		let subject = $('.editor-title').text();
 		let content = $('.textArea').html();
 			
-		fetch("/board/add-post" , {
+		fetch("/calendar/change/add-cal" , {
 			method : "POST",
 			headers :  {"Content-type" : "application/json; charset=UTF-8"},
 			body : JSON.stringify({
-				postTitle : subject,
-				postContent : content,
-				bdIdx : "${param.bdidx}"
+				startDate: ${param.start},
+				endDate : ${param.end},
+				wsIdx : ${param.wsIdx},
+				calTitle : subject,
+				calContent : content	
+				
 				})
 			
 		}).then(res=>{res.text()})
 		.then(text=>{
-			location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
+			location.href="/calendar/${projectIdx}?wsIdx=${param.wsIdx}";
 			
 		})
 	})
