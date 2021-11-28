@@ -158,11 +158,18 @@ align-content:space-between ;
 }
 
 .search{
-    height:10%;
+    height:15%;
     cursor: pointer;
 }
+.find, .setting, .projectProfile{
+	height:30%;
+    display:flex;
+    padding-left:30px;
+    justify-content: baseline;
+    align-items: center;
+}
 
-.find, .setting, .pjset, .rolemanage, .membermanage, .chatset, .cash, .workspacemanage{
+ .pjset, .rolemanage, .membermanage, .chatset, .cash, .workspacemanage{
     height:50%;
     display:flex;
     padding-left:30px;
@@ -170,11 +177,11 @@ align-content:space-between ;
     align-items: center;
 }
 
-.find>i , .setting>i, .pjset>i, .rolemanage>i, .membermanage>i, .chatset>i, .cash>i, .workspacemanage>i{
+.find>i , .setting>i, .pjset>i, .rolemanage>i, .membermanage>i, .chatset>i, .cash>i, .workspacemanage>i, .projectProfile>i{
     margin-right:15px;
 }
 
-.find:hover, .setting:hover, 
+.find:hover, .setting:hover, .projectProfile:hover,
 .facechat:hover, .chat:hover, .reload:hover, 
 .pjset:hover, .rolemanage:hover, .membermanage:hover, .chatset:hover, .cash:hover, .workspacemanage:hover{
     background:#ffffff15;
