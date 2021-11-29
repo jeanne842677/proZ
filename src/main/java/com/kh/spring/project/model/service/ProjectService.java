@@ -84,23 +84,18 @@ public interface ProjectService {
    List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx);
    
  //윤지코드
-   
+  
+	Member selectProjectMemberByUserIdx(String userIdx, String projectIdx); //완료
 
+	int updateMemberByNickname(Member member, String projectIdx); //완료
 
+	int insertProfileImg(FileDTO fileUploaded, String userIdx, String projectIdx);
 
-	
 	FileDTO selectProfileImgFilebyMemberIdx(Member member);
-
-	int insertProfileImg(FileDTO fileUploaded, String userIdx);
-
-	int updateMemberByProfileColor(Member tempMember);
-
-
-	Member selectProjectMemberByUserIdx(String userIdx, String projectIdx);
-
-	int updateMemberByNickname(Member member, String projectIdx);
-
 	
+	int updateMemberByProfileColor(Member tempMember, String projectIdx);
+
+	int updateProjectIsLeave(Member member, String projectIdx);
 
 	
 	

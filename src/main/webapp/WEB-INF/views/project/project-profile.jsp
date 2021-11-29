@@ -29,7 +29,7 @@
         </header>
         <div class="con">
             <nav>
-            	<%@ include file="/WEB-INF/views/include/nav/private-nav.jsp"%>
+            	<%@ include file="/WEB-INF/views/include/nav/profile-nav.jsp"%>
             </nav>
             <section>
                 <!--작업 내용-->
@@ -96,7 +96,7 @@
     	//color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
     	profileColorHex = color.hex.slice(1);
     	
-    	fetch('/project/profile/update/Color/cash?profileColor='+ profileColorHex, 
+    	fetch('/project/profile/update/Color/${projectIdx}?profileColor='+ profileColorHex, 
     			{
     			method: 'POST', 	
     			credentials : 'include'
@@ -133,7 +133,7 @@
 		
 		formData.append('files', file); 
 		
-		fetch('/project/profile/update/Img', {
+		fetch('/project/profile/update/Img/${projectIdx}', {
 			method: 'POST', 	
 			body : formData
 		})

@@ -402,6 +402,7 @@ margin-bottom:0;
             margin:10px;
             background-color: #fff3cd;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            min-height: 230px;
         }
         .textvalue{
            width:100%;
@@ -410,6 +411,7 @@ margin-bottom:0;
            display:flex;
            margin: 5px 5px 5px 5px;
            height: 80%;
+           overflow: hidden;
         }
         #profile{
            display:flex;
