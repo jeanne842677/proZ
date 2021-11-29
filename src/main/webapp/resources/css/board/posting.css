@@ -9,6 +9,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
 }
 
 header {
@@ -30,6 +31,7 @@ nav {
     background: rgb(19, 23, 34);
     background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
     width: 220px;
+    min-width: 220px;
     height: 100%;
     flex-shrink: 0;
 }

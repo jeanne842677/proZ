@@ -111,8 +111,6 @@ public class BoardController {
 		
 		model.addAttribute("wsIdx" , board.getWsIdx());
 		//.addAttribute(projectIdx); 
-		
-		
 		return "/board/posting";
 	} 
 	
@@ -146,6 +144,26 @@ public class BoardController {
 		
 		return "complete";
 		
+	}
+	
+	@GetMapping("view/{projectIdx}")
+	public String getBoardInfo(@RequestParam(required = false) String postIdx ,
+			@RequestParam(required = false) String pmIdx,
+			Model model,
+			@PathVariable String projectIdx) {
+		
+		logger.debug("포스트Idx는 :" + postIdx); 
+		Post newPost = boardService.selectPostByPostIdx(postIdx);
+		
+		// 저장시 : 매핑 포기하고 받는다. 
+				
+		// if(newPost.pmIdx.equals(pmIdx)) {
+		//	model.setAttribute("isSamePM", "true")
+		// }
+		
+		model.addAttribute("post",newPost); 		
+		
+		return "board/post"; 
 	}
 	
 	
