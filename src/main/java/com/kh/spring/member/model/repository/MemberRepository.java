@@ -14,7 +14,7 @@ import com.kh.spring.member.validator.JoinForm;
 @Mapper
 public interface MemberRepository {
 
-	@Select("select * from proz_user where email = #{email}")
+	@Select("select * from proz_user where email = #{email} and is_leave=0")
 	Member selectMemberByEmail(String email);
 
 	// insert into proz_user(user_Idx,email,password,nickname,git)
@@ -22,16 +22,16 @@ public interface MemberRepository {
 	@Insert("insert into proz_user(user_Idx,email,password,nickname,git) values(sc_proz_Idx.nextval,#{email},#{password},#{nickname},#{git})")
 	void insertMember(JoinForm form);
 
-	@Select("select * from proz_user where email = #{email} and password = #{password}")
+	@Select("select * from proz_user where email = #{email} and password = #{password} and is_leave = 0")
 	Member selectMemberByEmailAndPassword(Member member);
 
 	@Insert("insert into proz_user(user_Idx,email,password,nickname,git,social_Id) values(sc_proz_Idx.nextval,#{email},#{password},#{nickname},#{git},#{socialId})")
 	void insertSocialMember(JoinForm form);
 
-	@Select("select * from proz_user where social_Id = #{googleId}")
+	@Select("select * from proz_user where social_Id = #{googleId} and is_leave = 0")
 	Member selectGoogleId(String googleId);
 
-	@Select("select * from proz_user where social_Id = #{kakaoId}")
+	@Select("select * from proz_user where social_Id = #{kakaoId} and is_leave = 0")
 	Member selectKakaoId(String kakaoId);
 
 	// Mypage 관련

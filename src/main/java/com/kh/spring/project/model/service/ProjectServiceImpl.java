@@ -347,12 +347,7 @@ public class ProjectServiceImpl implements ProjectService {
       
       //윤지코드 시작
 
-	@Override
-	public int insertProfileImg(FileDTO fileUploaded, String userIdx) {
-		// TODO Auto-generated method stub
-		return projectRepository.insertProfileImg(fileUploaded,userIdx);
-	}
-
+	
 	@Override
 	public int updateMemberByNickname(Member member,String projectIdx) {
 		// TODO Auto-generated method stub
@@ -365,16 +360,29 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.selectProfileImgFilebyMemberIdx(dummyMember);
 	}
 
-	@Override
-	public int updateMemberByProfileColor(Member tempMember) {
-		// TODO Auto-generated method stub
-		return projectRepository.updateMemberByProfileColor(tempMember);
-	}
 
 	@Override
 	public Member selectProjectMemberByUserIdx(String userIdx, String projectIdx) {
 		// TODO Auto-generated method stub
 		return projectRepository.selectProjectMemberByUserIdx(userIdx,projectIdx);
+	}
+
+	@Override
+	public int insertProfileImg(FileDTO fileUploaded, String userIdx, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.insertProfileImg(fileUploaded,userIdx,projectIdx);
+	}
+
+	@Override
+	public int updateMemberByProfileColor(Member tempMember, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.updateMemberByProfileColor(tempMember,projectIdx);
+	}
+
+	@Override
+	public int updateProjectIsLeave(Member member, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.updateProjectIsLeave(member,projectIdx);
 	}
 
 
