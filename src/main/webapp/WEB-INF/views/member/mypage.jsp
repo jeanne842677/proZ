@@ -120,7 +120,7 @@
     	//color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
     	profileColorHex = color.hex.slice(1);
     	
-    	fetch('/member/profileColor/cash?profileColor='+ profileColorHex, 
+    	fetch('/member/profileColor?profileColor='+ profileColorHex, 
     			{
     			method: 'POST', 	
     			credentials : 'include'
@@ -182,17 +182,7 @@
     nickNameModal.setPlaceholder('닉네임 입력 (최대 8글자)'); 
     //nickNamePopUp.find('#input').attr('maxlength',8);
     nickNameModal.setConfirmFnc( function(){
-
-    	if(true){
- 			alert('success들어오는지 확인'); 
-    		$.ajax("/cash/${projectIdx}")
-    		.done({})
-    		.fail({})
-    		.always({
-    			alert('실행되는지 안되는지 확인해보기'); 
-    		})
-    	}
-    	
+   	
     	var changedNickname = nickNamePopUp.find('#input').val(); 
     	fetch('/member/profileNickname?nickname='+changedNickname, {
     		method : 'POST'

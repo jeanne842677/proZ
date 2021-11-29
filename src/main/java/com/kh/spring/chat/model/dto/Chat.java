@@ -2,6 +2,8 @@ package com.kh.spring.chat.model.dto;
 
 public class Chat {
 
+	
+	public String wsIdx;
 	public String name;
 	public String content;
 
