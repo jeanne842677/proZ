@@ -1,0 +1,84 @@
+/* Menu에 scrollbar 추가 */
+.ui-autocomplete {
+    max-height:300px;
+    max-width: 270px; 
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    border-radius: 10px;
+    padding-top: 5px;
+  }
+  /* IE 6 doesn't support max-height
+   * we use height instead, but this forces the menu to always be this tall
+   */
+  * html .ui-autocomplete {
+    height: 400px;
+    width: 400px;
+  }
+  /* 카테고리 폰트 설정 및 구분선 추가 */
+  .ui-autocomplete-category {
+    position: relative;
+    left: 10px;
+    width: 80%;
+    padding: 5px 0px 5px 10px;
+    margin-bottom: 5px;
+    line-height: 1.5;
+    color: slategray; 
+    border-bottom: 1px solid rgb(228, 228, 228);
+    font-size: 12px;
+  }
+  /* 호버링(focusing) 관련 디자인 */
+  .ui-menu-item{
+    width: 100%;
+  }
+  .ui-menu-item>div{
+    width: 100%;
+  }
+  /* 호버링 폰트 설정 */
+  /* 글이 두줄 이상 넘어가면 이미지 Height별도설정필요 */
+  .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+  background: lightgray !important;
+  color: inherit !important;
+  border : none !important; 
+  /* select관련 margin때문에 focus시 약간 흔들림 있음, 제거 */
+  margin: 5px 0 5px 0;
+  } 
+  /* 흔들림 제거, 카테고리 나누기, 이미지 leftMargin 주기, 호버링은 전체 */
+  .ui-menu-item .ui-menu-item-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5px 0 5px 0;
+    font-size: 14px;
+    font-family: NanumSquareRound;
+  }
+  /* scrollbar 커스터마이징 */
+  ::-webkit-scrollbar {
+      width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+      background-color: inherit; 
+  }
+
+  ::-webkit-scrollbar-thumb {
+      box-shadow: inset 0 0 2px lightslategray; 
+      border-radius: 50px;
+  }
+  /* immutable div의 backgroundFocusing */
+  .immutableDiv:focus-visible{
+  background-color: rgb(230, 230, 230);
+  }
+  /* fetch 비동기통신 애니메이션 관련 */
+  .loader {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #c08beb; /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 0.5s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

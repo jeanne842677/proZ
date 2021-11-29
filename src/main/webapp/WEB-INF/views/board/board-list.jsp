@@ -624,11 +624,18 @@
         //   $('.card').disableSelection();
         //   $('.card-subject').disableSelection();
 
-        $('.card').on('click', e => {
-
-            alert('dd');
+        
+        
+        // 카드를 클릭했을 때 post로 전송 
+        $('.card').on('click', function(e){
+        	let postIdx = $(this)[0].id; 
+			console.log(postIdx); 
+        	location.href = '/board/view/${project.projectIdx}?postIdx=' + postIdx;
         }).disableSelection();
-	
+        
+        
+        
+        
         let u;
         $('.board-wrap').sortable({
             

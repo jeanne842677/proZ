@@ -1,0 +1,297 @@
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+    min-width: 1000px;
+}
+
+.wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+header {
+    height: 60px;
+    background: rgb(143, 122, 229);
+    background: radial-gradient(circle, rgba(143, 122, 229, 1) 0%, rgba(241, 112, 170, 1) 100%);
+    min-height: 60px;
+    flex-shrink: 0;
+}
+
+.con {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+nav {
+    background: rgb(19, 23, 34);
+    background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
+    width: 220px;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+section {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    background: RGB(245, 246, 247);
+}
+
+
+aside {
+
+    background: rgb(19, 23, 34);
+    background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
+
+    height: 100%;
+    width: 200px;
+    flex-shrink: 0;
+
+}
+
+#login-btn {
+    width: 200px;
+    height: 100px;
+
+}
+/* 외부 Export할 div */
+.post-session-wrapper{
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.post-main-title-wrapper{
+    border: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    width: 100%;
+    height: 100px;
+    border-bottom: 1px solid black;
+}
+    .post-main-title{
+        display: flex;
+        align-items: center;
+        height: 70%;
+        width: 80%;
+        font-size: 24px;
+        font-weight: bolder;
+    }
+.post-main-content-wrapper{
+    display: flex;
+    flex-direction: column;
+    background-color: RGB(245, 246, 247);
+    flex: 1;
+    min-height: 500px;
+    width: 85%;
+}
+    .post-navigation-bar{
+        height: 30px;
+        background-color: lightgray;
+        border: 0px;
+        flex-shrink: 0;
+    }
+    .input-title{
+        width: 100%;
+        height: 80px;
+        border: 0px;
+        border-bottom: 1px solid lightgray;
+        margin-bottom: 20px;
+        font-size: 24px;
+        background-color: RGB(245, 246, 247);
+        
+    }
+        .input-title:focus{
+            outline: none;
+        }
+    .textArea{
+        min-height: 400px;
+        border: 1px solid black;
+        border: 0px;
+    }
+        .textArea:focus{
+            outline: none;
+        }
+
+        .post-title{
+            margin-top: 20px;
+            padding-bottom: 20px;
+            font-size : 22px;
+            border-bottom: 1px solid lightgray;
+
+        }
+    /* footer */
+    .footer-wrapper{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                height: 200px;
+                color: slategray;
+            }
+                .footer-content-wrapper{
+                    width: 100%;
+                    height: 100px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                    .footer-content-wrapper>div{
+                        margin-top: 10px;
+                    }
+                    .post-message{
+                        width: 90px;
+                    }
+                /* 커버 색상 조정  */
+            .post-content-cover{
+                display: flex;
+                align-items: center;
+            }
+                .post-cover{
+                    margin-right: 10px;
+                    width: 19px;
+                    height: 20px;
+                    background-color: lightgray;
+                }
+            .post-content-date{
+                display: flex;
+            }
+            .post-content-hashTag{
+                display: flex;
+            }
+    
+    /* 댓글 기능 */
+    .post-comment-wrapper{
+        display: flex;
+        flex-direction: column;
+        min-height: 400px;
+        padding-bottom: 50px;
+    }
+        .post-comment-title{
+            display: flex;
+            font-weight: bolder;
+            color:rgb(53, 62, 70);
+        }   
+            .title-number{
+                color: #8addfb;
+                padding-left: 5px;
+            }
+
+        .post-comment-textArea-label {
+            display: flex;
+            align-items: flex-start;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }  
+        .post-comment-textArea-div{
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        } 
+            #comment-smile{
+                color: lightgray;
+                font-size: 20px;
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+            .comment-textArea{
+                width: 95%;
+                overflow: auto;
+                resize: none;
+                border: 0px;
+                padding: 0px;
+                padding: 7px;
+                padding-right: 0px;
+                font-size: 12px;
+                overflow: hidden;
+                background-color: RGB(245, 246, 247);
+
+            }
+                .comment-textArea:focus{
+                    outline: none;
+                }
+                .comment-textArea::placeholder{
+                    font-weight: 500; 
+                    color: lightgray;
+                }
+            .post-comment-label{
+                display: flex;
+                align-items: flex-start;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+                /* 임시 댓글 */
+                .testCopyValue{
+                    font-size: 12px;
+                    max-width: 90%;
+                    word-break: break-word;
+                }
+                .content-btn-wrapper{
+                    display: flex;
+                    align-items: center;
+                    font-size: 8px;
+                    min-width: 75px;
+                    color: slategray;
+                }
+                    .coment-anchor-btn{
+                        color: #79bcd4;
+                        padding-left: 5px;
+                    }
+    .post-comment-anchor-wrapper{
+        display: flex;
+        justify-content: flex-end;
+    }
+        .post-comment-anchor-label{
+            display: flex;
+            align-items: flex-start;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: rgb(235, 219, 240);
+            border-radius: 10px;
+            width: 80%;
+        }
+    .post-comment-textArea-form{
+        width: 95%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        border: 2px solid rgb(182, 181, 181);
+        border-radius: 3px;
+        
+    }    
+    .comment-text-wrapper{
+        max-width: 86%;
+    }      
+        .comment-textArea-submit-btn {
+            width: 50px; 
+            border: none;
+            padding-top: 5px;
+            background-color: inherit;
+            color: #8addfb;
+            font-size: 12px;
+            padding-left: 0px;
+        }
+        
+        /* 임시 span Test */
+        
+
+    /* br-LINE */
+    .br-line{
+        height: 50px;
+        border-bottom: 1px solid lightgray;
+    }
+    #br-line80{
+        width: 100%;
+        margin-bottom: 10px;
+    }

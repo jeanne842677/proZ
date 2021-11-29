@@ -216,6 +216,10 @@ hr {
     height: 18%;
 }
 
+#memocolor{	
+	position:absolute;
+	top:647px;
+}
 
 </style>
 
@@ -243,7 +247,7 @@ hr {
 				</div>
 
 				<div
-					style="width: 90%; margin: 40px 0px 0px 0px; display: flex; justify-content: center;">
+					style="width: 90%; margin: 8px 0px 0px 0px; display: flex; justify-content: center;">
 					<hr width="90%">
 				</div>
 

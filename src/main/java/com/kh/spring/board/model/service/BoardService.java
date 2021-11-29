@@ -28,4 +28,6 @@ public interface BoardService {
 
 	void updatePostSort(Map<String, String> map);
 
+	Post selectPostByPostIdx(String pmIdx);
+
 }

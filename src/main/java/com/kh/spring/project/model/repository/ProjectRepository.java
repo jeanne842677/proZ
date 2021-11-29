@@ -146,10 +146,6 @@ public interface ProjectRepository {
    //윤지코드 시작
   
 		
-   @Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
-			+ "values(sc_file_idx.nextval, #{userIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
-	int insertProfileImg(@Param("fileUploaded") FileDTO fileUploaded,@Param("userIdx") String userIdx);
-		
    @Update("update project_member set nickname = #{member.nickname} where user_idx = #{member.userIdx} and project_idx = #{projectIdx}")
 	int updateMemberByNickname(@Param("member") Member member,@Param("projectIdx") String projectIdx);
 		
@@ -159,13 +155,20 @@ public interface ProjectRepository {
 	FileDTO selectProfileImgFilebyMemberIdx(Member dummyMember);
    
    
-   @Update("update project_member set profile_color = #{profileColor} where user_idx = #{userIdx}")
-   int updateMemberByProfileColor(Member tempMember);
+   @Update("update project_member set profile_color = #{tempMember.profileColor} where user_idx = #{tempMember.userIdx} and project_idx = #{projectIdx}")
+   int updateMemberByProfileColor(@Param("tempMember") Member tempMember, @Param("projectIdx") String projectIdx);
 
 
 
    @Select("select * from project_member where project_idx = #{projectIdx} and user_idx= #{userIdx}")
    Member selectProjectMemberByUserIdx(@Param("projectIdx") String projectIdx,@Param("userIdx")String userIdx);
+
+   @Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
+			+ "values(sc_file_idx.nextval, #{userIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
+   int insertProfileImg(FileDTO fileUploaded, String userIdx, String projectIdx);
+
+   @Update("update project_member set is_leave = 1  where project_idx = #{projectIdx} and user_idx= #{member.userIdx}")
+   int updateProjectIsLeave(@Param("member")Member member, @Param("projectIdx")String projectIdx);
    
 
 }

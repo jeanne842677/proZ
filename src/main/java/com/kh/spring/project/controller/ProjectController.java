@@ -478,11 +478,11 @@ public class ProjectController {
 		return "project/project-profile"; 
 	}
    
-   @PostMapping("profile/update/Color")
+   @PostMapping("profile/update/Color/{projectIdx}")
 	@ResponseBody 
 	public String changeProfileColor(@Validated MypageForm mypageForm
 			,Errors errors 
-			,HttpSession session) {
+			,HttpSession session, @PathVariable String projectIdx) {
 		
 		try {
 			//1) 값 Validate 검증
@@ -491,11 +491,15 @@ public class ProjectController {
 			}
 			//2) 색 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update 
 			String profileColor = "#" + mypageForm.getProfileColor();
-			Member tempMember = (Member) session.getAttribute("authentication");
-			tempMember.setProfileColor(profileColor); 
+			Member tempMember = new Member();
+			Member sessionMember = (Member) session.getAttribute("authentication");
 			
-			int res = projectService.updateMemberByProfileColor(tempMember);
-			session.setAttribute("authentication", tempMember);
+			tempMember.setProfileColor(profileColor); 
+			tempMember.setUserIdx(sessionMember.getUserIdx());
+			
+			int res = projectService.updateMemberByProfileColor(tempMember,projectIdx);
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return "failed";
@@ -504,10 +508,10 @@ public class ProjectController {
 			return "#" + mypageForm.getProfileColor(); 
 	}
 
-   @PostMapping("profile/update/Img")
+   @PostMapping("profile/update/Img/{projectIdx}")
 	@ResponseBody
 	public String changeProfileImg(@RequestParam List<MultipartFile> files
-			,HttpSession session) {
+			,HttpSession session,  @PathVariable String projectIdx) {
 		
 		//1) 파일 추출 및 DB저장 
 		FileUtil fileUtil = new FileUtil(); 
@@ -516,7 +520,7 @@ public class ProjectController {
 		try {
 			Member member = (Member) session.getAttribute("authentication");
 			System.out.println(member.getUserIdx());
-			int res = projectService.insertProfileImg(fileUploaded, member.getUserIdx()); 
+			int res = projectService.insertProfileImg(fileUploaded, member.getUserIdx(),projectIdx); 
 		} catch(Exception e) {
 			e.printStackTrace();
 			
@@ -557,5 +561,22 @@ public class ProjectController {
 		}
 			//3) nickname 반환 
 			return mypageForm.getNickname(); 
+	}
+	
+	@PostMapping("profile/update/isLeave/{projectIdx}")
+	@ResponseBody
+	public String changeMemberIsleave(HttpSession session,@PathVariable String projectIdx) {
+			
+		//1. session에서 member추출, isLeave 변경 
+		try {
+			Member member = (Member) session.getAttribute("authentication"); 
+			int res = projectService.updateProjectIsLeave(member,projectIdx); 
+			//session.removeAttribute("authentication");
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failed"; 
+		}
+		//2. return "success"
+		return "success"; 
 	}
 }

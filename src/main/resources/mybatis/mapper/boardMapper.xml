@@ -57,8 +57,6 @@
 		and sort >= #{changeSort}
 	</update>
 
-
-
 </mapper>
   
   

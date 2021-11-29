@@ -9,38 +9,71 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Repository;
 
+import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.ProjectMember;
+import com.kh.spring.projectmember.dto.ProjectMemberSession;
 
 @Repository
 public class ProjectMemberRepository {
 	
-	private Map<String , List<ProjectMember>> projectMap;
+	private Map<String , List<ProjectMemberSession>> projectMap;
 	
 	
 	@PostConstruct
 	private void init() {
 		
-		projectMap = new HashMap();
+		projectMap = new HashMap<>();
 		
 	}
 	
 	
 	
-	private void putProject(String projectIdx , ProjectMember projectMember) {
+	public void putProject(String projectIdx , ProjectMemberSession pms) {
 		
-		List<ProjectMember> members =projectMap.get(projectIdx);
+		List<ProjectMemberSession> members =projectMap.get(projectIdx);
 		
 		if(members==null) {
 			
+			System.out.println("멤버가 널일 때");
 			members = new ArrayList<>();
-			members.add(projectMember);
+			members.add(pms);
 			projectMap.put(projectIdx , members);
 			
 		}else {
-			members.add(projectMember);
+			
+			System.out.println("멤버가 이미 있을 때");
+			members.add(pms);
+			
+		}
+		
+		System.out.println("현재 프로젝트 리스트: " + projectMap);
+		
+	}
+
+
+
+	public Map<String, List<ProjectMemberSession>> getProjectMap() {
+		return projectMap;
+	}
+	
+	public List<ProjectMemberSession> getProjectMember(String projectIdx) {
+		
+		return projectMap.get(projectIdx);
+	}
+	
+	public void removeList(String projectIdx , String session ) {
+		List<ProjectMemberSession> pmsList = projectMap.get(projectIdx);
+		for(ProjectMemberSession pms:pmsList) {
+			if(pms.getSession().equals(session)) {
+				pmsList.remove(pms);
+			}
+			
+			
+			
 		}
 		
 	}
+	
 	
 	
 	
