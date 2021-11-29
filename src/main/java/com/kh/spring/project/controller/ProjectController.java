@@ -491,11 +491,15 @@ public class ProjectController {
 			}
 			//2) 색 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update 
 			String profileColor = "#" + mypageForm.getProfileColor();
-			Member tempMember = (Member) session.getAttribute("authentication");
+			Member tempMember = new Member();
+			Member sessionMember = (Member) session.getAttribute("authentication");
+			
 			tempMember.setProfileColor(profileColor); 
+			tempMember.setUserIdx(sessionMember.getUserIdx());
 			
 			int res = projectService.updateMemberByProfileColor(tempMember,projectIdx);
-			session.setAttribute("member", tempMember);
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return "failed";
