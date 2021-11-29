@@ -4,8 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
-<script src="https://kit.fontawesome.com/485bb3ceac.js"
-	crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/485bb3ceac.js" crossorigin="anonymous"></script>
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
 <style type="text/css">
@@ -269,7 +268,7 @@ aside {
                         <div class="currentTime">오후 1시 15분</div>
                       </div>
                       <div class="talk-other">
-                        <div class="chat-content">길어지면 한 블럭 내에 생기고ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</div>
+                        <div class="chat-content" >길어지면 한 블럭 내에 생기고ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</div>
                         <div class="chat-content">이렇게 한칸 뛰고</div>
                        </div>
                       </div>  
@@ -299,7 +298,7 @@ aside {
                         <div class="user-nickname">고기맛</div>
                       </div>
                       <div class="talk-me">
-                        <div class="chat-content">이게나</div>
+                        <div class="chat-content" >이게나</div>
                         <div class="chat-content">이렇게 한칸 뛰고</div>
                       </div>
                     </div>
@@ -371,17 +370,25 @@ aside {
      document.querySelector('#textarea').addEventListener('paste' , function(event) {
         event.preventDefault();
         let text =event.clipboardData.getData("text/plain");
+        
         document.execCommand("insertHTML", false,  text);
     })
 
       // 엔터키를 누르면, #textarea에 입력한 내용이 db에 올라가고 채팅창에도 보이게
       $('#textarea').on('keydown', function(e) {
-    	  let inputText = $(this).text();
+    	 
+    	  if(e.keyCode==13 && e.shiftKey){
+    		  $(this).append("</br>")
+    	  }
     	  
-         if (e.which == 13 && e.shiftKey == false) {
+    	  let inputText = $(this).html();
+    	  window.alert(inputText);
+    	 
+    	  
+         if (e.which == 13 && !e.shiftKey) {
         	 
         	 let lastChatBlock = $(".chat-block").last();
-        	 
+        	
         	 if(lastChatBlock.hasClass("chat-me")) { //마지막채팅이 나 일때
         		 alert("내가 마지막");
         		 lastChatBlock.find(".talk-me").append("<div class='chat-content'>"+ inputText +"</div>");
@@ -454,8 +461,40 @@ aside {
     
     </script>
 
-<!--  파이어 베이스 -->
-<script type="module"> 
+<!--  파이어 베이스 --> 
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+<!-- firebase.initializeApp(firebaseConfig); -->
+
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdvbEhAml2uk5K8fm8DBGKU0z9y_ie0xE",
+    authDomain: "proz-78541.firebaseapp.com",
+    projectId: "proz-78541",
+    storageBucket: "proz-78541.appspot.com",
+    messagingSenderId: "363657337849",
+    appId: "1:363657337849:web:974c2a6a5afa31845d3b28"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+
+
+
+
+
+<!-- 민협 코드 -->
+<!-- <script type="module"> 
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
@@ -477,7 +516,7 @@ aside {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-</script>
+</script> -->
 
 
 

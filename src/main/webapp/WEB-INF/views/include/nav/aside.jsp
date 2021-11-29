@@ -6,10 +6,10 @@
                         <div class="onlinetit">온라인</div>
                         <div class="online">
                                 <ul id="sortable">
-                                    <li class="member"><i class="fas fa-user-circle" style="color:#ffc107"></i>3조_길예진</li>
+                                    <!-- <li class="member"><i class="fas fa-user-circle" style="color:#ffc107"></i>3조_길예진</li>
                                     <li class="member"><i class="fas fa-user-circle" style="color:#17a2b8"></i>3조_길예진</li>
                                     <li class="member"><i class="fas fa-user-circle" style="color:#dc3538"></i>3조_길예진</li>
-                                </ul>
+ -->                                </ul>
                             
                         </div>
 
@@ -17,7 +17,7 @@
                         <div class="offline">
                                 <ul id="sortable2">
                                 <c:forEach items="${ projectMember }" var="pm">
-                                    <li class="member">
+                                    <li class="member" id="${pm.userIdx}" style="color:${ pm.profileColor }">
                                     	<i class="fas fa-user-circle" style="color:#aaa;"></i>
                                     	${ pm.nickname }
                                     	
@@ -34,27 +34,65 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
                 <script>
+                
+                
+                
+                 var stompClient;
 
-/* 
-                var stompClient = Stomp.over(new SockJS("/online"));
+				 let con = function() {
+					
+					 stompClient = Stomp.over(new SockJS("/ws-stomp"));
+					 
+					// setTimeout(function() {
+						 stompClient.connect({}, function (frame) {
+		                		
+	               			 stompClient.subscribe('/online/project/${project.projectIdx}',function(chat) {
+	               				
+	               				var content = JSON.parse(chat.body);	
+	               				console.dir(content);
+	               				
+	               				var content = JSON.parse(chat.body);	
+	               				console.dir(content);
+	               				
+	               				content.forEach(function(e) {
 
+		               				var userIdx = e.userIdx;
+		               				
+		               				let user = $('#'+userIdx);
+		               				$('.online ul').append(user);
+	               					
+	               					
+	               				})
+	              
+	               				
+	              
+	               		 });
+						 
+						 
+						 
+					// } , 300);
+			
+             		
+               		 
+               		 setTimeout(function() {
+               			 stompClient.send("/app/project/${project.projectIdx}", {}, JSON.stringify({
+              			    userIdx: "${authentication.userIdx}",
+              			    nickname : "${authentication.nickname}"
+              			}));
+               			 
+               		 },300);
+				
+               		 
 
-
-                	//연결
-                	stompClient.connect({}, function (frame) {
-                		
-                	    console.log("connected: " + frame);
-
-                		 let room = $('#room').val();
-                		 stompClient.subscribe('/projectIdx/online/'+ 999998,function(chat) {
-                				
-                				var content = JSON.parse(chat.body);	
-                				alert(content);
-                		});
-
-                	}); */
+               	});
+      
                 	
-                	
+				}
+				 
+				 
+				 con();
+				
+                	 
                 
                 
                 </script>

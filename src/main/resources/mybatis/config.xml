@@ -19,6 +19,7 @@
 		  <typeAlias alias="Post" type="com.kh.spring.board.model.dto.Post"/>
 		  <typeAlias alias="Memo" type="com.kh.spring.memo.model.dto.Memo"/>
 		   <typeAlias alias="Cash" type="com.kh.spring.cash.model.dto.Cash"/>
+		   <typeAlias alias="Calendar" type="com.kh.spring.calendar.model.dto.Calendar"/>
 	</typeAliases>
 	
 	
@@ -31,6 +32,7 @@
 		<mapper resource="mybatis/mapper/projectMapper.xml" />	
 		<mapper resource="mybatis/mapper/workspaceMapper.xml" />	
 		<mapper resource="mybatis/mapper/cashMapper.xml"/>
+		<mapper resource="mybatis/mapper/calendarMapper.xml"/>
 	</mappers>  
 
   </configuration>

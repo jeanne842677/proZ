@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.kh.spring.common.util.file.FileDTO;
+import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
@@ -140,6 +142,33 @@ public interface ProjectRepository {
    //예진윤지 시작
    @Select("select * from project_member PM join project_role using(auth_idx) where PM.project_idx = #{projectIdx} and PM.user_idx = #{userIdx} ")
       List<Map<String, String>> selectProjectNickname(@Param("projectIdx") String projectIdx, @Param("userIdx") String userIdx);
+
+   //윤지코드 시작
+  
+		
+   @Update("update project_member set nickname = #{member.nickname} where user_idx = #{member.userIdx} and project_idx = #{projectIdx}")
+	int updateMemberByNickname(@Param("member") Member member,@Param("projectIdx") String projectIdx);
+		
+   @Select("select * from "
+			+ "(select * from file_dto where type_idx = #{userIdx} order by fl_idx desc )"
+			+ "where rownum = 1")
+	FileDTO selectProfileImgFilebyMemberIdx(Member dummyMember);
+   
+   
+   @Update("update project_member set profile_color = #{tempMember.profileColor} where user_idx = #{tempMember.userIdx} and project_idx = #{projectIdx}")
+   int updateMemberByProfileColor(@Param("tempMember") Member tempMember, @Param("projectIdx") String projectIdx);
+
+
+
+   @Select("select * from project_member where project_idx = #{projectIdx} and user_idx= #{userIdx}")
+   Member selectProjectMemberByUserIdx(@Param("projectIdx") String projectIdx,@Param("userIdx")String userIdx);
+
+   @Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
+			+ "values(sc_file_idx.nextval, #{userIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
+   int insertProfileImg(FileDTO fileUploaded, String userIdx, String projectIdx);
+
+   @Update("update project_member set is_leave = 1  where project_idx = #{projectIdx} and user_idx= #{member.userIdx}")
+   int updateProjectIsLeave(@Param("member")Member member, @Param("projectIdx")String projectIdx);
    
 
 }

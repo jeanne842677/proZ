@@ -54,6 +54,7 @@
                                     <option> 게시판 </option>
                                     <option> 채팅 </option>
                                     <option> 로드맵 </option>
+                                    <option> 캘린더 </option>
                                 </select>
                             </div>
                             <div class="select-input">
@@ -97,6 +98,9 @@
                                         	</c:when>
                                         	<c:when test="${workspace.wsType =='CH'}">
                                         		<i class="far fa-comments fa-2x search-icon"></i>
+                                        	</c:when>
+                                        	<c:when test="${workspace.wsType =='CL'}">
+                                        		<i class="far fa-calendar-alt fa-2x search-icon"></i>
                                         	</c:when>
                                         	<c:otherwise> <!-- 게시판  -->
                                         		<i class="far fa-clipboard fa-2x search-icon"></i>
@@ -216,6 +220,9 @@ function addCategory(){
 	  break;
   case '채팅' :
 	  newCategory.find(".search-icon").addClass("far fa-comments fa-2x");
+	  break;
+  case '캘린더' :
+	  newCategory.find(".search-icon").addClass("far fa-calendar-alt fa-2x");
 	  break;
   default :
 	  newCategory.find(".search-icon").addClass("far fa-clipboard fa-2x");

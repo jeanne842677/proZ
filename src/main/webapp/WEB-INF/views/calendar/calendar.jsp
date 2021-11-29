@@ -82,19 +82,6 @@
         }
 
 
-        aside {
-
-            background: rgb(19, 23, 34);
-            background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
-
-            height: 100%;
-            width: 200px;
-            flex-shrink: 0;
-
-            overflow: auto;
-
-
-        }
 
 
         /*섹션 영역////////////////////////////////////////////////////////////*/
@@ -172,7 +159,7 @@
 
 
                     <div class="cat-subject">
-                        #캘린더
+                        #${workspace.wsName}
                         <hr>
                     </div>
                     <div class="content-wrap">
@@ -194,15 +181,32 @@
 
 
 
-
-
     <script>
+    
+    
 
         let today = new Date();
+        
+        let events = [] ;
+        
+        <c:forEach items="${calendarList}" var="cl">
+        	
+        var data = {                    
+                id: "${cl.calIdx}",
+                title: "${cl.calTitle}",
+                start: "${cl.startDate}",
+                end: "${cl.endDate}",
+                backgroundColor: 'red',
+                borderColor: 'red'
+            }
+        
+        events.push(data);
+        
+        </c:forEach>
 
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
-
+		
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
                     left: 'prev,next today',
@@ -213,9 +217,13 @@
                 selectable: true,
                 selectMirror: true,
                 select: function (arg) {
-                    alert('이벤트');
-                    var title = prompt('Event Title:');
-                    if (title) {
+               	//달력 클릭시 발생하는 이벤트 : 일정 추가
+          
+               		location.href="/calendar/posting/${projectIdx}?wsIdx=${param.wsIdx}&start="+arg.start.getTime()+"&end=" + arg.end.getTime();
+		
+               	
+               	
+       /*              if (title) {
                         calendar.addEvent({
                             title: title,
                             start: arg.start,
@@ -223,89 +231,37 @@
                             allDay: arg.allDay
                         })
                     }
-                    calendar.unselect()
+                    calendar.unselect() */
                 },
                 eventClick: function (arg) {
                     alert("클릭시 발생하는 이벤트");
                 },
                 eventChange: function (arg) {
-                    alert("체인지시 발생하는 이벤트");
+                	let changeStart = arg.event._instance.range.start.getTime()
+               		let changeEnd = arg.event._instance.range.end.getTime()
+                    let idx = arg.event._def.publicId;
+                	
+                    fetch("/calendar/change/update-date" , {
+            			method : "POST",
+            			headers :  {"Content-type" : "application/json; charset=UTF-8"},
+            			body : JSON.stringify({
+            					calIdx : idx ,
+            					startDate : changeStart ,
+            					endDate : changeEnd
+            				})
+            			
+            		})
+                    
+                    
                 },
                 editable: true,
                 dayMaxEvents: true, // allow "more" link when too many events
-                events: [
-                    {
-                        id: 'aa',
-                        title: 'All Day Event',
-                        start: '2021-11-01',
-                        backgroundColor: 'red',
-                        borderColor: 'red'
-                    },
-                    {
-                        title: 'Long Event',
-                        start: '2021-11-07',
-                        end: '2021-11-10'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2020-09-09T16:00:00'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2020-09-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: '2020-09-11',
-                        end: '2020-09-13'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2020-09-12T10:30:00',
-                        end: '2020-09-12T12:30:00'
-                    },
-                    {
-                        title: 'Lunch',
-                        start: '2020-09-12T12:00:00'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2020-09-12T14:30:00'
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: '2020-09-12T17:30:00'
-                    },
-                    {
-                        title: 'Dinner',
-                        start: '2020-09-12T20:00:00'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: '2020-09-13T07:00:00'
-                    },
-                    {
-                        title: 'Click for Google',
-                        url: 'http://google.com/',
-                        start: '2020-09-28'
-                    }
-                ]
+                events:events
+                
             });
 
             calendar.render();
 
-
-            let aaa = calendar.getEventById('aa');
-            aaa.start = '2021-11-10';
-
-            calendar.addEvent({
-                title: 'All Day Event',
-                start: '2021-11-03',
-                backgroundColor: 'red',
-                borderColor: 'red'
-            });
 
         });
         

@@ -119,6 +119,11 @@ public class BoardServiceImpl implements BoardService {
 		// 본인은 플러스한다.
 		boardRepository.updatePostSort(map);
 
+	}
+
+	@Override
+	public Post selectPostByPostIdx(String pmIdx) {
+		return boardRepository.selectPostByPostIdx(pmIdx);
 	};
 
 }

@@ -17,6 +17,7 @@ import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.mail.MailSender;
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.repository.MemberRepository;
@@ -305,6 +306,9 @@ public class ProjectServiceImpl implements ProjectService {
             case "채팅" :
                wsType = "CH";
                break;
+            case "캘린더" :
+            	wsType = "CL";
+            	break;
             case "게시판" :
                wsType = "BO";
          }
@@ -340,4 +344,50 @@ public class ProjectServiceImpl implements ProjectService {
       public List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx) {
          return projectRepository.selectProjectNickname(projectIdx, userIdx);
       }
+      
+      //윤지코드 시작
+
+	
+	@Override
+	public int updateMemberByNickname(Member member,String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.updateMemberByNickname(member,projectIdx);
+	}
+
+	@Override
+	public FileDTO selectProfileImgFilebyMemberIdx(Member dummyMember) {
+		// TODO Auto-generated method stub
+		return projectRepository.selectProfileImgFilebyMemberIdx(dummyMember);
+	}
+
+
+	@Override
+	public Member selectProjectMemberByUserIdx(String userIdx, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.selectProjectMemberByUserIdx(userIdx,projectIdx);
+	}
+
+	@Override
+	public int insertProfileImg(FileDTO fileUploaded, String userIdx, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.insertProfileImg(fileUploaded,userIdx,projectIdx);
+	}
+
+	@Override
+	public int updateMemberByProfileColor(Member tempMember, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.updateMemberByProfileColor(tempMember,projectIdx);
+	}
+
+	@Override
+	public int updateProjectIsLeave(Member member, String projectIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.updateProjectIsLeave(member,projectIdx);
+	}
+
+
+
+	
+     
+	
    }

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +26,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
+import com.kh.spring.common.util.file.FileDTO;
+import com.kh.spring.common.util.file.FileUtil;
 import com.kh.spring.common.util.json.JsonMaker;
 import com.kh.spring.common.util.map.CamelMap;
+import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.validator.MypageForm;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.memo.model.service.MemoService;
 import com.kh.spring.project.model.dto.Project;
@@ -435,12 +442,141 @@ public class ProjectController {
    public void updateWorkspace(@RequestBody List<Map<String, String>> workspaceList,
                          @PathVariable String projectIdx) {
       
-      System.out.println("저장버튼 눌렀을때 여길 지나가");
-
       projectService.settingWorkspace(workspaceList, projectIdx);
       
    }
 
    // ========================================은비 작업 끝=========================
+  
+   
+   //윤지코드
+   @GetMapping("project-profile/{projectIdx}") 
+	public String mypage( HttpSession session,
+			Model model, @PathVariable String projectIdx
+			,@SessionAttribute(value = "authentication") Member member
+			) {
+	   String userIdx = member.getUserIdx();
+	   member = projectService.selectProjectMemberByUserIdx(projectIdx,userIdx);
+		logger.debug(member.toString());
+		
 
+		//프로필 사진 추출
+		FileDTO fileDTO = projectService.selectProfileImgFilebyMemberIdx(member);
+		System.out.println("userIdx :"+userIdx);
+		System.out.println("projectIdx :"+projectIdx);
+		
+		
+		if(fileDTO == null) {
+			System.out.println("1. fileDTO 없음 진입확인");
+			session.setAttribute("profileImg", "person.png");
+		} else {
+			session.setAttribute("profileImg", fileDTO.getSavePath()+fileDTO.getRenameFileName());
+		}
+		model.addAttribute("member",member);
+		// Model에 error 객체 추가 
+		model.addAttribute(new MypageForm()).addAttribute("error",new ValidateResult().getError());
+		return "project/project-profile"; 
+	}
+   
+   @PostMapping("profile/update/Color/{projectIdx}")
+	@ResponseBody 
+	public String changeProfileColor(@Validated MypageForm mypageForm
+			,Errors errors 
+			,HttpSession session, @PathVariable String projectIdx) {
+		
+		try {
+			//1) 값 Validate 검증
+			if(errors.hasErrors()) {
+				return "failed"; 
+			}
+			//2) 색 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update 
+			String profileColor = "#" + mypageForm.getProfileColor();
+			Member tempMember = new Member();
+			Member sessionMember = (Member) session.getAttribute("authentication");
+			
+			tempMember.setProfileColor(profileColor); 
+			tempMember.setUserIdx(sessionMember.getUserIdx());
+			
+			int res = projectService.updateMemberByProfileColor(tempMember,projectIdx);
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failed";
+		}
+			//3) color값 반환 
+			return "#" + mypageForm.getProfileColor(); 
+	}
+
+   @PostMapping("profile/update/Img/{projectIdx}")
+	@ResponseBody
+	public String changeProfileImg(@RequestParam List<MultipartFile> files
+			,HttpSession session,  @PathVariable String projectIdx) {
+		
+		//1) 파일 추출 및 DB저장 
+		FileUtil fileUtil = new FileUtil(); 
+		FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
+	
+		try {
+			Member member = (Member) session.getAttribute("authentication");
+			System.out.println(member.getUserIdx());
+			int res = projectService.insertProfileImg(fileUploaded, member.getUserIdx(),projectIdx); 
+		} catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		//2) profileImg는 join을 통해 추출, session 업데이트 불필요
+		logger.debug(fileUploaded.getSavePath());
+		logger.debug(fileUploaded.getRenameFileName());
+		return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
+	}
+   
+  
+	
+	@PostMapping(value= "profile/update/Nickname/{projectIdx}", produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String changeProfileNickname(@Validated MypageForm mypageForm
+			,Errors errors
+			,HttpSession session, @PathVariable String projectIdx) {
+		
+		try {
+			//1) 값 validate 검증 
+			if(errors.hasErrors()) {
+				return "failed";
+			}
+			//2) 닉네임 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
+			String nickname = mypageForm.getNickname();
+			Member member = (Member) session.getAttribute("authentication"); 
+			member.setNickname(nickname);
+			
+		
+			int res = projectService.updateMemberByNickname(member,projectIdx);
+			session.setAttribute("authentication", member);
+			System.out.println("res :"+res);
+			
+		       
+		} catch(Exception e) {
+			e.printStackTrace(); 
+			return "failed";
+		}
+			//3) nickname 반환 
+			return mypageForm.getNickname(); 
+	}
+	
+	@PostMapping("profile/update/isLeave/{projectIdx}")
+	@ResponseBody
+	public String changeMemberIsleave(HttpSession session,@PathVariable String projectIdx) {
+			
+		//1. session에서 member추출, isLeave 변경 
+		try {
+			Member member = (Member) session.getAttribute("authentication"); 
+			int res = projectService.updateProjectIsLeave(member,projectIdx); 
+			//session.removeAttribute("authentication");
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "failed"; 
+		}
+		//2. return "success"
+		return "success"; 
+	}
 }

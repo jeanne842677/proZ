@@ -3,6 +3,7 @@ package com.kh.spring.project.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
@@ -82,7 +83,22 @@ public interface ProjectService {
    
    List<Map<String, String>> selectProjectNickname(String projectIdx, String userIdx);
    
+ //윤지코드
+  
+	Member selectProjectMemberByUserIdx(String userIdx, String projectIdx); //완료
 
+	int updateMemberByNickname(Member member, String projectIdx); //완료
+
+	int insertProfileImg(FileDTO fileUploaded, String userIdx, String projectIdx);
+
+	FileDTO selectProfileImgFilebyMemberIdx(Member member);
+	
+	int updateMemberByProfileColor(Member tempMember, String projectIdx);
+
+	int updateProjectIsLeave(Member member, String projectIdx);
+
+	
+	
    
 
 

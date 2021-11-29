@@ -31,7 +31,7 @@
 
 
 var stompClient = Stomp.over(new SockJS("/ws-stomp"));
-
+var chIdx = 0;
 
 
 	//연결
@@ -45,20 +45,35 @@ var stompClient = Stomp.over(new SockJS("/ws-stomp"));
 				var content = JSON.parse(chat.body);	
 				$('.chat').append('<div>' + content.content +'</div>')
 		});
-
+		 
 	});
 	
 	
 
 
- $('#send').on('click' , function() {
+ $('#send').on('click' , function() { // 빈 객체는 헤더.
+	chIdx += 1;
+	var today = new Date();
+  	var year = today.getFullYear();
+  	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+ 	var day = ('0' + today.getDate()).slice(-2);
+  	var hours = ('0' + today.getHours()).slice(-2); 
+  	var minutes = ('0' + today.getMinutes()).slice(-2);
+	var dateString = year + '-' + month  + '-' + day + " " + hours + ":" + minutes;
+
+
 	 
 	 let room = $('#room').val();
 	 let content = $('#content').val();
 
 	 stompClient.send("/app/msg/" + room , {}, JSON.stringify({
-		    content: content,
-		    name : "지영"
+		 		chIdx : chIdx,
+		 		wsIdx : "100001",
+		 		chName : room,
+		 		content : content,
+		 		regDate : dateString,
+		 		nickname : "성공하자"
+		 		
 		}));
 	 
 	 
