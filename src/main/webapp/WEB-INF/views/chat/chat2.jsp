@@ -364,6 +364,53 @@ aside {
    
   
     <script>
+    
+    var stompClient = Stomp.over(new SockJS("/ws-stomp"));
+    var chIdx = ${length};
+
+
+    	//연결
+    	stompClient.connect({}, function (frame) {
+    		
+    	    console.log("connected: " + frame);
+
+    		 let wsIdx = ${param.wsIdx};
+    		 stompClient.subscribe('/room/msg/'+wsIdx,function(chat) {
+    				
+    				var content = JSON.parse(chat.body);	
+					
+    				if(content.pmIdx == ${projectMember.pmIdx}) {
+    					
+    				}
+					
+    		});
+    		 
+    	});
+    	
+    	
+
+
+     $('#send').on('click' , function() { // 빈 객체는 헤더.
+
+    	 
+    	 
+     })
+     
+     
+    //연결 해제
+
+    function disconnect() {
+    	 if(stompClient !== null) {
+    		 stompClient.send("/app/out") , {} , usersessionid.value +"is out chatroom";
+    		 stompClient.disconnect();
+    		 
+    	 }
+    	 
+    	 
+     }
+     
+
+
 
     let flg = $("#lock").data('flg');
 
@@ -376,6 +423,16 @@ aside {
 
       // 엔터키를 누르면, #textarea에 입력한 내용이 db에 올라가고 채팅창에도 보이게
       $('#textarea').on('keydown', function(e) {
+    	  
+    	  chIdx += 1;
+      	var today = new Date();
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+       	var day = ('0' + today.getDate()).slice(-2);
+        var hours = ('0' + today.getHours()).slice(-2); 
+        var minutes = ('0' + today.getMinutes()).slice(-2);
+      	var dateString = year + '-' + month  + '-' + day + " " + hours + ":" + minutes;
+
     	 
     	  if(e.keyCode==13 && e.shiftKey){
     		  $(this).append("</br>")
@@ -390,11 +447,37 @@ aside {
         	 let lastChatBlock = $(".chat-block").last();
         	
         	 if(lastChatBlock.hasClass("chat-me")) { //마지막채팅이 나 일때
+        		 
         		 alert("내가 마지막");
+        	 
+
+              	 stompClient.send("/app/msg/" + room , {}, JSON.stringify({
+              		 		chIdx : chIdx,
+              		 		wsIdx : wsIdx,
+              		 		chName : "채팅방1",
+              		 		content : inputText,
+              		 		regDate : dateString,
+              		 		nickname : ${member.nickname}
+              		 		
+              		}));
+        	 
         		 lastChatBlock.find(".talk-me").append("<div class='chat-content'>"+ inputText +"</div>");
         	 	
         	 }else{ //마지막채팅이 다른사람일때
         		alert("다른사람이 마지막");
+        	 
+        	 	
+        		stompClient.send("/app/msg/" + room , {}, JSON.stringify({
+      		 		chIdx : chIdx,
+      		 		wsIdx : wsIdx,
+      		 		chName : "채팅방1",
+      		 		content : inputText,
+      		 		regDate : dateString,
+      		 		nickname : ${member.nickname},
+      		 		pmIdx : ${projectMember.pmIdx}
+      		 		
+      		}));	
+        	 
         	 	let newChat = $(".clone-me").clone();
         	 	newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
         	 	newChat.find(".talk-me").append("<div class='chat-content'>"+ inputText +"</div>")
@@ -461,62 +544,9 @@ aside {
     
     </script>
 
-<!--  파이어 베이스 --> 
-<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
-<!-- firebase.initializeApp(firebaseConfig); -->
-
-
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyDdvbEhAml2uk5K8fm8DBGKU0z9y_ie0xE",
-    authDomain: "proz-78541.firebaseapp.com",
-    projectId: "proz-78541",
-    storageBucket: "proz-78541.appspot.com",
-    messagingSenderId: "363657337849",
-    appId: "1:363657337849:web:974c2a6a5afa31845d3b28"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
 
 
 
-
-
-<!-- 민협 코드 -->
-<!-- <script type="module"> 
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAcLrqOqnHMyRDK-5UM0wkisY531EOpyqc",
-    authDomain: "proz-fdac4.firebaseapp.com",
-    projectId: "proz-fdac4",
-    storageBucket: "proz-fdac4.appspot.com",
-    messagingSenderId: "354092959250",
-    appId: "1:354092959250:web:f1496206092907aa9cfacb",
-    measurementId: "G-609WH2VP1R"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script> -->
 
 
 

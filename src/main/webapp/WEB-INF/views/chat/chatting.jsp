@@ -22,16 +22,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
-채팅방 번호: <input type="text" id="room" value="${param.room}"><button class="connect">연결</button><br>
+채팅방 번호: <input type="text" id="room" value="${param.wsIdx}"><button class="connect">연결</button><br>
 보낼 내용: <input type="text" id="content">
 <button id="send">메세지 보내기</button><br>
-<div class="chat"></div>
+<div class="chat">
+<c:forEach var="chat" items="${chatList}">
+	<div>${chat.nickname} : ${chat.content} /// ${chat.regDate}</div>
+
+
+</c:forEach>
+
+</div>
 
 <script>
 
 
 var stompClient = Stomp.over(new SockJS("/ws-stomp"));
-var chIdx = 0;
+var chIdx = ${length};
 
 
 	//연결
@@ -68,7 +75,7 @@ var chIdx = 0;
 
 	 stompClient.send("/app/msg/" + room , {}, JSON.stringify({
 		 		chIdx : chIdx,
-		 		wsIdx : "100001",
+		 		wsIdx : room,
 		 		chName : room,
 		 		content : content,
 		 		regDate : dateString,

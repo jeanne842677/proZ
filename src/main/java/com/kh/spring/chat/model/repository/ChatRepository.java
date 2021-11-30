@@ -36,7 +36,7 @@ public class ChatRepository {
 		item.put("regDate", chat.getRegDate());
 		item.put("nickname", chat.getNickname());
 		
-		db.collection(chat.getWsIdx()).document(chat.getChIdx()).set(item);
+		db.collection(chat.getWsIdx()).document(String.valueOf(chat.getChIdx())).set(item);
 	}
 
 
@@ -44,7 +44,7 @@ public class ChatRepository {
 		db = FirestoreClient.getFirestore();
 		
 		ApiFuture<QuerySnapshot> future =
-			    db.collection(wsIdx).get();
+			    db.collection(wsIdx).orderBy("regDate").get();
 		List<QueryDocumentSnapshot> documents = null;
 		
 		try {
