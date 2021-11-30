@@ -5,17 +5,26 @@ import java.util.Date;
 public class Chat {
 
 	
-	private String chIdx;	//채팅방 idx
+	private int chIdx;	//채팅방 idx
 	private String wsIdx;
 	private String chName; //채팅방이름
 	private String content;
 	private String regDate;
 	private String nickname;
+	private String pmIdx;
 	//private String fileIdx;
-	public String getChIdx() {
+	
+	
+	public int getChIdx() {
 		return chIdx;
 	}
-	public void setChIdx(String chIdx) {
+	public String getPmIdx() {
+		return pmIdx;
+	}
+	public void setPmIdx(String pmIdx) {
+		this.pmIdx = pmIdx;
+	}
+	public void setChIdx(int chIdx) {
 		this.chIdx = chIdx;
 	}
 	public String getWsIdx() {
@@ -48,11 +57,16 @@ public class Chat {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+	
 	@Override
 	public String toString() {
 		return "Chat [chIdx=" + chIdx + ", wsIdx=" + wsIdx + ", chName=" + chName + ", content=" + content
-				+ ", regDate=" + regDate + ", nickname=" + nickname + "]";
+				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + "]";
 	}
+	
+	
+	
+	
 	
 	
 	
