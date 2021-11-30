@@ -63,10 +63,11 @@
 	 
 							
 						}else if(content.status=="offline") {
-							
-							
-							alert("offline");
-							
+							userIdx = content.member.userIdx;
+
+							let user = $('#' + userIdx);
+
+							$('.offline ul').append(user);
 						}
 				
 					 	

@@ -10,7 +10,8 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
     <link type="text/css" rel="stylesheet" href="/resources/js/modal/modal.js">
-
+	
+    <script src="https://cdn.jsdelivr.net/npm/treeviz@2.3.0/dist/index.min.js"></script>
 
     <style type="text/css">
         html,
@@ -255,8 +256,9 @@
                             <div id="modifinishbtn" class="btn btn-info" style="display:none;">수정완료</div>
                         </div>
                         <div class="map-view">
-                            <div id="cy"></div>
-                        
+                            
+    						<div id="tree" style="height:700px; width:1200px"></div>
+    					
                         <!-- cytoscapt-end -->
                         <div class="map-editor">
                             <div class="input-area">
@@ -330,17 +332,15 @@
 	let dataJson = JSON.parse('${loadmap.gitTree}');
     
     console.dir(dataJson);
-    let dataArr = [{data : { id: "2785aa0e" }}];
+    let dataArr = [{ id: "2785aa0e" ,text_1:"src", father:null }];
     
     
 
     
     dataJson.forEach(function(e) {
     	
-    	let d = { data : { id: e.sha , label : e.path }};
-    	let target = { data: {source: e.prev ,  target:e.sha }}
+    	let d =  { id: e.sha , text_1:e.path , father: e.prev , color:"#2196F3" };
     	dataArr.push(d);
-    	dataArr.push(target);
     	
     })
     
@@ -352,6 +352,47 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.umd.js" integrity="sha512-bgoBr08oPe0Fgqfk4TY8yNOXb1g3pkWHnsiVLLqmR+71gyo1v4PRwFEYTIL1xuFG/EHZRAvn7P1aMvs/9rKoAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://pagecdn.io/lib/cytoscape/3.19.1/cytoscape.umd.js" crossorigin="anonymous"  ></script>
 <!-- cytoscape--------------------------------------------------------------------------------- -->
+ <script>
+ 
+        var data = dataArr;
+        
+
+    var myTree = Treeviz.create({
+        htmlId: "tree",
+        idKey: "id",
+        hasFlatData: true,
+        relationnalField: "father",
+        hasPanAndZoom: true,
+        nodeWidth:150,
+        nodeHeight:50,
+        mainAxisNodeSpacing:2, //너비
+        isHorizontal:true,
+        renderNode: function(node) { 
+        return result = "<div class='box' style='cursor:pointer;height:"+node.settings.nodeHeight+"px; width:auto;display:flex;flex-direction:column;justify-content:center;align-items:center;background-color:"
+                +node.data.color+
+              ";border-radius:5px;'><div><strong>"
+          +node.data.text_1+
+          "</strong></div></div>";
+        },
+        linkWidth : (nodeData)=> 5, //노드 선 두께
+        linkShape:"curve",
+        linkColor : (nodeData) => "#B0BEC5" ,
+        onNodeClick : (nodeData) => console.log(nodeData)
+    });
+
+    
+    
+    myTree.refresh(data);
+
+    
+    var toggle=true;
+/*     
+    document.querySelector("#add").addEventListener("click", () => {toggle ? myTree.refresh(data_2) : myTree.refresh(data_3); toggle = false});
+    document.querySelector("#remove").addEventListener("click", () => myTree.refresh(data));
+      */
+    </script>
+
+<!-- 
 <script type="text/javascript">
 
 
@@ -541,7 +582,7 @@ function setResetFocus(target_cy) {
     ],
 
     layout: {
-        name: 'preset',
+        name: 'breadthfirst',
         rows: 20,
         nodeDimensionsIncludeLabels: false,
         directed: true, 
@@ -610,7 +651,7 @@ cy.on('tapend mouseout', 'node', function (e) {
 
   </script>
 
-
+ -->
 </body>
 
 </html>

@@ -21,7 +21,7 @@
    	<!-- 일반 권한 찾기 -->
   	<select id="selectDefaultOfProjectRole" resultType="map">
 	  	select * from 
-		(select auth_idx , auth_name, rank() over(order by reg_date) as rank from project_role
+		(select auth_idx , auth_name, rank() over(order by auth_idx) as rank from project_role
 		where project_idx = #{projectIdx})
 		where rank=2
   	</select>
