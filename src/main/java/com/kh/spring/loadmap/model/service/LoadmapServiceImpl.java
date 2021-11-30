@@ -28,40 +28,20 @@ public class LoadmapServiceImpl implements LoadmapService {
 	
 
 	@Override
-	public String insertGit(String projectIdx , Loadmap loadmap) {
+	public String insertGit(Loadmap loadmap) {
 		
 		makeGitTree(loadmap);
-		loadmapRepository.insertGit(projectIdx , loadmap);
 		
+		loadmapRepository.insertGit(loadmap);
+		
+		System.out.println(loadmap);
 		
 		
 		return "complete";
 	}
 	
 	
-	
-	public static void main(String[] args) {
-		
-		String gitUrl = "sazzeo/proZ";
-		List<String> ignore = new ArrayList<>();
-		ignore.add("css");
-		ignore.add("js");
-		ignore.add("test");
-		ignore.add("webfonts");
-		ignore.add("img");
-		ignore.add("path");
-		
-		String branch = "main";
-		
-		Loadmap lm = new Loadmap();
-		lm.setGitRepo(gitUrl);
-		lm.setIgnore(ignore);
-		lm.setBranch(branch);
-		
-		
-		
-	}
-	
+
 	
 	
 	private List<Map<String, Object>> makeGitTree(Loadmap loadmap) {
@@ -70,9 +50,10 @@ public class LoadmapServiceImpl implements LoadmapService {
 		List<Map<String, Object>> paths = new ArrayList<>();
 
 		try {
+			loadmap.setGitRepo(loadmap.getGitRepo().replace("https://github.com/", ""));
 			
 			//깃 레포지토리 등록
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 			GHRepository repo = github.getRepository(loadmap.getGitRepo());
 			
 			//깃 브랜치 등록
@@ -92,7 +73,7 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 					Map<String, Object> m = new HashMap<>();
 					m.put("sha", sha.substring(0, 8));
-					m.put("path", path.substring(0, 8));
+					m.put("path", path);
 
 					q.offer(m);
 
@@ -106,7 +87,7 @@ public class LoadmapServiceImpl implements LoadmapService {
 							String p = (String) thisM.get("path");
 							
 							
-							boolean ignoring = ignoring(p , loadmap.getIgnore());
+							boolean ignoring = ignoring(p , loadmap.getIgnoreList());
 							if(ignoring) break;
 							
 							if (lt.get(j).getType().equals("tree")) {
@@ -160,6 +141,17 @@ public class LoadmapServiceImpl implements LoadmapService {
 		}
 	
 		return false;
+	}
+
+
+
+
+
+	@Override
+	public Loadmap selectLoadmap(String wsIdx) {
+		
+		Loadmap loadmap = loadmapRepository.selectLoadmapByWsIdx(wsIdx);
+		return loadmap;
 	}
 
 

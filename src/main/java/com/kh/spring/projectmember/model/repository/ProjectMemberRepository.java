@@ -36,16 +36,25 @@ public class ProjectMemberRepository {
 			
 			System.out.println("멤버가 널일 때");
 			members = new ArrayList<>();
-			members.add(pms);
 			projectMap.put(projectIdx , members);
 			
 		}else {
 			
 			System.out.println("멤버가 이미 있을 때");
-			members.add(pms);
+			for(ProjectMemberSession member : members) {
+				
+				if(member.getUserIdx().equals(pms.getUserIdx())) {
+					return;
+				}
+				
+			}
+			
 			
 		}
 		
+		
+		
+		members.add(pms);
 		System.out.println("현재 프로젝트 리스트: " + projectMap);
 		
 	}
@@ -61,16 +70,31 @@ public class ProjectMemberRepository {
 		return projectMap.get(projectIdx);
 	}
 	
-	public void removeList(String projectIdx , String session ) {
+	public ProjectMemberSession removeList(String projectIdx , String userIdx ) {
+		
+		
+		
 		List<ProjectMemberSession> pmsList = projectMap.get(projectIdx);
+		ProjectMemberSession thisPms = null;
+		
+		System.out.println("지금 확인하는 리무브 단: " + pmsList);
+		
 		for(ProjectMemberSession pms:pmsList) {
-			if(pms.getSession().equals(session)) {
-				pmsList.remove(pms);
+			
+			if(pms.getUserIdx().equals(userIdx)) {
+				
+				thisPms = pms;
+				
 			}
 			
 			
 			
 		}
+		
+		pmsList.remove(thisPms);
+		
+		return thisPms;
+		
 		
 	}
 	

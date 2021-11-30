@@ -86,7 +86,6 @@
 
         .section-wrap {
             margin: 0 50px;
-            border: solid red(128, 123, 123);
             height: auto;
             width:100%;
             display: flex;
@@ -280,7 +279,8 @@
     </div>
 
 <script type="text/javascript">
-
+	
+	
 
     $("#modifybtn").click(function(){
         $("#modifinishbtn").css("display","flex");
@@ -312,10 +312,11 @@
 			method : "POST",
 			headers :  {"Content-type" : "application/json; charset=UTF-8"},
 			body : JSON.stringify({
-				
+					wsIdx : ${param.wsIdx},
 					gitRepo : git	,
 					branch : "main" ,
-					ignore : ["css" , "resources"]
+					ignore : ["css" , "resources" , "test" , "img"]
+					
 			
 				})
 			
@@ -326,16 +327,39 @@
     })
 
 
+	let dataJson = JSON.parse('${loadmap.gitTree}');
+    
+    console.dir(dataJson);
+    let dataArr = [{data : { id: "2785aa0e" }}];
+    
+    
+
+    
+    dataJson.forEach(function(e) {
+    	
+    	let d = { data : { id: e.sha , label : e.path }};
+    	let target = { data: {source: e.prev ,  target:e.sha }}
+    	dataArr.push(d);
+    	dataArr.push(target);
+    	
+    })
+    
+    console.dir(dataArr);
+
 
 
 </script>
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.umd.js" integrity="sha512-bgoBr08oPe0Fgqfk4TY8yNOXb1g3pkWHnsiVLLqmR+71gyo1v4PRwFEYTIL1xuFG/EHZRAvn7P1aMvs/9rKoAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://pagecdn.io/lib/cytoscape/3.19.1/cytoscape.umd.js" crossorigin="anonymous"  ></script>
 <!-- cytoscape--------------------------------------------------------------------------------- -->
-<script type="module">
-    import cytoscape from "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.15.1/cytoscape.esm.min.js";
-    
-   const data = [ // 일반객체로 지정된 요소
+<script type="text/javascript">
+
+
+   const data = dataArr;
+
+
+/*
+[ // 일반객체로 지정된 요소
         { data: { id: 'proz' , url:"menu.html" ,label: "prozlabel"}},  //그래프 수준데이터를 포함하는 일반 개체
         { data: { id: 'src' , label: "srclabel" }},
         { data: { id: 'main' , label: "mainlabel" }},
@@ -355,6 +379,9 @@
         { data: { source: 'main', target: 'webapp' }},
 
       ];
+*/
+
+
   
   //뎁스에따라 크기차이 주기 
     const cy_for_rank = cytoscape({
@@ -514,11 +541,12 @@ function setResetFocus(target_cy) {
     ],
 
     layout: {
-        name: 'breadthfirst',
-        rows: 1,
+        name: 'preset',
+        rows: 20,
+        nodeDimensionsIncludeLabels: false,
         directed: true, 
-        fit: true,
-        animate: false,
+        pavoidOverlap: true,
+        fit: false
     }
 });
 

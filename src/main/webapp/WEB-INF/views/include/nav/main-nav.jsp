@@ -67,7 +67,7 @@
                 			location.href= "/calendar" + loca ;
                 			break;
                 		case "LD" :
-                			location.href= "/" + loca ;
+                			location.href= "/loadmap" + loca ;
                 			break;
                 	
                 		}
