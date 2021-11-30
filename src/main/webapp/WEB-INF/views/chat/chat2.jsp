@@ -237,80 +237,60 @@ aside {
             <nav></nav>
             <section>
                 <article class="title-section">
-                  <div id="room-title"> # 떡사모 </div>
+                  <div id="room-title"> 채팅방 이름 받아와야 돼</div>
                   <hr>
                 </article>
-                <article class="chat-section"> 
-                  <div class="chat-other">
-                    <div class ="user-picture">
-                      <i class="fas fa-user-circle fa-3x" style="color:lightsalmon"></i>
-                    </div>
-                    <div class ="chat-block chat-information">
-                      <div class="user">
-                        <div class="user-nickname">엽떡로제</div>
-                        <div class="currentTime">오후 1시 16분</div>
-                      </div>
-                      <div class="talk-other">
-                      <div class="chat-content">중국당면먹고싶다</div>
-                      <div class="chat-content">배고파</div>
-                    </div>
-                    </div>
-                  </div>
-                  <div class="today"> 2021년 11월 5일 </div>
-                  
-                  <div class="chat-block chat-other">
-                    <div class ="user-picture">
-                      <i class="fas fa-user-circle fa-3x" style="color:lightskyblue"></i>
-                    </div>
-                    <div class ="chat-information">
-                      <div class="user">
-                        <div class="user-nickname">소떡소떡</div>
-                        <div class="currentTime">오후 1시 15분</div>
-                      </div>
-                      <div class="talk-other">
-                        <div class="chat-content" >길어지면 한 블럭 내에 생기고ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</div>
-                        <div class="chat-content">이렇게 한칸 뛰고</div>
-                       </div>
-                      </div>  
-                  </div>
 
-                  <div class="chat-block chat-other">
-                    <div class ="user-picture">
-                      <i class="fas fa-user-circle fa-3x" style="color:lightskyblue"></i>
-                    </div>
-                    <div class ="chat-information">
-                      <div class="user">
-                        <div class="user-nickname">소떡소떡</div>
-                        <div class="currentTime">오후 1시 15분</div>
-                      </div>
-                      <div class="talk-other">
-                        <div class="chat-content">길어지면 한 블럭 내에 생기고ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</div>
-                        <div class="chat-content">이렇게 한칸 뛰고</div>
-                       </div>
-                      </div>  
-                  </div>
-                  
+				<article class="chat-section">
+					<c:forEach var="chat" items="${chatList}">
+						<c:choose>
+							<c:when test="${chat.pmIdx==projectMember.pmIdx}">
+								<div class="chat-block chat-me">
+									<div class="chat-information">
+										<div class="user">
+											<div class="currentTime">${chat.regDate}</div>
+											<div class="user-nickname">${chat.nickname}</div>
+										</div>
+										<div class="talk-me">
+											<div class="chat-content">${chat.content}</div>
+										</div>
+									</div>
+									<div class="user-picture">
+										<i class="fas fa-user-circle fa-3x"
+											style="color: lightskyblue"></i>
+									</div>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="chat-block chat-other">
+								<div class="user-picture">
+									<i class="fas fa-user-circle fa-3x" style="color: lightskyblue"></i>
+									<!-- 이미지로 나중에 변경  -->
+								</div>
+								<div class="chat-information">
+									<div class="user">
+										<div class="user-nickname">${chat.nickname}</div>
+										<div class="currentTime">${chat.regDate}</div>
+									</div>
+									<div class="talk-other">
+										<div class="chat-content">${chat.content}</div>
+									</div>
+								</div>
+							</div>
+							</c:otherwise>
+							
 
-                  <div class="chat-block chat-me">
-                    <div class ="chat-information">
-                      <div class="user">
-                        <div class="currentTime">오후 1시 15분</div>
-                        <div class="user-nickname">고기맛</div>
-                      </div>
-                      <div class="talk-me">
-                        <div class="chat-content" >이게나</div>
-                        <div class="chat-content">이렇게 한칸 뛰고</div>
-                      </div>
-                    </div>
-                    <div class ="user-picture">
-                      <i class="fas fa-user-circle fa-3x" style="color:lightskyblue"></i>
-                    </div>
-                  </div>
-                
-                  
-                </article>
-  
-                <article class="chat-input-section">
+
+
+						</c:choose>
+
+					</c:forEach>
+
+
+
+				</article>
+
+				<article class="chat-input-section">
                   <div class="chat-input-wrap">
                     <div id="textarea" contenteditable="true"></div> 
                     <div class="textarea-icons">
@@ -361,40 +341,59 @@ aside {
     
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.js"`integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
    
   
     <script>
+    $(document).ready(function () {
+    	 document.execCommand('defaultParagraphSeparator', false, 'br');
+	});
     
     var stompClient = Stomp.over(new SockJS("/ws-stomp"));
     var chIdx = ${length};
-
-
-    	//연결
+    let wsIdx = "${param.wsIdx}";
+	let nickname = "${projectMember.nickname}";
+	let pmIdx = "${projectMember.pmIdx}";
+	
+	
+    	//연결 + 파이어베이스에 있는 정보 불러오기
     	stompClient.connect({}, function (frame) {
     		
     	    console.log("connected: " + frame);
 
-    		 let wsIdx = ${param.wsIdx};
+    		 
     		 stompClient.subscribe('/room/msg/'+wsIdx,function(chat) {
     				
-    				var content = JSON.parse(chat.body);	
-					
-    				if(content.pmIdx == ${projectMember.pmIdx}) {
+    				var content = JSON.parse(chat.body); //sendig한 객체를 받아옴.
+    				
+    				
+    				
+    				if(content.pmIdx == pmIdx) { //내가 입력할 때
+    					let newChat = $(".clone-me").clone();
+    	        	 	newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
+    	        	 	newChat.find(".talk-me").append("<div class='chat-content'>"+ content.content +"</div>");
+    	        	 	newChat.find(".currentTime").html(content.regDate);
+    	        	 	newChat.find(".user-nickname").html(content.nickname);
+    	        	 	$(".chat-section").append(newChat);
+    	        	 	
     					
+    				}else{//다른사람이 입력할 때
+    					let newChat = $(".clone-other").clone();
+    	        	 	newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
+    	        	 	newChat.find(".talk-other").append("<div class='chat-content'>"+ content.content +"</div>");
+    	        	 	newChat.find(".currentTime").html(content.regDate);
+    	        	 	newChat.find(".user-nickname").html(content.nickname);
+    	        	 	$(".chat-section").append(newChat);
     				}
-					
+    				chIdx = content.chIdx;
+    				scrollFixedBottom();
     		});
-    		 
+    		 scrollFixedBottom();
     	});
     	
-    	
-
-
-     $('#send').on('click' , function() { // 빈 객체는 헤더.
-
-    	 
-    	 
-     })
+   
      
      
     //연결 해제
@@ -408,9 +407,18 @@ aside {
     	 
     	 
      }
-     
 
-
+    //스크롤 설정
+     function scrollFixedBottom(){
+    	$('.chat-section').scrollTop($('.chat-section')[0].scrollHeight);
+    } 
+    
+    
+    
+    
+    
+    
+    
 
     let flg = $("#lock").data('flg');
 
@@ -418,13 +426,13 @@ aside {
         event.preventDefault();
         let text =event.clipboardData.getData("text/plain");
         
+       
         document.execCommand("insertHTML", false,  text);
     })
 
       // 엔터키를 누르면, #textarea에 입력한 내용이 db에 올라가고 채팅창에도 보이게
       $('#textarea').on('keydown', function(e) {
-    	  
-    	  chIdx += 1;
+    	
       	var today = new Date();
         var year = today.getFullYear();
         var month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -432,57 +440,57 @@ aside {
         var hours = ('0' + today.getHours()).slice(-2); 
         var minutes = ('0' + today.getMinutes()).slice(-2);
       	var dateString = year + '-' + month  + '-' + day + " " + hours + ":" + minutes;
-
-    	 
+      	let inputText = $(this).html();
+    	
+      	
     	  if(e.keyCode==13 && e.shiftKey){
     		  $(this).append("</br>")
     	  }
     	  
-    	  let inputText = $(this).html();
-    	  window.alert(inputText);
+    	  
+    	 
     	 
     	  
+    	  
          if (e.which == 13 && !e.shiftKey) {
+        	 //내일 물어볼거
+       /*  	 if(inputText==""){
+       		  return;
+       	  	} 
+        	 
+        	 document.execCommand("defaultParagraphSeparator", false, "br");
+
+        	 */
         	 
         	 let lastChatBlock = $(".chat-block").last();
-        	
+        	 chIdx++;
         	 if(lastChatBlock.hasClass("chat-me")) { //마지막채팅이 나 일때
-        		 
-        		 alert("내가 마지막");
-        	 
-
-              	 stompClient.send("/app/msg/" + room , {}, JSON.stringify({
+     
+              	 stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
               		 		chIdx : chIdx,
               		 		wsIdx : wsIdx,
               		 		chName : "채팅방1",
               		 		content : inputText,
               		 		regDate : dateString,
-              		 		nickname : ${member.nickname}
-              		 		
+              		 		nickname : nickname,
+              		 		pmIdx : pmIdx
               		}));
-        	 
-        		 lastChatBlock.find(".talk-me").append("<div class='chat-content'>"+ inputText +"</div>");
+              	
         	 	
         	 }else{ //마지막채팅이 다른사람일때
-        		alert("다른사람이 마지막");
-        	 
         	 	
-        		stompClient.send("/app/msg/" + room , {}, JSON.stringify({
+        		stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
       		 		chIdx : chIdx,
       		 		wsIdx : wsIdx,
       		 		chName : "채팅방1",
       		 		content : inputText,
       		 		regDate : dateString,
-      		 		nickname : ${member.nickname},
-      		 		pmIdx : ${projectMember.pmIdx}
+      		 		nickname : nickname,
+      		 		pmIdx : pmIdx
       		 		
       		}));	
         	 
-        	 	let newChat = $(".clone-me").clone();
-        	 	newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
-        	 	newChat.find(".talk-me").append("<div class='chat-content'>"+ inputText +"</div>")
-        	 	$(".chat-section").append(newChat);
-        	 }
+        	 }	 
            $('#textarea').empty();
           return false;
         }
@@ -491,8 +499,6 @@ aside {
          
       });
 
-      //(+추가할 코드) DB에 boolean으로 flg 값 저장하면, 다음번에 그 상태가 유지되도록 했으면 좋겠다.
-      //(+추가할 코드) DB에 flg 값이 잠금이라면, placeholder 값으로 알려주면 좋겠다.
       //기본적으로 true이면 비잠금 상태
     $("#lock").on('click', function() {
         if(flg){
@@ -533,14 +539,6 @@ aside {
       })
     
 
-    // 데이터가 들어왔을 때, 내가 보낸 메시지는 오른쪽에. 남이 보낸 메시지는 왼쪽에.
-
-
-    // 채팅방 참여자의 출입에 따라 로그 찍히게끔
-
-
-
-    // 잠금 기능도 있으면 좋을텐데..너무 투머치인듯
     
     </script>
 
