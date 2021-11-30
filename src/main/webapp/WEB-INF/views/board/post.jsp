@@ -35,7 +35,7 @@
                         <div class="post-navigation-bar"></div>
                         <div class="editor-minHeight-div" style="min-height: 300px;">
                         	<!-- 엄청 위험하다, 파싱없이 바로 데이터를 사용하기 때문에.. -->
-                        	${post.postContent} 
+                        	${post.postContent}
                         </div>
                         <div class="footer-wrapper">
                             <div class="footer-wrapper">
@@ -124,6 +124,8 @@
     //Post의 모든 div들의 contentEditable을 비활성화 
     let allEditorDiv = $('.editor-minHeight-div').children(); 
    	console.log(allEditorDiv); 
+   	
+   	$('.editor-minHeight-div').html('${post.postContent}'); 
    	
    	$.each(allEditorDiv, function(i, val){
    		val.setAttribute('contentEditable', 'false'); 
