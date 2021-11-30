@@ -63,10 +63,11 @@
                 		case "ME" :
                 			location.href="/memo" + loca + "&order=0" ;
                 			break;
-                			
-                			
                 		case "CL" :
                 			location.href= "/calendar" + loca ;
+                			break;
+                		case "LD" :
+                			location.href= "/" + loca ;
                 			break;
                 	
                 		}

@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,20 +24,16 @@ public class ProjectMemberController {
 	
 	@Autowired
 	ProjectMemberRepository pm;
+	
 
- //   @MessageMapping("/project/{projectIdx}") //이 주소로 보낸 애들한테 메세지를 받음
-  //  @SendTo("/online/project/{projectIdx}") //이 주소인 애한테 메세지를 보냄
+    @MessageMapping("/project/{projectIdx}") //이 주소로 보낸 애들한테 메세지를 받음
+    @SendTo("/online/project/{projectIdx}") //이 주소인 애한테 메세지를 보냄
     public List<ProjectMemberSession> sendChatMessage(@DestinationVariable("projectIdx") String projectIdx
     	,Member member, SimpMessageHeaderAccessor headerAccessor, Principal principal) {
         
     	ProjectMemberSession pms = new ProjectMemberSession( member.getUserIdx(), headerAccessor.getSessionId());
     	
-    	
-    	if(member.getUserIdx().equals("test")) {
-    		
-    		System.out.println("이거실행....");
-    	}
-    	
+  
     	
     	pm.putProject(projectIdx, pms);
     	
@@ -52,6 +49,15 @@ public class ProjectMemberController {
         
         
     }
+    
+    
+    @MessageMapping("/remove/{projectIdx}")
+    @SendTo("/online/project/{projectIdx}") //이 주소인 애한테 메세지를 보냄
+    public String  disconnectMessage() {
+    	return "disconnect";
+    }
+    
+    
     
 
     
