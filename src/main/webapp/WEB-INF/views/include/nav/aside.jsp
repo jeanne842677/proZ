@@ -17,7 +17,7 @@
 		<div class="offlinetit">오프라인</div>
 		<div class="offline">
 			<ul id="sortable2">
-				<c:forEach items="${ projectMember }" var="pm">
+				<c:forEach items="${ projectMemberList }" var="pm">
 					<li class="member" id="${pm.userIdx}"
 						style="color:${ pm.profileColor }"><i
 						class="fas fa-user-circle" style="color: #aaa;"></i> ${ pm.nickname }
