@@ -1,22 +1,30 @@
 package com.kh.spring.chat.model.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Chat {
 
 	
-	private String chIdx;
+	private int chIdx;	//채팅방 idx
 	private String wsIdx;
-	private String pmIdx;
-	private String chName;
+	private String chName; //채팅방이름
 	private String content;
-	private String isDel;
-	private Date regDate;
+	private String regDate;
+	private String nickname;
+	private String pmIdx;
+	//private String fileIdx;
 	
-	public String getChIdx() {
+	
+	public int getChIdx() {
 		return chIdx;
 	}
-	public void setChIdx(String chIdx) {
+	public String getPmIdx() {
+		return pmIdx;
+	}
+	public void setPmIdx(String pmIdx) {
+		this.pmIdx = pmIdx;
+	}
+	public void setChIdx(int chIdx) {
 		this.chIdx = chIdx;
 	}
 	public String getWsIdx() {
@@ -24,12 +32,6 @@ public class Chat {
 	}
 	public void setWsIdx(String wsIdx) {
 		this.wsIdx = wsIdx;
-	}
-	public String getPmIdx() {
-		return pmIdx;
-	}
-	public void setPmIdx(String pmIdx) {
-		this.pmIdx = pmIdx;
 	}
 	public String getChName() {
 		return chName;
@@ -43,23 +45,34 @@ public class Chat {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getIsDel() {
-		return isDel;
-	}
-	public void setIsDel(String isDel) {
-		this.isDel = isDel;
-	}
-	public Date getRegDate() {
+	public String getRegDate() {
 		return regDate;
 	}
-	public void setRegDate(Date regDate) {
+	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	
 	@Override
 	public String toString() {
-		return "Chat [chIdx=" + chIdx + ", wsIdx=" + wsIdx + ", pmIdx=" + pmIdx + ", chName=" + chName + ", content="
-				+ content + ", isDel=" + isDel + ", regDate=" + regDate + "]";
+		return "Chat [chIdx=" + chIdx + ", wsIdx=" + wsIdx + ", chName=" + chName + ", content=" + content
+				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + "]";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

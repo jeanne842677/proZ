@@ -72,7 +72,7 @@ public class ProjectInterceptor implements HandlerInterceptor {
 		List<Map<String, Object>> projectMember = CamelMap
 				.changeListMap(projectService.selectProjectMemberByProjectIdx(projectIdx));
 
-		request.setAttribute("projectMember", projectMember);
+		request.setAttribute("projectMemberList", projectMember);
 		request.setAttribute("project", project);
 		request.setAttribute("workspaceList" , workspaceList);
 		request.setAttribute("projectIdx" , projectIdx);

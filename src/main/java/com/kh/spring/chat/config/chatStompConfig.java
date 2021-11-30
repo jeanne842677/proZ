@@ -1,4 +1,4 @@
-package com.kh.spring.friend.controller;
+package com.kh.spring.chat.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -7,11 +7,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import com.kh.spring.friend.handler.FriendHandler;
+import com.kh.spring.chat.handler.chatHandler;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class FriendStompConfig implements WebSocketMessageBrokerConfigurer {
+public class chatStompConfig implements WebSocketMessageBrokerConfigurer {
 
 	
 	//메시지 브로커 관련 설정
@@ -31,7 +31,7 @@ public class FriendStompConfig implements WebSocketMessageBrokerConfigurer {
 	
 	@Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new FriendHandler());
+        registration.interceptors(new chatHandler());
     }
 	
 	

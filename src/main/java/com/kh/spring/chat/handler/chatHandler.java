@@ -1,4 +1,4 @@
-package com.kh.spring.friend.handler;
+package com.kh.spring.chat.handler;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -6,7 +6,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 
-public class FriendHandler implements ChannelInterceptor{
+public class chatHandler implements ChannelInterceptor{
 	
 
 	@Override
