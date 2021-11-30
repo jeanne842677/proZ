@@ -26,16 +26,16 @@ public class FirebaseConfig {
 	private void init() throws Exception {
 		
 		
-		/*
-		 * String rootPath = this.getClass().getResource("/").getPath()+ "../../" +PATH;
-		 * 
-		 * 
-		 * FileInputStream refreshToken = new FileInputStream(rootPath); option = new
-		 * FirebaseOptions.Builder()
-		 * .setCredentials(GoogleCredentials.fromStream(refreshToken))
-		 * .setDatabaseUrl("https://proz-78641.firebaseio.com") .build();
-		 * FirebaseApp.initializeApp(option);
-		 */
+		
+		  String rootPath = this.getClass().getResource("/").getPath()+ "../../" +PATH;
+		  
+		  
+		  FileInputStream refreshToken = new FileInputStream(rootPath); option = new
+		  FirebaseOptions.Builder()
+		  .setCredentials(GoogleCredentials.fromStream(refreshToken))
+		  .setDatabaseUrl("https://proz-78641.firebaseio.com") .build();
+		  FirebaseApp.initializeApp(option);
+		 
 	}
 	
 	
