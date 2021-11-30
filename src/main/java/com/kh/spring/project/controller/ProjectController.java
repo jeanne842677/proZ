@@ -546,14 +546,14 @@ public class ProjectController {
 			}
 			//2) 닉네임 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
 			String nickname = mypageForm.getNickname();
-			Member member = (Member) session.getAttribute("authentication"); 
+			Member member = new Member();
+			Member sessionMember =(Member) session.getAttribute("authentication"); 
 			member.setNickname(nickname);
+			member.setUserIdx(sessionMember.getUserIdx());
 			
 		
 			int res = projectService.updateMemberByNickname(member,projectIdx);
-			session.setAttribute("authentication", member);
-			System.out.println("res :"+res);
-			
+
 		       
 		} catch(Exception e) {
 			e.printStackTrace(); 

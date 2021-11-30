@@ -221,6 +221,150 @@ hr {
 	top:647px;
 }
 
+/* nav css깨지는거   */
+.search{
+    height:15%;
+    cursor: pointer;
+}
+.find, .setting, .projectProfile{
+	height:30%;
+    display:flex;
+    padding-left:30px;
+    justify-content: baseline;
+    align-items: center;
+    font-size:16px;
+    left:15px;
+}
+
+ .pjset, .rolemanage, .membermanage, .chatset, .cash, .workspacemanage{
+    height:50%;
+    display:flex;
+    padding-left:30px;
+    justify-content: baseline;
+    align-items: center;
+}
+
+.find>i , .setting>i, .pjset>i, .rolemanage>i, .membermanage>i, .chatset>i, .cash>i, .workspacemanage>i, .projectProfile>i{
+    margin-right:15px;
+}
+
+.find:hover, .setting:hover, .projectProfile:hover,
+.facechat:hover, .chat:hover, .reload:hover, 
+.pjset:hover, .rolemanage:hover, .membermanage:hover, .chatset:hover, .cash:hover, .workspacemanage:hover{
+    background:#ffffff15;
+}
+
+/* nav워크스페이스------------------------------------------ */
+.worktit{
+    height:7%;
+    color:#aaa;
+    display:flex;
+    justify-content: baseline;
+    align-items: flex-end;
+    padding:0px 0px 10px 20px;
+}
+
+.workspace{
+    height:71%;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size:16px;
+}
+
+.workspace::-webkit-scrollbar {
+    width: 6px;
+}
+.workspace::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+.workspace::-webkit-scrollbar-track {
+    background-color: grey;
+}
+
+/* 오른쪽 nav */
+#onoff{
+    height:80%;
+    overflow-y: auto;
+    overflow-x:hidden;
+}
+
+.onlinetit{
+    height:5%;
+    display:flex;
+    align-items: flex-end;
+    justify-content: baseline;
+    color : #aaa;
+    padding: 0px 0px 0px 20px;
+}
+
+.online{
+    height:auto;
+    padding:7px;
+}
+
+.offlinetit{
+    height:5%;
+    display:flex;
+    align-items: flex-end;
+    justify-content: baseline;
+    color : #aaa;
+    padding: 0px 0px 0px 20px;
+}
+
+.offline{
+    height:auto;
+    padding:7px;
+}
+
+
+#onoff::-webkit-scrollbar {
+    width: 6px;
+}
+#onoff::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+#onoff::-webkit-scrollbar-track {
+    background-color: grey;
+}
+
+#sortable>.member{
+    color:white;
+}
+
+#sortable2>.member{
+    color:#888;
+}
+
+#onoff>.online>#sortable> li:hover{
+    background-color: #ffffff15;
+    
+}
+
+#onoff>.offline>#sortable2> li:hover{
+    background-color: #ffffff15;
+    color:#ffffff;
+}
+
+.online>#sortable>.member:hover{
+    background-color: transparent;
+}
+
+#sortable> .member , #sortable2>.member {
+    height:30px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    margin: 10px 0px 10px 0px;
+    cursor: pointer;
+}
+
+.member>.fas{
+    font-size: 25px;
+    margin-right:15px;
+}
 </style>
 
 
