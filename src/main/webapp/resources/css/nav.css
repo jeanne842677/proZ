@@ -160,6 +160,7 @@ align-content:space-between ;
 .search{
     height:15%;
     cursor: pointer;
+    font-size:16px;
 }
 .find, .setting, .projectProfile{
 	height:30%;
