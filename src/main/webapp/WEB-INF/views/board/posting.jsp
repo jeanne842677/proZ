@@ -99,7 +99,7 @@
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/resources/js/posting/popUpMenu.js"></script>
-<script src="/resources/js/posting/customJqeuryAuto.js"></script>
+<script src="/resources/js/posting/customJqeuryauto.js"></script>
 <script src="/resources/js/posting/customJqueryAutoOption.js"></script>
 <script>
 
@@ -200,26 +200,19 @@
 </script>
 <script>
 
-// initDiv를 클릭하면 
-
-// 제목에서 enter를 치면, div가 만들어지도록 만든다. 
-// Title 자체가 arrowFunction + Enter키를 적용시킨 특수 DIV로 작동 
-// 삭제는 없다.
-
-// clickEvent를 감지, 만약 자식요소가 ~개 이하이면 삭제 후 initPage 추가 
-// backSpace를 감지, 만약 자식요소가 ~개 이하이면 initPage 다시추가 
-
-
-//Title 관련 Copy방지 (연구중)
-// document.querySelector('.editor-title').addEventListener('paste' , function(event) {
-//     console.log('1'); 
-//     event.preventDefault();
-//     let text =event.clipboardData.getData("text/plain");
-//     document.execCommand("insertHTML", false,  text);
-// });
-
-// innerHTML을 이용하면 통째로 파싱할 수는 있으나 문제가 있다. 
-// ****innerHTML을 이용하면 XSS파싱공격에 취약해지고 보안이슈가 발생할 수 있다. 
+//Title 관련 Copy방지 (및 CommonDiv)
+ document.querySelector('.editor-title').addEventListener('paste' , function(event) {
+     console.log('1'); 
+     event.preventDefault();
+     let text =event.clipboardData.getData("text/plain");
+     document.execCommand("insertHTML", false,  text);
+ });
+ document.querySelector('.commonDiv').addEventListener('paste' , function(event) {
+     console.log('1'); 
+     event.preventDefault();
+     let text =event.clipboardData.getData("text/plain");
+     document.execCommand("insertHTML", false,  text);
+ });
 
 //Fecth 버튼 이벤트 코드 
 </script>
