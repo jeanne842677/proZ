@@ -35,7 +35,9 @@ public class ChatRepository {
 		item.put("content", chat.getContent());
 		item.put("regDate", chat.getRegDate());
 		item.put("nickname", chat.getNickname());
+		item.put("pmIdx", chat.getPmIdx());
 		
+		//기적을 꿈꾸며...기적이 이루어졌다..11월30일..오후11시9분..
 		db.collection(chat.getWsIdx()).document(String.valueOf(chat.getChIdx())).set(item);
 	}
 
