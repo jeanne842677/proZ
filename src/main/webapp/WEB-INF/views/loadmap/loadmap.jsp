@@ -117,12 +117,17 @@
             height:8%;
             display:flex;
             justify-content: flex-end;
+            align-items:center;
         }
 
         .address{
             display:flex;
             flex:1;
             align-items: center;
+        }
+        
+        .addresscon{
+        	width:50%;
         }
 
         #gitarea{
@@ -145,13 +150,17 @@
             align-items: center;
         }
 
-        #modifinishbtn,  #modifybtn, #allview, #resetbtn {
+        #modifinishbtn, #onedeps, #modifybtn, #allview, #resetbtn {
             width:10%;
             height:80%;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-left:10px;
+        }
+        
+        #resetbtn{
+        	font-size:13px;
         }
 
      
@@ -220,6 +229,7 @@
             width:100%;
             height:95%;
             display: flex;
+            flex-direction:column;
         }
 
         
@@ -227,8 +237,17 @@
 
         #tree{
             width:100%;
-            height:100%;
+            height:85%;
             
+        }
+        
+        #commitarea{
+        	width:100%;
+        	height:15%;
+        	padding:10px;
+        	border :solid 1px #999;
+        	border-radius : 5px;
+        	background-color:#fff;
         }
 
         .map-editor{
@@ -344,7 +363,8 @@
 
                         <!-- cytoscape -->
                         <div class="btnarea">
-                            <div class="address">https://github.com/sazzeo/proZ</div>
+                            <div class="address"><div class="addresscon form-control" id="disabledInput">https://github.com/sazzeo/proZ</div></div>
+                            <div id="onedeps" class="btn btn-primary">되돌리기</div>
                             <div id="allview" class="btn btn-primary">전체 보기</div>
                             <div id="modifybtn" class="btn btn-info">수정하기</div>
                             <div id="gitarea" style="display: none;">
@@ -356,11 +376,12 @@
                                 </div>
                                 <div id="gitbtn" class="btn btn-primary" style="display:none;">깃 연동하기</div>
                             </div>
-                            <div id="resetbtn" class="btn btn-primary" style="display:none;">내 깃주소 가져오기</div>
+                            <div id="resetbtn" class="btn btn-primary" style="display:none;">내 깃주소<br>불러오기</div>
                             <div id="modifinishbtn" class="btn btn-info" style="display:none;">수정완료</div>
                         </div>
                         <div class="map-view">
                             <div id="tree" ></div>
+                            <div id="commitarea" ></div>
                         
                         <!-- cytoscapt-end -->
                         </div>
@@ -384,6 +405,7 @@ $("#modifybtn").click(function(){
     $("#modifybtn").hide();
     $("#allview").hide();
     $(".address").hide();
+    $("#onedeps").hide();
     $("#tree").css("width","85%");
     $(".gitinput").css("display","flex");
     $(".branchinput").css("display","flex");
@@ -395,6 +417,7 @@ $("#modifinishbtn").click(function(){
     $("#modifybtn").css("display","flex");
     $("#allview").css("display","flex");
     $(".address").css("display","flex");
+    $("#onedeps").css("display","flex");
     $("#modifinishbtn").hide();
     $("#tree").css("width","100%");
     $("#gitbtn").hide();
