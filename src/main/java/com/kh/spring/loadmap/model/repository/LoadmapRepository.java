@@ -5,14 +5,13 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import com.kh.spring.loadmap.model.dto.GitCommit;
 import com.kh.spring.loadmap.model.dto.Loadmap;
 
 @Mapper
 public interface LoadmapRepository {
 
 	
-	@Insert("insert into loadmap(lm_idx , ws_idx , git_repo , git_tree , branch , ignore)"
-			+ " values(sc_proz_idx.nextval , #{wsIdx} , #{gitRepo} , #{gitTree} , #{branch} , #{ignore})")
 	public void insertGit(Loadmap loadmap) ;
 
 	
@@ -22,6 +21,11 @@ public interface LoadmapRepository {
 
 	@Delete("delete from loadmap where ws_idx=#{wsIdx}")
 	public void deleteLoadmapByWsIdx(String wsIdx);
+	
+	@Insert("insert into git_commit(gc_idx , lm_idx, login , message , commit_date , files)"
+			+ " values(sc_proz_idx.nextval , #{lmIdx} , #{login} , #{message} , #{commitDate} , #{files})")
+	public void insertGitCommit(GitCommit gitCommit);
+	
 	
 
 }
