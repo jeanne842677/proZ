@@ -297,6 +297,7 @@ aside {
                     <div class="textarea-icons">
                       <div id="lock" data-flg='true'><i class="fas fa-unlock fa-2x" cursor="pointer"></i></div>
                       <div id="file"><i class="fas fa-paperclip fa-2x" cursor="pointer"></i></div>
+                      <input id="input-file" type="file" style="display: none;" accept="image/*">
                       <div id="send"><i class="far fa-paper-plane fa-2x" cursor="pointer"></i></div>
                     </div>
                   </div>
@@ -505,21 +506,80 @@ aside {
         }
       });
 
-      
+      //<div id="file"><input id="input-file" type="file" style="display: none;"><i class="fas fa-paperclip fa-2x" cursor="pointer"></i></div>
       // 파일 전송 버튼도, 일단은 클릭 이벤트만..
-      $('#file').on('click', function(){
+      var fileInput = $('#input-file');
+      
+      $('#file').click( () => {
        if(flg){
-        window.alert("파일 전송 로직 어케될까");
+    	   fileInput.click();
+        
        }else{
         window.alert("잠금을 해제해주세요.");
        }
         
         
-      })
+      });
+      
+    //multipart -> 경로찾고. stomp에 보내고. -> firebase에 저장하고?
+  	
+    
+  	$('#input-file').on('input', function(){
+  		
+    	  		var file = document.querySelector('#input-file').files[0];
+    	  		var formData = new FormData();
+    	  		
+    	  		if(file == null){
+    	  			//나 모달 띄울래 나중에
+    	  			alert("파일 선택을 취소하였습니다.");
+    	  			return false;
+    	  		}
+    	  		
+    	  		formData.append('files', file);
+    		
+    	  		console.dir("------------file : " + file);
+    	  		console.log(file);
+    	  		console.dir("-----------===--" + formData);
+    	  		console.log(formData);
+    	  		//formData를 넘겨주기	
+    	  		
+    	  		//10분까지 쉴까? ㅇㅋ 미안 (20분을 쉬어서 10분에 다시 보자.^^먄!자지않긔. 오는길에 커피타와. 나 옆에 커피있어./ 못하면 못잠.)
+    	  		
+    	  		// formData
+    	  		fetch('/chat/file', {
+			method: 'POST', 	
+			body : formData
+		})
+		.then(response => response.text())
+    	.then(text=>{
+    		console.log(text);
+    	})
+    	.catch( ()=>{
+    		alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
+    	});	
+    	  				
+    	  		
+    	  	/* 	stompClient.send("/app/test/" + wsIdx , {}, JSON.stringify({ //나머지.
+    	               chIdx : chIdx,
+    	                 wsIdx : wsIdx,
+    	                 chName : "채팅방1",
+    	                 content : "테스트용",
+    	                 regDate : "1234",
+    	                 nickname : nickname,//파일을 어떻게? 바이너리코드? 그거괜찮은것..?(은비쓰 생각) or 경로를 주자.(민협쓰 생각)//이미지 올리면 저장?
+    	                 pmIdx : pmIdx, 
+    	                 form : file 
+    	 
+    	          }));   */
+    	  	
+    	  	
+    	  	});
+  
+  	
 
       // 전송 버튼을 누르면, #textarea에 입력한 내용이 db에 올라가고 채팅창에도 보이게
       $('#send').on('click', function(){
         if(flg){
+        	//@@@@@@@@@@@@@@코드 추가 요망!!!
           $('#textarea').empty();
           window.alert("전송 버튼 눌렸다?");
           return false;
