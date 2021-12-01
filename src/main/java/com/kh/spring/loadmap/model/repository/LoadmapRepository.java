@@ -1,5 +1,6 @@
 package com.kh.spring.loadmap.model.repository;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -17,7 +18,10 @@ public interface LoadmapRepository {
 	
 	@Select("select * from loadmap where ws_idx = #{wsIdx} ")
 	public Loadmap selectLoadmapByWsIdx(String wsIdx);
-	
+
+
+	@Delete("delete from loadmap where ws_idx=#{wsIdx}")
+	public void deleteLoadmapByWsIdx(String wsIdx);
 	
 
 }

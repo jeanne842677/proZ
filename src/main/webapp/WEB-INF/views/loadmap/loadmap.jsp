@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/treeviz@2.3.0/dist/index.min.js"></script>
 
     <style type="text/css">
-        html,
+       html,
         body {
 
             width: 100%;
@@ -87,6 +87,7 @@
 
         .section-wrap {
             margin: 0 50px;
+            border: solid red(128, 123, 123);
             height: auto;
             width:100%;
             display: flex;
@@ -113,20 +114,106 @@
 
         .btnarea{
             width:100%;
-            height:5%;
+            height:8%;
             display:flex;
             justify-content: flex-end;
         }
 
-
-        #modifinishbtn, #gitbtn, #modifybtn, #resetbtn{
-            margin-right: 10px;
+        .address{
+            display:flex;
+            flex:1;
+            align-items: center;
         }
 
-        .gitinput{
-            width:400px;
+        #gitarea{
+            width:70%;
+            height:80%;
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            background-color: RGB(227, 228, 231);
+            padding:5px;
+            border-radius: 5px;
+        }
+
+        #gitbtn{
+            display:flex;
+            align-items: center;
+            width:13%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modifinishbtn,  #modifybtn, #allview, #resetbtn {
+            width:10%;
+            height:80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left:10px;
+        }
+
+     
+
+        .gitinput {
+            width:28%;
             margin-right: 10px;
 
+        }
+
+        .branchinput{
+            width:12%;
+        }
+
+
+        #ignoreinput{
+            width:42%;
+            border:solid 1px #999;
+            overflow-x:auto;
+            overflow-y:hidden;
+            display: flex;
+            align-items: center;
+            padding:3px;
+            border-radius: 5px;
+            
+        }
+
+        #ignoreinput::-webkit-scrollbar {
+            width: 3px;
+            height: 1px;
+        }
+        #ignoreinput::-webkit-scrollbar-thumb {
+            background-color: #000000;
+        }
+        #ignoreinput::-webkit-scrollbar-track {
+            background-color: grey;
+        }
+
+        .ignoreele{
+            width:70px;
+            height:100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            margin-right:5px;
+        }
+
+        .addIgnore{
+            width:30px;
+            height:100%;
+            margin-left:5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #777;
+            border: none;
+            font-size:15px;
+        }
+
+        .addIgnore:hover{
+            background-color: #555;
         }
 
         .map-view{
@@ -138,7 +225,7 @@
         
 
 
-        #cy{
+        #tree{
             width:100%;
             height:100%;
             
@@ -146,7 +233,6 @@
 
         .map-editor{
             width:15%;
-            height:100%;
             display:none;
             padding:3px;
             margin-top:10px;
@@ -155,7 +241,7 @@
 
         .input-area{
             width:100%;
-            height:100%;
+            height:23%;
             /* border: solid 1px #ccc; */
             background-color: RGB(227, 228, 231);
             border-radius: 5px;
@@ -214,6 +300,14 @@
         border-color: #6d5dac;
     }
 
+    #add{
+        width:200px;
+    }
+
+    #remove{
+        width:200px;
+    }
+
 
 
 
@@ -221,11 +315,12 @@
 
     </style>
 
+
 </head>
 
 <body>
 
-    <div class="wrap">
+      <div class="wrap">
         <header>
 
 
@@ -249,28 +344,25 @@
 
                         <!-- cytoscape -->
                         <div class="btnarea">
+                            <div class="address">https://github.com/sazzeo/proZ</div>
+                            <div id="allview" class="btn btn-primary">전체 보기</div>
                             <div id="modifybtn" class="btn btn-info">수정하기</div>
-                            <input type="text" class= "gitinput form-control" name="element" style="display:none;" placeholder="깃주소를 입력하세요">
-                            <div id="gitbtn" class="btn btn-primary" style="display:none;">깃 연동하기</div>
-                            <div id="resetbtn" class="btn btn-primary" style="display:none;">모두 지우기</div>
+                            <div id="gitarea" style="display: none;">
+                                <input type="text" class= "gitinput form-control" name="element" style="display:none;" placeholder="git">
+                                <input type="text" class= "branchinput form-control" name="element" style="display:none;" placeholder="branch">
+                                <div id="ignoreinput">
+                                    <input type="text" class="ignoreele form-control" name="element"  placeholder="ignore">
+                                    <div class="addIgnore btn btn-primary">+</div>
+                                </div>
+                                <div id="gitbtn" class="btn btn-primary" style="display:none;">깃 연동하기</div>
+                            </div>
+                            <div id="resetbtn" class="btn btn-primary" style="display:none;">내 깃주소 가져오기</div>
                             <div id="modifinishbtn" class="btn btn-info" style="display:none;">수정완료</div>
                         </div>
                         <div class="map-view">
-                            
-    						<div id="tree" style="height:700px; width:1200px"></div>
-    					
+                            <div id="tree" ></div>
+                        
                         <!-- cytoscapt-end -->
-                        <div class="map-editor">
-                            <div class="input-area">
-                                <div class="fromto">
-                                    <div class="sourceclass">from<input type="text" class= "source form-control form-control-sm" name="source" placeholder="source"></div>
-                                    <div class="targetclass">to<input type="text" class="target form-control form-control-sm" name="target" placeholder="target"></div>
-                                </div>
-                                <div class="linebtn">
-                                    <div id="addline"  class= "btn btn-success"> + </div>
-                                    <div id="removeline" class= "btn btn-danger"> - </div>
-                                </div>
-                            </div>
                         </div>
                         </div>
                     </div>
@@ -280,30 +372,47 @@
 
     </div>
 
+
 <script type="text/javascript">
 	
 	
 
-    $("#modifybtn").click(function(){
-        $("#modifinishbtn").css("display","flex");
-        $("#gitbtn").css("display","flex");
-        $("#resetbtn").css("display","flex");
-        $("#modifybtn").hide();
-        $("#cy").css("width","85%");
-        $(".map-editor").css("display","flex");
-        $(".gitinput").css("display","flex");
-    });
-    
+$("#modifybtn").click(function(){
+    $("#modifinishbtn").css("display","flex");
+    $("#gitbtn").css("display","flex");
+    $("#resetbtn").css("display","flex");
+    $("#modifybtn").hide();
+    $("#allview").hide();
+    $(".address").hide();
+    $("#tree").css("width","85%");
+    $(".gitinput").css("display","flex");
+    $(".branchinput").css("display","flex");
+    $("#ignoreinput").css("display","flex");
+    $("#gitarea").css("display","flex");
+});
 
-    $("#modifinishbtn").click(function(){
-        $("#modifybtn").css("display","flex");
-        $("#modifinishbtn").hide();
-        $("#cy").css("width","100%");
-        $(".map-editor").hide();
-        $("#gitbtn").hide();
-        $("#resetbtn").hide();
-        $(".gitinput").hide();
+$("#modifinishbtn").click(function(){
+    $("#modifybtn").css("display","flex");
+    $("#allview").css("display","flex");
+    $(".address").css("display","flex");
+    $("#modifinishbtn").hide();
+    $("#tree").css("width","100%");
+    $("#gitbtn").hide();
+    $("#resetbtn").hide();
+    $(".gitinput").hide();
+    $(".branchinput").hide();
+    $("#ignoreinput").hide();
+    $("#gitarea").hide();
+});
+
+    
+    $(".addIgnore").click(function(){
+        $("#ignoreinput").prepend('<input type="text" class="ignoreele form-control" name="element"  placeholder="ignore">')
+        document.getElementById("ignoreinput").scrollLeft += 100;
     });
+
+  
+
     
     
     $("#gitbtn").on('click', function() {
@@ -332,21 +441,42 @@
 	let dataJson = JSON.parse('${loadmap.gitTree}');
     
     console.dir(dataJson);
-    let dataArr = [{ id: "2785aa0e" ,text_1:"src", father:null }];
     
+    //첫 애 넣어주기
+    let dataArr = [{id:"root" , text_1:"root" , father: null}];
     
+
+    let data = [{id:"root" , text_1:"root" , father: null}];
 
     
     dataJson.forEach(function(e) {
+    	let d;
+    	if(!e.prev) {
+    		
     	
-    	let d =  { id: e.sha , text_1:e.path , father: e.prev , color:"#2196F3" };
+    	d =  { id: e.sha , text_1:e.path , father: "root" , color:"#2196F3" };
+
+        data.push(d);   
+    		
+    	}else {
+    		let color;
+    		if(e.type="tree") {
+    			color = "#B076CF";
+    			
+    		}else if(e.type="blob"){
+    			color ="#E971AD";
+    		}
+    		
+    	d =  { id: e.sha , text_1:e.path , father: e.prev , color:color };
+    		
+    	}
+    	
     	dataArr.push(d);
     	
     })
     
     console.dir(dataArr);
-
-
+    
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.umd.js" integrity="sha512-bgoBr08oPe0Fgqfk4TY8yNOXb1g3pkWHnsiVLLqmR+71gyo1v4PRwFEYTIL1xuFG/EHZRAvn7P1aMvs/9rKoAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -354,7 +484,28 @@
 <!-- cytoscape--------------------------------------------------------------------------------- -->
  <script>
  
-        var data = dataArr;
+     
+     
+     //클릭했을 떄 id
+     function add(id) {
+    	 console.dir("에드함수: ")
+    	 console.dir(id);
+    	 dataArr.forEach(function(e) {
+    	
+    		 if(id==e.father) {
+    			 data.push(e);
+    			 console.dir(e.text_1)
+    			 console.dir("이프문 실행");
+    		 }
+    		 
+    		 
+    	 })
+    	 
+    	 
+     }
+     
+     
+     
         
 
     var myTree = Treeviz.create({
@@ -377,281 +528,36 @@
         linkWidth : (nodeData)=> 5, //노드 선 두께
         linkShape:"curve",
         linkColor : (nodeData) => "#B0BEC5" ,
-        onNodeClick : (nodeData) => console.log(nodeData)
+        onNodeClick : (nodeData, node) => {
+        	console.dir(node)
+        	console.dir("노드id: ");
+        	console.dir(node.id);
+        	add(node.id);
+        	myTree.refresh(data);
+        	
+        } //노드 클릭시 발생하는 이벤트
     });
-
+	
+    
+ 
+    
     
     
     myTree.refresh(data);
 
     
     var toggle=true;
+    
+    
+    
+    
+    
 /*     
     document.querySelector("#add").addEventListener("click", () => {toggle ? myTree.refresh(data_2) : myTree.refresh(data_3); toggle = false});
     document.querySelector("#remove").addEventListener("click", () => myTree.refresh(data));
       */
     </script>
 
-<!-- 
-<script type="text/javascript">
-
-
-   const data = dataArr;
-
-
-/*
-[ // 일반객체로 지정된 요소
-        { data: { id: 'proz' , url:"menu.html" ,label: "prozlabel"}},  //그래프 수준데이터를 포함하는 일반 개체
-        { data: { id: 'src' , label: "srclabel" }},
-        { data: { id: 'main' , label: "mainlabel" }},
-        { data: { id: 'test' , label: "testlabel"}},
-        { data: { id: 'java' , label: "mainlabel" }},
-        { data: { id: 'java1' , label: "mainlabel" }},
-        { data: { id: 'webapp' , label: "webapplabel" }},
-        { data: { id: 'resources' , label: "resourceslabel" }},
-        { data: { id: 'resources1' , label: "resourceslabel" }},
-        { data: { id: 'ab', source: 'proz', target: 'src' }},
-        { data: { source: 'src', target: 'main' }},
-        { data: { source: 'src', target: 'test' }},
-        { data: { source: 'test', target: 'resources' }},
-        { data: { source: 'test', target: 'java' }},
-        { data: { source: 'main', target: 'resources1' }},
-        { data: { source: 'main', target: 'java1' }},
-        { data: { source: 'main', target: 'webapp' }},
-
-      ];
-*/
-
-
-  
-  //뎁스에따라 크기차이 주기 
-    const cy_for_rank = cytoscape({
-    elements: data
-});
-// rank를 활용하기 위해 data만 입력한 cytoscape 객체입니다
-
-const pageRank = cy_for_rank.elements().pageRank();
-// elements들의 rank들입니다.
-
-
-/// 변경된 부분
-const nodeMaxSize = 50;
-const nodeMinSize = 30;
-const nodeActiveSize = 28;
-const fontMaxSize = 20;
-const fontMinSize = 15;
-const fontActiveSize = 7;
-// node & font 크기 값
-
-const edgeWidth = '2px';
-var edgeActiveWidth = '4px';
-const arrowScale = 0.8;
-const arrowActiveScale = 1.2;
-// edge & arrow 크기값
-
-const dimColor = '#dfe4ea';
-const edgeColor = '#ced6e0';
-const nodeColor = '#57606f';
-const nodeActiveColor = '#5000bf';
-
-const successorColor = '#8f7ae5';
-// 상위 node & edge color
-const predecessorsColor = '#f170aa';
-// 하위 node & edge color
-
-// 변경된 부분
-
-
-function setDimStyle(target_cy, style) {
-    target_cy.nodes().forEach(function (target) {
-        target.style(style);
-    });
-    target_cy.edges().forEach(function (target) {
-        target.style(style);
-    });
-}
-
-function setFocus(target_element, successorColor, predecessorsColor, edgeWidth, arrowScale) {
-    target_element.style('background-color', nodeActiveColor);
-    target_element.style('color', nodeColor);
-    target_element.successors().each(function (e) {
-        // 상위  엣지와 노드
-        if (e.isEdge()) {
-            e.style('width', edgeWidth);
-            e.style('arrow-scale', arrowScale);
-        }
-        e.style('color', nodeColor);
-        e.style('background-color', successorColor);
-        e.style('line-color', successorColor);
-        e.style('source-arrow-color', successorColor);
-        setOpacityElement(e, 0.5);
-    }
-    );
-    target_element.predecessors().each(function (e) {
-        // 하위 엣지와 노드
-        if (e.isEdge()) {
-            e.style('width', edgeWidth);
-            e.style('arrow-scale', arrowScale);
-        }
-        e.style('color', nodeColor);
-        e.style('background-color', predecessorsColor);
-        e.style('line-color', predecessorsColor);
-        e.style('source-arrow-color', predecessorsColor);
-        setOpacityElement(e, 0.5);
-    });
-    target_element.neighborhood().each(function (e) {
-        // 이웃한 엣지와 노드
-        setOpacityElement(e, 1);
-    }
-    );
-    target_element.style('width', Math.max(parseFloat(target_element.style('width')), nodeActiveSize));
-    target_element.style('height', Math.max(parseFloat(target_element.style('height')), nodeActiveSize));
-    target_element.style('font-size', Math.max(parseFloat(target_element.style('font-size')), fontActiveSize));
-}
-
-function setOpacityElement(target_element, degree) {
-    target_element.style('opacity', degree);
-}
-
-function setResetFocus(target_cy) {
-    target_cy.nodes().forEach(function (target) {
-        target.style('background-color', nodeColor);
-        var rank = pageRank.rank(target);
-        target.style('width', nodeMaxSize * rank + nodeMinSize);
-        target.style('height', nodeMaxSize * rank + nodeMinSize);
-        target.style('font-size', fontMaxSize * rank + fontMinSize);
-        target.style('color', nodeColor);
-        target.style('opacity', 1);
-    });
-    target_cy.edges().forEach(function (target) {
-        target.style('line-color', edgeColor);
-        target.style('source-arrow-color', edgeColor);
-        target.style('width', edgeWidth);
-        target.style('arrow-scale', arrowScale);
-        target.style('opacity', 1);
-    });
-}
-
-
-
-    var cy = cytoscape({    //초기화
-  
-      container: $('#cy'), // 맵을 그릴 컨테이너 준비 (시각화를 위한 dom 요소)
-
-      
-      elements: data,
-
-  
-      style: [ // the stylesheet for the graph
-        {
-            selector: 'node',
-            style: {
-              // 변경된 부분
-                'background-color': nodeColor,
-              //
-                'label': 'data(label)',
-                'width': function (ele) {
-                    return nodeMaxSize * pageRank.rank('#' + ele.id()) + nodeMinSize;
-                },
-                'height': function (ele) {
-                    return nodeMaxSize * pageRank.rank('#' + ele.id()) + nodeMinSize;
-                },
-                'font-size': function (ele) {
-                    return fontMaxSize * pageRank.rank('#' + ele.id()) + fontMinSize;
-                },
-              // 추가된 부분
-                'color': nodeColor
-              //
-            }
-        },
-
-        {
-            selector: 'edge',
-            style: {
-              // 변경된 부분
-                'width': edgeWidth,
-                'curve-style': 'bezier',
-                'line-color': edgeColor,
-                'source-arrow-color': edgeColor,
-                'source-arrow-shape': 'vee',
-                'arrow-scale': arrowScale,
-                'curve-style': 'bezier'
-              //
-            }
-        }
-    ],
-
-    layout: {
-        name: 'breadthfirst',
-        rows: 20,
-        nodeDimensionsIncludeLabels: false,
-        directed: true, 
-        pavoidOverlap: true,
-        fit: false
-    }
-});
-
-
-
-
-
-      
-
-
-
-    //url 연결
-    cy.on('tap', function (e) {
-    const url = e.target.data('url')
-    if (url && url !== '') {
-        window.open(url);
-    }
-    });
-
-    cy.on('tapstart mouseover', 'node', function (e) {
-    setDimStyle(cy, {
-        'background-color': dimColor,
-        'line-color': dimColor,
-        'source-arrow-color': dimColor,
-        'color': dimColor
-    });
-
-    setFocus(e.target, successorColor, predecessorsColor, edgeActiveWidth, arrowActiveScale);
-});
-
-cy.on('tapend mouseout', 'node', function (e) {
-    setResetFocus(e.cy);
-}); 
-
-    //요소&관계 추가
-      // $("#addline").click(function(){
-      //   cy.add ( [{ group: 'nodes', data: { id: $(".source").val() }, position: { x: 100, y: 100 } }, 
-      //            { group: 'nodes', data: { id: $(".target").val() }, position: { x: 100, y: 100 } }, 
-      //            { group: 'edges', data: { id: $(".source").val() + $(".target").val() , source: $(".source").val() , target: $(".target").val() } }, ]);
-      //            cy.layout({ name: 'breadthfirst', rows: 1 });
-      //            layout.run();
-      //   data.push({ group: 'nodes', data: { id: $(".source").val() }, position: { x: 100, y: 100 } },); 
-      //   });
-
-        $("#addline").click(function(){
-        data.push({ group: 'nodes', data: { id: $(".source").val() + "Id", label: $(".source").val()}, position: { x: 100, y: 100 } }, ); 
-        data.push({ group: 'nodes', data: { id: $(".target").val() + "Id", label: $(".target").val()}, position: { x: 100, y: 100 } }, ); 
-        data.push({ group: 'edges', data: { id: $(".source").val() + $(".target").val() , source: $(".source").val() , target: $(".target").val() } }, ); 
-        });
-
-      $("#removeele").click(function(){
-        cy.remove ({ group: 'nodes', data: { id: $(".source").val() }, position: { x: 100, y: 100 } }, );
-      });
-
-
-
-      
-    
-
-
-
-  </script>
-
- -->
 </body>
 
 </html>

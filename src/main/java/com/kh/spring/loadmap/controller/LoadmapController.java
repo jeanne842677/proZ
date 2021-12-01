@@ -36,7 +36,7 @@ import com.kh.spring.loadmap.model.dto.Loadmap;
 public class LoadmapController {
 
 	@Autowired
-	private LoadmapService roadmapService;
+	private LoadmapService loadmapService;
 
 	@Autowired
 	RestTemplate http;
@@ -45,7 +45,7 @@ public class LoadmapController {
 	public String roadmap(@PathVariable String projectIdx, Model model,
 			@RequestParam String wsIdx) {
 		
-		Loadmap loadmap = roadmapService.selectLoadmap(wsIdx);
+		Loadmap loadmap = loadmapService.selectLoadmap(wsIdx);
 		
 		model.addAttribute("loadmap",loadmap);
 		
@@ -59,7 +59,7 @@ public class LoadmapController {
 	public String gitUpload(@RequestBody Loadmap loadmap) {
 		
 	
-		String res = roadmapService.insertGit(loadmap);
+		String res = loadmapService.insertGit(loadmap);
 		
 		System.out.println(res);
 		
