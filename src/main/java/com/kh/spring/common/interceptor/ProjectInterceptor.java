@@ -35,7 +35,7 @@ public class ProjectInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		
 		String[] uri = request.getRequestURI().split("/");
-
+		
 		
 		if (uri.length != 0) {
 			
@@ -44,8 +44,6 @@ public class ProjectInterceptor implements HandlerInterceptor {
 			
 			if(match) {
 				addNavAtrribute(request, response , projectIdx);
-				
-				
 			}
 
 

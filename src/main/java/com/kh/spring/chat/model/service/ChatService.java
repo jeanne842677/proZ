@@ -9,6 +9,6 @@ public interface ChatService {
 
 	void insertChat(Chat chat);
 
-	List<QueryDocumentSnapshot> selectAllMeassage(String wsIdx);
+	List<Chat> selectAllMeassage(String wsIdx);
 
 }

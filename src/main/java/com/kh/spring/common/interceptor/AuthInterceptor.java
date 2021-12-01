@@ -1,6 +1,7 @@
 package com.kh.spring.common.interceptor;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -28,13 +29,20 @@ public class AuthInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Object handler) {
 
 		String[] uri = httpRequest.getRequestURI().split("/");
+		String projectIdx = "";
 
 		if (uri.length != 0) {
-
+			
+			projectIdx = uri[uri.length-1];
+			
 			switch (uri[1]) {
 
 			case "project":
-				projectAuthorize(httpRequest, httpResponse, uri);
+				projectAuthorize(httpRequest, httpResponse, uri,projectIdx);
+				break;
+				
+			case "chat":
+				chattingAuthorize(httpRequest, httpResponse, uri,projectIdx);
 				break;
 
 			default:
@@ -47,7 +55,42 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 	}
 
-	private void projectAuthorize(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String[] uri) {
+	private void chattingAuthorize(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String[] uri ,String projectIdx) {
+		HttpSession session = httpRequest.getSession();
+		Member member = (Member) session.getAttribute("authentication");
+		
+		System.out.println("아ㅏㅏㅏㅏㅏㅏㅇ아ㅏ아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ아아ㅏㅏㅏㅏㅏ"+projectIdx);
+		
+		
+		Project project = projectService.selectProjectExist(projectIdx);
+		
+		// 로그인 하지 않았을 경우
+		if (member == null) {
+			throw new HandlableException(ErrorCode.NEED_LOGIN);
+		} else {
+			// 프로젝트가 없을 경우
+			if (project == null || projectService.projectIsDel(projectIdx) == 1) {
+				throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
+			}
+
+			// 프로젝트 멤버가 아닐 경우
+			List<String> proIdxList = projectService.selectProjectIdxByUserIdx(member.getUserIdx());
+			System.out.println("인터셉터 프로젝트 리스트 : " + proIdxList);
+			boolean flg = true;
+			for (String proIdx : proIdxList) {
+				if (proIdx.equals(projectIdx)) {
+					flg = false;
+				}
+			}
+			
+			if (flg) {
+				throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);
+			}
+		}
+		
+	}
+
+	private void projectAuthorize(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String[] uri, String projectIdx) {
 		HttpSession session = httpRequest.getSession();
 		Member member = (Member) session.getAttribute("authentication");
 
@@ -56,7 +99,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 			switch (uri[2]) {
 
 			case "setting":
-				String projectIdx = uri[uri.length - 1];
+				
 				System.out.println("setting projectIdx :  " + projectIdx);
 
 				Project project = projectService.selectProjectExist(projectIdx);
@@ -82,7 +125,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 					}
 
 					if (flg) {
-						throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
+						throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);
 					}
 
 				}
