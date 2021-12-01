@@ -6,6 +6,7 @@ import java.util.Map;
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.member.model.dto.Member;
+import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.Workspace;
 
 public interface BoardService {
@@ -29,5 +30,7 @@ public interface BoardService {
 	void updatePostSort(Map<String, String> map);
 
 	Post selectPostByPostIdx(String pmIdx);
+
+	List<Post> selectBoardByTop(String projectIdx);
 
 }

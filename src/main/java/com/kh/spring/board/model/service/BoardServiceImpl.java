@@ -10,6 +10,7 @@ import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.board.model.repository.BoardRepository;
 import com.kh.spring.member.model.dto.Member;
+import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.repository.ProjectRepository;
@@ -124,6 +125,12 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Post selectPostByPostIdx(String pmIdx) {
 		return boardRepository.selectPostByPostIdx(pmIdx);
+	}
+
+	@Override
+	public List<Post> selectBoardByTop(String projectIdx) {
+		// TODO Auto-generated method stub
+		return boardRepository.selectBoardByTop(projectIdx);
 	};
 
 }
