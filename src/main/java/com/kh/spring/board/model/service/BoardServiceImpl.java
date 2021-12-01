@@ -82,9 +82,9 @@ public class BoardServiceImpl implements BoardService {
 		map.put("userIdx", member.getUserIdx());
 
 		ProjectMember projectMember = projectRepository.selectProjectMemberByMap(map);
-		//임시 pmIdx(),100108 
-		map.put("pmIdx", "100108");
-		//map.put("pmIdx", projectMember.getPmIdx());
+		
+		// 수정됨
+		map.put("pmIdx", projectMember.getPmIdx());
 
 		System.out.println(projectMember);
 		boardRepository.insertPost(map);
