@@ -423,6 +423,7 @@ margin-bottom:0;
            margin-right:10px;
         }
         
+        
 
     </style>
 </head>
@@ -469,21 +470,18 @@ margin-bottom:0;
                         <div class="board">
                             <div class="boardarea" >board</div>
                             <div class="boardwrap">
-                            	<c:if test="${empty boardList}">
+                            	<c:if test="${empty postList}">
 	                             	<div id="noticeText">현재 워크스페이스에 게시판이 존재하지 않습니다.</div>
-	                             </c:if>
-	                             
-                              		
+	                             </c:if> 
 	                                     <c:forEach items="${postList}" var="post">
-	                                    	
+	                                    	<div class="boardcon">
 	                                        <div class="card" id="${post.postIdx }" data-sort="${post.sort}">
 	                                            <div class="card-subject">${post.postTitle}</div>
 	                                            <div class="profile-img"></div>
 	                                        </div>
-	                                       
+	                                       </div>
 	                                    </c:forEach>
-	                   
-                                
+	            
                             </div>
                         </div>
                         <div class="comment">
