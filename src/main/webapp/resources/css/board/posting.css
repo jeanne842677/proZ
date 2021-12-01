@@ -169,15 +169,21 @@ aside {
                 align-items: center;
             }
                 .editor-cover{
-                    margin-right: 10px;
                     width: 19px;
                     height: 20px;
-                    background-color: lightgray;
+					padding:0; 
+					border: 2px solid RGB(245, 246, 247); 
+					margin-right: 10px;
                 }
+                	.editor-cover:hover{
+                		border:2px solid lightgray;
+                		border-radius: 3px; 
+                	}
+                	.editor-cover:focus{
+                		border:2px solid slategray;
+                		border-radius: 3px; 
+                	}
             .editor-content-date{
-                display: flex;
-            }
-            .editor-content-hashTag{
                 display: flex;
             }
             /* br-LINE */

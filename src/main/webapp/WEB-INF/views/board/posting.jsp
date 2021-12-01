@@ -54,7 +54,7 @@
                     </div>
                     <div class="editor-main-content-wrapper">
                         <div class="editor-navigation-bar"></div>
-                        <div class="editor-minHeight-div" style="min-height: 300px;">
+                        <div class="editor-minHeight-div" style="min-height: 500px;">
                         <div class="editor-title" contenteditable="true" placeholder="제목을 입력하세요"></div>
                         <div class="initPage">
                             <div>이곳을 클릭하여 새로운 포스트를 작성하세요</div>
@@ -68,23 +68,19 @@
                                     <div class="editor-content-cover">
                                         <div class="editor-content-cover-wrapper">
                                             <div class="editor-message">커버</div>
-                                            <div class="editor-cover"></div>
-                                            <div class="editor-cover"></div>
-                                            <div class="editor-cover"></div>
-                                            <div class="editor-cover"></div>
-                                            <div class="editor-cover"></div>
-                                            <div class="editor-cover"></div>
-                                            <div class="editor-cover"></div>
+                                            <button class="editor-cover" style="background-color:#ff3a68;"></button>
+                                            <button class="editor-cover" style="background-color:#ff77ee;"></button>
+                                            <button class="editor-cover" style="background-color:#7ec1fc;"></button>
+                                            <button class="editor-cover" style="background-color:#4dffde;"></button>
+                                            <button class="editor-cover" style="background-color:#6cff84;"></button>
+                                            <button class="editor-cover" style="background-color:#f0f266;"></button>
+                                            <button class="editor-cover" style="background-color:#fcae4ddb;"></button>
                                         </div>
                                         <button type="button" id="editor-submit-btn" class="btn btn-primary">POST</button>
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
                                         <div>2021년 03월 03일 ~ 2021년 11월 13일</div>
-                                    </div>
-                                    <div class="editor-content-hashTag">
-                                        <div class="editor-message">#인물 태그</div>
-                                        <div>#이유송 #하명도</div>
                                     </div>
                                     <div class="br-line"></div>
                                 </div>
@@ -162,8 +158,8 @@
       }; 
     });
   };
-
-    console.log($('.editor-title')); 
+ 	
+  // 임시 titleDiv 생성 
     createTitleDiv($('.editor-title')); 
 
     // 카피 비동기통신 테스트 중... 
@@ -197,22 +193,25 @@
   var createLinkDiv = function(element){
     isCopied(element); 
   }
+  
+  //*** 여기부터는 자잘한 기능 
+  // *커버색 추가 
+  // 1. 커버 전부 버튼으로 바꾸고, 선택 시 focusing: 연한테두리 
+  // 2. 선택 시 javascript 기능으로 특정 변수 (색을 전달할 변수에) 의 색 값을 바꾼다. 
+  var postColor = 'white';
+  
+  $('.editor-cover').on('click', function(e){
+	 postColor = $(this).css('background-color'); 
+  })
+  // 기본값 white 
+  
+  // *작성날짜 추가 
+  // 1. 작성날짜는 Date()로 받아서 javascript로 표기, innerText로 삽입 
+  
+  
+  
 </script>
 <script>
-
-//Title 관련 Copy방지 (및 CommonDiv)
- document.querySelector('.editor-title').addEventListener('paste' , function(event) {
-     console.log('1'); 
-     event.preventDefault();
-     let text =event.clipboardData.getData("text/plain");
-     document.execCommand("insertHTML", false,  text);
- });
- document.querySelector('.commonDiv').addEventListener('paste' , function(event) {
-     console.log('1'); 
-     event.preventDefault();
-     let text =event.clipboardData.getData("text/plain");
-     document.execCommand("insertHTML", false,  text);
- });
 
 //Fecth 버튼 이벤트 코드 
 </script>
@@ -230,6 +229,7 @@ $('#editor-submit-btn').on('click' , function() {
         body : JSON.stringify({
             postTitle : subject,
             postContent : content,
+            postColor : postColor, 
             bdIdx : "${param.bdidx}"
             })
         

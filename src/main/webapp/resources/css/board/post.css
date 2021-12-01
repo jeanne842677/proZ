@@ -130,14 +130,19 @@ aside {
 
         }
     /* footer */
-    .footer-wrapper{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                height: 200px;
-                color: slategray;
-            }
+   .footer-wrapper{
+               display: flex;
+               flex-direction: column;
+               align-items: center;
+               width: 100%;
+               height: 200px;
+               color: slategray;
+           }
+           	.post-footer-content-cover{
+           		display:flex;
+           		width:100%; 
+           		justify-content:space-between; 
+           	}	
                 .footer-content-wrapper{
                     width: 100%;
                     height: 100px;
@@ -151,23 +156,28 @@ aside {
                     .post-message{
                         width: 90px;
                     }
+                    
                 /* 커버 색상 조정  */
-            .post-content-cover{
+            .post-footer-content-cover{
                 display: flex;
-                align-items: center;
             }
+            	.post-content-cover-wrapper{
+            		display:flex; 
+            	}
                 .post-cover{
                     margin-right: 10px;
                     width: 19px;
                     height: 20px;
                     background-color: lightgray;
+                    border: 2px solid RGB(245, 246, 247);
                 }
             .post-content-date{
                 display: flex;
             }
-            .post-content-hashTag{
-                display: flex;
-            }
+            	/* 버튼 스타일 조정 */
+    			#post-delete-btn{
+    				margin-left:10px; 
+    			}
     
     /* 댓글 기능 */
     .post-comment-wrapper{

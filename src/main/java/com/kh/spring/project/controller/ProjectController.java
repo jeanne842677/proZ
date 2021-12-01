@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.spring.board.model.dto.Board;
+import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
@@ -57,6 +60,8 @@ public class ProjectController {
    @Autowired
    MemberService memberSerivce;
    
+   @Autowired
+   BoardService boardService;
 
    //윤지코드
    @Autowired
@@ -395,12 +400,17 @@ public class ProjectController {
       	System.out.println("workspace : " + workspace);
       	
       	List<Memo> mainMemoList = memoService.selectMemoByTop(projectIdx);
-          
-        System.out.println("mainMemoList 다 불러지냐? :"+mainMemoList);
-         
-        model.addAttribute("mainMemoList", mainMemoList);
-           //////////////////////////////////////////////////
       
+		
+        System.out.println("mainMemoList 다 불러지냐? :"+mainMemoList);
+        model.addAttribute("mainMemoList", mainMemoList);
+        
+           //////////////////윤지 추가 코드 12월 1일////////////////////////////////
+        List<Post> postList = boardService.selectBoardByTop(projectIdx);
+    	 System.out.println("boardList 다 불러지냐? :"+postList);
+    	 model.addAttribute("postList", postList);
+    	
+        
          ///예진 코드
          String userIdx = member.getUserIdx();
          System.out.println(userIdx);
@@ -569,9 +579,12 @@ public class ProjectController {
 			
 		//1. session에서 member추출, isLeave 변경 
 		try {
-			Member member = (Member) session.getAttribute("authentication"); 
+			Member member = new Member();
+			Member sessionMember =(Member) session.getAttribute("authentication");  
+			member.setUserIdx(sessionMember.getUserIdx());
 			int res = projectService.updateProjectIsLeave(member,projectIdx); 
-			//session.removeAttribute("authentication");
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return "failed"; 

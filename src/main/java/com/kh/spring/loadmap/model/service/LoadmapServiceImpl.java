@@ -1,6 +1,7 @@
 package com.kh.spring.loadmap.model.service;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHCommit.File;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHTree;
 import org.kohsuke.github.GHTreeEntry;
@@ -17,98 +20,154 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.spring.common.util.json.JsonMaker;
+import com.kh.spring.loadmap.model.dto.GitCommit;
 import com.kh.spring.loadmap.model.dto.Loadmap;
 import com.kh.spring.loadmap.model.repository.LoadmapRepository;
 
 @Service
 public class LoadmapServiceImpl implements LoadmapService {
-	
+
 	@Autowired
 	LoadmapRepository loadmapRepository;
-	
 
 	@Override
 	public String insertGit(Loadmap loadmap) {
 		
-		makeGitTree(loadmap);
 		
+		//로드맵 주소 세팅
+		List<Map<String, Object>> paths = new ArrayList<>();
+		if (!loadmap.getGitRepo().contains("https://github.com/")) {
+			return "fail";
+		}
+		loadmap.setGitRepo(loadmap.getGitRepo().replace("https://github.com/", ""));
+
+		
+		Loadmap beforeLoadmap = loadmapRepository.selectLoadmapByWsIdx(loadmap.getWsIdx());
+		GitCommit gitCommit = null;
+
+		if (beforeLoadmap != null) {
+
+			loadmapRepository.deleteLoadmapByWsIdx(beforeLoadmap.getWsIdx());
+		}
+
+		try {
+			
+			GHRepository repo = getGitRepo(loadmap);
+			makeGitTree(repo,loadmap);
+			
+			gitCommit = getCommitFileShaList(repo);
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "fail";
+		}
+
 		loadmapRepository.insertGit(loadmap);
+		gitCommit.setLmIdx(loadmap.getLmIdx());
+		
+		loadmapRepository.insertGitCommit(gitCommit);
 		
 		System.out.println(loadmap);
-		
-		
+
 		return "complete";
+	}
+	
+
+	private GHRepository getGitRepo(Loadmap loadmap) throws IOException {
+
+		GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+		GHRepository repo = github.getRepository(loadmap.getGitRepo());
+
+		return repo;
+
+	}
+	
+
+	private GitCommit getCommitFileShaList(GHRepository repo) throws IOException {
+
+		GitCommit gitCommit = new GitCommit();
+		List<String> fileSha = new ArrayList<>();
+		for (GHCommit g : repo.listCommits()) {
+
+			gitCommit.setLogin(g.getCommitter().getLogin());
+			gitCommit.setMessage(g.getCommitShortInfo().getMessage());
+			gitCommit.setCommitDate(new Date(g.getCommitDate().getTime()));
+
+			for (File f : repo.getCommit(g.getSHA1()).getFiles()) {
+				System.out.println("추가 파일: " + f.getSha());
+				fileSha.add(f.getSha().substring(0, 8));
+			}
+
+			break; // 1번만 돌고 멈춤
+		}
+
+		gitCommit.setFiles(fileSha);
+		System.out.println(gitCommit);
+
+		return gitCommit;
+
 	}
 	
 	
 
-	
-	
-	private List<Map<String, Object>> makeGitTree(Loadmap loadmap) {
+	private List<Map<String, Object>> makeGitTree(GHRepository repo,Loadmap loadmap) throws Exception {
+
+
+		// 깃 브랜치 등록
+		GHTree ghTree = repo.getTree(loadmap.getBranch());
+		List<GHTreeEntry> treeList = ghTree.getTree();
 		
-	
-		List<Map<String, Object>> paths = new ArrayList<>();
+		Queue<Map<String, Object>> q = new LinkedList<>();
+		 List<Map<String, Object>> paths = new ArrayList<>();
+		for (int i = 0; i < treeList.size(); i++) {
 
-		try {
-			loadmap.setGitRepo(loadmap.getGitRepo().replace("https://github.com/", ""));
-			
-			//깃 레포지토리 등록
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
-			GHRepository repo = github.getRepository(loadmap.getGitRepo());
-			
-			//깃 브랜치 등록
-			GHTree ghTree = repo.getTree(loadmap.getBranch());
-			List<GHTreeEntry> treeList = ghTree.getTree();
-			System.out.println(treeList);
+			if (treeList.get(i).getType().equals("tree")) {
+				String sha = treeList.get(i).getSha();
+				String path = treeList.get(i).getPath();
+				System.out.println(sha);
+				System.out.println(path);
+				Map<String, Object> m = new HashMap<>();
+				m.put("sha", sha.substring(0, 8));
+				m.put("path", path);
+				m.put("type", "tree");
+				paths.add(m);
 
-			Queue<Map<String, Object>> q = new LinkedList<>();
+				q.offer(m);
 
-			for (int i = 0; i < treeList.size(); i++) {
+				while (q.size() != 0) {
 
-				if (treeList.get(i).getType().equals("tree") ) {
-					String sha = treeList.get(i).getSha();
-					String path = treeList.get(i).getPath();
-					System.out.println(sha);
-					System.out.println(path);
+					Map<String, Object> thisM = q.poll();
+					List<GHTreeEntry> lt = repo.getTree((String) thisM.get("sha")).getTree();
+					for (int j = 0; j < lt.size(); j++) {
 
-					Map<String, Object> m = new HashMap<>();
-					m.put("sha", sha.substring(0, 8));
-					m.put("path", path);
+						Map<String, Object> m2 = new HashMap<>();
+						String p = (String) thisM.get("path");
 
-					q.offer(m);
+						boolean ignoring = ignoring(p, loadmap.getIgnoreList());
+						if (ignoring)
+							break;
 
-					while (q.size() != 0) {
+						if (lt.get(j).getType().equals("tree")) {
 
-						Map<String, Object> thisM = q.poll();
-						List<GHTreeEntry> lt = repo.getTree((String) thisM.get("sha")).getTree();
-						for (int j = 0; j < lt.size(); j++) {
+							m2.put("prev", (String) thisM.get("sha"));
+							m2.put("sha", lt.get(j).getSha().substring(0, 8));
+							m2.put("path", lt.get(j).getPath());
+							m2.put("type", "tree");
+							q.offer(m2);
+							System.out.println(m2);
 
-							Map<String, Object> m2 = new HashMap<>();
-							String p = (String) thisM.get("path");
-							
-							
-							boolean ignoring = ignoring(p , loadmap.getIgnoreList());
-							if(ignoring) break;
-							
-							if (lt.get(j).getType().equals("tree")) {
-								
-								m2.put("prev", (String) thisM.get("sha"));
-								m2.put("sha", lt.get(j).getSha().substring(0, 8));
-								m2.put("path", lt.get(j).getPath());
-								q.offer(m2);
-								System.out.println(m2);
-							} else if (lt.get(j).getType().equals("blob")) {
-								
-								
-								m2.put("prev", (String) thisM.get("sha"));
-								m2.put("path", lt.get(j).getPath());
-								m2.put("sha", lt.get(j).getSha().substring(0, 8));
-								System.out.println(m2);
-							}
+						} else if (lt.get(j).getType().equals("blob")) {
 
-							paths.add(m2);
-
+							m2.put("prev", (String) thisM.get("sha"));
+							m2.put("path", lt.get(j).getPath());
+							m2.put("sha", lt.get(j).getSha().substring(0, 8));
+							m2.put("type", "blob");
+							System.out.println(m2);
+							System.out.println(lt.get(j).getSha());
 						}
+
+						paths.add(m2);
 
 					}
 
@@ -116,45 +175,32 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 			}
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
 		}
-		
+
 		loadmap.setGitTree(JsonMaker.json(paths));
 		return paths;
-		
-		
-		
+
 	}
-	
-	private boolean ignoring( String path ,List<String> ignore) {
-		
-		for(String dir :ignore) {
-			
-			if(path.equals(dir)) {
+
+	private boolean ignoring(String path, List<String> ignore) {
+
+		for (String dir : ignore) {
+
+			if (path.equals(dir)) {
 				return true;
 			}
-			
-			
+
 		}
-	
+
 		return false;
 	}
 
-
-
-
-
 	@Override
 	public Loadmap selectLoadmap(String wsIdx) {
-		
+
 		Loadmap loadmap = loadmapRepository.selectLoadmapByWsIdx(wsIdx);
+
 		return loadmap;
 	}
-
-
-
 
 }

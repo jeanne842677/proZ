@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.Workspace;
 
 @Mapper
@@ -58,6 +59,9 @@ public interface BoardRepository {
 	
 	@Update("update post set sort= #{changeSort} , bd_idx=#{bdIdx} where post_idx = #{postIdx} ")
 	void updatePostSort(Map<String, String> map);
+
+	@Select("select post_idx , bd_idx , pm_idx , post_title , post_color from(select * from post where bd_idx in (select bd_idx from board where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='BO'))order by post_idx desc) where rownum <= 3")
+	List<Post> selectBoardByTop(String projectIdx);
 
 
 }
