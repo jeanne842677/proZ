@@ -49,25 +49,41 @@
 					function(chat) {
 
 						var content = JSON.parse(chat.body);
-						console.dir( content);
-					
+						console.dir(content);
+						
+						
+						if(content.status=="online") {
+							
+							content.members.forEach(function(e) {
+								var userIdx = e.userIdx;
+								let user = $('#' + userIdx);
+								$('.online ul').append(user);
 
-						content.forEach(function(e) {
-
-							var userIdx = e.userIdx;
+							})
+	 
+							
+						}else if(content.status=="offline") {
+							userIdx = content.member.userIdx;
 
 							let user = $('#' + userIdx);
-							$('.online ul').append(user);
 
-						})
+							$('.offline ul').append(user);
+						}
+				
+					 	
 
-					});
+			});
+			
+				stompClient.send("/app/project/${project.projectIdx}", {}, JSON
+						.stringify({
+							userIdx : "${authentication.userIdx}",
+							nickname : "${authentication.nickname}"
+						}));
+				
+				
+	
 
-			stompClient.send("/app/project/${project.projectIdx}", {}, JSON
-					.stringify({
-						userIdx : "${authentication.userIdx}",
-						nickname : "${authentication.nickname}"
-					}));
+	
 
 	
 
@@ -83,7 +99,14 @@
 
 	function disconnect() {
 		if (stompClient !== null) {
-			stompClient.send("/app/remove/${project.projectIdx}");
+			stompClient.send("/app/remove/${project.projectIdx}", {}, JSON
+					.stringify({
+						userIdx : "${authentication.userIdx}",
+						nickname : "${authentication.nickname}"
+					}));
+			
+			
+			
 			stompClient.disconnect();
 		}
 	}

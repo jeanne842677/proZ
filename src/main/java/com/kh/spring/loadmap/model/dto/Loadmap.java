@@ -2,6 +2,8 @@ package com.kh.spring.loadmap.model.dto;
 
 import java.util.List;
 
+import com.kh.spring.common.util.json.JsonMaker;
+
 public class Loadmap {
 	
 	
@@ -67,7 +69,13 @@ public class Loadmap {
 	}
 
 
-	public List<String> getIgnore() {
+	public String getIgnore() {
+		return JsonMaker.json(ignore);
+	}
+	
+	
+	//리스트 반환하는 getter
+	public List<String> getIgnoreList() {
 		return ignore;
 	}
 

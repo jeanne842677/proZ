@@ -21,7 +21,7 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<QueryDocumentSnapshot> selectAllMeassage(String wsIdx) {
+	public List<Chat> selectAllMeassage(String wsIdx) {
 		
 		return chatRepository.selectAllMeassage(wsIdx);
 	}

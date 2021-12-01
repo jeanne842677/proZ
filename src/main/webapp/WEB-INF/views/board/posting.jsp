@@ -200,20 +200,6 @@
 </script>
 <script>
 
-//Title 관련 Copy방지 (및 CommonDiv)
- document.querySelector('.editor-title').addEventListener('paste' , function(event) {
-     console.log('1'); 
-     event.preventDefault();
-     let text =event.clipboardData.getData("text/plain");
-     document.execCommand("insertHTML", false,  text);
- });
- document.querySelector('.commonDiv').addEventListener('paste' , function(event) {
-     console.log('1'); 
-     event.preventDefault();
-     let text =event.clipboardData.getData("text/plain");
-     document.execCommand("insertHTML", false,  text);
- });
-
 //Fecth 버튼 이벤트 코드 
 </script>
 <script type="text/javascript">

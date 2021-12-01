@@ -12,7 +12,7 @@ public class StompSession implements ApplicationListener<SessionDisconnectEvent>
 	
 	@Override
 	public void onApplicationEvent(SessionDisconnectEvent event) {
-		System.out.println("<<<<연결 끊김>>>>");
+		//System.out.println("<<<<연결 끊김>>>>");
     	//template.convertAndSend("/online/project/999998" , "disconnect");
 	}
 }

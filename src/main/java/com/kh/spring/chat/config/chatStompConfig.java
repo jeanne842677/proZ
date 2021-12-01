@@ -17,7 +17,7 @@ public class chatStompConfig implements WebSocketMessageBrokerConfigurer {
 	//메시지 브로커 관련 설정
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/room" , "online"); //구독 주소
+		config.enableSimpleBroker("/room" , "/online"); //구독 주소
 		config.setApplicationDestinationPrefixes("/app");
 		//메세지 매핑에 쓰는 애
 

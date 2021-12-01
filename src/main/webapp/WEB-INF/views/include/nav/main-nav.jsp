@@ -59,7 +59,6 @@
                 		case "BO" :
                 			location.href= "/board" + loca ;
                     		break;
-                    		
                 		case "ME" :
                 			location.href="/memo" + loca + "&order=0" ;
                 			break;
@@ -67,8 +66,12 @@
                 			location.href= "/calendar" + loca ;
                 			break;
                 		case "LD" :
-                			location.href= "/" + loca ;
+                			location.href= "/loadmap" + loca ;
                 			break;
+                		case "CH" :
+                			location.href= "/chat/chatting" + loca ;
+                			break;
+                			
                 	
                 		}
                 		

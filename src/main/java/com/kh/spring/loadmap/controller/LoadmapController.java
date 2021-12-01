@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,15 +36,20 @@ import com.kh.spring.loadmap.model.dto.Loadmap;
 public class LoadmapController {
 
 	@Autowired
-	private LoadmapService roadMapService;
+	private LoadmapService loadmapService;
 
 	@Autowired
 	RestTemplate http;
 	
-	@GetMapping("loadmap")
-	public void roadmap(Model model) {
+	@GetMapping("{projectIdx}")
+	public String roadmap(@PathVariable String projectIdx, Model model,
+			@RequestParam String wsIdx) {
 		
+		Loadmap loadmap = loadmapService.selectLoadmap(wsIdx);
 		
+		model.addAttribute("loadmap",loadmap);
+		
+		return "/loadmap/loadmap";
 	}
 	
 	
@@ -50,9 +57,9 @@ public class LoadmapController {
 	@PostMapping("/git/upload")
 	@ResponseBody
 	public String gitUpload(@RequestBody Loadmap loadmap) {
-		System.out.println(loadmap);
-		String projectIdx= "999998";
-		String res = roadMapService.insertGit(projectIdx ,loadmap);
+		
+	
+		String res = loadmapService.insertGit(loadmap);
 		
 		System.out.println(res);
 		
