@@ -128,8 +128,13 @@ function readImage(input) {//이미지 업로드 함수
         reader.onload = (e) => {
             const previewImage = document.getElementById('project-img');
             previewImage.src = e.target.result;
+            console.log("e.target.result  " + e.target.result);
+            console.dir(reader.result);//이미지파일
         }
         reader.readAsDataURL(input.files[0]);
+        console.dir("input.files" + input.files);
+        console.dir(reader);
+        
     }
 }
 // 이미지 업로드==========================================

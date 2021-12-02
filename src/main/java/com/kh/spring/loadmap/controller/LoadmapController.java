@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.kh.spring.loadmap.model.service.LoadmapService;
+import com.kh.spring.common.util.json.JsonMaker;
+import com.kh.spring.loadmap.model.dto.GitCommit;
 import com.kh.spring.loadmap.model.dto.Loadmap;
 
 @RequestMapping("loadmap")
@@ -46,7 +48,14 @@ public class LoadmapController {
 			@RequestParam String wsIdx) {
 		
 		Loadmap loadmap = loadmapService.selectLoadmap(wsIdx);
+		if(loadmap!=null) {
+			List<GitCommit> gitCommitList = loadmapService.selectGitCommitListByLmIdx(loadmap.getLmIdx());
+			model.addAttribute("gitCommitList" , gitCommitList);
+			List<String> fileJson = new ArrayList<>();
+			
+		}
 		
+		System.out.println(loadmap);
 		model.addAttribute("loadmap",loadmap);
 		
 		return "/loadmap/loadmap";
@@ -54,7 +63,7 @@ public class LoadmapController {
 	
 	
 	
-	@PostMapping("/git/upload")
+	@PostMapping("git/upload")
 	@ResponseBody
 	public String gitUpload(@RequestBody Loadmap loadmap) {
 		
@@ -65,6 +74,28 @@ public class LoadmapController {
 		
 		return "complete";
 	}
+	
+	
+	@PostMapping("add/commit-list")
+	@ResponseBody
+	public GitCommit commitList(@RequestBody Loadmap loadmap) {
+		
+		
+		System.out.println(loadmap);
+		GitCommit newCommit = loadmapService.selectNewCommitList(loadmap);
+	
+		
+		return newCommit;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
@@ -133,77 +164,6 @@ public class LoadmapController {
 		
 	}
 
-	
-	@PostMapping("draw")
-	@ResponseBody
-	public List<Map<String, Object>> draw() {
-		List<Map<String, Object>> paths = new ArrayList<>();
-
-		try {
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
-			GHRepository repo = github.getRepository("sazzeo/proZ/src");
-			System.out.println("여기: " + repo.getTree("main"));
-			GHTree ghTree = repo.getTree("main");
-			List<GHTreeEntry> treeList = ghTree.getTree();
-			System.out.println(treeList);
-
-			Queue<Map<String, Object>> q = new LinkedList<>();
-
-			for (int i = 0; i < treeList.size(); i++) {
-
-				if (treeList.get(i).getType().equals("tree")) {
-					String sha = treeList.get(i).getSha();
-					String path = treeList.get(i).getPath();
-					System.out.println(sha);
-					System.out.println(path);
-
-					Map<String, Object> m = new HashMap<>();
-					m.put("sha", sha);
-					m.put("path", path);
-
-					q.offer(m);
-
-					while (q.size() != 0) {
-
-						Map<String, Object> thisM = q.poll();
-						List<GHTreeEntry> lt = repo.getTree((String) thisM.get("sha")).getTree();
-						for (int j = 0; j < lt.size(); j++) {
-
-							Map<String, Object> m2 = new HashMap<>();
-							if (lt.get(j).getType().equals("tree")) {
-								
-								m2.put("prev", (String) thisM.get("path"));
-								m2.put("sha", lt.get(j).getSha());
-								m2.put("path", lt.get(j).getPath());
-								q.offer(m2);
-								System.out.println(m2);
-							} else if (lt.get(j).getType().equals("blob")) {
-
-								m2.put("prev", (String) thisM.get("path"));
-								m2.put("path", lt.get(j).getPath());
-								System.out.println(m2);
-							}
-
-							paths.add(m2);
-
-						}
-
-					}
-
-				}
-
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
-
-		System.out.println(paths);
-
-		return paths;
-	}
 	
 	
 

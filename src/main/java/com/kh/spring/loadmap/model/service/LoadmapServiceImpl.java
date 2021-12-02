@@ -32,16 +32,14 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 	@Override
 	public String insertGit(Loadmap loadmap) {
-		
-		
-		//로드맵 주소 세팅
+
+		// 로드맵 주소 세팅
 		List<Map<String, Object>> paths = new ArrayList<>();
 		if (!loadmap.getGitRepo().contains("https://github.com/")) {
 			return "fail";
 		}
 		loadmap.setGitRepo(loadmap.getGitRepo().replace("https://github.com/", ""));
 
-		
 		Loadmap beforeLoadmap = loadmapRepository.selectLoadmapByWsIdx(loadmap.getWsIdx());
 		GitCommit gitCommit = null;
 
@@ -51,13 +49,12 @@ public class LoadmapServiceImpl implements LoadmapService {
 		}
 
 		try {
-			
+
 			GHRepository repo = getGitRepo(loadmap);
-			makeGitTree(repo,loadmap);
-			
+			makeGitTree(repo, loadmap);
+
 			gitCommit = getCommitFileShaList(repo);
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "fail";
@@ -65,24 +62,22 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 		loadmapRepository.insertGit(loadmap);
 		gitCommit.setLmIdx(loadmap.getLmIdx());
-		
+
 		loadmapRepository.insertGitCommit(gitCommit);
-		
+
 		System.out.println(loadmap);
 
 		return "complete";
 	}
-	
 
 	private GHRepository getGitRepo(Loadmap loadmap) throws IOException {
 
-		GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+		GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 		GHRepository repo = github.getRepository(loadmap.getGitRepo());
 
 		return repo;
 
 	}
-	
 
 	private GitCommit getCommitFileShaList(GHRepository repo) throws IOException {
 
@@ -108,18 +103,15 @@ public class LoadmapServiceImpl implements LoadmapService {
 		return gitCommit;
 
 	}
-	
-	
 
-	private List<Map<String, Object>> makeGitTree(GHRepository repo,Loadmap loadmap) throws Exception {
-
+	private List<Map<String, Object>> makeGitTree(GHRepository repo, Loadmap loadmap) throws Exception {
 
 		// 깃 브랜치 등록
 		GHTree ghTree = repo.getTree(loadmap.getBranch());
 		List<GHTreeEntry> treeList = ghTree.getTree();
-		
+
 		Queue<Map<String, Object>> q = new LinkedList<>();
-		 List<Map<String, Object>> paths = new ArrayList<>();
+		List<Map<String, Object>> paths = new ArrayList<>();
 		for (int i = 0; i < treeList.size(); i++) {
 
 			if (treeList.get(i).getType().equals("tree")) {
@@ -201,6 +193,48 @@ public class LoadmapServiceImpl implements LoadmapService {
 		Loadmap loadmap = loadmapRepository.selectLoadmapByWsIdx(wsIdx);
 
 		return loadmap;
+	}
+
+	@Override
+	public List<GitCommit> selectGitCommitListByLmIdx(String lmIdx) {
+
+		return loadmapRepository.selectGitCommitListByLmIdx(lmIdx);
+	}
+
+	@Override
+	public GitCommit selectNewCommitList(Loadmap loadmap) {
+
+		GitCommit gitCommit = null;
+
+		try {
+
+			GHRepository repo = getGitRepo(loadmap);
+			gitCommit = getCommitFileShaList(repo);
+			System.out.println("다시 받아온 깃커밋:  " + gitCommit);
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		List<GitCommit> lastGitList = loadmapRepository.selectGitCommitListByLmIdx(loadmap.getLmIdx());
+		System.out.println(lastGitList);
+		if (lastGitList != null) {
+			
+			GitCommit lastGit = lastGitList.get(0);
+			if (lastGit.getCommitDate().getTime()==gitCommit.getCommitDate().getTime()) {
+				System.out.println("최신과 같음 걸림");
+				return null;
+			}else {
+				
+				System.out.println("여기걸림");
+				gitCommit.setLmIdx(loadmap.getLmIdx());
+				loadmapRepository.insertGitCommit(gitCommit);
+				
+			}
+
+		}
+
+		return gitCommit;
 	}
 
 }

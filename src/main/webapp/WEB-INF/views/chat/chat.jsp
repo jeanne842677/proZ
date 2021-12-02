@@ -355,6 +355,7 @@ aside {
     let wsIdx = "${param.wsIdx}";
    	let nickname = "${projectMember.nickname}";
    	let pmIdx = "${projectMember.pmIdx}";
+   	let projectIdx = "${projectMember.projectIdx}"
    
    
        //연결 + 파이어베이스에 있는 정보 불러오기
@@ -546,33 +547,21 @@ aside {
     	  		//10분까지 쉴까? ㅇㅋ 미안 (20분을 쉬어서 10분에 다시 보자.^^먄!자지않긔. 오는길에 커피타와. 나 옆에 커피있어./ 못하면 못잠.)
     	  		
     	  		// formData
-    	  		fetch('/chat/file', {
+    	  		fetch('/chat/file/' + projectIdx, {
 			method: 'POST', 	
 			body : formData
 		})
 		.then(response => response.text())
     	.then(text=>{
     		console.log(text);
-    	})
-    	.catch( ()=>{
-    		alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
-    	});	
+    		//12/3 여기부터 json에서 데이터 더넣고 send하기!
+      	  	/* stompClient.send("/app/test/" + wsIdx , {}, text); */
+ 	
+ 	});
+    	});
     	  				
     	  		
-    	  	/* 	stompClient.send("/app/test/" + wsIdx , {}, JSON.stringify({ //나머지.
-    	               chIdx : chIdx,
-    	                 wsIdx : wsIdx,
-    	                 chName : "채팅방1",
-    	                 content : "테스트용",
-    	                 regDate : "1234",
-    	                 nickname : nickname,//파일을 어떻게? 바이너리코드? 그거괜찮은것..?(은비쓰 생각) or 경로를 주자.(민협쓰 생각)//이미지 올리면 저장?
-    	                 pmIdx : pmIdx, 
-    	                 form : file 
-    	 
-    	          }));   */
-    	  	
-    	  	
-    	  	});
+
   
   	
 
@@ -589,6 +578,7 @@ aside {
       })
     
 
+      
     
     </script>
 

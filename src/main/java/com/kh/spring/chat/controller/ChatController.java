@@ -32,6 +32,7 @@ import com.kh.spring.chat.model.dto.Chat;
 import com.kh.spring.chat.model.service.ChatService;
 import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.common.util.file.FileUtil;
+import com.kh.spring.common.util.json.JsonMaker;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.Workspace;
@@ -102,12 +103,12 @@ public class ChatController {
 
     @MessageMapping("/test/{wsIdx}") //이 주소로 보낸 애들한테 메세지를 받음. 구독주소가 빠진거?
     @SendTo("/room/test/{wsIdx}") //이 주소인 애한테 메세지를 보냄
-    public List<MultipartFile> sendChatMessage2(@DestinationVariable("wsIdx") String wsIdx
-    	,List<MultipartFile> files, SimpMessageHeaderAccessor headerAccessor, Principal principal) {
+    public  Chat sendChatMessage2(@DestinationVariable("wsIdx") String wsIdx
+    	 ,Chat chat, SimpMessageHeaderAccessor headerAccessor, Principal principal) {
         
     	System.out.println("룸번호" + wsIdx);
     	System.out.println("채팅 메세지 들어옴");
-        System.out.println(files);
+        System.out.println(chat);
         //chatService.insertChat(map);
         
         return null; //response BODY 느낌
@@ -116,16 +117,17 @@ public class ChatController {
         
     }
 
-    @PostMapping("file")
+    @PostMapping("file/{projectIdx}")
     @ResponseBody
     public String chatFileUpload(@RequestParam(required=false) List<MultipartFile> files,
-    		HttpSession session) {
+    		HttpSession session,
+    		@PathVariable String projectIdx) {
     	System.out.println("ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ");
     	//1) 파일 추출 및 DB저장 
     	FileUtil fileUtil = new FileUtil(); 
     	FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
     	System.out.println("fileUploaded : " + fileUploaded);
-    	return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
+    	return JsonMaker.json(fileUploaded); 
     }
 
 }

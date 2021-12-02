@@ -83,6 +83,8 @@ public class Loadmap {
 	public void setIgnore(List<String> ignore) {
 		this.ignore = ignore;
 	}
+	
+	
 
 
 	@Override
