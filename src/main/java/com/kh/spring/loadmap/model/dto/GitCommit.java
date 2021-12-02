@@ -12,8 +12,8 @@ public class GitCommit {
 	private String login;
 	private String message;
 	private Date commitDate;
-	private List<String> files;
-	private Date regDaate;
+	private String files;
+	private Date regDate;
 	
 	public GitCommit() {
 		// TODO Auto-generated constructor stub
@@ -80,34 +80,35 @@ public class GitCommit {
 
 
 	public String getFiles() {
-		return JsonMaker.json(files);
+		return files;
 	}
 
 
 
 	public void setFiles(List<String> files) {
+		this.files = JsonMaker.json(files);
+	}
+	
+	public void setFiles(String files) {
 		this.files = files;
 	}
 
-
-
-	public Date getRegDaate() {
-		return regDaate;
+	public Date getRegDate() {
+		return regDate;
 	}
 
-
-
-	public void setRegDaate(Date regDaate) {
-		this.regDaate = regDaate;
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
 	}
-
-
 
 	@Override
 	public String toString() {
 		return "GitCommit [gcIdx=" + gcIdx + ", lmIdx=" + lmIdx + ", login=" + login + ", message=" + message
-				+ ", commitDate=" + commitDate + ", files=" + files + ", regDaate=" + regDaate + "]";
+				+ ", commitDate=" + commitDate + ", files=" + files + ", regDate=" + regDate + "]";
 	}
+
+
+
 
 	
 
