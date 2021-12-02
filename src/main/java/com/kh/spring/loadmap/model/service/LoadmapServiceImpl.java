@@ -72,7 +72,7 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 	private GHRepository getGitRepo(Loadmap loadmap) throws IOException {
 
-		GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+		GitHub github = new GitHubBuilder().withOAuthToken("ghp_xY7zcQwkJZ=JGkXGcBOhH3g=MW6Akxbx0F7pkW".replace("=","" )).build();
 		GHRepository repo = github.getRepository(loadmap.getGitRepo());
 
 		return repo;
@@ -91,7 +91,8 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 			for (File f : repo.getCommit(g.getSHA1()).getFiles()) {
 				System.out.println("추가 파일: " + f.getSha());
-				fileSha.add(f.getSha().substring(0, 8));
+				String[] fileUrl = f.getFileName().split("/");
+				fileSha.add(fileUrl[fileUrl.length-1]);
 			}
 
 			break; // 1번만 돌고 멈춤

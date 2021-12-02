@@ -5,13 +5,30 @@
 font-family: 'Nanum Gothic Coding', monospace;
 }
 
+  @font-face {
+    font-family: 'NanumSquareRound';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SpoqaHanSansNeo-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html , body {
 width: 100%;
 height: 100%;
 min-width: 1000px;
-font-family: 'Nanum Gothic Coding', monospace;
+font-family: 'NanumSquareRound';
 }
 
+ol,ul,dl{
+	margin:0;
+}
 /* div {
 border : solid black thin;
 }  */
@@ -154,7 +171,7 @@ align-content:space-between ;
 
 
 .mypage>i{
-    margin-right:10px;
+    margin-right:15px;
 }
 
 .search{
@@ -196,6 +213,7 @@ align-content:space-between ;
     justify-content: baseline;
     align-items: flex-end;
     padding:0px 0px 10px 20px;
+    font-size:16px;
 }
 
 .workspace{
@@ -222,7 +240,14 @@ align-content:space-between ;
 .folder{
     color: #ffffff;
     list-style:none;
-    margin:5px;
+	font-size:15px;
+	margin-bottom: 5px;
+}
+
+
+
+ul>li>i, ul>li>b{
+	margin-right: 10px;
 }
 
 .cate1{
@@ -232,13 +257,10 @@ align-content:space-between ;
     list-style: none;
 }
 
-.cate1:hover, .folder>li:hover{
+.folder:hover{
     background-color: #ffffff15;
 }
 
-.cate1>i{
-    margin-right:15px;
-}
 
 .folder>li{
     padding:10px 10px 10px 0px;
@@ -258,13 +280,7 @@ align-content:space-between ;
     cursor: pointer;
 }
 
-.cate2:hover, .video>li:hover{
-    background-color: #ffffff15;
-}
 
-.cate2>i{
-    margin-right:15px;
-}
 
 .video>li{
     padding:10px 10px 10px 50px;
@@ -291,6 +307,7 @@ align-content:space-between ;
     flex-direction: column;
     padding:10px 0px 10px 0px;
     justify-content: end;
+    font-size:16px;
 }
 
 
@@ -362,6 +379,7 @@ aside {
 .online{
     height:auto;
     padding:7px;
+    font-size:16px;
 }
 
 .offlinetit{
@@ -376,6 +394,7 @@ aside {
 .offline{
     height:auto;
     padding:7px;
+    font-size:16px;
 }
 
 
@@ -409,6 +428,11 @@ aside {
 
 .online>#sortable>.member:hover{
     background-color: transparent;
+}
+
+#sortable, #sortable2{
+	padding:0;
+	font-size:16px;
 }
 
 #sortable> .member , #sortable2>.member {

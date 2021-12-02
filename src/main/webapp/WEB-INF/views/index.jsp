@@ -25,7 +25,16 @@
                     <div class="logo"><img src="/resources/img/LOGO0000w.png"></div>
                     
                     <div class="rightheader">
-                            <div class="signup" onclick="location.href='/member/join'">sign-up</div>
+                            
+                            <c:set var="loginout" value="${authentication}" />
+                        <c:choose>
+	                        <c:when test="${empty loginout}">
+								 <div class="signup" onclick="location.href='/member/join'">sign-up</div>
+							</c:when> 
+							<c:when test="${!empty loginout}">
+							      <div class="signup" onclick="location.href = '/member/mypage'">mypage</div>
+							 </c:when>
+                        </c:choose>
                             <div class="login" ><a href="/member/logout.do">
                             <c:set var="loginout" value="${authentication}" />
                         <c:choose>
@@ -48,7 +57,17 @@
                         <div class="textlogo"><img src="/resources/img/logo-white.png"></div>
                         <div class="des1">Proz is used for better project work.</div>
                         <div class="des2"> click the button to join us.</div>
-                        <div class="startbtn" onclick="location.href='/member/login'">start now!</div>
+                        <div class="startbtn" >
+                        <c:set var="loginout" value="${authentication}" />
+                        <c:choose>
+	                        <c:when test="${empty loginout}">
+								 <div class="signup" onclick="location.href='/member/login'">start now!</div>
+							</c:when> 
+							<c:when test="${!empty loginout}">
+							      <div class="signup" onclick="location.href='/project/project-list'">start now!</div>
+							 </c:when>
+                        </c:choose>
+                        </div>
                     </div>
                 </section>
 

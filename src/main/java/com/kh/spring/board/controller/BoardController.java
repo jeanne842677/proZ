@@ -139,7 +139,7 @@ public class BoardController {
 	
 	// **Post 
 	// 2) Post_getMapping 
-	@GetMapping("post/{projectIdx}")
+	@GetMapping("view/{projectIdx}")
 	public String getBoardInfo(@PathVariable String projectIdx,
 			@RequestParam(required = false) String postIdx,
 			@RequestParam(required = false) String pmIdx,
@@ -158,7 +158,7 @@ public class BoardController {
 		return "board/post"; 
 	}
 	
-	@PostMapping("post/remove-post")
+	@PostMapping("view/remove-post")
 	@ResponseBody
 	public String removePost(@RequestBody Board board) {
 

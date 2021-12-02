@@ -6,35 +6,16 @@
 
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
 <title>Insert title here</title>
-<link type="text/css" rel="stylesheet"
-	href="/resources/css/bootstrap.css">
-<link type="text/css" rel="stylesheet"
-	href="/resources/css/memo/memo.css">
-<script type="text/javascript"
-	src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript"
-	src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<link type="text/css" rel="stylesheet" href="/resources/css/bootstrap.css">
+<link type="text/css" rel="stylesheet" href="/resources/css/memo/memo.css">
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=1">
 
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://kit.fontawesome.com/485bb3ceac.js"
-	crossorigin="anonymous"></script>
-<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<link type="text/css" rel="stylesheet"
-	href="https://bootswatch.com/5/flatly/bootstrap.min.css">
-<script src="https://kit.fontawesome.com/485bb3ceac.js"
-	crossorigin="anonymous"></script>
-<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 <!-- include libraries(jQuery, bootstrap) -->
-<link
-	href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-	rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
 
 <!-- include summernote css/js -->
 <link
@@ -44,10 +25,12 @@
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 <style type="text/css">
+
 html, body {
 	width: 100%;
 	height: 100%;
 	min-width: 1450px;
+	overflow:hidden;
 }
 
 a {
@@ -104,6 +87,7 @@ section {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	min-width: 1300px;
 }
 
 aside {
@@ -221,150 +205,36 @@ hr {
 	top:647px;
 }
 
-/* nav css깨지는거   */
-.search{
-    height:15%;
-    cursor: pointer;
-}
-.find, .setting, .projectProfile{
-	height:30%;
-    display:flex;
-    padding-left:30px;
-    justify-content: baseline;
-    align-items: center;
-    font-size:16px;
-    left:15px;
+ ul>li>svg{ 
+	margin-right: 10px;
 }
 
- .pjset, .rolemanage, .membermanage, .chatset, .cash, .workspacemanage{
-    height:50%;
-    display:flex;
-    padding-left:30px;
-    justify-content: baseline;
-    align-items: center;
+.find>svg, .setting>svg, .projectProfile>svg ,.mypage>svg, .cash>svg, .reload>svg{ 
+	margin-right: 15px;
 }
 
-.find>i , .setting>i, .pjset>i, .rolemanage>i, .membermanage>i, .chatset>i, .cash>i, .workspacemanage>i, .projectProfile>i{
-    margin-right:15px;
+.online>#sortable>.member>svg, .offline>#sortable2>.member>svg{
+	width:25px;
+	height:25px;
 }
 
-.find:hover, .setting:hover, .projectProfile:hover,
-.facechat:hover, .chat:hover, .reload:hover, 
-.pjset:hover, .rolemanage:hover, .membermanage:hover, .chatset:hover, .cash:hover, .workspacemanage:hover{
-    background:#ffffff15;
+.onlinetit, .offlinetit, .teamstit{
+	font-size:16px;
 }
 
-/* nav워크스페이스------------------------------------------ */
-.worktit{
-    height:7%;
-    color:#aaa;
-    display:flex;
-    justify-content: baseline;
-    align-items: flex-end;
-    padding:0px 0px 10px 20px;
-}
-
-.workspace{
-    height:71%;
-    display:flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow-y: auto;
-    overflow-x: hidden;
-    font-size:16px;
-}
-
-.workspace::-webkit-scrollbar {
-    width: 6px;
-}
-.workspace::-webkit-scrollbar-thumb {
-    background-color: #000000;
-}
-.workspace::-webkit-scrollbar-track {
-    background-color: grey;
-}
-
-/* 오른쪽 nav */
-#onoff{
-    height:80%;
-    overflow-y: auto;
-    overflow-x:hidden;
-}
-
-.onlinetit{
-    height:5%;
-    display:flex;
-    align-items: flex-end;
-    justify-content: baseline;
-    color : #aaa;
-    padding: 0px 0px 0px 20px;
-}
-
-.online{
-    height:auto;
-    padding:7px;
-}
-
-.offlinetit{
-    height:5%;
-    display:flex;
-    align-items: flex-end;
-    justify-content: baseline;
-    color : #aaa;
-    padding: 0px 0px 0px 20px;
-}
-
-.offline{
-    height:auto;
-    padding:7px;
-}
-
-
-#onoff::-webkit-scrollbar {
-    width: 6px;
-}
-#onoff::-webkit-scrollbar-thumb {
-    background-color: #000000;
-}
-#onoff::-webkit-scrollbar-track {
-    background-color: grey;
-}
-
-#sortable>.member{
-    color:white;
-}
-
-#sortable2>.member{
-    color:#888;
-}
-
-#onoff>.online>#sortable> li:hover{
-    background-color: #ffffff15;
-    
-}
-
-#onoff>.offline>#sortable2> li:hover{
-    background-color: #ffffff15;
-    color:#ffffff;
-}
-
-.online>#sortable>.member:hover{
-    background-color: transparent;
-}
-
-#sortable> .member , #sortable2>.member {
-    height:30px;
-    display: flex;
-    align-items: center;
+.folder {
+    color: #ffffff;
+    list-style: none;
+    font-size: 15px;
+    margin-bottom: 5px;
     padding-left: 30px;
-    margin: 10px 0px 10px 0px;
-    cursor: pointer;
 }
 
-.member>.fas{
-    font-size: 25px;
-    margin-right:15px;
-}
+nav, aside{
+font-family: 'NanumSquareRound';
+} 
+ 
+
 </style>
 
 

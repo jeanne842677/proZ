@@ -7,6 +7,7 @@
 	<link type="text/css" rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
 	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 	<link rel="stylesheet" href="/resources/css/board/post.css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
 	<style type="text/css">
 	.commonDiv{
         padding: 5px 5px 5px 12px; 
@@ -32,9 +33,9 @@
 </head>
 <body>
     <div class="wrap">
-        <header></header>
+        <header><%@ include file="/WEB-INF/views/include/nav/header.jsp" %></header>
         <div class="con">
-            <nav></nav>
+            <nav><%@ include file="/WEB-INF/views/include/nav/main-nav.jsp" %></nav>
             <section>
                 <!--여기서만 작업-->
                 <div class="post-session-wrapper">
@@ -116,14 +117,17 @@
                     </div>
                 </div>
             </section>
-            <aside></aside>
+            <aside><%@ include file="/WEB-INF/views/include/nav/aside.jsp" %></aside>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script>
   
-    //Post의 내용을 교체, innerHTML로 교체 (DOMPurify 필요**)
-    // DB 저장 시 SPACE를 파싱해야 하는 것 같다. 
+    // *** 페이지 기능 (분리 이전) 
+    
+    // posting에서 DOMPurify 테스트 
+    var postContent = `${post.postContent}`;
+    console.log(postContent); 
     
     //Post 내용 없을 시 수정 
     let mainDiv = $('.editor-minHeight-div');

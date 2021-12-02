@@ -13,6 +13,8 @@
 	<link type="text/css" rel="stylesheet" href="/resources/css/board/customAuto.css">
 	<link type="text/css" rel="stylesheet" href="/resources/css/loading/loading.css">
 	<link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
+	<!-- css for Navigation bar -->
+	<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
 <style>
     .commonDiv{
         padding: 5px 5px 5px 12px; 
@@ -45,9 +47,9 @@
 </head>
 <body>
     <div class="wrap">
-        <header></header>
+        <header><%@ include file="/WEB-INF/views/include/nav/header.jsp" %></header>
         <div class="con">
-            <nav></nav>
+            <nav><%@ include file="/WEB-INF/views/include/nav/main-nav.jsp" %></nav>
             <section>
                 <!--여기서만 작업-->
                 <div class="editor-session-wrapper">
@@ -92,7 +94,7 @@
                     </div>
                 </div>
             </section>
-            <aside></aside>
+            <aside><%@ include file="/WEB-INF/views/include/nav/aside.jsp" %></aside>
         </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
@@ -104,7 +106,7 @@
 <script>
 
     // *** 페이지 기능 (분리 이전) 
-    
+   
    	// 1) initPage(시작페이지) 추가 및 시작페이지에 enter_click시 사라지는 기능 부여 
     var createInitPageFnc = function(element){
             element.on('click', function(e){
@@ -202,6 +204,12 @@ $('#editor-submit-btn').on('click' , function() {
     
 	let subject = $('.editor-title').text();
     let content = $('.editor-minHeight-div').html().trim();
+    
+    // TRIM 및 LineBreak, Quot escape처리 
+    content.replace(/(\r\n|\n|\r)/gm, ""); 
+    console.log(content); 
+    
+    
     console.log(content); 
     // 1) 제목 NULL 처리 
 	if(subject === ""){
@@ -223,7 +231,7 @@ $('#editor-submit-btn').on('click' , function() {
             })
     }).then(res=>{res.text()})
     .then(text=>{
-        //location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
+        location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
     })
 })
 </script>

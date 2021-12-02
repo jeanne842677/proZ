@@ -22,14 +22,24 @@
             <header>
                 <div class="middleheader-wrap">
                     <div class="leftheader">
-                        <div class="project" onclick="location.href='/'">home</div>
-                        <div class="templates" onclick="location.href='/project/project-list'">projects</div>
+                            <div class="project" onclick="location.href='/'">home</div>
+                            <div class="templates" onclick="location.href='/project/project-list'">projects</div>
                     </div>
                     <div class="logo"><img src="/resources/img/LOGO0000w.png"></div>
+                    
                     <div class="rightheader">
-                        <div class="signup" onclick="location.href='/member/join'">sign-up</div>
-                        <div class="login" ><a href="/member/logout.do">
-                         <c:set var="loginout" value="${authentication}" />
+                            
+                            <c:set var="loginout" value="${authentication}" />
+                        <c:choose>
+	                        <c:when test="${empty loginout}">
+								 <div class="signup" onclick="location.href='/member/join'">sign-up</div>
+							</c:when> 
+							<c:when test="${!empty loginout}">
+							      <div class="signup" onclick="location.href = '/member/mypage'">mypage</div>
+							 </c:when>
+                        </c:choose>
+                            <div class="login" ><a href="/member/logout.do">
+                            <c:set var="loginout" value="${authentication}" />
                         <c:choose>
 	                        <c:when test="${empty loginout}">
 								 login
@@ -38,8 +48,8 @@
 							      logout
 							 </c:when>
                         </c:choose>
-                        </a></div>
-                    </div>
+                            </a></div>
+                    
                 </div>
             </header>
 
