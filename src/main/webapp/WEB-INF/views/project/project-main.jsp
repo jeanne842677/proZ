@@ -233,7 +233,7 @@ margin-bottom:0;
             align-items: flex-end;
         }
 
-        #left2{
+        #calendar{
             width:90%;
             height: 50%;
             display:flex;
@@ -422,9 +422,7 @@ margin-bottom:0;
         #profileImg{
            margin-right:10px;
         }
-        
-        
-
+ 
     </style>
 </head>
 <body>
@@ -463,7 +461,7 @@ margin-bottom:0;
                         </div>     
                     </div>
                     
-                    <div id="left2">캘린더</div>
+                    <div id="calendar">캘린더</div>
                 </div>
                 <div id="right">
                     <div id="right1">
@@ -474,10 +472,12 @@ margin-bottom:0;
 	                             	<div id="noticeText">현재 워크스페이스에 게시판이 존재하지 않습니다.</div>
 	                             </c:if> 
 	                                     <c:forEach items="${postList}" var="post">
-	                                    	<div class="boardcon">
+	                                    	<div class="boardcon" data-board-post-idx="${post.postIdx}">
 	                                        <div class="card" id="${post.postIdx }" data-sort="${post.sort}">
 	                                            <div class="card-subject">${post.postTitle}</div>
-	                                            <div class="profile-img"></div>
+	                                            
+	                                            <div class="profileImg"></div>
+	                                           
 	                                        </div>
 	                                       </div>
 	                                    </c:forEach>
@@ -487,11 +487,11 @@ margin-bottom:0;
                         <div class="comment">
                             <div class="commentarea" >comment</div>
                             <div class="commentwrap">
-                                <div class="commentcon"></div>
-                                <div class="commentcon"></div>
-                                <div class="commentcon"></div>
-                                <div class="commentcon"></div>
-                                <div class="commentcon"></div>
+                            <c:if test="${empty commentList}">
+	                             	<div id="noticeText">현재 댓글이 존재하지 않습니다.</div>
+	                             </c:if> 
+                               <!--  <div class="commentcon"></div> -->
+                                
                             </div>
                         </div>
                     </div>
@@ -503,7 +503,7 @@ margin-bottom:0;
 	                            <c:if test="${empty mainMemoList}">
 	                             	<div id="noticeText">현재 워크스페이스에 메모가 존재하지 않습니다.</div>
 	                             </c:if>
-	                            	<c:forEach items="${mainMemoList}" var="memo" begin="0" end="5" step="1" >
+	                            	<c:forEach items="${mainMemoList}" var="memo" >
 	                            	 
 	                               <div class="memo"
 			                           style="background-color : ${memo.bgColor}"
@@ -537,6 +537,12 @@ margin-bottom:0;
     </div>
     
     <script type="text/javascript">
+    $('.boardcon').click(function(){
+    	var postIdx = $(this).data('board-post-idx');
+    	location.href = 'http://localhost:9090/board/view/${projectIdx}?postIdx='+postIdx;
+    	
+    });
+    
     $('.memo').click(function(){
     	var wsIdx = $(this).data('memo-ws-idx');
     	location.href = 'http://localhost:9090/memo/${projectIdx}?wsIdx='+wsIdx+'&order=0';
