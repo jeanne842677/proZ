@@ -503,7 +503,7 @@ margin-bottom:0;
 	                            <c:if test="${empty mainMemoList}">
 	                             	<div id="noticeText">현재 워크스페이스에 메모가 존재하지 않습니다.</div>
 	                             </c:if>
-	                            	<c:forEach items="${mainMemoList}" var="memo" >
+	                            	<c:forEach items="${mainMemoList}" var="memo">
 	                            	 
 	                               <div class="memo"
 			                           style="background-color : ${memo.bgColor}"
