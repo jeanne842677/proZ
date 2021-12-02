@@ -7,9 +7,10 @@
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
     <title>Document</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
     <link type="text/css" rel="stylesheet" href="/resources/js/modal/modal.js">
+	
 	
     <script src="https://cdn.jsdelivr.net/npm/treeviz@2.3.0/dist/index.min.js"></script>
 
@@ -248,6 +249,7 @@
         	border :solid 1px #999;
         	border-radius : 5px;
         	background-color:#fff;
+        	position: relative;
         }
 
         .map-editor{
@@ -326,6 +328,26 @@
     #remove{
         width:200px;
     }
+    
+    #commit-btn {
+    
+    	position: absolute;
+    	top: -45px;
+    	right: 0px;
+    	
+    
+    }
+    
+    .git-commit {
+    	display: flex;
+    	
+    }
+    
+    .git-files {
+    
+    	margin-left: auto;
+    
+    }
 
 
 
@@ -339,17 +361,19 @@
 
 <body>
 
+
+
       <div class="wrap">
         <header>
-
-
-
-
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp" %>
 
         </header>
 
         <div class="con">
-            <nav></nav>
+            <nav>
+            
+            <%@ include file="/WEB-INF/views/include/nav/main-nav.jsp" %>
+            </nav>
             <section>
                     <div class="section-wrap">
     
@@ -363,7 +387,7 @@
 
                         <!-- cytoscape -->
                         <div class="btnarea">
-                            <div class="address"><div class="addresscon form-control" id="disabledInput">https://github.com/sazzeo/proZ</div></div>
+                            <div class="address"><div class="addresscon form-control" id="disabledInput">https://github.com/<c:if test="${loadmap != null}">${ loadmap.gitRepo }(${loadmap.branch })</c:if></div></div>
                             <div id="onedeps" class="btn btn-primary">되돌리기</div>
                             <div id="allview" class="btn btn-primary">전체 보기</div>
                             <div id="modifybtn" class="btn btn-info">수정하기</div>
@@ -380,21 +404,69 @@
                             <div id="modifinishbtn" class="btn btn-info" style="display:none;">수정완료</div>
                         </div>
                         <div class="map-view">
-                            <div id="tree" ></div>
-                            <div id="commitarea" ></div>
-                        
+                            <div id="tree" >
+                            <c:if test="${loadmap == null}">
+							수정하기 버튼을 눌러 로드맵을 추가해보세요                            
+                            </c:if>
+                            </div>
+                      
+                            <div id="commitarea" >
+                          	  <div id="commit-btn" class="btn btn-primary" >커밋 업데이트</div>
+                           	<c:forEach items="${ gitCommitList }" var="gc">
+                           		<div class="git-commit">
+                           			<div class="git-user"><b>[${ gc.login }]</b> ${gc.message}</div>
+                           			<div class="git-files">${gc.files}</div>
+                  
+                           		</div>
+                           	</c:forEach>
+                            
+                            </div>
                         <!-- cytoscapt-end -->
                         </div>
                         </div>
                     </div>
             </section>
-            <aside></aside>
+            <aside>
+            
+				<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+            
+            </aside>
         </div>
 
     </div>
 
 
 <script type="text/javascript">
+
+$('#commit-btn').on('click' , function() {
+	
+	fetch("/loadmap/add/commit-list",{
+		method : "POST",
+		headers :  {"Content-type" : "application/json; charset=UTF-8"},
+		body : JSON.stringify({
+				lmIdx: "${loadmap.lmIdx}" ,
+				gitRepo : "${loadmap.gitRepo}"
+			})
+	}).then(res => res.text())
+	.then(text=> {
+		
+		
+		if(!text) {
+			alert("최신 커밋 내역이 없습니다.");
+		}else {
+			
+			let newCommit = JSON.parse(text);
+			
+		}
+		
+		
+		
+		
+	})
+		
+	
+	
+})
 	
 	
 
@@ -441,6 +513,22 @@ $("#modifinishbtn").click(function(){
     $("#gitbtn").on('click', function() {
     	
     	var git = $(".gitinput").val();
+    	var branch = $('.branchinput').val();
+    	var ignore = [];
+    	if(!branch) {
+    		alert("브랜치를 입력해주세요.");
+    	}
+    	
+    	$('.ignoreele').each(function() {
+    		if($(this).val()){
+    			
+    		ignore.push($(this).val());
+    			
+    		} 
+    		
+    		    		
+    	})
+    
     	
     	fetch("/loadmap/git/upload",{
 			method : "POST",
@@ -448,36 +536,54 @@ $("#modifinishbtn").click(function(){
 			body : JSON.stringify({
 					wsIdx : ${param.wsIdx},
 					gitRepo : git	,
-					branch : "main" ,
-					ignore : ["css" , "resources" , "test" , "img"]
+					branch : branch ,
+					ignore : ignore
 					
 			
 				})
+			
+		}).then(res=>res.text())
+		.then(text=>{
+			
+			if(text=="complete") {
+				 location.reload();
+			}else {
+				
+				alert("깃을 불러오는데 실패했습니다.");
+				
+			}
+			
+			
 			
 		})
     	
     	
     	
     })
-
-
-	let dataJson = JSON.parse('${loadmap.gitTree}');
     
+    let dataJson = [];
+    let dataArr = [];
+    let data =[];
+    let root ="";
+	<c:if test="${ loadmap !=null }">
+
+	dataJson = JSON.parse('${loadmap.gitTree}');
+	root = "${loadmap.gitRepo}"
+
+	dataArr = [{id:root , text_1:root , father: null}];
+	data = [{id:root , text_1:root , father: null}];
+
+	</c:if>
+	
     console.dir(dataJson);
     
     //첫 애 넣어주기
-    let dataArr = [{id:"root" , text_1:"root" , father: null}];
-    
-
-    let data = [{id:"root" , text_1:"root" , father: null}];
-
     
     dataJson.forEach(function(e) {
     	let d;
     	if(!e.prev) {
     		
-    	
-    	d =  { id: e.sha , text_1:e.path , father: "root" , color:"#2196F3" };
+    	d =  { id: e.sha , text_1:e.path , father: root , color:"#2196F3" };
 
         data.push(d);   
     		
@@ -500,6 +606,7 @@ $("#modifinishbtn").click(function(){
     
     console.dir(dataArr);
     
+    
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.umd.js" integrity="sha512-bgoBr08oPe0Fgqfk4TY8yNOXb1g3pkWHnsiVLLqmR+71gyo1v4PRwFEYTIL1xuFG/EHZRAvn7P1aMvs/9rKoAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -517,8 +624,6 @@ $("#modifinishbtn").click(function(){
     	
     		 if(id==e.father) {
     			 data.push(e);
-    			 console.dir(e.text_1)
-    			 console.dir("이프문 실행");
     		 }
     		 
     		 
@@ -537,7 +642,7 @@ $("#modifinishbtn").click(function(){
         hasFlatData: true,
         relationnalField: "father",
         hasPanAndZoom: true,
-        nodeWidth:150,
+        nodeWidth:160,
         nodeHeight:50,
         mainAxisNodeSpacing:2, //너비
         isHorizontal:true,
@@ -572,6 +677,16 @@ $("#modifinishbtn").click(function(){
     var toggle=true;
     
     
+    
+    $('.git-files').each(function() {
+    	
+    	let files = JSON.parse($(this).text());
+    	console.dir(files);
+    	
+    	
+    	
+    	
+    })
     
     
     

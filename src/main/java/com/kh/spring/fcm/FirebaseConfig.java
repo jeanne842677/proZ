@@ -29,7 +29,6 @@ public class FirebaseConfig {
         FileInputStream refreshToken = new FileInputStream(rootPath); 
         option = new FirebaseOptions.Builder()
               .setCredentials(GoogleCredentials.fromStream(refreshToken))
-              .setStorageBucket("proz-78541.appspot.com")
               .setDatabaseUrl("https://proz-78641.firebaseio.com")
               .build();
         
