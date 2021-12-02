@@ -81,15 +81,10 @@ public class BoardServiceImpl implements BoardService {
 	public void insertPost(Map<String, String> map, Member member) {
 
 		map.put("userIdx", member.getUserIdx());
-
 		ProjectMember projectMember = projectRepository.selectProjectMemberByMap(map);
-		
-		// 수정됨
 		map.put("pmIdx", projectMember.getPmIdx());
-
-		System.out.println(projectMember);
+		
 		boardRepository.insertPost(map);
-
 	}
 
 	@Override

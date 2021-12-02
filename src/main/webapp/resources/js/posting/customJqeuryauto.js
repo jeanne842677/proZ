@@ -1221,8 +1221,7 @@ $.ui.position = {
 				
 				// myOffset이 renderingPosition의 핵심이다. 
 				 //myOffset = -100;
-				
-				console.log('myOffset은? : ' + myOffset); 
+			
 				// 두가지는 제외 (작동 안함)
 			if ( overLeft < 0 ) {
 				newOverRight = position.left + myOffset + atOffset + offset + data.collisionWidth -
@@ -2688,7 +2687,6 @@ $.widget( "ui.autocomplete", {
 			// 네비게이션 바 만큼 밀려난다 ( px단위 ) + rect를 넣어주어야 한다 (Caret)
 			let editorSide = $('.editor-session-wrapper').width()*75/1000;
 			let left = rect.x- (220 + editorSide); 
-			console.log(left); 
 			customOptions.my = "left+"+ left +" top+9"; 
 			customOptions.collision ="flip";
 		}

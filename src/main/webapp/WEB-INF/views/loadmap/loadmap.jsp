@@ -250,6 +250,7 @@
         	border-radius : 5px;
         	background-color:#fff;
         	position: relative;
+        	overflow:auto;
         }
 
         .map-editor{
@@ -329,27 +330,32 @@
         width:200px;
     }
     
+    #tree {
+    	position: relative;
+    }
+    
     #commit-btn {
     
     	position: absolute;
-    	top: -45px;
-    	right: 0px;
-    	
-    
+ 		right: 0px;
+    	bottom: 5px;
     }
     
     .git-commit {
-    	display: flex;
     	
+    	display:flex;
+    
     }
+    
+   	.git-user {
+   	flex-shrink: 0;
+   	
+   	}
     
     .git-files {
-    
-    	margin-left: auto;
-    
+    margin-left: 10px;
+
     }
-
-
 
 
 
@@ -360,7 +366,6 @@
 </head>
 
 <body>
-
 
 
       <div class="wrap">
@@ -408,10 +413,11 @@
                             <c:if test="${loadmap == null}">
 							수정하기 버튼을 눌러 로드맵을 추가해보세요                            
                             </c:if>
+                            
+                          	  <div id="commit-btn" class="btn btn-primary" >커밋 업데이트</div>
                             </div>
                       
                             <div id="commitarea" >
-                          	  <div id="commit-btn" class="btn btn-primary" >커밋 업데이트</div>
                            	<c:forEach items="${ gitCommitList }" var="gc">
                            		<div class="git-commit">
                            			<div class="git-user"><b>[${ gc.login }]</b> ${gc.message}</div>
@@ -421,6 +427,7 @@
                            	</c:forEach>
                             
                             </div>
+                            
                         <!-- cytoscapt-end -->
                         </div>
                         </div>
@@ -455,7 +462,7 @@ $('#commit-btn').on('click' , function() {
 			alert("최신 커밋 내역이 없습니다.");
 		}else {
 			
-			let newCommit = JSON.parse(text);
+			 location.reload();
 			
 		}
 		
@@ -565,13 +572,15 @@ $("#modifinishbtn").click(function(){
     let dataArr = [];
     let data =[];
     let root ="";
+    
+    let rootObject =[] ;
 	<c:if test="${ loadmap !=null }">
 
 	dataJson = JSON.parse('${loadmap.gitTree}');
 	root = "${loadmap.gitRepo}"
-
-	dataArr = [{id:root , text_1:root , father: null}];
-	data = [{id:root , text_1:root , father: null}];
+	rootObject.push({id:root , text_1:root , father: null});
+	dataArr = [rootObject[0]];
+	data = [rootObject[0]];
 
 	</c:if>
 	
@@ -579,22 +588,62 @@ $("#modifinishbtn").click(function(){
     
     //첫 애 넣어주기
     
+      
+    $('.git-files').each(function() {
+    	
+    	let files = JSON.parse($(this).text());
+    	console.dir(files);
+    	
+    	files.forEach(function(e) {
+    		
+    		dataArr.some(function(data) {
+    			if( data.text_1 == e) {
+    				console.dir("일치" + data.text_1)  
+    				return true;
+    			}
+    			return false;
+    			
+    		})
+    	})
+    	
+    })
+    
+    
+    
     dataJson.forEach(function(e) {
     	let d;
     	if(!e.prev) {
     		
     	d =  { id: e.sha , text_1:e.path , father: root , color:"#2196F3" };
-
-        data.push(d);   
+    	rootObject.push(d);
+        data.push(d);
     		
     	}else {
     		let color;
-    		if(e.type="tree") {
+    		if(e.type=="tree") {
     			color = "#B076CF";
     			
-    		}else if(e.type="blob"){
+    		}else if(e.type=="blob"){
     			color ="#E971AD";
     		}
+    		
+
+    	    $('.git-files').each(function() {
+
+    	    	let files = JSON.parse($(this).text());
+
+    	    	files.forEach(function(f) {
+    	    		
+    	    	if(e.path == f) {
+    	    		color="#FFCD42";
+    	    		
+    	    	}
+    	    	
+    	    	})
+    	    	
+    	    	
+    	    })
+    	    
     		
     	d =  { id: e.sha , text_1:e.path , father: e.prev , color:color };
     		
@@ -617,17 +666,33 @@ $("#modifinishbtn").click(function(){
      
      
      //클릭했을 떄 id
-     function add(id) {
-    	 console.dir("에드함수: ")
-    	 console.dir(id);
+     function add(node) {
+    	 
+    	 console.dir(node.id);
+    	 let res = false;
+    	 
+    	 data.some(function(e) {
+    		 if(node.id==e.father) {
+    			
+    			 res = true;
+				return true;
+    		 }
+    		 
+    		return false;
+    		 
+    	 })
+    	 
+    	 if(!res) {
     	 dataArr.forEach(function(e) {
+    		 
     	
-    		 if(id==e.father) {
+    		 if(node.id==e.father) {
     			 data.push(e);
     		 }
     		 
     		 
     	 })
+    	 }
     	 
     	 
      }
@@ -660,7 +725,7 @@ $("#modifinishbtn").click(function(){
         	console.dir(node)
         	console.dir("노드id: ");
         	console.dir(node.id);
-        	add(node.id);
+        	add(node);
         	myTree.refresh(data);
         	
         } //노드 클릭시 발생하는 이벤트
@@ -672,22 +737,33 @@ $("#modifinishbtn").click(function(){
     
     
     myTree.refresh(data);
+	
+    
+    $('#onedeps').on('click' , function() {
+    	
+    	let newData =  []
+    	rootObject.forEach(function(e) {
+    		
+    		newData.push(e);
+    		
+    		
+    	})
+		data = newData;    	
 
+        myTree.refresh(data);
+    })
     
-    var toggle=true;
     
-    
-    
-    $('.git-files').each(function() {
-    	
-    	let files = JSON.parse($(this).text());
-    	console.dir(files);
-    	
-    	
+    //전체보기
+    $('#allview').on('click' , function() {
+    	data = dataArr.copyWithin();
+
+        myTree.refresh(data);
     	
     	
     })
-    
+	
+  
     
     
 /*     

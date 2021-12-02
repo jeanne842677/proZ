@@ -48,7 +48,7 @@ public interface MemoRepository {
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
 
-	@Select("select * from memo where ws_idx in (select ws_idx from workspace where ws_type='ME' and project_idx=#{projectIdx}) order by memo_idx desc")
+	@Select("select * from (select * from memo where ws_idx in (select ws_idx from workspace where ws_type='ME' and project_idx=#{projectIdx}) order by memo_idx desc) where rownum <=6")
 	List<Memo> selectMemoByTop(String projectIdx);
 	
 	
