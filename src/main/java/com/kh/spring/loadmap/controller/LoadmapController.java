@@ -55,8 +55,8 @@ public class LoadmapController {
 			
 		}
 		
-		System.out.println(loadmap);
 		model.addAttribute("loadmap",loadmap);
+		System.out.println(loadmap);
 		
 		return "/loadmap/loadmap";
 	}
