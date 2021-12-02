@@ -11,6 +11,8 @@
 	<!-- css for CustomJqueryAutocomplete module  -->
 	<link type="text/css" rel="stylesheet" href="/resources/css/board/jquery-ui.css">
 	<link type="text/css" rel="stylesheet" href="/resources/css/board/customAuto.css">
+	<link type="text/css" rel="stylesheet" href="/resources/css/loading/loading.css">
+	<link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
 <style>
     .commonDiv{
         padding: 5px 5px 5px 12px; 
@@ -80,7 +82,7 @@
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
-                                        <div>2021년 03월 03일 ~ 2021년 11월 13일</div>
+                                        <div></div>
                                     </div>
                                     <div class="br-line"></div>
                                 </div>
@@ -97,72 +99,68 @@
 <script src="/resources/js/posting/popUpMenu.js"></script>
 <script src="/resources/js/posting/customJqeuryauto.js"></script>
 <script src="/resources/js/posting/customJqueryAutoOption.js"></script>
+<script src="/resources/js/loading/loading.js"></script>
+<script src="/resources/js/modal/modal.js"></script>
 <script>
 
-    // init custom_autocomplete widget
-    initcustomAutocomplete(); 
-    createCustomAutocomplete($('.commonDiv')); 
+    // *** 페이지 기능 (분리 이전) 
     
-    // Title과 initPage를 위한 기능들 
-    // initPage용 element (다시 추가하는 기능은 고민중)
+   	// 1) initPage(시작페이지) 추가 및 시작페이지에 enter_click시 사라지는 기능 부여 
     var createInitPageFnc = function(element){
             element.on('click', function(e){
             $(this).parent().append("<div class='commonDiv'contenteditable='true' style='font-size:14px;'></div>");
             $(this).parent().children('.commonDiv').get(0).focus(); 
             createCustomAutocomplete($(this).parent().children('.commonDiv')); 
             $(this).remove(); 
-        })
-    }
+        });
+    };
     createInitPageFnc($('.initPage')); 
-
-    // 타이틀 div를 위한 기능들 
+    
+    // 2) Titlediv enterFunction을 customize  
     var createTitleDiv = function(element){
         TitleEnterFnc(element);  
         arrowFnc(element); 
     }
-
+    
+	// 3-2) TitleDiv의 arrowFunction costomize
     var TitleEnterFnc = function(element) {
-    element.on('keydown', function(e) { 
-      if(e.keyCode === 13){
-        
-          if($(this).next()[0].className === 'initPage'){
-            $(this).next().remove(); 
-          }
-          if(isSelect === false){
-            e.preventDefault();
-            let afterText;
-              // isSelect를 통해서 일반 enter와 특수한 enter를 구분 
-              // ** 주의, selection은 저장되지 않고 계속 바뀌므로 값 저장필요 
-                      $(this).after(function(){
-                        let text = $(this).text();
-                        let currentSel = selection.anchorOffset;
-                        let originText = text.slice(0, currentSel); 
-                        $(this).text(originText); 
-                            if(text.length-currentSel !== 0){
-                              afterText = text.slice(-(text.length-currentSel));
-                            } else {
-                              afterText = ""; 
-                            }           
-                        return "<div class='commonDiv'contenteditable='true' style='font-size:14px;'></div>";
-                      });
-            //3. 포커싱 바꾸기
-            let sibling = $(this).next();
-            sibling.text(afterText); 
-            createCustomAutocomplete(sibling);
-            sibling.focus(); 
-          } else {
-            // Event trigger Enter일 경우 : 
-            isSelect = false; 
-            $(this).next().focus();
-          };
-      }; 
-    });
-  };
+	    element.on('keydown', function(e) { 
+	      if(e.keyCode === 13){
+	        
+	          if($(this).next()[0].className === 'initPage'){
+	            $(this).next().remove(); 
+	          }
+	          if(isSelect === false){
+	            e.preventDefault();
+	            let afterText; 
+	               $(this).after(function(){
+	                 let text = $(this).text();
+	                 let currentSel = selection.anchorOffset;
+	                 let originText = text.slice(0, currentSel); 
+	                 $(this).text(originText); 
+	                     if(text.length-currentSel !== 0){
+	                       afterText = text.slice(-(text.length-currentSel));
+	                     } else {
+	                       afterText = ""; 
+	                     }           
+	                 return "<div class='commonDiv'contenteditable='true' style='font-size:14px;'></div>";
+	               });
+	            //3. 포커싱 바꾸기
+	            let sibling = $(this).next();
+	            sibling.text(afterText); 
+	            createCustomAutocomplete(sibling);
+	            sibling.focus(); 
+	          } else { 
+	            isSelect = false; 
+	            $(this).next().focus();
+	          };
+	      }; 
+	    });
+	};
  	
-  // 임시 titleDiv 생성 
-    createTitleDiv($('.editor-title')); 
-
-    // 카피 비동기통신 테스트 중... 
+	// --------------------- 테스트 중 기능 -------------------------
+    
+	// 1) 카피 비동기통신 테스트 중... 
     var isCopied = function(element){
     element.children().children('input')
     .on('paste', function(e){
@@ -189,40 +187,31 @@
     })
   }
 
-  // 링크 Div를 만드는 function 
+  // 2. 링크 Div를 만드는 function 테스트 중.. 
   var createLinkDiv = function(element){
     isCopied(element); 
   }
-  
-  //*** 여기부터는 자잘한 기능 
-  // *커버색 추가 
-  // 1. 커버 전부 버튼으로 바꾸고, 선택 시 focusing: 연한테두리 
-  // 2. 선택 시 javascript 기능으로 특정 변수 (색을 전달할 변수에) 의 색 값을 바꾼다. 
-  var postColor = 'white';
-  
-  $('.editor-cover').on('click', function(e){
-	 postColor = $(this).css('background-color'); 
-  })
-  // 기본값 white 
-  
-  // *작성날짜 추가 
-  // 1. 작성날짜는 Date()로 받아서 javascript로 표기, innerText로 삽입 
-  
-  
-  
-</script>
-<script>
 
-//Fecth 버튼 이벤트 코드 
+
+
 </script>
 <script type="text/javascript">
 
-// SUBMIT 버튼 
+// *Editor_Submit Button clicked 
 $('#editor-submit-btn').on('click' , function() {
     
-    let subject = $('.editor-title').text();
-    let content = $('.editor-minHeight-div').html();
-        
+	let subject = $('.editor-title').text();
+    let content = $('.editor-minHeight-div').html().trim();
+    console.log(content); 
+    // 1) 제목 NULL 처리 
+	if(subject === ""){
+		modal.modal.css('display','flex');
+		return; 
+	}
+	
+	// 2. 전송시작 및 로딩화면 공개 
+    // 로딩화면 on
+    loading.on(); 
     fetch("/board/add-post" , {
         method : "POST",
         headers :  {"Content-type" : "application/json; charset=UTF-8"},
@@ -232,12 +221,42 @@ $('#editor-submit-btn').on('click' , function() {
             postColor : postColor, 
             bdIdx : "${param.bdidx}"
             })
-        
     }).then(res=>{res.text()})
     .then(text=>{
-        location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
+        //location.href="/board/${projectIdx}?wsIdx=${wsIdx}";
     })
 })
+</script>
+<script type="text/javascript">
+
+	//*** 페이지 위젯 초기화 및 instance 생성 
+	
+	// 1) init loadingGear(로딩화면) 
+	loading = new loadingGear('gear'); 
+	loading.createLoadingGear(); 
+	
+	// 2) init AlertModal(확인모달); 
+	modal = new Modal('제목을 적어주세요', '글 제목을 입력해야 글을 등록할 수 있어요');
+	modal.createAlertModal(); 
+	
+	// 3) init custom_autocomplete widget
+	initcustomAutocomplete(); 
+	createCustomAutocomplete($('.commonDiv')); 
+	
+	// 4) init title contentEditable div 
+	createTitleDiv($('.editor-title'));
+	
+	// 5) init postBannerColor to default value; 
+	var postColor = 'white';
+	$('.editor-cover').on('click', function(e){
+  	 postColor = $(this).css('background-color'); 
+    });
+	
+	// 6) init post Date 
+	const date = new Date();
+	const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
+	$('.editor-content-date div:nth-child(2)').html(date.toLocaleDateString(undefined, options));
+
 </script>
 </body>
 </html>

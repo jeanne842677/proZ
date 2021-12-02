@@ -32,9 +32,9 @@
 	</select>
 
 	<insert id="insertPost">
-		insert into post(post_idx , bd_idx , pm_idx ,post_title , post_content ,
+		insert into post(post_idx , bd_idx , pm_idx ,post_title , post_content , post_color,
 		sort)
-		values(sc_proz_idx.nextval , #{bdIdx} , #{pmIdx} ,#{postTitle} , #{postContent} ,
+		values(sc_proz_idx.nextval , #{bdIdx} , #{pmIdx} ,#{postTitle} , #{postContent} , #{postColor} ,
 		(select nvl(max(sort),0)+1 from post where bd_idx = #{bdIdx} ) )
 
 	</insert>

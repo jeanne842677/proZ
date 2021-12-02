@@ -355,7 +355,6 @@ aside {
     let wsIdx = "${param.wsIdx}";
    	let nickname = "${projectMember.nickname}";
    	let pmIdx = "${projectMember.pmIdx}";
-   	let projectIdx = "${projectMember.projectIdx}"
    
    
        //연결 + 파이어베이스에 있는 정보 불러오기
@@ -549,7 +548,7 @@ aside {
     	  		// formData
     	  		fetch('/chat/file/' + projectIdx, {
 			method: 'POST', 	
-			body : formData
+			//body : formData
 		})
 		.then(response => response.text())
     	.then(text=>{
