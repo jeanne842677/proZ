@@ -12,9 +12,22 @@ public class Chat {
 	private String regDate;
 	private String nickname;
 	private String pmIdx;
-	//private String fileIdx;
+	private String isFile;
+	private String filePath;
 	
 	
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	public String getIsFile() {
+		return isFile;
+	}
+	public void setIsFile(String isFile) {
+		this.isFile = isFile;
+	}
 	public int getChIdx() {
 		return chIdx;
 	}
@@ -61,8 +74,11 @@ public class Chat {
 	@Override
 	public String toString() {
 		return "Chat [chIdx=" + chIdx + ", wsIdx=" + wsIdx + ", chName=" + chName + ", content=" + content
-				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + "]";
+				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + ", isFile=" + isFile
+				+ ", filePath=" + filePath + "]";
 	}
+	
+
 	
 	
 	

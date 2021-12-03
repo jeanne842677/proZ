@@ -8,6 +8,13 @@
 <link rel="stylesheet" href="/resources/css/modal/modal.css">
 <style type="text/css">
 
+
+ a:link { color: #fff; text-decoration: none;}
+ a:visited { color: #fff; text-decoration: none;}
+ a:hover { color: #fff; text-decoration: none;}
+
+
+
 	.clone{
 	display: none;
 	}
@@ -38,7 +45,11 @@
 							      <div class="signup" onclick="location.href = '/member/mypage'">mypage</div>
 							 </c:when>
                         </c:choose>
+
+                            <div class="login"  ><a href="/member/logout.do">
+
                             <div class="login" ><a href="/member/logout.do">
+
                             <c:set var="loginout" value="${authentication}" />
                         <c:choose>
 	                        <c:when test="${empty loginout}">
@@ -94,7 +105,7 @@
 			<footer style="margin-top : 200px">
                 <div class="footleft">
                     <div class="footdes1">project by DragonBall.</div>
-                    <div class="footdes2">Lim Ji-young , Kang Min-hyeop ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yoon-ji</div>
+                    <div class="footdes2">Lim Ji-young , Kang Min-hyeop ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yun-ji</div>
                 </div>
                 <div class="footright">Email_ lucky007proz@gmail.com</div>
 

@@ -6,6 +6,13 @@
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="/resources/css/index.css">
 <title>proz index</title>
+<style type="text/css">
+
+
+ a:link { color: #fff; text-decoration: none;}
+ a:visited { color: #fff; text-decoration: none;}
+ a:hover { color: #fff; text-decoration: none;}
+ </style>
 </head>
 <body>
 

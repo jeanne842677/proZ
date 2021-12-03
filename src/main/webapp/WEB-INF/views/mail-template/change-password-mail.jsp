@@ -107,13 +107,13 @@
     </style>
 </head>
 
-<body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
+<body style="background: linear-gradient(to right, #131722, #221541); margin: 0 !important; padding: 0 !important;">
     <!-- HIDDEN PREHEADER TEXT -->
     <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"></div>
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <!-- LOGO -->
         <tr>
-            <td bgcolor="#FFA73B" align="center">
+            <td style="background: linear-gradient(to right, #131722, #221541);" align="center">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td align="center" valign="top" style="padding: 40px 10px 40px 10px;"> </td>
@@ -122,33 +122,33 @@
             </td>
         </tr>
         <tr>
-            <td bgcolor="#FFA73B" align="center" style="padding: 0px 10px 0px 10px;">
+            <td style="background: linear-gradient(to right, #131722, #221541);" align="center" style="padding: 0px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
-                        <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">조회하신 결과입니다</h1> <img src=" https://img.icons8.com/clouds/100/000000/handshake.png" width="125" height="120" style="display: block; border: 0px;" />
+                        <td bgcolor="transparent" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
+                            <h1 style="font-size: 20px; font-weight: 400; margin: 2; color:#fff;"">change password</h1> <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FQfSBi%2FbtrmRSfoCiM%2FFA0yOIIjc1EkRGtGDzBQ31%2Fimg.png" width="500" style="display: block; border: 0px;" />
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+            <td style="background: linear-gradient(to right, #131722, #221541);" align="center" style="padding: 0px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
-                        <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">${param.nickname}님 환영합니다. 아래 버튼을 눌러 패스워드 변경 페이지로 이동하세요.</p>
+                        <td bgcolor="transparent" align="left" style="padding: 20px 30px 40px 30px; color: #fff; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                            <p style="margin: 0;">${param.nickname}님 환영합니다. <br>아래 버튼을 눌러 패스워드 변경 페이지로 이동하세요.</p>
                         </td>
                     </tr>
                     <tr>
-                        <td bgcolor="#ffffff" align="left">
+                        <td bgcolor="transparent" align="left">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
+                                    <td bgcolor="transparent" align="center" style="padding: 20px 30px 60px 30px;">
                                         <table border="0" cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td align="center" style="border-radius: 3px;" bgcolor="#FFA73B">
-                                                	<a href="http://localhost:9090/member/change-password/${param.persistToken}" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #FFA73B; display: inline-block;">Change Password</a>
+                                                <td align="center" style="border-radius: 3px;" bgcolor="transparent">
+                                                	<a href="http://localhost:9090/member/change-password/${param.persistToken}" target="_blank" style=" background: linear-gradient(to right, #8f7ae5, #f170aa); display: flex; justify-content: center; align-items: center; font-size: 23px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #000; font-weight: 700; text-decoration: none; padding: 15px 25px; border-radius: 5px; border: none; display: inline-block; height:100px; width:300px; line-height: 70px;">Change Password</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -161,10 +161,10 @@
             </td>
         </tr>
         <tr>
-            <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
+            <td style="background: linear-gradient(to right, #131722, #221541);" align="center" style="padding: 30px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
-                        <td bgcolor="#f4f4f4" align="center" style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                        <td style="background: linear-gradient(to right, #131722, #221541);" align="center" style="padding: 30px 30px 30px 30px; border-radius: 5px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
                             <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;"></h2>
                             <p style="margin: 0;"><a href="#" target="_blank" style="color: #FFA73B;"></a></p>
                         </td>
