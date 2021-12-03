@@ -393,6 +393,12 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.selectWorkspaceByWsIdx(wsIdx);
 	}
 
+	@Override
+	public ProjectMember selectProjectMemberByProjectIdxAndUserIdx(String projectIdx, String userIdx) {
+		
+		return projectRepository.selectProjectMemberByProjectIdxAndUserIdx(projectIdx , userIdx);
+	}
+
 
 
 	

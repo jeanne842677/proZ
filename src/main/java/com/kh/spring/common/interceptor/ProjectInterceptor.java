@@ -16,7 +16,9 @@ import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.map.CamelMap;
+import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
+import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
 
@@ -72,10 +74,10 @@ public class ProjectInterceptor implements HandlerInterceptor {
 		
 		
 		// 온라인 오프라인 확인용
-		List<Map<String, Object>> projectMember = CamelMap
+		List<Map<String, Object>> projectMemberList = CamelMap
 				.changeListMap(projectService.selectProjectMemberByProjectIdx(projectIdx));
 
-		request.setAttribute("projectMemberList", projectMember);
+		request.setAttribute("projectMemberList", projectMemberList);
 		request.setAttribute("project", project);
 		request.setAttribute("workspaceList" , workspaceList);
 		request.setAttribute("projectIdx" , projectIdx);
@@ -106,6 +108,16 @@ public class ProjectInterceptor implements HandlerInterceptor {
 			}
 			
 		}
+		
+		Member member = (Member) request.getSession().getAttribute("authentication");
+		
+		if(member!=null) {
+			ProjectMember projectMember = projectService.selectProjectMemberByProjectIdxAndUserIdx(projectIdx, member.getUserIdx());
+			request.setAttribute("projectMember" , projectMember);
+			System.out.println(projectMember);
+		}
+		//유저 정보 담기
+		
 		
 
 	}

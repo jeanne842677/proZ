@@ -103,6 +103,8 @@ public interface ProjectService {
 	
 
 		Workspace selectWorkspaceByWsIdx(String wsIdx);
+
+		ProjectMember selectProjectMemberByProjectIdxAndUserIdx(String projectIdx, String userIdx);
 	
    
 
