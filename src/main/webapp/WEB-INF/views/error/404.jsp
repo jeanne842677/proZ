@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +20,15 @@
     font-style: normal;
 }
 
+<<<<<<< HEAD
+=======
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+>>>>>>> refs/heads/dev2
 
 
     html, body{
@@ -52,6 +60,10 @@
         align-items: flex-end;
         color: #fff;
         font-family: 'GongGothicLight';
+<<<<<<< HEAD
+=======
+        text-shadow: 0 0 7px #8f7ae5, 0 0 10px #8f7ae5, 0 0 2px #8f7ae5, 0 0 10px #8f7ae5, 0 0 48px #8f7ae5, 0 0 0px #8f7ae5, 0 0 27px #8f7ae5, 0 0 33px #8f7ae5
+>>>>>>> refs/heads/dev2
     }
 
     .sub_title{
@@ -112,7 +124,11 @@
 <body>
     <div class="wrap">
         <div class="deco">
+<<<<<<< HEAD
             <img src="/resources/img/logo-white.png">
+=======
+            <img src="resources/image/LOGOw.png">
+>>>>>>> refs/heads/dev2
         </div>
         <div class="title">404</div>
         <div class="sub_title">페이지를 찾을 수 없습니다.</div>
