@@ -444,6 +444,13 @@
 
 
 <script type="text/javascript">
+//내 깃주소 불러오기
+$("#resetbtn").click(function(){
+	$(".gitinput").attr('value',"${authentication.git}");
+	if(${authentication.git} == null){
+		alert("git주소가 등록되어있지 않습니다.");
+	}
+});
 
 $('#commit-btn').on('click' , function() {
 	
@@ -485,6 +492,7 @@ $("#modifybtn").click(function(){
     $("#allview").hide();
     $(".address").hide();
     $("#onedeps").hide();
+    $("#commit-btn").hide();
     $("#tree").css("width","85%");
     $(".gitinput").css("display","flex");
     $(".branchinput").css("display","flex");
@@ -494,6 +502,7 @@ $("#modifybtn").click(function(){
 
 $("#modifinishbtn").click(function(){
     $("#modifybtn").css("display","flex");
+    $("#commit-btn").css("display","flex");
     $("#allview").css("display","flex");
     $(".address").css("display","flex");
     $("#onedeps").css("display","flex");

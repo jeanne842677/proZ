@@ -288,13 +288,11 @@ ul>li>i, ul>li>b{
 }
 
 .on{
-    color:#28a745;
     float:left;
     margin-right: 5px;
 }
 
 .off{
-    color:#aaa;
     float:left;
     margin-right: 5px;
 }
