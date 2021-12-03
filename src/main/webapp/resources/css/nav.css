@@ -26,6 +26,16 @@ min-width: 1000px;
 font-family: 'NanumSquareRound';
 }
 
+body::-webkit-scrollbar {
+    width: 6px;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+body::-webkit-scrollbar-track {
+    background-color: grey;
+}
+
 ol,ul,dl{
 	margin:0;
 }
@@ -193,6 +203,7 @@ align-content:space-between ;
     padding-left:30px;
     justify-content: baseline;
     align-items: center;
+	cursor:pointer;
 }
 
 .find>i , .setting>i, .pjset>i, .rolemanage>i, .membermanage>i, .chatset>i, .cash>i, .workspacemanage>i, .projectProfile>i{

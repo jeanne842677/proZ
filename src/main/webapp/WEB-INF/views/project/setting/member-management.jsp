@@ -12,6 +12,17 @@
 	href="/resources/css/setting/member-management.css?ver=2" />
 <script type="text/javascript" src="/resources/js/modal/modal.js?ver=2"></script>
 <title>멤버 설정</title>
+<style>
+#sortable> .member, #sortable2>.member{
+	height: 30px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    margin: 10px 0px 10px 0px;
+    cursor: pointer;
+    justify-content: flex-start;
+    }
+</style>
 </head>
 
 <body>

@@ -252,6 +252,18 @@
         	position: relative;
         	overflow:auto;
         }
+        
+        #commitarea::-webkit-scrollbar {
+		    width: 6px;
+		    height: 6px;
+		}
+		#commitarea::-webkit-scrollbar-thumb {
+		    background-color: #000000;
+		}
+		#commitarea::-webkit-scrollbar-track {
+		    background-color: grey;
+		}
+        
 
         .map-editor{
             width:15%;
@@ -447,9 +459,14 @@
 //내 깃주소 불러오기
 $("#resetbtn").click(function(){
 	$(".gitinput").attr('value',"${authentication.git}");
-	if(${authentication.git} == null){
-		alert("git주소가 등록되어있지 않습니다.");
-	}
+
+});
+
+$("#resetbtn").click(function(){
+	if($(".gitinput").val() == ""){
+		alert("깃 주소가 등록되어있지 않습니다.");
+	};
+
 });
 
 $('#commit-btn').on('click' , function() {

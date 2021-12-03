@@ -59,6 +59,7 @@ header {
 	background: rgb(143, 122, 229);
 	background: radial-gradient(circle, rgba(143, 122, 229, 1) 0%,
 		rgba(241, 112, 170, 1) 100%);
+	display:flex;
 }
 
 .con {
@@ -113,6 +114,17 @@ aside {
 	background-color: #fff3cd;
 	width: 300px;
 }
+
+.note-editable::-webkit-scrollbar {
+    width: 6px;
+}
+.note-editable::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+.note-editable::-webkit-scrollbar-track {
+    background-color: grey;
+}
+
 
 .note-status-output {
 	background-color: #fff3cd;
@@ -355,11 +367,11 @@ font-family: 'NanumSquareRound';
 						</div>
 					</div>
 					<div id="memocolor" style="display: none;">
-						<div class="yellow" style="background-color: #fff3cd;"></div>
-						<div class="pink" style="background-color: #f8d7da;"></div>
-						<div class="green" style="background-color: #d4edda;"></div>
-						<div class="blue" style="background-color: #d1ecf1;"></div>
-						<div class="black" style="background-color: #dddddd;"></div>
+						<div class="yellow" style="background-color: #FEE182;"></div>
+						<div class="pink" style="background-color: #F6A9B0;"></div>
+						<div class="green" style="background-color: #A1D5AE;"></div>
+						<div class="blue" style="background-color: #9FDFEB;"></div>
+						<div class="black" style="background-color: #D8BBDC;"></div>
 					</div>
 				</div>
 
@@ -580,23 +592,23 @@ font-family: 'NanumSquareRound';
             // 메모지 색상 변경
             $(document).ready(function (){
                 $(".yellow").click(function(){
-                    changeColor("#fff3cd");
+                    changeColor("#FEE182");
                 });
 
                 $(".pink").click(function(){
-                    changeColor("#f8d7da");
+                    changeColor("#F6A9B0");
                 });
 
                 $(".green").click(function(){
-                    changeColor("#d4edda");
+                    changeColor("#A1D5AE");
                 });
 
                 $(".blue").click(function(){
-                    changeColor("#d1ecf1");
+                    changeColor("#9FDFEB");
                 });
 
                 $(".black").click(function(){
-                    changeColor("#dddddd");
+                    changeColor("#D8BBDC");
                 });
             })
 
