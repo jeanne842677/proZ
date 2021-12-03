@@ -709,7 +709,7 @@ $("#modifinishbtn").click(function(){
         hasPanAndZoom: true,
         nodeWidth:160,
         nodeHeight:50,
-        mainAxisNodeSpacing:2, //너비
+        mainAxisNodeSpacing:1.5, //너비
         isHorizontal:true,
         renderNode: function(node) { 
         return result = "<div class='box' style='cursor:pointer;height:"+node.settings.nodeHeight+"px; width:auto;display:flex;flex-direction:column;justify-content:center;align-items:center;background-color:"

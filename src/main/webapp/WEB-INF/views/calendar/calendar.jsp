@@ -196,8 +196,9 @@
                 title: "${cl.calTitle}",
                 start: "${cl.startDate}",
                 end: "${cl.endDate}",
-                backgroundColor: 'red',
-                borderColor: 'red'
+                backgroundColor: "${cl.calColor}",
+                borderColor:  "${cl.calColor}" ,
+                textColor: "black"
             }
         
         events.push(data);
@@ -234,7 +235,10 @@
                     calendar.unselect() */
                 },
                 eventClick: function (arg) {
-                    alert("클릭시 발생하는 이벤트");
+                	
+                	let idx = arg.event._def.publicId;
+                	location.href="/calendar/view/${projectIdx}?calIdx="+idx;
+                	
                 },
                 eventChange: function (arg) {
                 	let changeStart = arg.event._instance.range.start.getTime()

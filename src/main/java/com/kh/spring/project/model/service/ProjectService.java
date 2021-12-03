@@ -97,7 +97,12 @@ public interface ProjectService {
 
 	int updateProjectIsLeave(Member member, String projectIdx);
 
+
 	
+	//지영 코드
+	
+
+		Workspace selectWorkspaceByWsIdx(String wsIdx);
 	
    
 

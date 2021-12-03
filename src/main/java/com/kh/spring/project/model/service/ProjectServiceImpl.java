@@ -385,6 +385,14 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.updateProjectIsLeave(member,projectIdx);
 	}
 
+	
+	//지영코드
+	@Override
+	public Workspace selectWorkspaceByWsIdx(String wsIdx) {
+		// TODO Auto-generated method stub
+		return projectRepository.selectWorkspaceByWsIdx(wsIdx);
+	}
+
 
 
 	

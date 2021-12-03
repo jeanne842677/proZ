@@ -169,6 +169,9 @@ public interface ProjectRepository {
 
    @Update("update project_member set is_leave = 1  where project_idx = #{projectIdx} and user_idx= #{member.userIdx}")
    int updateProjectIsLeave(@Param("member")Member member, @Param("projectIdx")String projectIdx);
+
+   @Select("select * from workspace where ws_idx = #{wsIdx}")
+   Workspace selectWorkspaceByWsIdx(String wsIdx);
    
 
 }

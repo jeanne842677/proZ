@@ -58,10 +58,15 @@ public class ProjectInterceptor implements HandlerInterceptor {
 
 		
 		Project project = projectService.selectProjectByIdx(projectIdx);
-
+		
+		
+		//만약 프로젝트가 없으면 바로 넘기기
 		if (project == null) {
 			throw new HandlableException(ErrorCode.REDIRECT_MAIN_PAGE);
 		}
+		
+
+		
 		
 		List<Workspace> workspaceList = projectService.selectWorkspaceByProjectIdx(projectIdx);
 		
@@ -74,6 +79,34 @@ public class ProjectInterceptor implements HandlerInterceptor {
 		request.setAttribute("project", project);
 		request.setAttribute("workspaceList" , workspaceList);
 		request.setAttribute("projectIdx" , projectIdx);
+		
+
+		String wsIdx = request.getParameter("wsIdx");
+	
+		//만약 파라미터가 존재하면 wsIdx 정보담기
+		if(wsIdx !=null) {
+			
+			Workspace workspace = null;
+			for(Workspace ws :workspaceList ) {
+				
+				if(wsIdx.equals(ws.getWsIdx())) {
+					workspace = ws;
+					break;
+				}
+				
+			}
+			
+			if (workspace == null) {
+				ErrorCode error = ErrorCode.REDIRECT_MAIN_PAGE;
+				error.setURL("/project/" + projectIdx);
+				throw new HandlableException(error);
+			}else {
+				request.setAttribute("workspace" , workspace);
+				
+			}
+			
+		}
+		
 
 	}
 
