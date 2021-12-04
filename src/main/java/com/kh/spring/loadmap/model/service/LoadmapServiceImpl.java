@@ -72,7 +72,8 @@ public class LoadmapServiceImpl implements LoadmapService {
 
 	private GHRepository getGitRepo(Loadmap loadmap) throws IOException {
 
-		GitHub github = new GitHubBuilder().withOAuthToken("ghp_xY7zcQwkJZ=JGkXGcBOhH3g=MW6Akxbx0F7pkW".replace("=","" )).build();
+		GitHub github = new GitHubBuilder()
+				.withOAuthToken("ghp_xY7zcQwkJZ=JGkXGcBOhH3g=MW6Akxbx0F7pkW".replace("=", "")).build();
 		GHRepository repo = github.getRepository(loadmap.getGitRepo());
 
 		return repo;
@@ -92,7 +93,7 @@ public class LoadmapServiceImpl implements LoadmapService {
 			for (File f : repo.getCommit(g.getSHA1()).getFiles()) {
 				System.out.println("추가 파일: " + f.getSha());
 				String[] fileUrl = f.getFileName().split("/");
-				fileSha.add(fileUrl[fileUrl.length-1]);
+				fileSha.add(fileUrl[fileUrl.length - 1]);
 			}
 
 			break; // 1번만 돌고 멈춤
@@ -212,25 +213,24 @@ public class LoadmapServiceImpl implements LoadmapService {
 			GHRepository repo = getGitRepo(loadmap);
 			gitCommit = getCommitFileShaList(repo);
 			System.out.println("다시 받아온 깃커밋:  " + gitCommit);
-			
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		List<GitCommit> lastGitList = loadmapRepository.selectGitCommitListByLmIdx(loadmap.getLmIdx());
 		System.out.println(lastGitList);
 		if (lastGitList != null) {
-			
+
 			GitCommit lastGit = lastGitList.get(0);
-			if (lastGit.getCommitDate().getTime()==gitCommit.getCommitDate().getTime()) {
+			if (lastGit.getCommitDate().getTime() == gitCommit.getCommitDate().getTime()) {
 				System.out.println("최신과 같음 걸림");
 				return null;
-			}else {
-				
+			} else {
+
 				System.out.println("여기걸림");
 				gitCommit.setLmIdx(loadmap.getLmIdx());
 				loadmapRepository.insertGitCommit(gitCommit);
-				
+
 			}
 
 		}

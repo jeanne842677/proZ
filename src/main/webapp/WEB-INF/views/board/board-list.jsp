@@ -15,86 +15,81 @@
     <script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>   <!-- 부트스트랩 3.x를 사용한다. -->
 
     <style type="text/css">
-        html,
-        body {
+html, body {
+	width: 100%;
+	height: 100%;
+	min-width: 1450px;
+	overflow:hidden;
+}
 
-            width: 100%;
-            height: 100%;
-            min-width: 1000px;
+a {
+	color: #A4A4A4;
+	text-decoration: none;
+}
 
-        }
+a:hover {
+	color: #8F7AE5;
+	text-decoration: none;
+}
 
-        .wrap {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            flex: 1 auto;
+a:active {
+	color: #8F7AE5;
+	text-decoration: none;
+}
 
+.wrap {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
 
-        }
+header {
+	height: 60px;
+	background: rgb(143, 122, 229);
+	background: radial-gradient(circle, rgba(143, 122, 229, 1) 0%,
+		rgba(241, 112, 170, 1) 100%);
+	display:flex;
+}
 
-        header {
-            height: 60px;
-            background: rgb(143, 122, 229);
-            background: radial-gradient(circle, rgba(143, 122, 229, 1) 0%, rgba(241, 112, 170, 1) 100%);
-            min-height: 60px;
+.con {
+	flex: 1;
+	height: 100%;
+	display: flex;
+	justify-content: space-between;
+	overflow: auto;
+}
 
-        }
+nav {
+	background: rgb(19, 23, 34);
+	background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%,
+		rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1)
+		100%);
+	width: 220px;
+	height: 100%;
+	flex-shrink: 0;
+}
 
-        .con {
+section {
+	height: 100%;
+	width: 100%;
+	overflow-y: auto;
+	background: RGB(245, 246, 247);
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	min-width: 1300px;
+}
 
-            height: 100%;
-            display: flex;
-            justify-content: space-between;
-            overflow-x: auto;
+aside {
+	background: rgb(19, 23, 34);
+	background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%,
+		rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1)
+		100%);
+	height: 100%;
+	width: 200px;
+	flex-shrink: 0;
+}
 
-        }
-
-        nav {
-            background: rgb(19, 23, 34);
-            background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
-
-
-            width: 220px;
-            height: 100%;
-            flex-shrink: 0;
-            overflow: auto;
-
-
-
-        }
-
-        section {
-
-            flex: 1;
-            width: 100%;
-            background: RGB(245, 246, 247);
-            display: flex;
-            justify-content: center;
-            overflow-y: auto;
-            min-width: 1300px;
-            overflow-x: hidden;
-
-
-
-
-        }
-
-
-        aside {
-
-            background: rgb(19, 23, 34);
-            background: linear-gradient(0deg, rgba(19, 23, 34, 1) 0%, rgba(26, 17, 47, 1) 22%, rgba(26, 30, 41, 1) 83%, rgba(19, 23, 34, 1) 100%);
-
-            height: 100%;
-            width: 200px;
-            flex-shrink: 0;
-
-            overflow: auto;
-
-
-        }
 
 
         /*섹션 영역////////////////////////////////////////////////////////////*/
@@ -396,9 +391,9 @@
                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">게시판
                                         추가</button>
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                        <div class="dropdown-item" id="add-small-board">작은 애</div>
-                                        <div class="dropdown-item" id="add-medium-board">중간 애</div>
-                                        <div class="dropdown-item" id="add-large-board">큰 애</div>
+                                        <div class="dropdown-item" id="add-small-board">작은 게시판</div>
+                                        <div class="dropdown-item" id="add-medium-board">중간 게시판</div>
+                                        <div class="dropdown-item" id="add-large-board">큰 게시판</div>
                                     </div>
                                 </div>
                             </div>
@@ -433,9 +428,15 @@
                                             <a data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                                                 aria-expanded="false">⋮</a>
                                             <div class="dropdown-menu" style="">
-                                                <div class="dropdown-item" href="#">지영</div>
+                                             <div class="dropdown-item leaf-board" id="${ board.bdIdx }">${ board.bdName }</div>
+                                            <c:forEach items="${LeafBoardList }" var="lbl">
+                         						<c:if test="${ lbl.parent == board.bdIdx }">                   
+                                                <div class="dropdown-item leaf-board" id="${ lbl.bdIdx }">${ lbl.bdName }</div>
+                                                </c:if>
+                                            
+                                            </c:forEach>
                                                 <div class="dropdown-divider"></div>
-                                                <div class="dropdown-item" >게시판 추가</div>
+                                                <div class="dropdown-item add-leaf-board" >게시판 추가</div>
                                                 <div class="dropdown-item remove-board">게시판 삭제</div>
                                             </div>
                                         </button>
@@ -788,7 +789,7 @@
                 
                 let bdSize = boardDiv.data("size");
                  
-                let toggle = $('<button class="nav-item dropdown board-change-btn"><a data-bs-toggle="dropdown" role="button" aria-haspopup="true"aria-expanded="false">⋮</a><div class="dropdown-menu" style=""><div class="dropdown-item" href="#">게시판 추가</div><div class="dropdown-item" id="remove-board">게시판 삭제</div></div></button>');
+                let toggle = $('<button class="nav-item dropdown board-change-btn"><a data-bs-toggle="dropdown" role="button" aria-haspopup="true"aria-expanded="false">⋮</a><div class="dropdown-menu" style=""><div class="dropdown-item  add-leaf-board" href="#">게시판 추가</div><div class="dropdown-item" id="remove-board">게시판 삭제</div></div></button>');
                 boardDiv.find('.board-subject-wrap').append(toggle);
 
                 $(this).remove();
@@ -849,7 +850,8 @@
     				headers :  {"Content-type" : "application/json; charset=UTF-8"},
     				body : JSON.stringify({
     					bdIdx : bdIdx ,
-    					sort : sort
+    					sort : sort,
+    					wsIdx : ${workspace.wsIdx}
  
     					})
     				
@@ -891,9 +893,170 @@
 	})
 	
 
+	//지영 추가======================================
+		
+	$('.add-leaf-board').on("click" , function() {
+
+		let board = $(this).parents('.board');
+		let size = board.data('size');
+		
+        let boardDiv = $('<div class="board"></div>');
+        
+        
+        switch (size) {
+        case 1:
+            boardDiv.addClass('small-board-wrap');
+            break;
+
+        case 2:
+            boardDiv.addClass('medium-board-wrap');
+            break;
+
+        case 3:
+            boardDiv.addClass('large-board-wrap');
+            break;
+
+   		 }
+        
+        boardDiv.html('<div class="small-board"><div class="board-subject-wrap"><input class="board-subject" type="text" placeholder="게시판 이름을 입력하세요"></div><div class="card-wrap"></div><button class="save-btn btn btn-primary">저장하기</button></div>')
+
+        let input = boardDiv.find('.board-subject')
+        input.css('backgroundColor', 'white');
+        input.css('width', '100%');
+        input.attr('autofocus', 'autofocus');
+        
+        $(board).after(boardDiv);
+        $(board).remove();
+		
+
+		console.dir(board);
+		
+	    boardDiv.find('.save-btn').on('click', function () {
+	    	
+            let bdName = input.val();
+            if(!bdName) {
+            	alert("게시판 이름을 입력하세요");
+            	return;
+            }
+            
+            bdIdx = board.attr('id');
+            
+    		fetch("/board/add/leaf-board" ,{
+    			
+    			
+    			
+    			method : "POST",
+    			headers :  {"Content-type" : "application/json; charset=UTF-8"},
+    			body : JSON.stringify({
+    				bdIdx : bdIdx,  
+    				bdName : bdName
+
+    				})
+    			
+    		}).then(res=>res.text())
+    		.then(text => {
+
+    	    	board.find('.board-subject').val(bdName);
+    	    	board.find('.card-wrap').empty();
+
+    	    	board.attr('id' , text) //text에 bdIdx들어있음.
+    	    	$(boardDiv).after(board); //이벤트는 복사 안됨...
+    	    	$(boardDiv).remove();
+    			
+    			
+    		})
+
+            
+	    	
+	    	
+	    	board.find('.post-btn').on('click' , addPost);
+	    	
+	    })
+	    
+	    
+		
+	})
+	
+	
+	
+	//보드 버튼을 눌렀을 때 
+	$('.leaf-board').each(function() {
+			
+			
+		
+		$(this).on('click' , function() {
+			
+			let bdIdx = $(this).attr('id');
+			let boardName = $(this).text();
+			let board = $(this).parents('.board');
+			
+			
+			fetch("/board/select/leaf-board-post" ,{
+				
+				
+				
+				method : "POST",
+				headers :  {"Content-type" : "application/json; charset=UTF-8"},
+				body : JSON.stringify({
+					bdIdx : bdIdx 
+
+					})
+				
+			}).then(res=>res.text())
+			.then(text=>{
+	
+				console.dir(JSON.parse(text));
+				let cardList = JSON.parse(text);
+				
+				board.find('.board-subject').val(boardName);
+				board.attr('id' , bdIdx);
+				board.find('.card-wrap').empty();
+				
+				cardList.forEach(function(post) {
+					
+					let card = $('<div class="card" ><div class="card-subject"></div><div class="profile-img"></div>');
+					
+					card.attr('id' , post.postIdx);
+					card.data('sort' , post.sort);
+					card.find('.card-subject').text(post.postTitle);
+					board.find('.card-wrap').append(card);
+					
+					
+					
+				})
+				
+			})
+			
+			
+			
+		})
+		
+		
+		
+		
+	})
 	
 
+/* 			
+		alert('안녕');
+		let bdIdx = $(this).parents('.board').attr('id');
+		alert(bdIdx);
+		
+		
+		fetch("/board/add/leaf-board" ,{
+			
+		
+			
+			method : "POST",
+			headers :  {"Content-type" : "application/json; charset=UTF-8"},
+			body : JSON.stringify({
+				bdIdx : bdIdx 
 
+				})
+			
+		})
+
+ */
 
     </script>
 

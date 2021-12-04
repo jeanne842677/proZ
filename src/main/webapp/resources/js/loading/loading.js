@@ -37,6 +37,9 @@
             
             let secondDiv = document.createElement('div');
             secondDiv.setAttribute('class', 'ldio-8mhodazy58c');
+            
+            
+            
             div.append(secondDiv);
 
             secondDiv.append(document.createElement('div'));
@@ -45,6 +48,9 @@
                 secondDiv.firstChild
                 .append(document.createElement('div'));
             };
+
+			console.log(document.querySelector('body'));  
+			
             
             // body에 추가, 자식요소를 querySelector, querySelectorAll로 호출 
             document.querySelector('body').append(div);
@@ -56,6 +62,7 @@
             
             document.querySelector('.ldio-8mhodazy58c > div div:nth-child(6)').style.backgroundColor = this.innerColor; 
             div.style.display = 'none'; 
+            
             
             this.loadingGear = div; 
         } 

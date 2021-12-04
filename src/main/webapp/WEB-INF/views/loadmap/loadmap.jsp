@@ -252,6 +252,18 @@
         	position: relative;
         	overflow:auto;
         }
+        
+        #commitarea::-webkit-scrollbar {
+		    width: 6px;
+		    height: 6px;
+		}
+		#commitarea::-webkit-scrollbar-thumb {
+		    background-color: #000000;
+		}
+		#commitarea::-webkit-scrollbar-track {
+		    background-color: grey;
+		}
+        
 
         .map-editor{
             width:15%;
@@ -444,6 +456,18 @@
 
 
 <script type="text/javascript">
+//내 깃주소 불러오기
+$("#resetbtn").click(function(){
+	$(".gitinput").attr('value',"${authentication.git}");
+
+});
+
+$("#resetbtn").click(function(){
+	if($(".gitinput").val() == ""){
+		alert("깃 주소가 등록되어있지 않습니다.");
+	};
+
+});
 
 $('#commit-btn').on('click' , function() {
 	
@@ -485,6 +509,7 @@ $("#modifybtn").click(function(){
     $("#allview").hide();
     $(".address").hide();
     $("#onedeps").hide();
+    $("#commit-btn").hide();
     $("#tree").css("width","85%");
     $(".gitinput").css("display","flex");
     $(".branchinput").css("display","flex");
@@ -494,6 +519,7 @@ $("#modifybtn").click(function(){
 
 $("#modifinishbtn").click(function(){
     $("#modifybtn").css("display","flex");
+    $("#commit-btn").css("display","flex");
     $("#allview").css("display","flex");
     $(".address").css("display","flex");
     $("#onedeps").css("display","flex");
@@ -709,7 +735,7 @@ $("#modifinishbtn").click(function(){
         hasPanAndZoom: true,
         nodeWidth:160,
         nodeHeight:50,
-        mainAxisNodeSpacing:2, //너비
+        mainAxisNodeSpacing:1.5, //너비
         isHorizontal:true,
         renderNode: function(node) { 
         return result = "<div class='box' style='cursor:pointer;height:"+node.settings.nodeHeight+"px; width:auto;display:flex;flex-direction:column;justify-content:center;align-items:center;background-color:"

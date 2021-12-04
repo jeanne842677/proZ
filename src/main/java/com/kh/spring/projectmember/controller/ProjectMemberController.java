@@ -37,14 +37,14 @@ public class ProjectMemberController {
     	
     	pm.putProject(projectIdx, pms);
     	
-    	System.out.println("================================");
+    	//System.out.println("================================");
     	
-    	System.out.println("projectIdx: " + projectIdx);
-    	System.out.println("인간 들어옴");
-        System.out.println(member);
-        System.out.println("===============================");
+    	//System.out.println("projectIdx: " + projectIdx);
+    	//System.out.println("인간 들어옴");
+        //System.out.println(member);
+        //System.out.println("===============================");
         
-        System.out.println(pm.getProjectMember(projectIdx));
+        //System.out.println(pm.getProjectMember(projectIdx));
         
         
         res.put("members" , pm.getProjectMember(projectIdx));
@@ -64,9 +64,9 @@ public class ProjectMemberController {
     	ProjectMemberSession pms = pm.removeList(projectIdx, member.getUserIdx());
     	res.put("member" , pms);
     	
-    	System.out.println("커넥션 끊어짐");
+    	//System.out.println("커넥션 끊어짐");
     	
-    	System.out.println(pm.getProjectMember(projectIdx));
+    	//System.out.println(pm.getProjectMember(projectIdx));
     	
     	
     	return res;

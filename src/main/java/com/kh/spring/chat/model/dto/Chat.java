@@ -12,17 +12,13 @@ public class Chat {
 	private String regDate;
 	private String nickname;
 	private String pmIdx;
-	//private String fileIdx;
-	
+	private String isFile;
+	private String filePath;
+	private String dataUrl;
+	private String fileType;
 	
 	public int getChIdx() {
 		return chIdx;
-	}
-	public String getPmIdx() {
-		return pmIdx;
-	}
-	public void setPmIdx(String pmIdx) {
-		this.pmIdx = pmIdx;
 	}
 	public void setChIdx(int chIdx) {
 		this.chIdx = chIdx;
@@ -57,12 +53,49 @@ public class Chat {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	
+	public String getPmIdx() {
+		return pmIdx;
+	}
+	public void setPmIdx(String pmIdx) {
+		this.pmIdx = pmIdx;
+	}
+	public String getIsFile() {
+		return isFile;
+	}
+	public void setIsFile(String isFile) {
+		this.isFile = isFile;
+	}
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	public String getDataUrl() {
+		return dataUrl;
+	}
+	public void setDataUrl(String dataUrl) {
+		this.dataUrl = dataUrl;
+	}
+	public String getFileType() {
+		return fileType;
+	}
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
 	@Override
 	public String toString() {
 		return "Chat [chIdx=" + chIdx + ", wsIdx=" + wsIdx + ", chName=" + chName + ", content=" + content
-				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + "]";
+				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + ", isFile=" + isFile
+				+ ", filePath=" + filePath + ", dataUrl=" + dataUrl + ", fileType=" + fileType + "]";
 	}
+	
+	
+	
+	
+	
+	
+
 	
 	
 	

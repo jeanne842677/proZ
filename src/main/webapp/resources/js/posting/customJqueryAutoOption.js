@@ -65,30 +65,45 @@ var initCustomAutocomplete = function(element) {
                   break;
 
                   // 3_file function, (말줄임 필요, 업데이트이전)
-                  case 'file' :
-                    $(this).after(function(){
-                        return "<div class='immutableDiv'"
-                        + "style='width:200px; height:25px; border: 1px solid lightgray; margin:4px; border-radius:5px;"
-                        + "font-size: 12px; display:flex; align-items:center; padding-left:10px; padding-right:10px; caret-color: transparent;'>"
-                        + "<a href='resources/h1.png' type='file' target='blank'>"
-                        + "PUT_YOUR_FILES</a>"
-                        + "</div>";
+                  case 'file' :    
+                    $(this).after(function(){ 
+                      // input을 포함한 작은 div 생성 
+                      return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
+                      + "<div id='drop_zone'class='dropleaved' data-fetchResult='file'"
+                      + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
+                      + "style='height:120px; width:200px; font-size:8px;"  
+                      + "border-radius:5px; margin:10px; color:slategray; font-weight:bolder;" 
+                      + "display:flex; flex-direction:column; justify-content:center; align-items:center;'>"
+                      + "파일을 드래그 앤 드롭하세요" 
+                      + "</div></div>"
                     });
                     createHyperLinkDiv($(this).next());
                   break; 
                   case 'img':
-                    $(this).after(function(){
-                      return "<div class='immutableDiv' contenteditable='false' style='padding:10px;' >"
-                      + "<img src='resources/h1.png' style='width:100px; height:100px; caret-color: transparent;'>"
-                      + "</div>";
+                    $(this).after(function(){ 
+                      // input을 포함한 작은 div 생성 
+                      return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
+                      + "<div id='drop_zone'class='dropleaved' data-fetchResult='img'"
+                      + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
+                      + "style='height:120px; width:200px; font-size:8px;"  
+                      + "border-radius:5px; margin:10px; color:slategray; font-weight:bolder;" 
+                      + "display:flex; flex-direction:column; justify-content:center; align-items:center;'>"
+                      + "파일을 드래그 앤 드롭하세요" 
+                      + "</div></div>"
                     });
                     createImmutableDiv($(this).next()); 
                   break;
                   case 'audio':
-                    $(this).after(function(){
-                      return "<div class='immutableDiv' contenteditable='false'>"
-                      + "<audio controls src='resources/1234.mp3' style='caret-color: transparent;'>"
-                      + "</div>";
+                    $(this).after(function(){ 
+                      // input을 포함한 작은 div 생성 
+                     return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
+                      + "<div id='drop_zone'class='dropleaved' data-fetchResult='audio'"
+                      + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
+                      + "style='height:120px; width:200px; font-size:8px;"  
+                      + "border-radius:5px; margin:10px; color:slategray; font-weight:bolder;" 
+                      + "display:flex; flex-direction:column; justify-content:center; align-items:center;'>"
+                      + "파일을 드래그 앤 드롭하세요" 
+                      + "</div></div>"
                     });
                     createImmutableDiv($(this).next());
 
@@ -115,7 +130,7 @@ var initCustomAutocomplete = function(element) {
                   case 'code':
                     $(this).after(function(){
                         return "<div class='immutableDiv' contentEditable='false' style='padding:20px; caret-color:transparent;width:100%;'>"
-                        + "<div contentEditable='true' style='height:90%; min-height:100px; width:80%; background-color:#919191;"
+                        + "<div contentEditable='true' style='height:90%; min-height:100px; width:85%; background-color:#ebebeb;"
                         + "border-radius:10px; color:white; padding:20px; caret-color: white; font-size:12px;'>"
                         +"</div></div>";
                       });
@@ -159,16 +174,16 @@ var initCustomAutocomplete = function(element) {
 
                   // fetch_test_case 
                   case 'fetch' :
-                    $(this).after(function(){
+                    $(this).after(function(){ 
                       // input을 포함한 작은 div 생성 
                       return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent;'>" 
-                      + "<div class='fileBox'"
-                      + "style='height:70px; width:200px; background-color:lightgray; font-size:8px;"  
+                      + "<div id='drop_zone'class='dropleaved' data-fetchResult='file'"
+                      + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
+                      + "style='height:120px; width:200px; font-size:8px;"  
                       + "border-radius:5px; margin:10px; color:slategray; font-weight:bolder;" 
                       + "display:flex; flex-direction:column; justify-content:center; align-items:center;'>"
-                      + "&nbsp&nbsp파일 링크를 Ctrl+V로 붙여넣기 : "
-                      + "<input type='text' style='border-radius:5px; border:0; margin-top:10px;' >" 
-                      "</div></div>"
+                      + "파일을 드래그 앤 드롭하세요" 
+                      + "</div></div>"
                     });
                     // 링크에 fetch추가, 코드블록이벤트(immutable, but 작성가능) 추가 
                     createLinkDiv($(this).next()); 
@@ -336,6 +351,7 @@ var initCustomAutocomplete = function(element) {
   var immutableDivClickFnc = function(element){
     element.on('click', function(e){
       $(this).attr('contenteditable', "true"); 
+      console.log('클릭 테스트!')
       // jqueryFocus는 contentEditable에 약간 문제가 있다. 
       $(this).get(0).focus();  
     })
@@ -359,11 +375,11 @@ var initCustomAutocomplete = function(element) {
   }
 
   //****** function for HyperLink source
-  // 하이퍼링크를 위한 Div 생성 
+  // 하이퍼링크를 위한 Div 생성 (deprecated, view단 switch_case에서 처리) 
   var createHyperLinkDiv = function(element){
-    immutableDivClickFnc(element); 
+    hyperLinkDivClickFnc(element); 
     triggerHyperLink(element);
-    immutableDivBlurFnc(element); 
+    hyperLinkDivBlurFnc(element); 
     immutableDivDeleteFnc(element);
   };
   // 1) hyperLink를 click 시 작동시킨다. 
@@ -372,11 +388,32 @@ var initCustomAutocomplete = function(element) {
     .on('click', function(e){
       // jqueryFocus는 contentEditable에 약간 문제가 있다. 
       window.open(
+		
         $(this).children('a').attr('href'),
         '_blank'
       );
+      
     }); 
   };
+  var hyperLinkDivClickFnc = function(element){
+    element.on('click', function(e){
+      $(this).attr('contenteditable', "true"); 
+      // jqueryFocus는 contentEditable에 약간 문제가 있다. 
+      $(this).get(0).focus();  
+    });
+    element.children('a').click(function (evt) {
+         evt.stopPropagation();
+    });
+  }
+  
+  var hyperLinkDivBlurFnc = function(element) {
+    element.blur(function(){
+      $(this).attr('contenteditable', "false");
+    })
+    element.children('a').blur(function(evt){
+      evt.stopPropagation(); 
+    })
+  }
   
   
   //***** function for codeBlockFnc (contentEditable Div, codeBlock)
@@ -396,6 +433,8 @@ var initCustomAutocomplete = function(element) {
         }
     });
   }
+  
+  
 
   // 2) 코드블록에 영향없이 바깥 Div를 선택하면 focus가 발생하도록 한다.   
   // 코드블록을 클릭하면 바깥이벤트가 발생하지 않도록 버블링 차단. 

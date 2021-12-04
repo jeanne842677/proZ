@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.board.model.dto.Reply;
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.Workspace;
@@ -21,7 +23,7 @@ public interface BoardService {
 
 	void updateSort(Map<String, String> map);
 
-	void insertPost(Map<String, String> map , Member member);
+	void insertPost(Map<String, String> map, Member member);
 
 	List<Post> selectPostListByWsIdx(String wsIdx);
 
@@ -32,5 +34,25 @@ public interface BoardService {
 	Post selectPostByPostIdx(String pmIdx);
 
 	List<Post> selectBoardByTop(String projectIdx);
+	
+	//유송추가
+	void deletePost(String postIdx);
+	
+	 int insertPostFile(FileDTO fileUploaded, String userIdx);
+	// 윤지 추가
+	Reply insertReply(Reply reply);
+
+	List<Map<String, Object>> selectReplyByPostIdx(String postIdx);
+
+	void deleteReplyByReplyIdx(String replyIdx);
+
+	void updateReplyByReplyIdx(Reply reply);
+
+	// 지영 추가
+	void insertLeafBoard(Board board);
+
+	List<Board> selectLeafBoardByWsIdx(String wsIdx);
+
+	List<Post> selectPostListByBdIdx(String bdIdx);
 
 }

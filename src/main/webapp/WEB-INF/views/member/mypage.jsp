@@ -90,9 +90,7 @@
                     </div>
                 </div>
             </section>
-            <aside>
-            	<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
-            </aside>
+    
         </div>
     </div>
 </body>

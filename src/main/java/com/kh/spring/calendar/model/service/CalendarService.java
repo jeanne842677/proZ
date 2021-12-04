@@ -13,4 +13,8 @@ public interface CalendarService {
 
 	void updateCalendar(Calendar calendar);
 
+	Calendar selectCalendarByCalIdx(String calIdx);
+
+	List<Calendar> selectCalendarListByProjectIdx(String projectIdx);
+
 }

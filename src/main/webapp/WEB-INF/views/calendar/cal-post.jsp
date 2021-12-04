@@ -29,6 +29,12 @@
         font-size: 16px;
         color: gray;
     }
+    
+    .date {
+    	display : flex;
+    }
+    
+
 	</style>
 </head>
 <body>
@@ -44,6 +50,8 @@
                     </div>
                     <div class="post-main-content-wrapper">
                         <div class="editor-minHeight-div" style="min-height: 500px;">
+                        	<!-- 엄청 위험하다, 파싱없이 바로 데이터를 사용하기 때문에.. -->
+                        	${calendar.calContent}
                         </div>
                         <div class="footer-wrapper">
                             <div class="footer-wrapper">
@@ -52,51 +60,27 @@
                                     <div class="post-footer-content-cover">
                                         <div class="post-content-cover-wrapper">
                                             <div class="post-message">커버</div>
-                                            <button class="post-cover" style="background-color:${post.postColor}" disabled="disabled"></button>
+                                            <button class="post-cover" style="background-color:${calendar.calColor}" disabled="disabled"></button>
                                         </div>
-                                        <c:if test="${projectMember.pmIdx eq post.pmIdx}" var="pm">
-	                                        <div class="post-btn-wrapper">
-		                                        <button type="button" id="post-change-btn" class="btn btn-primary">EDIT</button>
-		                                        <button type="submit" id="post-delete-btn" class="btn btn-primary">DELETE</button>
-	                                        </div>
-                                        </c:if>
+                                        <div class="post-btn-wrapper">
+	                                        <button type="button" id="post-change-btn" class="btn btn-primary">EDIT</button>
+	                                        <button type="button" id="post-delete-btn" class="btn btn-primary">DELETE</button>
+                                        </div>
                                     </div>     
-                                    <div class="post-content-date">
-                                        <div class="post-message">작성 날짜</div>
-                                        <div>${post.regDate}</div>
-                                    </div>
+									<div class="editor-content-date">
+										<div class="editor-message">작성 날짜</div>
+										<div class="date">
+											<div class="start-date">2021년 03월 03일</div>
+											&nbsp;~&nbsp;
+											<div class="end-date">2021년 11월 13일</div>
+										</div>
+									</div>
                                     <div class="br-line"></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- 댓글 기능 DIV, 윤지 수정본 -->
-                           
-                            <div class="post-comment-textArea-div">
-                                <i id="comment-smile" class="fas fa-smile"></i></label>
-                                <form class="post-comment-textArea-form">
-                                    <div id="comment-textArea" class="comment-textArea" contenteditable="true"></div>
-                                    <button class="comment-textArea-submit-btn">등록</button>
-                                </form>
-                            </div>
-                           <c:forEach  items="${replyList}" var="reply">
-                            <label class="post-comment-textArea-label"
-                               data-reply-idx="${reply.replyIdx}" data-reply-content="${reply.replyContent}"   >
-                                <label for="comment-textArea"><i id="comment-smile" class="fas fa-smile"></i></label>
-                                <div class="comment-text-wrapper">
-                                    <pre class="test">${reply.replyContent}</pre>
-                                    <div class="content-btn-wrapper">
-                                        <div>${reply.regDate}</div><a class="coment-anchor-btn" href="#">답글달기</a>
-                                        <c:if test="${projectMember.pmIdx eq reply.pmIdx}">
-                                       <a class="modify-btn" >수정하기</a>
-                                       <a class="remove-btn">삭제하기</a>
-                                        </c:if>
-                                    </div>
-                                </div>
-                            </label>
-                            </c:forEach>
-						<!-- 댓글기능 div 윤지 수정본 -->
-						
-                        <!-- <div class="post-comment-wrapper">
+                        <!-- 댓글 기능 DIV -->
+                        <div class="post-comment-wrapper">
                             <div class="post-comment-title">
                                 <div class="title-text">댓글</div><div class="title-number">48</div>
                             </div>
@@ -139,7 +123,7 @@
                                     </div>
                                 </label>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -152,8 +136,8 @@
     // *** 페이지 기능 (분리 이전) 
     
     // posting에서 DOMPurify 테스트 
-    var postContent = `${post.postContent}`;
-    $('.editor-minHeight-div').html(postContent); 
+    var postContent = `${calendar.calContent}`;
+    console.log(postContent); 
     
     //Post 내용 없을 시 수정 
     let mainDiv = $('.editor-minHeight-div');
@@ -185,95 +169,31 @@
         let text =event.clipboardData.getData("text/plain");
         document.execCommand("insertHTML", false,  text);
     });
-
-    // delete 기능 btn 
-    $('#post-delete-btn').on('click', function(e){
-    	//loading.on(); 
-    	fetch('/board/view/remove-post?' + 'postIdx=${post.postIdx}?wsIdx=${wsIdx}', {
-    		method : 'POST'
-    	})
-    	.then(response => response.text())
-    	.then(text => {
-			location.href = '/board/${projectIdx}';   
-    	})
-    });
-   
-    // edit 기능 btn 
-    $('#post-change-btn').on('click', function(e){
-    	//loading.on(); 
-    	let form = document.createElement('form'); 
-    	form.action = '/board/view/change-post?bdidx=${post.bdIdx}'; 
-    	form.method = 'POST'; 
-    	form.innerHTML = '<input name="content" value=${postContent}>';
-    	document.body.append(form);
-    	form.submit();
-    });
     
-    //
-</script>
-<script type="text/javascript">
-/* 댓글 입력 삭제 수정 javascript 윤지   */
-//댓글 입력
-$(".comment-textArea-submit-btn").off().on('click',function () {
-    let replyIdx = "";
-     let reply = $('.comment-textArea').html().trim();
-     console.dir(reply);
+    
 
- 
-    fetch("/board/post/add/reply" , {
-         method : "POST" ,
-         headers : {"Content-type" : "application/json; charset=UTF-8"} ,
-         body : JSON.stringify({
-            replyContent : reply,
-            postIdx : "${param.postIdx}",
-            pmIdx: "${projectMember.pmIdx}"
-               })
-    }).then(res=>{res.text()})
-     .then(reply=>{
-        
-         location.reload();
-     })
- })
- //댓글 삭제하기
-$(".remove-btn").off().on('click',function () {
-let replyIdx = $(this).closest(".post-comment-textArea-label").data("reply-idx");
-console.dir(replyIdx);
-    fetch("/board/post/delete/reply" , {
-         method : "POST" ,
-         headers : {"Content-type" : "application/json; charset=UTF-8"} ,
-         body : JSON.stringify({
-           replyIdx :replyIdx
-           
-               })
-    }).then(res=>{res.text()})
-     .then(reply=>{
-        
-        location.reload();
-     })
- })
- 
-  //댓글 수정하기
-$(".modify-btn").off().on('click',function () {
-let replyIdx = $(this).closest(".post-comment-textArea-label").data("reply-idx");
-let reply = $(this).closest(".post-comment-textArea-label").data("reply-content");
-console.dir(reply);
-console.dir(replyIdx);
-    fetch("/board/post/update/reply" , {
-         method : "POST" ,
-         headers : {"Content-type" : "application/json; charset=UTF-8"} ,
-         body : JSON.stringify({
-         replyContent : reply,
-         replyIdx :replyIdx,
-         postIdx : "${param.postIdx}",
-         pmIdx: "${projectMember.pmIdx}"
-           
-               })
-    }).then(res=>{res.text()})
-     .then(reply=>{
-        
-        location.reload();
-     })
- })
-</script>
+
+    $(function() {
+    	
+    	let changeDate =function(day) {
+    		return day.getFullYear()+"년 " + (day.getMonth()+1)+"월 " + day.getDate()+"일";
+    	}
+    	
+		let start = new Date("${calendar.startDate}");
+		let end = new Date("${calendar.endDate}");
+		end.setDate(end.getDate()-1);
+		
+		$('.start-date').text(changeDate(start));
+		$('.end-date').text(changeDate(end));
+    	
+    })
+
+
+
+	
+    
+    
+
+    </script>
 </body>
 </html>

@@ -16,7 +16,9 @@ import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.map.CamelMap;
+import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
+import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
 
@@ -58,22 +60,74 @@ public class ProjectInterceptor implements HandlerInterceptor {
 
 		
 		Project project = projectService.selectProjectByIdx(projectIdx);
-
+		
+		
+		//만약 프로젝트가 없으면 바로 넘기기
 		if (project == null) {
 			throw new HandlableException(ErrorCode.REDIRECT_MAIN_PAGE);
 		}
+		
+
+		
 		
 		List<Workspace> workspaceList = projectService.selectWorkspaceByProjectIdx(projectIdx);
 		
 		
 		// 온라인 오프라인 확인용
-		List<Map<String, Object>> projectMember = CamelMap
+		List<Map<String, Object>> projectMemberList = CamelMap
 				.changeListMap(projectService.selectProjectMemberByProjectIdx(projectIdx));
 
-		request.setAttribute("projectMemberList", projectMember);
+		request.setAttribute("projectMemberList", projectMemberList);
 		request.setAttribute("project", project);
 		request.setAttribute("workspaceList" , workspaceList);
 		request.setAttribute("projectIdx" , projectIdx);
+		
+
+		String wsIdx = request.getParameter("wsIdx");
+	
+		//만약 파라미터가 존재하면 wsIdx 정보담기
+		if(wsIdx !=null) {
+			
+			Workspace workspace = null;
+			for(Workspace ws :workspaceList ) {
+				
+				if(wsIdx.equals(ws.getWsIdx())) {
+					workspace = ws;
+					break;
+				}
+				
+			}
+			
+			if (workspace == null) {
+				ErrorCode error = ErrorCode.REDIRECT_MAIN_PAGE;
+				error.setURL("/project/" + projectIdx);
+				throw new HandlableException(error);
+			}else {
+				request.setAttribute("workspace" , workspace);
+				
+			}
+			
+		}
+		
+		Member member = (Member) request.getSession().getAttribute("authentication");
+		if(member!=null) {
+			
+			Map<String, Object> projectMember = null;
+			for(Map<String, Object> pm :projectMemberList) {
+				
+				if(member.getUserIdx().equals(pm.get("userIdx"))) {
+					
+					projectMember = pm;
+					request.setAttribute("projectMember" , projectMember);
+				}
+			}
+			
+			System.out.println(projectMember);
+		
+		}
+		//유저 정보 담기
+		
+		
 
 	}
 

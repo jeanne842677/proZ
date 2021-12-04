@@ -71,8 +71,8 @@
   }
   /* fetch 비동기통신 애니메이션 관련 */
   .loader {
-    border: 6px solid #f3f3f3; /* Light grey */
-    border-top: 6px solid #c08beb; /* Blue */
+    border: 6px solid #dadada; /* Light grey */
+    border-top: 6px solid #9b9b9b; /* Blue */
     border-radius: 50%;
     width: 20px;
     height: 20px;

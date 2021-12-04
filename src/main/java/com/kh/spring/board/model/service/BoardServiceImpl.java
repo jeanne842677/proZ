@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.board.model.dto.Reply;
 import com.kh.spring.board.model.repository.BoardRepository;
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.ProjectMember;
@@ -48,13 +50,13 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void deleteBoard(Board board) {
-
+		System.out.println("삭제된 보드 :" + board);
 		boardRepository.deleteBoard(board);
 		boardRepository.updateBoardSortWhenRemoveBoard(board);
 
 	}
 
-	@Override
+	@Override // 지영 수정 파트~~~~~~~~~~
 	public void updateSort(Map<String, String> map) {
 
 		String bdIdx = map.get("bdIdx");
@@ -83,7 +85,7 @@ public class BoardServiceImpl implements BoardService {
 		map.put("userIdx", member.getUserIdx());
 		ProjectMember projectMember = projectRepository.selectProjectMemberByMap(map);
 		map.put("pmIdx", projectMember.getPmIdx());
-		
+
 		boardRepository.insertPost(map);
 	}
 
@@ -126,6 +128,72 @@ public class BoardServiceImpl implements BoardService {
 	public List<Post> selectBoardByTop(String projectIdx) {
 		// TODO Auto-generated method stub
 		return boardRepository.selectBoardByTop(projectIdx);
-	};
+	}
+
+	
+	//유송 추가
+	@Override
+	public void deletePost(String postIdx) {
+		boardRepository.deletePost(postIdx);
+	}
+	
+	@Override
+	   public int insertPostFile(FileDTO fileUploaded, String userIdx) {
+	      return boardRepository.insertPostFile(fileUploaded, userIdx);
+	   }
+
+	// 윤지 추가
+
+	@Override
+	public Reply insertReply(Reply reply) {
+		// TODO Auto-generated method stub
+		boardRepository.insertReply(reply);
+		return reply;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectReplyByPostIdx(String postIdx) {
+		// TODO Auto-generated method stub
+		return boardRepository.selectReplyByPostIdx(postIdx);
+	}
+
+	@Override
+	public void deleteReplyByReplyIdx(String replyIdx) {
+
+		boardRepository.deleteReplyByReplyIdx(replyIdx);
+	}
+
+	@Override
+	public void updateReplyByReplyIdx(Reply reply) {
+
+		boardRepository.updateReplyByReplyIdx(reply);
+	}
+
+	// 지영 추가
+
+	@Override
+	public void insertLeafBoard(Board board) {
+
+		Board parentsBoard = boardRepository.selectBoardByBdIdx(board.getBdIdx());
+
+		board.setParent(parentsBoard.getBdIdx());
+		board.setBdSize(parentsBoard.getBdSize());
+		board.setSort(parentsBoard.getSort());
+		board.setWsIdx(parentsBoard.getWsIdx());
+
+		boardRepository.insertLeafBoard(board);
+
+	}
+
+	@Override
+	public List<Board> selectLeafBoardByWsIdx(String wsIdx) {
+
+		return boardRepository.selectLeafBoardByWsIdx(wsIdx);
+	}
+
+	@Override
+	public List<Post> selectPostListByBdIdx(String bdIdx) {
+		return boardRepository.selectPostListByBdIdx(bdIdx);
+	}
 
 }

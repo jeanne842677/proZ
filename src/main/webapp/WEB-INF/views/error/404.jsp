@@ -1,96 +1,157 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <link rel="stylesheet" href="https://bootswatch.com/5/minty/bootstrap.min.css">	
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/485bb3ceac.js" crossorigin="anonymous"></script>
 <style type="text/css">
-html {
-  height: 100%;
+
+@font-face {
+    font-family: 'GongGothicLight';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
-body {
-  height: 100%;
-  background: url("https://wallpapercave.com/wp/6SLzBEY.jpg") no-repeat left top;
-  background-size: cover;
-  overflow: hidden;
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
-  align-items: center;
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
 }
 
-.text h1 {
-  color: #011718;
-  margin-top: -200px;
-  font-size: 15em;
-  text-align: center;
-  text-shadow: -5px 5px 0px rgba(0, 0, 0, 0.7), -10px 10px 0px rgba(0, 0, 0, 0.4), -15px 15px 0px rgba(0, 0, 0, 0.2);
-  font-family: monospace;
-  font-weight: bold;
+
+
+    html, body{
+        background-color: #f9f7e8;
+        width:100%;
+        height:100%;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+                0deg, rgba(19,23,34,1) 0%, rgba(34,21,65,1) 22%, rgba(26,30,41,1) 83%, rgba(19,23,34,1) 100%);
+    }
+
+
+
+    .wrap{
+        width:800px;
+        height:600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .title{
+        font-size:180px;
+        display:flex;
+        justify-content: center;
+        height: 250px;
+        align-items: flex-end;
+        color: #fff;
+        font-family: 'GongGothicLight';
+        text-shadow: 0 0 7px #8f7ae5, 0 0 10px #8f7ae5, 0 0 2px #8f7ae5, 0 0 10px #8f7ae5, 0 0 48px #8f7ae5, 0 0 0px #8f7ae5, 0 0 27px #8f7ae5, 0 0 33px #8f7ae5;
 }
 
-.text h2 {
-  color: black;
-  font-size: 5em;
-  text-shadow: -5px 5px 0px rgba(0, 0, 0, 0.7);
-  text-align: center;
-  margin-top: -150px;
-  font-family: monospace;
-  font-weight: bold;
-}
+    .sub_title{
+        display:flex;
+        justify-content: center;
+        font-size:30px;
+        padding:0px 30px 10px 30px;
+        color:#fff;
+    }
+    
+    .description1, .description2{
+        display:flex;
+        justify-content: center;
+        color:#fff;
+    }
 
-.text h3 {
-  color: white;
-  margin-left: 30px;
-  font-size: 2em;
-  text-shadow: -5px 5px 0px rgba(0, 0, 0, 0.7);
-  margin-top: -40px;
-  font-family: monospace;
-  font-weight: bold;
-}
+    .btn_wrap{
+        display:flex;
+        justify-content: space-around;
+        width:100%;
+        padding:25px;
+    }
 
-.torch {
-  margin: -150px 0 0 -150px;
-  width: 200px;
-  height: 200px;
-  box-shadow: 0 0 0 9999em #000000f7;
-  opacity: 1;
-  border-radius: 50%;
-  position: fixed;
-  background: rgba(0, 0, 0, 0.3);
-}
-.torch:after {
-  content: "";
-  display: block;
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  box-shadow: inset 0 0 40px 2px #000, 0 0 20px 4px rgba(13, 13, 10, 0.2);
-}
+    .btn1{
+        width:150px;
+        background: linear-gradient(
+128deg, rgba(117, 55, 181, 1) 0%, rgba(190, 68, 172, 1) 100%);
+        border:none;
+        border-radius: 5px;
+    }
+    
+    .btn2{
+        width:150px;
+        background: linear-gradient(
+128deg, rgba(117, 55, 181, 1) 0%, rgba(190, 68, 172, 1) 100%);
+        border:none;
+        border-radius: 5px;
+    }
+
+    .deco{
+        height: auto;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+    }
+
+
+    .deco>img{
+        width:200px;
+    }
+
+
+
 </style>
+
 </head>
 <body>
-<div class="text">
-  <h1>404</h1>
-  <h2>Uh, Ohh</h2>
-  <h3>Sorry we cant find what you are looking for 'cuz its so dark in here</h3>
-</div>
-<div class="torch"></div>
+    <div class="wrap">
+        <div class="deco">
+<<<<<<< HEAD
+            <img src="/resources/img/logo-white.png">
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            <img src="/resources/img/logo-white.png">
+=======
+            <img src="resources/image/LOGOw.png">
+>>>>>>> refs/heads/dev2
+=======
+            <img src="/resources/img/logo-white.png">
+>>>>>>> refs/heads/dev2
+>>>>>>> branch 'main' of https://github.com/sazzeo/proZ
+        </div>
+        <div class="title">404</div>
+        <div class="sub_title">페이지를 찾을 수 없습니다.</div>
+        <div class="description1">페이지가 존재하지 않거나, 사용할 수 없는 페이지 입니다.</div>
+        <div class="description2">입력하신 주소가 정확한지 다시 한 번 확인해주세요 : )</div>
+        
+        <div class="btn_wrap">
+            <button class="btn1 btn btn-outline" onclick="history.go(-1)">이전페이지</button>
+            <button class="btn2 btn btn-outline" onclick="location.href='/'">proZ 메인</button>
+        </div>
+    </div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript">
-$(document).mousemove(function (event) {
-	  $('.torch').css({
-	    'top': event.pageY,
-	    'left': event.pageX
-	  });
-	});
+    <script type="text/javascript">
+        
+        </script>
 
-</script>
+
+
+
 
 
 </body>

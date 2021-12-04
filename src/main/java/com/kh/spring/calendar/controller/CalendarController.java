@@ -56,11 +56,29 @@ public class CalendarController {
 		
 	}
 	
+	@GetMapping("view/{projectIdx}")
+	public String viewPost(@PathVariable String projectIdx ,
+			@RequestParam(required = false) String calIdx ,
+			Model model
+			) {
+		
+		
+		Calendar calendar = calendarService.selectCalendarByCalIdx(calIdx);
+		model.addAttribute("calendar" , calendar);
+		
+		return "/calendar/cal-post";
+	}
+	
+	
+	
 	
 	@PostMapping("change/add-cal")
 	public String addCal(@RequestBody Calendar calendar,
 			@SessionAttribute(required = false , value="authentication") Member member) {
 		
+		
+		
+		System.out.println("캘린더 추가: " + calendar);
 		calendarService.insertCalendar(calendar, member);
 		
 		return "redirect:/";

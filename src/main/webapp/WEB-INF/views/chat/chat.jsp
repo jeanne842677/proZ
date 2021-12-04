@@ -8,7 +8,9 @@
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 <link rel="stylesheet" href="/resources/css/nav.css">
 <script type="text/javascript" src="/resources/js/nav.js"></script>
-<style type="text/css">
+<script type="text/javascript"src="/resources/js/file/download.js"></script>
+
+<style type="text/css"> 
 html, body {
    width: 100%;
    height: 100%;
@@ -148,8 +150,16 @@ article {
    align-items: flex-end;
 }
 
-.user {
+.chat-other .user{
    display: flex;
+   display: flex;
+   justify-content: flex-start;
+}
+
+.chat-me .user {
+   display: flex;
+   justify-content: flex-end;
+   margin-right: 10px;
 }
 
 .user-nickname {
@@ -224,6 +234,15 @@ aside {
 .clone-me, .clone-other {
    display: none;
 }
+
+.img-section {
+
+	width: 250px;
+	height: 200px;
+	cursor : pointer;
+	
+}
+
 </style>
 
 <meta charset="UTF-8">
@@ -253,7 +272,16 @@ aside {
                                  <div class="user-nickname">${chat.nickname}</div>
                               </div>
                               <div class="talk-me">
-                                 <div class="chat-content">${chat.content}</div>
+                              <c:choose>
+                              	<c:when test="${chat.isFile==1}">
+                              		<div class='chat-content'data-file-name='${chat.content}' data-file-path='${chat.filePath}' data-file-type='${chat.fileType}'><img class='img-section' src='${chat.dataUrl}'></div>
+                              	</c:when>
+                              	
+                              	<c:otherwise>
+                              		<div class="chat-content">${chat.content}</div>
+                              	</c:otherwise>
+                              </c:choose>
+                                 
                               </div>
                            </div>
                            <div class="user-picture">
@@ -297,7 +325,7 @@ aside {
                     <div class="textarea-icons">
                       <div id="lock" data-flg='true'><i class="fas fa-unlock fa-2x" cursor="pointer"></i></div>
                       <div id="file"><i class="fas fa-paperclip fa-2x" cursor="pointer"></i></div>
-                      <input id="input-file" type="file" style="display: none;" accept="image/*">
+                      <input id="input-file" type="file" style="display: none;">
                       <div id="send"><i class="far fa-paper-plane fa-2x" cursor="pointer"></i></div>
                     </div>
                   </div>
@@ -346,18 +374,89 @@ aside {
 <script src="https://code.jquery.com/jquery-3.6.0.js"`integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+
+
    
+
   
     <script>
+    
+    const firebaseConfig = {
+	    	    apiKey: "AIzaSyDdvbEhAml2uk5K8fm8DBGKU0z9y_ie0xE",
+	    	    authDomain: "proz-78541.firebaseapp.com",
+	    	    projectId: "proz-78541",
+	    	    storageBucket: "proz-78541.appspot.com",
+	    	    messagingSenderId: "363657337849",
+	    	    appId: "1:363657337849:web:974c2a6a5afa31845d3b28"
+	    	  };
+
+	    	  // Initialize Firebase
+	    	  firebase.initializeApp(firebaseConfig);
+    
+
+    
+   
+   	
+   	$('.img-section').off().on('click', function () {
+   		alert("이미지 클릭");
+   		let fileName = $(this).parent().data('file-name');
+   		let fileUrl = $(this).attr('src');
+   		let fileType = $(this).parent().data('file-type');
+   		
+   		download(fileUrl,fileName,fileType);
+   	});
+   	
+
+   	
+   	$(document).ready(function () {//채팅 컨텐츠가 이미지 파일일때
+   		
+   		$(".chat-content").each(function (index) {
+   			let path = $(this).data('file-path');
+   			if(path) {
+   				console.log("path 제발제발!!!" + path);
+   				//이미지 띄우기부터..
+   				var pathReference = firebase.storage().ref(path);
+                pathReference.getDownloadURL().then(function(url) {
+                	console.log(url);
+					$(this).find(".img-section").attr('src' , url);
+                }).catch( function(error) {//나중에
+                	alert("비상 비상");
+                	console.log(error);
+                	});
+   			}
+		})
+   	})
+    
+
+    
+    
+    
+    
+    
+    
+    
+    	  
+    
+    
+    
     
     var stompClient = Stomp.over(new SockJS("/ws-stomp"));
     var chIdx = ${length};
     let wsIdx = "${param.wsIdx}";
    	let nickname = "${projectMember.nickname}";
    	let pmIdx = "${projectMember.pmIdx}";
-   
-   
-       //연결 + 파이어베이스에 있는 정보 불러오기
+   	let projectIdx = "${projectMember.projectIdx}";
+   	let chatName = "${workspace.wsName}";
+   	let date = "";
+   	
+   	
+   	
        stompClient.connect({}, function (frame) {
           
            console.log("connected: " + frame);
@@ -367,24 +466,87 @@ aside {
                 
                 var content = JSON.parse(chat.body); //sendig한 객체를 받아옴.
                 
-                
-                
                 if(content.pmIdx == pmIdx) { //내가 입력할 때
+                	
                    let newChat = $(".clone-me").clone();
-                      newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
-                      newChat.find(".talk-me").append("<div class='chat-content'>"+ content.content +"</div>");
-                      newChat.find(".currentTime").html(content.regDate);
-                      newChat.find(".user-nickname").html(content.nickname);
-                      $(".chat-section").append(newChat);
+                   newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
+                   
+                   if(content.isFile == "1") {//보낸 메세지가 파일일 경우
+                	   
+                       var pathReference = firebase.storage().ref(content.filePath);
+                       var urlStirng = "";
+                       pathReference.getDownloadURL().then(function(url) {
+                      console.log("지나가?");
+                          var xhr = new XMLHttpRequest();
+                          
+                          
+                         /*  xhr.onload = function(event) {
+                            var blob = xhr.response;
+                            //blob.setHeader("Access-Control-Allow-Methods", "GET");
+                          }; */
+                          xhr.open('GET', url, true);
+                          xhr.responseType = 'blob';
+                          
+                          /* xhr.onload = function(event) {
+                        	    var blob = xhr.response;
+                        	    console.log(blob);
+                        	    const url2 = window.URL.createObjectURL(blob);
+                        	    console.log(url2);
+                        	  }; */
+                         /*  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                          xhr.withCredentials = true;
+                          xhr.onreadystatechange = handler; */
+                          //xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
+                          //xhr.setRequestHeader("Access-Control-Allow-Credentials", "true");
+                          //xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+                        
+                          xhr.send();
+						
+                          // Or inserted into an <img> element:
+                          urlStirng = url;
+                          console.log("urlllllllllllllll" + url);
+                          
+                          
+                          
+                          //<a href='" +url+ "' download='"+ content.content +"'>"
+                          //download(url, content.content, content.fileType);
+                          
+                          newChat.find(".talk-me").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
+                          
+                         	$('.img-section').off().on('click', function () {
+                           		alert("이미지 클릭");
+                           		let fileName = $(this).parent().data('file-name');
+                           		let fileUrl = $(this).attr('src');
+                           		let fileType = $(this).parent().data('file-type');
+                           		
+                           		download(fileUrl,fileName,fileType);
+                           	});
+                        }).catch(function(error) {//나중에
+                        	alert("비상 비상");
+                        	console.log(error);
+                        });
+
+                   }else {
+                	   newChat.find(".talk-me").append("<div class='chat-content'>" + content.content + "</div>");
+                   }
+                   newChat.find(".currentTime").html(content.regDate);
+                   newChat.find(".user-nickname").html(content.nickname);
+                   $(".chat-section").append(newChat);
+                   
                       
                    
                 }else{//다른사람이 입력할 때
                    let newChat = $(".clone-other").clone();
-                      newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
-                      newChat.find(".talk-other").append("<div class='chat-content'>"+ content.content +"</div>");
-                      newChat.find(".currentTime").html(content.regDate);
-                      newChat.find(".user-nickname").html(content.nickname);
-                      $(".chat-section").append(newChat);
+                   newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
+                   if(content.isFile == "1") {
+                	   newChat.find(".talk-me").append("<div class='chat-content'><a href='#'>" + content.content + "</a></div>");
+                   }else {
+                	   newChat.find(".talk-other").append("<div class='chat-content'>" + content.content + "</div>");
+                   }
+                   
+                   newChat.find(".currentTime").html(content.regDate);
+                   newChat.find(".user-nickname").html(content.nickname);
+                   $(".chat-section").append(newChat);
                 }
                 chIdx = content.chIdx;
                 scrollFixedBottom();
@@ -413,11 +575,6 @@ aside {
     } 
     
     
-    
-    
-    
-    
-    
 
     let flg = $("#lock").data('flg');
 
@@ -432,13 +589,9 @@ aside {
       // 엔터키를 누르면, #textarea에 입력한 내용이 db에 올라가고 채팅창에도 보이게
       $('#textarea').on('keydown', function(e) {
        
-        var today = new Date();
-        var year = today.getFullYear();
-        var month = ('0' + (today.getMonth() + 1)).slice(-2);
-        var day = ('0' + today.getDate()).slice(-2);
-        var hours = ('0' + today.getHours()).slice(-2); 
-        var minutes = ('0' + today.getMinutes()).slice(-2);
-        var dateString = year + '-' + month  + '-' + day + " " + hours + ":" + minutes;
+        
+    	date = nowDate();
+        
         let inputText = $(this).html();
        
          
@@ -457,15 +610,16 @@ aside {
             chIdx++;
             if(lastChatBlock.hasClass("chat-me")) { //마지막채팅이 나 일때
      
-                  stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
-                           chIdx : chIdx,
-                           wsIdx : wsIdx,
-                           chName : "채팅방1",
-                           content : inputText,
-                           regDate : dateString,
-                           nickname : nickname,
-                           pmIdx : pmIdx
-                    }));
+               stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
+                        chIdx : chIdx,
+                        wsIdx : wsIdx,
+                        chName : chatName,
+                        content : inputText,
+                        regDate : date,
+                        nickname : nickname,
+                        pmIdx : pmIdx,
+                        isFile : 0
+                 }));
                  
                
             }else{ //마지막채팅이 다른사람일때
@@ -473,12 +627,12 @@ aside {
               stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
                    chIdx : chIdx,
                    wsIdx : wsIdx,
-                   chName : "채팅방1",
+                   chName : chatName,
                    content : inputText,
-                   regDate : dateString,
+                   regDate : date,
                    nickname : nickname,
-                   pmIdx : pmIdx
-                   
+                   pmIdx : pmIdx,
+                   isFile : 0
             }));   
             
             }    
@@ -513,7 +667,6 @@ aside {
       $('#file').click( () => {
        if(flg){
     	   fileInput.click();
-        
        }else{
         window.alert("잠금을 해제해주세요.");
        }
@@ -524,10 +677,60 @@ aside {
     //multipart -> 경로찾고. stomp에 보내고. -> firebase에 저장하고?
   	
     
+    let storage = firebase.app().storage("gs://proz-78541.appspot.com"); 
+    		
   	$('#input-file').on('input', function(){
   		
+  				
     	  		var file = document.querySelector('#input-file').files[0];
-    	  		var formData = new FormData();
+    	  		let fileReader = new FileReader();
+    	  		fileReader.readAsDataURL(file);
+    	  		
+    	  		
+    	  		console.log(fileReader);
+    	  		
+    	  		fileReader.onload = (e) => {
+    	  			chIdx++;
+    	  			let dataUrl = fileReader.result;
+    	  		  	console.dir("------------dataUrl : ");
+    	  		    console.log(dataUrl);
+    	  		  	
+      	  		
+	      	  		let filePath = wsIdx + '/' + chIdx + '/' + file.name;
+	      	  		let storageRef = firebase.storage().ref(filePath);
+	      	  		let fileName = file.name;
+	      	  		date = nowDate();
+	      	  		
+	      	  		let fileType = file.type;
+	      	  		
+	      	  		/* console.log("************fileReader.result----------");
+	      	  		console.log(fileReader.result);
+	      	  		console.log("************dataUrl----------");
+	      	  		console.log(dataUrl); */
+	      	  		let saveStorageFile = storageRef.child(fileName);
+	      	  		let saveStorageFileRef = storageRef.child(wsIdx+'/'+ 'dd /' + fileName);
+	      	  		let path = saveStorageFile.fullPath
+	      	  		let name = saveStorageFile.name
+	      	  		
+	      	  		storageRef.put(file).then(function (snapshot) {
+	  				console.log(snapshot);
+	  				});
+	      	  		
+	                  stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
+	                      chIdx : chIdx,
+	                      wsIdx : wsIdx,
+	                      chName : chatName,
+	                      content : fileName,
+	                      regDate : date,
+	                      nickname : nickname,
+	                      pmIdx : pmIdx,
+	                      isFile : 1,
+	                      filePath : filePath,
+	                      fileType : fileType
+	               }));  
+    	  		};
+
+    	  		
     	  		
     	  		if(file == null){
     	  			//나 모달 띄울래 나중에
@@ -535,28 +738,20 @@ aside {
     	  			return false;
     	  		}
     	  		
-    	  		formData.append('files', file);
-    		
     	  		console.dir("------------file : " + file);
     	  		console.log(file);
-    	  		console.dir("-----------===--" + formData);
-    	  		console.log(formData);
-    	  		//formData를 넘겨주기	
     	  		
-    	  		//10분까지 쉴까? ㅇㅋ 미안 (20분을 쉬어서 10분에 다시 보자.^^먄!자지않긔. 오는길에 커피타와. 나 옆에 커피있어./ 못하면 못잠.)
     	  		
-    	  		// formData
-    	  		fetch('/chat/file/' + projectIdx, {
-			method: 'POST', 	
-			//body : formData
-		})
-		.then(response => response.text())
-    	.then(text=>{
-    		console.log(text);
-    		//12/3 여기부터 json에서 데이터 더넣고 send하기!
-      	  	/* stompClient.send("/app/test/" + wsIdx , {}, text); */
- 	
- 	});
+    	  		
+    	  		
+    	  		
+    	  		
+    	  		//fireBaseStorage에 저장
+    	  		
+    	  		 
+    	  		
+    	  		
+    	  		
     	});
     	  				
     	  		
@@ -574,12 +769,23 @@ aside {
         }else{
           window.alert("잠금을 해제해주세요.");
         }
-      })
+      });
     
 
+     function nowDate() {
+    	var today = new Date();
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var hours = ('0' + today.getHours()).slice(-2); 
+        var minutes = ('0' + today.getMinutes()).slice(-2);
+        var dateString = year + '-' + month  + '-' + day + " " + hours + ":" + minutes;
+        return dateString;
+	}
       
     
     </script>
+    <script type="text/javascript"src="/resources/js/file/download.js"></script>
 
 
 

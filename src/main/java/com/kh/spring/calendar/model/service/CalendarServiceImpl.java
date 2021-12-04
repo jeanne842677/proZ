@@ -59,6 +59,21 @@ public class CalendarServiceImpl implements CalendarService {
 		System.out.println("업뎃 완료");
 		
 	}
+
+
+
+	@Override
+	public Calendar selectCalendarByCalIdx(String calIdx) {
+		
+		return calendarRepository.selectCalendarByCalIdx(calIdx);
+	}
+
+
+
+	@Override
+	public List<Calendar> selectCalendarListByProjectIdx(String projectIdx) {
+		return calendarRepository.selectCalendarListByProjectIdx(projectIdx);
+	}
 	
 	
 	

@@ -16,6 +16,10 @@
 
 </head>
 <style type="text/css">
+ a:link { color: #292929; text-decoration: none;}
+ a:visited { color: #292929; text-decoration: none;}
+ a:hover { color: #292929; text-decoration: none;}
+
 input {
     -webkit-appearance: none;
        -moz-appearance: none;
@@ -78,7 +82,7 @@ input {
                             
                             </form>
                             
-                            <div class="find-wrap"><a href="/member/join">회원가입</a> <a href="/member/searchPassword">비밀번호 재설정</a></div>
+                            <div class="find-wrap"><a href="/member/join" style="color:#fff;">회원가입</a> <a href="/member/searchPassword" style="color:#fff;">비밀번호 재설정</a></div>
                             <div class="social">다른 서비스 계정으로 로그인</div>
                             <div class="btn-wrap">
                             <button id="kakao-btn" class="btn  btn-primary" type="button" >
@@ -86,7 +90,7 @@ input {
                                 <a href="/member/kakao_login" ><i class="fas fa-comment"></i>  카카오 로그인</a>
                               </button>
                                 <button id="google-btn" class="btn  btn-primary" type="button" >
-                                   <a href="/member/google_login"><i class="fab fa-google"></i>  구글 로그인</a>
+                                   <a href="/member/google_login"><img src="/resources/img/google.png" style="width:20px;">구글 로그인</a>
                          </button>
     
                             </div>
