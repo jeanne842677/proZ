@@ -10,7 +10,8 @@
 <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
     <link type="text/css" rel="stylesheet" href="/resources/js/modal/modal.js">
-	
+		<link type="text/css" rel="stylesheet" href="/resources/css/loading/loading.css">
+	<script src="/resources/js/loading/loading.js"></script>
 	
     <script src="https://cdn.jsdelivr.net/npm/treeviz@2.3.0/dist/index.min.js"></script>
 
@@ -456,6 +457,41 @@
 
 
 <script type="text/javascript">
+//로딩 화면 
+
+
+
+/* $(window).on('load', function() {
+	loading.off();
+}); */ 
+var loading = new loadingGear('gear'); 
+loading.createLoadingGear(); 
+
+$(document).ready(function(){
+	loading.on();
+	console.dir("이거슨 도큐");
+});  
+
+$(window).ready(function(){
+	loading.off();
+	console.dir("이거슨 윈도우");
+});
+
+window.onbeforeunload = function () { loading.on(); }
+
+/* $(function() {
+loading.off();
+});  */
+/* window.onload=function(){
+	loading.off();
+	console.dir("이거슨 온로드");
+
+}; */
+  
+
+
+
+
 //내 깃주소 불러오기
 $("#resetbtn").click(function(){
 	$(".gitinput").attr('value',"${authentication.git}");
@@ -681,7 +717,7 @@ $("#modifinishbtn").click(function(){
     
     console.dir(dataArr);
     
-    
+
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.umd.js" integrity="sha512-bgoBr08oPe0Fgqfk4TY8yNOXb1g3pkWHnsiVLLqmR+71gyo1v4PRwFEYTIL1xuFG/EHZRAvn7P1aMvs/9rKoAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -788,9 +824,11 @@ $("#modifinishbtn").click(function(){
     	
     	
     })
-	
-  
     
+    
+
+  
+
     
 /*     
     document.querySelector("#add").addEventListener("click", () => {toggle ? myTree.refresh(data_2) : myTree.refresh(data_3); toggle = false});
