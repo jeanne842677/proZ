@@ -20,10 +20,15 @@
         padding: 5px 5px 5px 12px; 
     }
     .commonDiv:hover{
-        background-color: rgb(214, 211, 255);
+        background-color: #EEEEEE;
+    }
+    .commonDiv::before{
+    	position : relative; 
+    	right:20px; 
+    	content : "::"
     }
     .immutableDiv:hover{
-        background-color: rgb(214, 211, 255);
+        background-color: #EEEEEE;
     }
     .immutableDiv:focus{
         background-color: rgb(182, 177, 255);
@@ -43,6 +48,23 @@
         font-size: 16px;
         color: gray;
     }
+   
+
+    /* 클래스 이름 변경은 원래 border를 줄수 없는 문제발생 */
+    .dropleaved {
+        border-color: #d8d8d8;
+        border-style: dashed;
+	    width:  200px;
+	    height: 100px;
+    }
+
+    .dragOver {
+        border-color: slategray; 
+        border-style: dashed;
+	    width:  200px;
+	    height: 100px;
+    }
+    
 </style>
 </head>
 <body>
@@ -98,6 +120,7 @@
         </div>
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
 <script src="/resources/js/posting/popUpMenu.js"></script>
 <script src="/resources/js/posting/customJqeuryauto.js"></script>
 <script src="/resources/js/posting/customJqueryAutoOption.js"></script>
@@ -170,22 +193,36 @@
       let text = event.clipboardData.getData("text/plain");
       $(this).val(text); 
       $(this).parent().html('<div class="loader"></div>');
-      // fetch를 통해 바로 값을 보낸다. 
-      // fetch('url', {
-        
-      // })
-      // .then(response => response.text())
-      // .then(text => function(text){
-      //   // 받은 값에 따라 다르게 작동한다. 
-      //   // switch_Case로 모듈화 피한다.  
+      // fetch를 통해 바로 값을 보낸다.
+      
+      // inputTag가 아닌 상태에서 file객체를 생성할 수 있는 방법은 없을까..? 
+      //var file = document.querySelector('#profile-img-input').files[0]; 
+	  //var formData = new FormData();
+      var img = null; 
+      
+      fetch('/posting/fileIo', {
+    	  method : "POST",
+          headers :  {"Content-type" : "application/json; charset=UTF-8"},
+          body : JSON.stringify({
+              postTitle : subject,
+              postContent : img,
+              postColor : postColor, 
+              bdIdx : "${param.bdidx}"
+              })
+      })
+      .then(response => response.text())
+      .then(text => function(text){
+         // 받은 값에 따라 다르게 작동한다. 
+         console.log('결과값은 : ' + text); 
+         // switch_Case로 모듈화 피한다.  
 
-      //   // file이라면, originFileName / 새로운 링크를 받아 랜더링 
+         // file이라면, originFileName / 새로운 링크를 받아 랜더링 
 
-      //   // img라면 이름 필요없이 링크만 
+         // img라면 이름 필요없이 링크만 
 
-      //   // audio 역시 이름 필요없이 링크만 
-      // })
-      // .catch();
+         // audio 역시 이름 필요없이 링크만 
+       })
+       .catch();
     })
   }
 
@@ -204,11 +241,10 @@ $('#editor-submit-btn').on('click' , function() {
     
 	let subject = $('.editor-title').text();
     let content = $('.editor-minHeight-div').html().trim();
-    
+    // DOMPurify로 입력 검증 
+    content = DOMPurify.sanitize(content);
     // TRIM 및 LineBreak, Quot escape처리 
     content.replace(/(\r\n|\n|\r)/gm, ""); 
-    console.log(content); 
-    
     
     console.log(content); 
     // 1) 제목 NULL 처리 
@@ -266,5 +302,137 @@ $('#editor-submit-btn').on('click' , function() {
 	$('.editor-content-date div:nth-child(2)').html(date.toLocaleDateString(undefined, options));
 
 </script>
+<script type="text/javascript">
+
+
+// ----------------------드래그 앤 드롭 비동기 테스트 -----------------------
+
+//*** 드랍이벤트 Handler 
+function dropHandler(ev) {
+	
+  // 1. 파일 드랍 이벤트 시작 
+  console.log('File(s) dropped');
+  // 2. 파일을 담아 보낼 formData 객체 만들기 
+  var formdata = new FormData(); 
+  // 3. 브라우저 기본 드랍이벤트 (파일오픈) 방지 
+  ev.preventDefault();
+  // 4. 파일-파일아님 검증 (후 파일은 append)
+  if (ev.dataTransfer.items) {
+      // Use DataTransferItemList interface to access the file(s)
+      for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+      // If dropped items aren't files, reject them
+          if (ev.dataTransfer.items[i].kind === 'file') {
+              var file = ev.dataTransfer.items[i].getAsFile();
+              console.log('... file[' + i + '].name = ' + file.name);
+              formdata.append(`files`,file);
+              // 시간상의 문제로 기능은 파일 하나를 받는 것으로 구현 
+          }
+      }
+  } else {
+      // Use DataTransfer interface to access the file(s)
+      for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+      console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+      }
+  }
+  // ** formData 검증 ( nullCheck 필요 )
+  console.log('formData의 내용은 : ');
+  console.log(formdata.get('file0')); 
+  
+  // 5. Hovering 을 className 변경으로 임시 활성화 
+  ev.target.className = 'dropleaved'; 
+  
+  // 6. 로딩화면 작동 
+  ev.target.innerHTML = '<div class="loader"></div>'; 
+  
+  // 7. 최종 fetch 
+  	
+  	fetch(`/board/posting/fileIo?projectIdx=${projectIdx}` , {
+	  method : 'POST',
+	  body : formdata
+	})
+	.then(response => response.text())
+	.then(text => {
+	 
+	  // 부모 div와 받아온 json객체를 가져온다. 
+	  let immutableDiv = ev.target.parentElement;
+	  let res = JSON.parse(text); 
+	  
+	  // data-* 속성을 이용하여 보여줄 fetch를 구한다.
+	  
+	  switch(ev.target.getAttribute('data-fetchResult')){
+		  case 'img' : 
+			  // img일 경우 경로첨부 및 immutableDiv에 append 처리 
+			  let img = document.createElement('img');
+			  // 최대 크기제한, 500px 
+			  img.style.maxWidth = '500px';
+			  img.style.margin = '20px 10px 20px 10px';
+			  img.setAttribute('src', '/file/' + res.savePath + res.renameFileName);
+			  immutableDiv.append(img); 
+			  break; 
+		  case 'file' :
+			  // file일 경우 a tag 추가 및 이벤트 부여 
+			  let file = document.createElement('a');
+			  file.setAttribute('download', '/file/' + res.savePath + res.renameFileName); 
+			  file.setAttribute('href', '/file/' + res.savePath + res.renameFileName);
+			  
+			  // a tag에 event 부여  
+			  file.addEventListener('click', function(){
+				  // 1. 파일 다운로드 
+				  let link = document.createElement('a'); 
+				  link.href = file.getAttribute('href'); 
+				  link.download = file.getAttribute('href').substr('1111');
+				  link.click(); 
+			  }); 
+			 
+			  let icon = document.createElement('i'); 
+			  icon.className = 'far fa-file'; 
+			  file.append(icon); 
+			  let text = document.createTextNode(" " + res.originFileName); 
+			  file.append(text);
+			  immutableDiv.style.cssText = "width:200px; height:25px; display:flex; align-items:center; padding:5px 5px 5px 12px; width:100%; font-size:14px; caret-color: transparent;";
+			  immutableDiv.append(file); 
+			  break; 
+		  case 'audio' : 
+			  // audio일 경우 경로첨부 및 immutableDiv에 append 처리 
+			  let audio = document.createElement('audio');
+			  audio.setAttribute('controls', ''); 
+			  audio.style.margin = '20px 10px 20px 10px';
+			  audio.setAttribute('src', '/file/' + res.savePath + res.renameFileName);
+			  immutableDiv.append(audio);
+			  break; 
+		  default : 
+			  break; 
+	  };
+		
+	  // 2. dropBox 제거
+	  ev.target.remove(); 
+	   
+	})
+
+}
+
+//*** 드래그Over이벤트 Handler 
+function dragOverHandler(ev) {
+
+  // 1. file이 dropZone에 존재하고 있음 
+  console.log('File(s) in drop zone');
+  
+  // 2. ClassName을 통해 dropEvent를 가시화 
+  ev.target.className = 'dragOver'; 
+
+  // 3. 기본 dragOverEvent 방지 
+  ev.preventDefault();
+}
+
+function dragleaveHandler(ev) {
+
+  ev.target.className = 'dropleaved'; 
+  ev.preventDefault(); 
+}
+
+
+
+</script>
+
 </body>
 </html>
