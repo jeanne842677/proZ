@@ -27,7 +27,7 @@ public interface ProjectRepository {
 	@Select("select * from project where project_idx = #{projectIdx}")
 	Project selectProjectByIdx(String projectIdx);
 
-	@Select("select * from project_member where project_idx = #{projectIdx}  order by is_ok desc , reg_date")
+	@Select("select pm.project_idx, user_idx , auth_idx, pm_idx , pm.nickname  , auth_name , pm.profile_color , git from project_member pm join project_role using(auth_idx) join proz_user  using(user_idx) where pm.project_idx=#{projectIdx} order by is_ok desc , pm.nickname")
 	List<Map<String, Object>> selectProjectMemberByProjectIdx(String projectIdx);
 
 	List<Map<String, Object>> selectProjectMemberRoleByProjectIdx(String projectIdx);

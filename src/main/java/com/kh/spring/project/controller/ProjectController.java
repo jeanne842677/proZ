@@ -2,6 +2,7 @@ package com.kh.spring.project.controller;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.board.model.service.BoardService;
+import com.kh.spring.calendar.model.service.CalendarService;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
@@ -66,6 +68,10 @@ public class ProjectController {
    //윤지코드
    @Autowired
    MemoService memoService;
+   
+   @Autowired
+   CalendarService calendarSerivce;
+   
    //윤지코드 끝
    Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -78,15 +84,6 @@ public class ProjectController {
    @GetMapping("setting/member-management/{projectIdx}")
    public String memberManagement(Model model, @PathVariable String projectIdx) {
 
-      // 프로젝트Idx가 유효한지 확인한다
-
-      Project project = projectService.selectProjectByIdx(projectIdx);
-      // 만약 프로젝트가 없으면?
-      if (project == null) {
-
-         throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-
-      }
 
       // 멤버 권한 불러오기
       List<ProjectRole> projectRoleList = projectService.selectProjectRoleByIdx(projectIdx);
@@ -127,14 +124,12 @@ public class ProjectController {
    @ResponseBody
    public String resetInviteLink(@RequestBody Project project) {
 
-      logger.debug("프로젝트:" + project.toString());
       String newUuid = projectService.updateProjectInviteCode(project.getProjectIdx());
-      System.out.println(newUuid);
-
       return newUuid;
 
    }
 
+   
    @PostMapping(value = "invite-member", produces = "application/text; charset=UTF-8")
    @ResponseBody
    public String inviteMember(@RequestBody Map<String, String> map, HttpSession session) {
@@ -384,7 +379,10 @@ public class ProjectController {
       return "project/project-main";
    };
 
-   // 프로젝트 상세로 이동 알고리즘?
+   
+   
+   
+   // 프로젝트 상세로 이동 알고리즘?////지영이 수정 12/4
    @GetMapping("{projectIdx}")
    public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member,
          HttpSession session, Model model) {      
@@ -402,31 +400,17 @@ public class ProjectController {
       	List<Memo> mainMemoList = memoService.selectMemoByTop(projectIdx);
       
 		
-        System.out.println("mainMemoList 다 불러지냐? :"+mainMemoList);
         model.addAttribute("mainMemoList", mainMemoList);
         
-           //////////////////윤지 추가 코드 12월 1일////////////////////////////////
+          //////////////////윤지 추가 코드 12월 1일////////////////////////////////
         List<Post> postList = boardService.selectBoardByTop(projectIdx);
-    	 System.out.println("boardList 다 불러지냐? :"+postList);
     	 model.addAttribute("postList", postList);
+    	 
+    	 List<com.kh.spring.calendar.model.dto.Calendar> calendarList = calendarSerivce.selectCalendarListByProjectIdx(projectIdx);
+    	 model.addAttribute("calendarList" , calendarList);
     	
         
-         ///예진 코드
-         String userIdx = member.getUserIdx();
-         System.out.println(userIdx);
-         System.out.println(projectIdx);
-         List<Map<String,String>> projectMemberList = new ArrayList<Map<String,String>>();
-         projectMemberList = projectService.selectProjectNickname(projectIdx,userIdx);
-         System.out.println("projectMemberList :"+projectMemberList.toString());      
-         
-         String nickname = projectMemberList.get(0).get("NICKNAME");
-         System.out.println(nickname);
-         String authname = projectMemberList.get(0).get("AUTH_NAME");
-         System.out.println(authname);
-         
-         model.addAttribute("nickname",nickname);
-         model.addAttribute("authname",authname);
-         
+        
       
       return "project/project-main"; 
    }

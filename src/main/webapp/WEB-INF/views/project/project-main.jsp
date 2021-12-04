@@ -6,6 +6,8 @@
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
 <link rel="stylesheet" href="/resources/css/nav.css">
 <script type="text/javascript" src="/resources/js/nav.js"></script>
+    <script src='/resources/js/calendar/main.js'></script>
+    <link href='/resources/css/calendar/main.css' rel='stylesheet' />
 
 
 <meta charset="UTF-8">
@@ -240,6 +242,8 @@ margin-bottom:0;
             background-color:#fff;
             border-radius: 10px;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        	padding: 5px;
+        
         }
 
         #right{
@@ -423,6 +427,12 @@ margin-bottom:0;
            margin-right:10px;
         }
         
+        .fc-more-link {
+        
+        	position: relative;
+        	top:-5px;
+        }
+        
     </style>
 </head>
 <body>
@@ -437,8 +447,8 @@ margin-bottom:0;
             <div id="top">
                 <div id="top1">
                     <div id="my"><div class="myprofile"></div></div>
-                    <div class="myname">${nickname}</div>
-                    <div class="myrole">${authname}</div>
+                    <div class="myname">${projectMember.nickname}</div>
+                    <div class="myrole">${projectMember.authName}</div>
                 </div>
                 <div id="top2">팀정보</div>
             </div>
@@ -461,7 +471,9 @@ margin-bottom:0;
                         </div>     
                     </div>
                     
-                    <div id="calendar">캘린더</div>
+                    <div id="calendar">
+                    
+                    </div>
                 </div>
                 <div id="right">
                     <div id="right1">
@@ -533,6 +545,8 @@ margin-bottom:0;
         </div>
 
     </div>
+    
+    
     
     <script type="text/javascript">
     $('.boardcon').click(function(){
@@ -645,6 +659,63 @@ margin-bottom:0;
 
     })
     
+    
+    	let today = new Date();
+		let events = [];
+		
+		<c:forEach items="${calendarList}" var="cl">
+    	
+        var data = {                    
+                id: "${cl.calIdx}",
+                title: "${cl.calTitle}",
+                start: "${cl.startDate}",
+                end: "${cl.endDate}",
+                backgroundColor: "${cl.calColor}",
+                borderColor:  "${cl.calColor}" ,
+                textColor: "black"
+            }
+        
+        events.push(data);
+        
+        </c:forEach>
+		
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+		
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: '',
+                    center: 'title',
+                    right: ''
+                },
+                initialDate: today,
+                selectable: true,
+                selectMirror: true,
+                select: function (arg) {
+         
+                },
+                eventClick: function (arg) {
+                	
+
+                	let idx = arg.event._def.publicId;
+                	location.href="/calendar/view/${projectIdx}?calIdx="+idx;
+                	
+                	
+                },
+                eventChange: function (arg) {
+                	
+                    
+                },
+                editable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events:events
+                
+            });
+
+            calendar.render();
+
+
+        });    
     
     </script>
 </body>
