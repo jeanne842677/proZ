@@ -12,4 +12,4 @@
 <link rel="shortcut icon" href="/resources/img/logo-black.ico" type="image/x-ico" />
 <link type="text/css" rel="stylesheet" href="/resources/css/loading/loading.css">
 <script src="/resources/js/loading/loading.js"></script>
-<script defer src="/resources/js/loading/allloading.js"></script>
+<script defer src="/resources/js/loading/allLoading.js"></script>
