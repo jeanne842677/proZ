@@ -2,10 +2,10 @@ package com.kh.spring.common.code;
 
 public enum CashItem {
 	
-	MEMBER_COUNT_UPGRADE("멤버 수 추가", 8000, 30),
-	ALARM_UPGRADE("알림 기능", 8000, 30),
-	STORAGE_UPGRADE("용량 추가", 10000, 30),
-	ALL_UPGRADE("전체 결제", 25000, 30);
+	MEMBER_COUNT_UPGRADE("멤버 수 추가", 5000, 30),
+	WORKSPACE_UPGRADE("워크스페이스 추가", 5000, 30),
+	CHAT_UPGRADE("채팅 기능", 3000, 30),
+	ALL_UPGRADE("전체 결제", 12000, 30);
 	
 	public final String ITEM_NAME;
 	public final int CHARGE;

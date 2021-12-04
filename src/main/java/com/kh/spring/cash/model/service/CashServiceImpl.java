@@ -22,7 +22,7 @@ public class CashServiceImpl implements CashService {
 	}
 
 	@Override
-	public List<String> selectCashNameListByProjectIdx(String projectIdx) {
+	public List<Map<String,Object>> selectCashNameListByProjectIdx(String projectIdx) {
 		return cashRepository.selectCashNameListByProjectIdx(projectIdx);
 	}
 
