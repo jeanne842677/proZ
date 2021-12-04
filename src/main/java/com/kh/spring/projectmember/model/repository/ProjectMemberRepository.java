@@ -34,13 +34,11 @@ public class ProjectMemberRepository {
 		
 		if(members==null) {
 			
-			System.out.println("멤버가 널일 때");
 			members = new ArrayList<>();
 			projectMap.put(projectIdx , members);
 			
 		}else {
 			
-			System.out.println("멤버가 이미 있을 때");
 			for(ProjectMemberSession member : members) {
 				
 				if(member.getUserIdx().equals(pms.getUserIdx())) {
@@ -55,7 +53,6 @@ public class ProjectMemberRepository {
 		
 		
 		members.add(pms);
-		System.out.println("현재 프로젝트 리스트: " + projectMap);
 		
 	}
 
@@ -77,7 +74,6 @@ public class ProjectMemberRepository {
 		List<ProjectMemberSession> pmsList = projectMap.get(projectIdx);
 		ProjectMemberSession thisPms = null;
 		
-		System.out.println("지금 확인하는 리무브 단: " + pmsList);
 		
 		for(ProjectMemberSession pms:pmsList) {
 			

@@ -26,4 +26,8 @@ public interface CalendarRepository {
 	@Select("select * from calendar where cal_idx= #{calIdx}")
 	Calendar selectCalendarByCalIdx(String calIdx);
 
+	
+	@Select("select cal_idx , ws_idx , pm_idx , cal_title , cal_color , start_date , end_date from calendar where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='CL')")
+	List<Calendar> selectCalendarListByProjectIdx(String projectIdx);
+
 }

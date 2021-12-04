@@ -110,11 +110,20 @@ public class ProjectInterceptor implements HandlerInterceptor {
 		}
 		
 		Member member = (Member) request.getSession().getAttribute("authentication");
-		
 		if(member!=null) {
-			ProjectMember projectMember = projectService.selectProjectMemberByProjectIdxAndUserIdx(projectIdx, member.getUserIdx());
-			request.setAttribute("projectMember" , projectMember);
+			
+			Map<String, Object> projectMember = null;
+			for(Map<String, Object> pm :projectMemberList) {
+				
+				if(member.getUserIdx().equals(pm.get("userIdx"))) {
+					
+					projectMember = pm;
+					request.setAttribute("projectMember" , projectMember);
+				}
+			}
+			
 			System.out.println(projectMember);
+		
 		}
 		//유저 정보 담기
 		

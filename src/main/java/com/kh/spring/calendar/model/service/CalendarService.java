@@ -15,4 +15,6 @@ public interface CalendarService {
 
 	Calendar selectCalendarByCalIdx(String calIdx);
 
+	List<Calendar> selectCalendarListByProjectIdx(String projectIdx);
+
 }

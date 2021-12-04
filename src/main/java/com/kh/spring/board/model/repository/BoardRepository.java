@@ -4,41 +4,43 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.board.model.dto.Reply;
+import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.Workspace;
 
 @Mapper
 public interface BoardRepository {
 
-	int insertBoard(Board board) ;
+	int insertBoard(Board board);
 
 	@Select("select * from workspace where ws_idx = #{wsIdx}")
 	Workspace selectWorkSpaceByWsIdx(String wsIdx);
 
-	
 	List<Board> selectBoardByWsIdx(String wsIdx);
-	
+
 	@Delete("delete from board where bd_idx = #{bdIdx}")
 	void deleteBoard(Board board);
-	
-	@Update("update board set sort=sort-1 where sort > #{sort}")
+
+	@Update("update board set sort=sort-1 where ws_idx ={wsIdx} and sort > #{sort}")
 	void updateBoardSortWhenRemoveBoard(Board board);
 
-	
 	@Update("update board set sort=#{changeSort} where bd_idx = #{bdIdx}")
 	void updateBoardSort(Map<String, String> map);
-	
+
 	@Update("update board set sort=sort+1 where bd_idx in (select bd_idx from board where ws_idx = #{wsIdx}"
 			+ " and sort between #{changeSort} and #{sort}-1)")
 	void updateBoardSortPlus(Map<String, String> map);
-	
+
 	@Update("update board set sort=sort-1 where bd_idx in (select bd_idx from board where ws_idx = #{wsIdx}"
 			+ " and sort between #{sort}+1 and #{changeSort})")
 	void updateBoardSortMinus(Map<String, String> map);
@@ -56,12 +58,42 @@ public interface BoardRepository {
 	void updatePostSortMinus(Map<String, String> map);
 
 	void updatePostSortPlus(Map<String, String> map);
-	
+
 	@Update("update post set sort= #{changeSort} , bd_idx=#{bdIdx} where post_idx = #{postIdx} ")
 	void updatePostSort(Map<String, String> map);
 
 	@Select("select post_idx , bd_idx , pm_idx , post_title , post_color from(select * from post where bd_idx in (select bd_idx from board where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='BO'))order by post_idx desc) where rownum <= 3")
 	List<Post> selectBoardByTop(String projectIdx);
 
+	// 유송 추가
+
+	@Delete("delete from post where post_Idx = #{postIdx}")
+	void deletePost(String postIdx);
+
+	@Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
+			+ "values(sc_file_idx.nextval, #{userIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
+	int insertPostFile(@Param("FileDTO") FileDTO fileUploaded, @Param("userIdx") String userIdx);
+
+	// 윤지 추가
+	int insertReply(Reply reply);
+
+	@Select("select * from reply where post_idx = #{postIdx} order by reply_idx desc")
+	List<Map<String, Object>> selectReplyByPostIdx(String postIdx);
+
+	@Delete("delete from reply where reply_idx = #{replyIdx}")
+	void deleteReplyByReplyIdx(String replyIdx);
+
+	@Update("update reply set reply_content= #{reply_content} where reply_idx=#{replyIdx}")
+	void updateReplyByReplyIdx(Reply reply);
+
+	// 지영 추가
+
+	void insertLeafBoard(Board board);
+
+	@Select("select * from board where ws_idx = #{wsIdx} and parent is not null")
+	List<Board> selectLeafBoardByWsIdx(String wsIdx);
+
+	@Select("select * from post where bd_idx = #{bdIdx} order by sort")
+	List<Post> selectPostListByBdIdx(String bdIdx);
 
 }
