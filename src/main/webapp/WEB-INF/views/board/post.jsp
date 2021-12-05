@@ -105,10 +105,10 @@
                         <!-- 댓글 기능 DIV, 윤지 수정본 -->
                             <div class="post-comment-textArea-div">
                                 <i id="comment-smile" class="fas fa-smile"></i></label>
-                                <form class="post-comment-textArea-form">
+                                <div class="post-comment-textArea-form">
                                     <div id="comment-textArea" class="comment-textArea" contenteditable="true"></div>
                                     <button class="comment-textArea-submit-btn">등록</button>
-                                </form>
+                                </div>
                             </div>
                            <c:forEach  items="${replyMember}" var="reply">
                             <label class="post-comment-textArea-label"
