@@ -104,7 +104,6 @@ public class ProjectController {
 
       if (member == null) {
          throw new HandlableException(ErrorCode.NEED_LOGIN);
-
       }
 
       Project project = projectService.selectProjectByInviteCode(inviteCode);

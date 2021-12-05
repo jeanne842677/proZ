@@ -1,4 +1,5 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,19 +121,10 @@
 <body>
     <div class="wrap">
         <div class="deco">
-<<<<<<< HEAD
             <img src="/resources/img/logo-white.png">
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <img src="/resources/img/logo-white.png">
-=======
-            <img src="resources/image/LOGOw.png">
->>>>>>> refs/heads/dev2
-=======
-            <img src="/resources/img/logo-white.png">
->>>>>>> refs/heads/dev2
->>>>>>> branch 'main' of https://github.com/sazzeo/proZ
+
+
+
         </div>
         <div class="title">404</div>
         <div class="sub_title">페이지를 찾을 수 없습니다.</div>

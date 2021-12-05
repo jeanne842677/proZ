@@ -27,8 +27,7 @@
 		join board b
 		using(ws_idx)
 		where ws_idx=#{wsIdx}
-		and b.parent is null
-		order by b.sort
+		order by b.sort , bd_idx
 	</select>
 
 	<insert id="insertPost">
@@ -97,6 +96,19 @@
 		#{bdIdx} , #{wsIdx} , #{bdName} , #{sort}, #{bdSize} ,
 		#{parent} )
 	</insert>
+	
+	
+	<update id="updateBoardSort">
+		update board set sort=#{changeSort} where bd_idx in
+		( 1
+		<foreach collection="bdIdxList" item="bdIdx">
+			, #{bdIdx}
+		</foreach>
+		)
+	
+	
+	
+	</update>
 
 
 
