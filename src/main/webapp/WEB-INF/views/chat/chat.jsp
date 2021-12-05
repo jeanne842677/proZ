@@ -274,14 +274,13 @@ aside {
                               <div class="talk-me">
                               <c:choose>
                               	<c:when test="${chat.isFile==1}">
-                              		<div class='chat-content'data-file-name='${chat.content}' data-file-path='${chat.filePath}' data-file-type='${chat.fileType}'><img class='img-section' src='${chat.dataUrl}'></div>
+                              		<div class='chat-content'data-file-name='${chat.content}' data-file-path='${chat.filePath}' data-file-type='${chat.fileType}'><img class='img-section' ></div>
                               	</c:when>
                               	
                               	<c:otherwise>
                               		<div class="chat-content">${chat.content}</div>
                               	</c:otherwise>
                               </c:choose>
-                                 
                               </div>
                            </div>
                            <div class="user-picture">
@@ -302,7 +301,15 @@ aside {
                               <div class="currentTime">${chat.regDate}</div>
                            </div>
                            <div class="talk-other">
-                              <div class="chat-content">${chat.content}</div>
+                            <c:choose>
+                              	<c:when test="${chat.isFile==1}">
+                              		<div class='chat-content'data-file-name='${chat.content}' data-file-path='${chat.filePath}' data-file-type='${chat.fileType}'><img class='img-section' ></div>
+                              	</c:when>
+                              	
+                              	<c:otherwise>
+                              		<div class="chat-content">${chat.content}</div>
+                              	</c:otherwise>
+                             </c:choose>
                            </div>
                         </div>
                      </div>
@@ -325,7 +332,7 @@ aside {
                     <div class="textarea-icons">
                       <div id="lock" data-flg='true'><i class="fas fa-unlock fa-2x" cursor="pointer"></i></div>
                       <div id="file"><i class="fas fa-paperclip fa-2x" cursor="pointer"></i></div>
-                      <input id="input-file" type="file" style="display: none;">
+                      <input id="input-file" type="file" style="display: none;" accept="image/*">
                       <div id="send"><i class="far fa-paper-plane fa-2x" cursor="pointer"></i></div>
                     </div>
                   </div>
@@ -388,16 +395,16 @@ aside {
     <script>
     
     const firebaseConfig = {
-	    	    apiKey: "AIzaSyDdvbEhAml2uk5K8fm8DBGKU0z9y_ie0xE",
-	    	    authDomain: "proz-78541.firebaseapp.com",
-	    	    projectId: "proz-78541",
-	    	    storageBucket: "proz-78541.appspot.com",
-	    	    messagingSenderId: "363657337849",
-	    	    appId: "1:363657337849:web:974c2a6a5afa31845d3b28"
-	    	  };
+    	    apiKey: "AIzaSyDdvbEhAml2uk5K8fm8DBGKU0z9y_ie0xE",
+    	    authDomain: "proz-78541.firebaseapp.com",
+    	    projectId: "proz-78541",
+    	    storageBucket: "proz-78541.appspot.com",
+    	    messagingSenderId: "363657337849",
+    	    appId: "1:363657337849:web:974c2a6a5afa31845d3b28"
+    	  };
 
-	    	  // Initialize Firebase
-	    	  firebase.initializeApp(firebaseConfig);
+    	  // Initialize Firebase
+    	  firebase.initializeApp(firebaseConfig);
     
 
     
@@ -417,6 +424,7 @@ aside {
    	$(document).ready(function () {//채팅 컨텐츠가 이미지 파일일때
    		
    		$(".chat-content").each(function (index) {
+   			let imgSection = $(this).find(".img-section");
    			let path = $(this).data('file-path');
    			if(path) {
    				console.log("path 제발제발!!!" + path);
@@ -424,7 +432,7 @@ aside {
    				var pathReference = firebase.storage().ref(path);
                 pathReference.getDownloadURL().then(function(url) {
                 	console.log(url);
-					$(this).find(".img-section").attr('src' , url);
+                	imgSection.attr('src' , url);
                 }).catch( function(error) {//나중에
                 	alert("비상 비상");
                 	console.log(error);
@@ -477,42 +485,12 @@ aside {
                        var urlStirng = "";
                        pathReference.getDownloadURL().then(function(url) {
                       console.log("지나가?");
-                          var xhr = new XMLHttpRequest();
                           
-                          
-                         /*  xhr.onload = function(event) {
-                            var blob = xhr.response;
-                            //blob.setHeader("Access-Control-Allow-Methods", "GET");
-                          }; */
-                          xhr.open('GET', url, true);
-                          xhr.responseType = 'blob';
-                          
-                          /* xhr.onload = function(event) {
-                        	    var blob = xhr.response;
-                        	    console.log(blob);
-                        	    const url2 = window.URL.createObjectURL(blob);
-                        	    console.log(url2);
-                        	  }; */
-                         /*  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-                          xhr.withCredentials = true;
-                          xhr.onreadystatechange = handler; */
-                          //xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
-                          //xhr.setRequestHeader("Access-Control-Allow-Credentials", "true");
-                          //xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
-                        
-                          xhr.send();
-						
-                          // Or inserted into an <img> element:
                           urlStirng = url;
                           console.log("urlllllllllllllll" + url);
                           
-                          
-                          
-                          //<a href='" +url+ "' download='"+ content.content +"'>"
-                          //download(url, content.content, content.fileType);
-                          
                           newChat.find(".talk-me").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
-                          
+                          scrollFixedBottom();
                          	$('.img-section').off().on('click', function () {
                            		alert("이미지 클릭");
                            		let fileName = $(this).parent().data('file-name');
@@ -533,8 +511,6 @@ aside {
                    newChat.find(".user-nickname").html(content.nickname);
                    $(".chat-section").append(newChat);
                    
-                      
-                   
                 }else{//다른사람이 입력할 때
                    let newChat = $(".clone-other").clone();
                    newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
@@ -548,6 +524,7 @@ aside {
                    newChat.find(".user-nickname").html(content.nickname);
                    $(".chat-section").append(newChat);
                 }
+                
                 chIdx = content.chIdx;
                 scrollFixedBottom();
           });
@@ -660,8 +637,6 @@ aside {
         }
       });
 
-      //<div id="file"><input id="input-file" type="file" style="display: none;"><i class="fas fa-paperclip fa-2x" cursor="pointer"></i></div>
-      // 파일 전송 버튼도, 일단은 클릭 이벤트만..
       var fileInput = $('#input-file');
       
       $('#file').click( () => {
@@ -687,13 +662,9 @@ aside {
     	  		fileReader.readAsDataURL(file);
     	  		
     	  		
-    	  		console.log(fileReader);
-    	  		
     	  		fileReader.onload = (e) => {
     	  			chIdx++;
     	  			let dataUrl = fileReader.result;
-    	  		  	console.dir("------------dataUrl : ");
-    	  		    console.log(dataUrl);
     	  		  	
       	  		
 	      	  		let filePath = wsIdx + '/' + chIdx + '/' + file.name;
@@ -703,10 +674,7 @@ aside {
 	      	  		
 	      	  		let fileType = file.type;
 	      	  		
-	      	  		/* console.log("************fileReader.result----------");
-	      	  		console.log(fileReader.result);
-	      	  		console.log("************dataUrl----------");
-	      	  		console.log(dataUrl); */
+	      	  		
 	      	  		let saveStorageFile = storageRef.child(fileName);
 	      	  		let saveStorageFileRef = storageRef.child(wsIdx+'/'+ 'dd /' + fileName);
 	      	  		let path = saveStorageFile.fullPath
@@ -740,17 +708,6 @@ aside {
     	  		
     	  		console.dir("------------file : " + file);
     	  		console.log(file);
-    	  		
-    	  		
-    	  		
-    	  		
-    	  		
-    	  		
-    	  		//fireBaseStorage에 저장
-    	  		
-    	  		 
-    	  		
-    	  		
     	  		
     	});
     	  				
