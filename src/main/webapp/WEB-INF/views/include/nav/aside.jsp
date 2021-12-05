@@ -19,8 +19,7 @@
 			<ul id="sortable2">
 				<c:forEach items="${ projectMemberList }" var="pm">
 					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}" data-auth-name="${pm.authName}" data-git="${ pm.git }" 
-						style="color:${ pm.profileColor }"><i
-						class="fas fa-user-circle" style="color: #aaa;"></i> ${ pm.nickname }
+						style="color:${ pm.profileColor }"><div class="onoffprofile"></div> ${ pm.nickname }
 
 					</li>
 				</c:forEach>

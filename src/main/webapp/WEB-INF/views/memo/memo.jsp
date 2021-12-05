@@ -111,7 +111,7 @@ aside {
 }
 
 .note-editable {
-	background-color: #fff3cd;
+	background-color: #FEE182;
 	width: 300px;
 }
 
@@ -127,7 +127,7 @@ aside {
 
 
 .note-status-output {
-	background-color: #fff3cd;
+	background-color: #FEE182;
 }
 
 .note-resizebar {
@@ -145,7 +145,7 @@ aside {
 }
 
 .note-editor .note-toolbar {
-	background-color: #fff3cd;
+	background-color: #FEE182;
 }
 
 .panel-default>.panel-heading {
@@ -471,7 +471,7 @@ font-family: 'NanumSquareRound';
                newMemo.find('.textvalue').html(markupStr);
                newMemo.css("background-color", color);
                $(".note-editable").text("");
-               changeColor("#fff3cd");
+               changeColor("#FEE182");
                      
                     
                newMemo.off().on('click',function(){
@@ -525,7 +525,7 @@ font-family: 'NanumSquareRound';
                 	$(".save").show();
                 	$(".modify-save").hide();
                     $("#modal").css('display','flex');
-                    changeColor("#fff3cd");
+                    changeColor("#FEE182");
                     
                 });
                 $(".close").click(function(){
