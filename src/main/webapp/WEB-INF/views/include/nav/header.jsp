@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
             <div class="head1"><a href="/"><img src="/resources/img/logo-white.png"></a></div>
             <div class="righthead">
+            	<div class="projects">projects</div>
                 <div class="alram">
                     <!-- <div class="badge">●</div>  -->   
                     <i class="fas fa-bell"></i>

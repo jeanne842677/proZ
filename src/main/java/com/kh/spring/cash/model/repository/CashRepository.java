@@ -14,9 +14,9 @@ public interface CashRepository {
 	@Select("select pm_idx, nickname from project_member where project_idx = #{projectIdx}")
 	List<Map<String,Object>> selectPmIdxByProjectIdx(String projectIdx);
 
-	@Select("select cash_name from cash where project_idx = #{projectIdx} and reg_date >= sysdate" )
-	List<String> selectCashNameListByProjectIdx(String projectIdx);
+	@Select("select cash_name, to_char(expiration_date, 'yyyy-MM-dd') as expiration_date from cash where project_idx = #{projectIdx} and expiration_date >= sysdate" )
+	List<Map<String,Object>> selectCashNameListByProjectIdx(String projectIdx);
 
-	@Insert("insert into cash(cash_idx, project_idx, cash_name) values(sc_proz_idx.nextval, #{projectIdx}, #{cashName})")
+	@Insert("insert into cash(cash_idx, project_idx, cash_name, expiration_date) values(sc_proz_idx.nextval, #{projectIdx}, #{cashName}, sysdate+30)")
 	void insertCashIdxByCashNameAndProjectIdx(@Param("projectIdx") String projectIdx, @Param("cashName")String cashName);
 }

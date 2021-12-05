@@ -27,6 +27,7 @@ public class CashController {
 	@Autowired
 	CashService cashService;
 	
+	
 	@GetMapping("{projectIdx}")
 	public String cashPage(Model model, @PathVariable String projectIdx) {
 
@@ -37,21 +38,23 @@ public class CashController {
 		model.addAttribute("buyerInfo", buyerInfo.get(0));
 		
 		//결제 유무 확인
-		List<String> cashNameList = new ArrayList<String>();
-		cashNameList = (cashService.selectCashNameListByProjectIdx(projectIdx));
+		List<Map<String,Object>> cashNameList = new ArrayList<Map<String,Object>>();
+		cashNameList = CamelMap.changeListMap(cashService.selectCashNameListByProjectIdx(projectIdx));
 		
+		//[{멤버수 추가, 12/11}, {알림 기능, 12/11}]
 		System.out.println(cashNameList);
-		for(String cashName : cashNameList) {
-			switch(cashName) {
-			case "멤버 수 추가" :
+		for(Map<String,Object> cashName : cashNameList) {
+			String item = (String) cashName.get("cashName");
+		
+			switch(item) {
+			case  "멤버 수 추가":
 				model.addAttribute("memberFunction", cashName);
-				System.out.println("멤버수 추가 돈다.");
 				break;
-			case "알림 기능" :
-				model.addAttribute("alarmFunction", cashName);
-			break;
-			case "용량 추가" :
-				model.addAttribute("storageFunction", cashName);
+			case "워크스페이스 추가" :
+				model.addAttribute("workspaceFunction", cashName);
+				break;
+			case "채팅 기능" :
+				model.addAttribute("chatFunction", cashName);
 				break;
 			case "전체 결제" :
 				model.addAttribute("allFunction", cashName);
@@ -59,15 +62,16 @@ public class CashController {
 			}
 		}
 		
+		
 		return "cash/cash";
 	}
+	
 	
 	@PostMapping("{projectIdx}")
 	@ResponseBody
 	public String cashPage(@PathVariable String projectIdx,
 							@RequestBody Map<String,String> map) {
 		
-		System.out.println("지나가나요?");
 		String cashName = map.get("item");
 		System.out.println(cashName);
 		

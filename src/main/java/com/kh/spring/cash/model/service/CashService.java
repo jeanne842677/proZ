@@ -8,7 +8,7 @@ public interface CashService {
 
 	List<Map<String,Object>> selectPmIdxByProjectIdx(String projectIdx);
 
-	List<String> selectCashNameListByProjectIdx(String projectIdx);
+	List<Map<String,Object>> selectCashNameListByProjectIdx(String projectIdx);
 
 	void insertCashIdxByCashNameAndProjectIdx(String projectIdx, String cashName);
 
