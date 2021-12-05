@@ -33,12 +33,12 @@
     .nickname, .modify-btn, .remove-btn, .register-btn{
        margin-left: 10px;
     }
-    .modify-btn, .register-btn{
-       color: blue;
+    .modify-btn, .register-btn,.remove-btn{
+       color: gray;
+       font-weight: bolder;
     }
-    .remove-btn{
-     color:red;
-    }
+    
+  
     .all-btn{
        display:flex;
     }

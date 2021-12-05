@@ -88,7 +88,7 @@ public interface BoardRepository {
 	@Select("select * from (select * from reply where post_idx in (select post_idx from post where bd_idx in (select bd_idx from board where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='BO'))) order by reply_idx desc)where rownum <=5")
 	List<Reply> selectReplyByTop(String projectIdx);
 
-	@Select("select * from reply join project_member using(pm_idx) where post_idx= #{postIdx}")
+	@Select("select * from reply join project_member using(pm_idx) where post_idx= #{postIdx} order by reply_idx")
 	List<Map<String, Object>> selectReplyByProjectMember(String postIdx);
 
 	int insertReply(Reply reply);
