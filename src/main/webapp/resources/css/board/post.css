@@ -96,7 +96,7 @@ aside {
 }
     .post-navigation-bar{
         height: 30px;
-        background-color: lightgray;
+        background-color: inherit;
         border: 0px;
         flex-shrink: 0;
     }
