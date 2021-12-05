@@ -331,7 +331,7 @@ aside {
                     <div id="textarea" contenteditable="true"></div> 
                     <div class="textarea-icons">
                       <div id="lock" data-flg='true'><i class="fas fa-unlock fa-2x" cursor="pointer"></i></div>
-                      <div id="file"><i class="fas fa-paperclip fa-2x" cursor="pointer"></i></div>
+                      <div id="file"><i class="fas fa-image fa-2x" cursor="pointer"></i></div>
                       <input id="input-file" type="file" style="display: none;" accept="image/*">
                       <div id="send"><i class="far fa-paper-plane fa-2x" cursor="pointer"></i></div>
                     </div>
@@ -416,7 +416,13 @@ aside {
    		let fileUrl = $(this).attr('src');
    		let fileType = $(this).parent().data('file-type');
    		
-   		download(fileUrl,fileName,fileType);
+   		var x=new XMLHttpRequest();
+   		x.open("GET", fileUrl , true);
+   		x.responseType = 'blob';
+   		x.onload=function(e){download(x.response, fileName, fileType ); }
+   		x.send();
+   		
+   		
    	});
    	
 
@@ -434,7 +440,7 @@ aside {
                 	console.log(url);
                 	imgSection.attr('src' , url);
                 }).catch( function(error) {//나중에
-                	alert("비상 비상");
+                	alert("데이터 통신중 오류가 발생했습니다.");
                 	console.log(error);
                 	});
    			}
@@ -475,15 +481,13 @@ aside {
                 var content = JSON.parse(chat.body); //sendig한 객체를 받아옴.
                 
                 if(content.pmIdx == pmIdx) { //내가 입력할 때
-                	
                    let newChat = $(".clone-me").clone();
                    newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
                    
                    if(content.isFile == "1") {//보낸 메세지가 파일일 경우
-                	   
-                       var pathReference = firebase.storage().ref(content.filePath);
-                       var urlStirng = "";
-                       pathReference.getDownloadURL().then(function(url) {
+                      var pathReference = firebase.storage().ref(content.filePath);
+                      var urlStirng = "";
+                      pathReference.getDownloadURL().then(function(url) {
                       console.log("지나가?");
                           
                           urlStirng = url;
@@ -491,16 +495,18 @@ aside {
                           
                           newChat.find(".talk-me").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
                           scrollFixedBottom();
-                         	$('.img-section').off().on('click', function () {
-                           		alert("이미지 클릭");
-                           		let fileName = $(this).parent().data('file-name');
-                           		let fileUrl = $(this).attr('src');
-                           		let fileType = $(this).parent().data('file-type');
+                          newChat.find('.img-section').off().on('click', function () {
+                           		var x=new XMLHttpRequest();
+                           		x.open("GET", url , true);
+                           		x.responseType = 'blob';
+                           		x.onload=function(e){download(x.response, content.content, content.fileType ); }
                            		
-                           		download(fileUrl,fileName,fileType);
+                           		x.send();
+                           		alert("비동기로 생성된 내이미지 클릭");
+                           		
                            	});
                         }).catch(function(error) {//나중에
-                        	alert("비상 비상");
+                        	alert("데이터 통신중 오류가 발생했습니다.");
                         	console.log(error);
                         });
 
@@ -514,12 +520,34 @@ aside {
                 }else{//다른사람이 입력할 때
                    let newChat = $(".clone-other").clone();
                    newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
-                   if(content.isFile == "1") {
-                	   newChat.find(".talk-me").append("<div class='chat-content'><a href='#'>" + content.content + "</a></div>");
+                   if(content.isFile == "1") {//보낸 매세지가 파일일때
+                	   var pathReference = firebase.storage().ref(content.filePath);
+                       var urlStirng = "";
+                       pathReference.getDownloadURL().then(function(url) {
+                       console.log("지나가?");
+                           
+                           urlStirng = url;
+                           console.log("urlllllllllllllll" + url);
+                           
+                           newChat.find(".talk-other").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
+                           scrollFixedBottom();
+                           newChat.find('.img-section').off().on('click', function () {
+                            		var x=new XMLHttpRequest();
+                            		x.open("GET", url , true);
+                            		x.responseType = 'blob';
+                            		x.onload=function(e){download(x.response, content.content, content.fileType ); }
+                            		
+                            		x.send();
+                            		alert("비동기로 생성된 상대 이미지 클릭");
+                            		
+                            	});
+                         }).catch(function(error) {//나중에
+                         	alert("데이터 통신중 오류가 발생했습니다.");
+                         	console.log(error);
+                         });
                    }else {
                 	   newChat.find(".talk-other").append("<div class='chat-content'>" + content.content + "</div>");
                    }
-                   
                    newChat.find(".currentTime").html(content.regDate);
                    newChat.find(".user-nickname").html(content.nickname);
                    $(".chat-section").append(newChat);
@@ -528,6 +556,7 @@ aside {
                 chIdx = content.chIdx;
                 scrollFixedBottom();
           });
+           console.log("빠져나와?");
            scrollFixedBottom();
        });
        
@@ -577,15 +606,10 @@ aside {
          }
          
          
-        
-        
-         
-         
          if (e.which == 13 && !e.shiftKey) {
             
             let lastChatBlock = $(".chat-block").last();
             chIdx++;
-            if(lastChatBlock.hasClass("chat-me")) { //마지막채팅이 나 일때
      
                stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
                         chIdx : chIdx,
@@ -599,20 +623,6 @@ aside {
                  }));
                  
                
-            }else{ //마지막채팅이 다른사람일때
-               
-              stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
-                   chIdx : chIdx,
-                   wsIdx : wsIdx,
-                   chName : chatName,
-                   content : inputText,
-                   regDate : date,
-                   nickname : nickname,
-                   pmIdx : pmIdx,
-                   isFile : 0
-            }));   
-            
-            }    
            $('#textarea').empty();
           return false;
         }
@@ -719,9 +729,28 @@ aside {
       // 전송 버튼을 누르면, #textarea에 입력한 내용이 db에 올라가고 채팅창에도 보이게
       $('#send').on('click', function(){
         if(flg){
-        	//@@@@@@@@@@@@@@코드 추가 요망!!!
+        	
+        	date = nowDate();
+            
+            let inputText =  $('#textarea').html();
+        	
+        	let lastChatBlock = $(".chat-block").last();
+            chIdx++;
+     
+               stompClient.send("/app/msg/" + wsIdx , {}, JSON.stringify({
+                        chIdx : chIdx,
+                        wsIdx : wsIdx,
+                        chName : chatName,
+                        content : inputText,
+                        regDate : date,
+                        nickname : nickname,
+                        pmIdx : pmIdx,
+                        isFile : 0
+                 }));
+                 
+        	
           $('#textarea').empty();
-          window.alert("전송 버튼 눌렸다?");
+          
           return false;
         }else{
           window.alert("잠금을 해제해주세요.");
