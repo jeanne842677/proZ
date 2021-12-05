@@ -474,7 +474,6 @@ cursor: pointer;
    
    	
    	$('.img-section').off().on('click', function () {
-   		alert("이미지 클릭");
    		let fileName = $(this).parent().data('file-name');
    		let fileUrl = $(this).attr('src');
    		let fileType = $(this).parent().data('file-type');
@@ -565,7 +564,6 @@ cursor: pointer;
                            		x.onload=function(e){download(x.response, content.content, content.fileType ); }
                            		
                            		x.send();
-                           		alert("비동기로 생성된 내이미지 클릭");
                            		
                            	});
                         }).catch(function(error) {//나중에
@@ -601,7 +599,6 @@ cursor: pointer;
                             		x.onload=function(e){download(x.response, content.content, content.fileType ); }
                             		
                             		x.send();
-                            		alert("비동기로 생성된 상대 이미지 클릭");
                             		
                             	});
                          }).catch(function(error) {//나중에
