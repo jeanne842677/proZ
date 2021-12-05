@@ -150,8 +150,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int insertPostFile(FileDTO fileUploaded, String userIdx) {
-		return boardRepository.insertPostFile(fileUploaded, userIdx);
+	public int insertPostFile(FileDTO fileUploaded, String bdIdx) {
+		return boardRepository.insertPostFile(fileUploaded, bdIdx);
 	}
 
 	@Override

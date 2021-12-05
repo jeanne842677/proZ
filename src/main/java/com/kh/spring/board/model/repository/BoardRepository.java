@@ -70,8 +70,8 @@ public interface BoardRepository {
 	void deletePost(String postIdx);
 
 	@Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
-			+ "values(sc_file_idx.nextval, #{userIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
-	int insertPostFile(@Param("FileDTO") FileDTO fileUploaded, @Param("userIdx") String userIdx);
+			+ "values(sc_file_idx.nextval, #{bdIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
+	int insertPostFile(@Param("FileDTO") FileDTO fileUploaded, @Param("bdIdx") String bdIdx);
 
 	@Select("select w.ws_idx from post p, board b, workspace w where p.bd_idx = b.bd_idx"
 			+ " and b.ws_idx = w.ws_idx and p.post_idx = #{postIdx}")

@@ -153,13 +153,13 @@ public class BoardController {
 	// 2) Posting file 비동기전송 Code
 	@PostMapping(value = "posting/fileIo", produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String insertFileAsync(HttpSession session, @RequestParam(required = false) String projectIdx,
+	public String insertFileAsync(HttpSession session, @RequestParam(required = false) String bdIdx,
 			@RequestParam(required = false) List<MultipartFile> files) {
 
 		// 1. 파일 추출 및 DB저장
 		FileUtil fileUtil = new FileUtil();
 		FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
-		boardService.insertPostFile(fileUploaded, projectIdx);
+		boardService.insertPostFile(fileUploaded, bdIdx);
 
 		// 2. DTO를 JSON형식으로 전달
 		return JsonMaker.json(fileUploaded);

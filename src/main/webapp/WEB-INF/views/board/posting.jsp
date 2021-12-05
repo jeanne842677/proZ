@@ -338,7 +338,7 @@ function dropHandler(ev) {
   
   // 7. 최종 fetch 
   	
-  	fetch(`/board/posting/fileIo?projectIdx=${projectIdx}` , {
+  	fetch(`/board/posting/fileIo?projectIdx=${projectIdx}&bdIdx=${param.bdidx}` , {
 	  method : 'POST',
 	  body : formdata
 	})

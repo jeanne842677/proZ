@@ -38,7 +38,7 @@ public interface BoardService {
 	// 유송추가
 	void deletePost(String postIdx);
 
-	int insertPostFile(FileDTO fileUploaded, String userIdx);
+	int insertPostFile(FileDTO fileUploaded, String bdIdx);
 
 	String selectWsIdxByPostIdx(String postIdx);
 
