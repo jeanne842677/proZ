@@ -141,6 +141,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void insertSocialMember(JoinForm form) {
+		form.setPassword(passwordEncoder.encode(form.getPassword()));
 		memberRepository.insertSocialMember(form);
 
 	}
