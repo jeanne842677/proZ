@@ -68,7 +68,7 @@ var initCustomAutocomplete = function(element) {
                   case 'file' :    
                     $(this).after(function(){ 
                       // input을 포함한 작은 div 생성 
-                      return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
+                      return "<div class='immutableDiv' data-id='immutableFile' contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
                       + "<div id='drop_zone'class='dropleaved' data-fetchResult='file'"
                       + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
                       + "style='height:120px; width:200px; font-size:8px;"  
@@ -82,7 +82,7 @@ var initCustomAutocomplete = function(element) {
                   case 'img':
                     $(this).after(function(){ 
                       // input을 포함한 작은 div 생성 
-                      return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
+                      return "<div class='immutableDiv' data-id='immutableImg' contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
                       + "<div id='drop_zone'class='dropleaved' data-fetchResult='img'"
                       + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
                       + "style='height:120px; width:200px; font-size:8px;"  
@@ -96,7 +96,7 @@ var initCustomAutocomplete = function(element) {
                   case 'audio':
                     $(this).after(function(){ 
                       // input을 포함한 작은 div 생성 
-                     return "<div class='immutableDiv'contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
+                     return "<div class='immutableDiv' data-id=' immutableAudio' contenteditable='false' style='caret-color:transparent; padding:20px;'>" 
                       + "<div id='drop_zone'class='dropleaved' data-fetchResult='audio'"
                       + "ondrop='dropHandler(event);' ondragover='dragOverHandler(event);' ondragleave='dragleaveHandler(event)'"
                       + "style='height:120px; width:200px; font-size:8px;"  
@@ -111,7 +111,7 @@ var initCustomAutocomplete = function(element) {
                   break;
                   case 'line':
                     $(this).after(function(){
-                        return "<div class='immutableDiv'contenteditable='false' "
+                        return "<div class='immutableDiv'contenteditable='false' data-id=' immutableLine' "
                         + "style='display:flex; align-items:center; height:20px; width:100%; caret-color: transparent;'>"
                         + "<div style='width:80%; border-top:1.5px solid lightgray;'></div>"
                         + "</div>";
@@ -129,15 +129,15 @@ var initCustomAutocomplete = function(element) {
                   break;
                   case 'code':
                     $(this).after(function(){
-                        return "<div class='immutableDiv' contentEditable='false' style='padding:20px; caret-color:transparent;width:100%;'>"
-                        + "<div contentEditable='true' style='height:90%; min-height:100px; width:85%; background-color:#ebebeb;"
-                        + "border-radius:10px; color:white; padding:20px; caret-color: white; font-size:12px;'>"
+                        return "<div class='immutableDiv' data-id='immutableCode' contentEditable='false' style='padding:20px; caret-color:transparent;width:100%;'>"
+                        + "<div contentEditable='true' style='height:90%; min-height:100px; width:85%; background-color:black;"
+                        + "color:white; padding:20px; caret-color: white; font-size:12px;'>"
                         +"</div></div>";
                       });
                       createCodeBlock($(this).next()); 
                   break; 
                   
-                  // 3_function for anchor
+                  // 3_function for anchor (미완, 보완필요)
                   case 'link' :
                     $(this).after(function(){
                         return "<div class='immutableDiv'contenteditable='false'"
@@ -309,17 +309,28 @@ var initCustomAutocomplete = function(element) {
           let searchDiv = preSib; 
           let textAreaLength = $('section').children().length;
           for (let i=0; i<textAreaLength; i++) {
+			// arrowFnc null check, return 시킴 
+			if(searchDiv === null) {
+				break; 
+			}
             if(searchDiv.className !== 'commonDiv ui-autocomplete-input' && searchDiv.className !=='editor-title') { 
               searchDiv = searchDiv.previousElementSibling;
             } else{
               break;  
             }
           }  
-          searchDiv.focus(); 
-          let customRange = selection.getRangeAt(0); 
-          let previousContainer = customRange.startContainer;
-          customRange.setStart(previousContainer, searchDiv.innerHTML.length);
-          customRange.setEnd(previousContainer, searchDiv.innerHTML.length); 
+          if(searchDiv !== null){
+			searchDiv.focus(); 
+			let customRange = selection.getRangeAt(0); 
+         	let previousContainer = customRange.startContainer;
+         	customRange.setStart(previousContainer, searchDiv.innerText.length);
+          	customRange.setEnd(previousContainer, searchDiv.innerText.length); 
+		  }
+          // 오류, setStart 시 어떤 상황에서는 innerHTML.LENGTH가 node의 길이보다 길다. 
+          // node의 length로 최대값을 바꾼다. 
+          // searchDiv의 length를 참고한다.(innerHTML의 Length는 nbsp 등이 들어가기 때문에
+          // 길이가 달라진다.)
+          
         } else {
           
           // 만일 아래쪽 fucntion이라면 대상을 찾아 focusing을 옮긴다. 
@@ -327,13 +338,18 @@ var initCustomAutocomplete = function(element) {
           let searchDiv = nextSib;
           let textAreaLength = $('section').children().length;  
           for (let i=0; i<textAreaLength; i++) {
+			if(searchDiv === null) {
+				break; 
+			}
             if(searchDiv.className !== 'commonDiv ui-autocomplete-input') {
               searchDiv = searchDiv.nextElementSibling;
             } else{
               break;  
             }
           }
-          searchDiv.focus();
+          if(searchDiv !== null){
+          	searchDiv.focus();
+          }
         }
       }
     })
