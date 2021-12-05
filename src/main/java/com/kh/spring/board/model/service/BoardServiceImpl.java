@@ -1,5 +1,6 @@
 package com.kh.spring.board.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,10 +49,15 @@ public class BoardServiceImpl implements BoardService {
 		return boardRepository.selectBoardByWsIdx(wsIdx);
 	}
 
-	@Override
+	@Override // 지영이 수정!!!!!!!!!!! 12/5
 	public void deleteBoard(Board board) {
+
 		System.out.println("삭제된 보드 :" + board);
+
 		boardRepository.deleteBoard(board);
+
+		// boardRepository.selectBoardAndBoardLeafList(board.getBdIdx());
+
 		boardRepository.updateBoardSortWhenRemoveBoard(board);
 
 	}
@@ -62,7 +68,14 @@ public class BoardServiceImpl implements BoardService {
 		String bdIdx = map.get("bdIdx");
 		String wsIdx = map.get("wsIdx");
 		int changeSort = Integer.parseInt(map.get("changeSort"));
-		int sort = Integer.parseInt(map.get("sort"));
+
+		List<Board> boardList = boardRepository.selectBoardAndBoardLeafList(bdIdx);
+		int sort = boardList.get(0).getSort();
+
+		List<String> bdIdxList = new ArrayList<>();
+		for (Board b : boardList) {
+			bdIdxList.add(b.getBdIdx());
+		}
 
 		// 바뀐 애가 더 작으면?
 		if (changeSort < sort) {
@@ -75,7 +88,7 @@ public class BoardServiceImpl implements BoardService {
 
 		}
 
-		boardRepository.updateBoardSort(map);
+		boardRepository.updateBoardSort(bdIdxList, changeSort);
 
 	}
 
@@ -130,19 +143,47 @@ public class BoardServiceImpl implements BoardService {
 		return boardRepository.selectBoardByTop(projectIdx);
 	}
 
-	
-	//유송 추가
+	// 유송 추가
 	@Override
 	public void deletePost(String postIdx) {
 		boardRepository.deletePost(postIdx);
 	}
-	
+
 	@Override
-	   public int insertPostFile(FileDTO fileUploaded, String userIdx) {
-	      return boardRepository.insertPostFile(fileUploaded, userIdx);
-	   }
+	public int insertPostFile(FileDTO fileUploaded, String userIdx) {
+		return boardRepository.insertPostFile(fileUploaded, userIdx);
+	}
+
+	@Override
+	public String selectWsIdxByPostIdx(String postIdx) {
+		return boardRepository.selectWsIdxByPostIdx(postIdx);
+	}
+
+	@Override
+	public void updatePostByPostIdx(Map<String, String> map) {
+		boardRepository.updatePostByPostIdx(map);
+
+	}
 
 	// 윤지 추가
+
+	@Override
+	public List<Reply> selectReplyByTop(String projectIdx) {
+		// TODO Auto-generated method stub
+		return boardRepository.selectReplyByTop(projectIdx);
+	}
+
+	@Override
+	public void updateReplyByReplyIdx(Reply reply) {
+
+		boardRepository.updateReplyByReplyIdx(reply);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectReplyByProjectMember(String postIdx) {
+		// TODO Auto-generated method stub
+		return boardRepository.selectReplyByProjectMember(postIdx);
+	}
 
 	@Override
 	public Reply insertReply(Reply reply) {
@@ -152,21 +193,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectReplyByPostIdx(String postIdx) {
-		// TODO Auto-generated method stub
-		return boardRepository.selectReplyByPostIdx(postIdx);
-	}
-
-	@Override
 	public void deleteReplyByReplyIdx(String replyIdx) {
 
 		boardRepository.deleteReplyByReplyIdx(replyIdx);
-	}
-
-	@Override
-	public void updateReplyByReplyIdx(Reply reply) {
-
-		boardRepository.updateReplyByReplyIdx(reply);
 	}
 
 	// 지영 추가
