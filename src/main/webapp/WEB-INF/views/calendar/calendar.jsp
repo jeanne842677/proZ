@@ -173,7 +173,11 @@
 
 
             </section>
-            <aside></aside>
+            <aside>
+            
+				<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+            
+            </aside>
         </div>
 
     </div>
@@ -237,7 +241,7 @@
                 eventClick: function (arg) {
                 	
                 	let idx = arg.event._def.publicId;
-                	location.href="/calendar/view/${projectIdx}?calIdx="+idx;
+                	location.href="/calendar/view/${projectIdx}?wsIdx=${workspace.wsIdx}&calIdx="+idx;
                 	
                 },
                 eventChange: function (arg) {

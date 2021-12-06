@@ -836,7 +836,7 @@ a:hover {
     	    	board.find('.card-wrap').empty();
 
     	    	board.attr('id' , text) //text에 bdIdx들어있음.
-    	    	board.css('display' , 'flex');
+    	    	board.css('display' , 'block');
     	    	
     	    	let leafBoardItemDiv = $('<div class="dropdown-item leaf-board-item"></div>');
     	    	leafBoardItemDiv.attr('id' , text);

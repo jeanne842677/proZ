@@ -148,7 +148,7 @@
                                         <table border="0" cellspacing="0" cellpadding="0">
                                             <tr>
                                                 <td align="center" style="border-radius: 3px;" style="background: linear-gradient(to right, #8f7ae5, #f170aa);">
-                                                	<a href="http://localhost:9090/project/join-by-email/${param.userIdx}/${param.projectIdx}" target="_blank" style=" background: linear-gradient(to right, #8f7ae5, #f170aa); display: flex; justify-content: center; align-items: center; font-size: 23px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #000; font-weight: 700; text-decoration: none; padding: 15px 25px; border-radius: 5px; border: none; display: inline-block; height:100px; width:300px; line-height: 70px;">Confirm Account</a>
+                                                	<a href="http://localhost:9090/project/join-by-email/${param.userIdx}/${param.projectIdx}" target="_blank" style=" background: linear-gradient(to right, #8f7ae5, #f170aa); display: flex; justify-content: center; align-items: center; font-size: 23px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #000; font-weight: 700; text-decoration: none; padding: 15px 25px; border-radius: 5px; border: none; display: inline-block; height:100px; width:300px; line-height: 70px;">프로젝트 가입하기</a>
                                                 </td>
                                             </tr>
                                         </table>

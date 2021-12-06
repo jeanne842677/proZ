@@ -69,6 +69,12 @@
 .comment-text-wrapper {
 	width: 100%;
 }
+
+.date {
+	display:flex;
+	margin-left: 30px;
+	
+}
 </style>
 </head>
 <body>
@@ -82,7 +88,7 @@
 				<div class="post-session-wrapper">
 					<div class="post-main-title-wrapper">
 						<!-- ++++ 수정 -->
-						<div class="post-main-title">#{workspace.wsName }</div>
+						<div class="post-main-title">#${workspace.wsName }</div>
 					</div>
 					<div class="post-main-content-wrapper">
 						<!-- ++++ 수정 -->
