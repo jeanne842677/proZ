@@ -23,8 +23,8 @@ import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
-//import com.kh.spring.projectmember.dto.Alarm;
-//import com.kh.spring.projectmember.model.repository.AlarmRepository;
+import com.kh.spring.projectmember.dto.Alarm;
+import com.kh.spring.projectmember.model.repository.AlarmRepository;
 
 
 //url이 projectIdx로 끝나는 모든 친구들 interceptor 
@@ -36,8 +36,8 @@ public class ProjectInterceptor implements HandlerInterceptor {
    @Autowired
    BoardService boardService;
    
-   //@Autowired
-   //AlarmRepository alarmRepository;
+   @Autowired
+   AlarmRepository alarmRepository;
    
 
    @Override
@@ -136,8 +136,8 @@ public class ProjectInterceptor implements HandlerInterceptor {
          }
          
 
-         //List<Alarm> alarmList = alarmRepository.selectAlramListByUserIdx(member.getUserIdx());
-         //request.setAttribute("alarmList" , alarmList);
+         List<Alarm> alarmList = alarmRepository.selectAlramListByUserIdx(member.getUserIdx());
+         request.setAttribute("alarmList" , alarmList);
          
       
       }
