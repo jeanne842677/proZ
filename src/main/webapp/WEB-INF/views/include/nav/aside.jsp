@@ -20,7 +20,12 @@
 				<c:forEach items="${ projectMemberList }" var="pm">
 					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}"
 						data-auth-name="${pm.authName}" data-git="${ pm.git }"
-						style="color:${ pm.profileColor }"><div class="onoffprofile"></div>
+						style="color:${ pm.profileColor }"><div class="onoffprofile">
+							<c:if test="${!empty pm.savePath}"> 
+								<img class="profile-img"  style="height: 100%; width:100%; border-radius: 30px;" src="/file/${pm.savePath}${pm.renameFileName}">
+							</c:if>
+						</div>
+
 						${ pm.nickname }</li>
 				</c:forEach>
 
