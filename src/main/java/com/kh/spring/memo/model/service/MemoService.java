@@ -21,7 +21,7 @@ public interface MemoService {
 
 	void updateMemoByMemoIdx(Memo memo);
 
-	List<Map<String, Object>> selectMemoBySearch(String wsIdx,String search);
+	List<Map<String, Object>> selectMemoBySearch(String wsIdx,String keyword);
 
 	
 

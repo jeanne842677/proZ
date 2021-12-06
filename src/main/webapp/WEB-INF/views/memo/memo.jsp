@@ -261,6 +261,7 @@ font-family: 'NanumSquareRound';
    		border-radius: 30px;
 	}
 
+
 </style>
 
 
@@ -323,11 +324,10 @@ font-family: 'NanumSquareRound';
 					<div id="rightzone">
 						<div id="search-form">
 							<img class="search-icon" src="/resources/img/search.png">
-							<input class="form-control" id="search" type="text" placeholder="검색하기" value="${search}" name="searchKeyword"> 
+							<input class="form-control" id="keyword" type="text" placeholder="검색하기" value="${keyword}" name="searchKeyword"> 
 						</div>
 
-						<button type="button" id="memo-btn" class="memo-btn">메모
-							작성</button>
+						<button type="button" id="memo-btn" class="memo-btn">메모작성</button>
 					</div>
 				</div>
 				<div class="memocon">
@@ -454,8 +454,8 @@ font-family: 'NanumSquareRound';
 	//검색
     $("input[name='searchKeyword']").keydown(function(e){
        if(e.keyCode == 13){
-          var valueBySearch = $('#search').val();
-          location.replace("http://localhost:9090/memo/${projectIdx}/"+valueBySearch+"?wsIdx=${wsIdx}&order=0")
+          var valueBySearch = $('#keyword').val();
+          location.replace("http://localhost:9090/memo/${projectIdx}/search?wsIdx=${wsIdx}&order=0&keyword="+valueBySearch);
        }
     })
 

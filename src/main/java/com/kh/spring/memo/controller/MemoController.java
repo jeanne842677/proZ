@@ -86,15 +86,15 @@ public class MemoController {
    
    
    //검색할 때 
-   @GetMapping("{projectIdx}/{search}")
+   @GetMapping("{projectIdx}/search")
    public String searchForm(@PathVariable String projectIdx , Model model,
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
 		   				   @SessionAttribute("authentication") Member member,
-		   				   @PathVariable String  search,
+		   				   @RequestParam(value = "keyword") String keyword,
 		   				   HttpServletRequest request
 		   				   
 		   				) {
-	   List<Map<String, Object>> memoList = memoService.selectMemoBySearch(wsIdx,search);
+	   List<Map<String, Object>> memoList = memoService.selectMemoBySearch(wsIdx,keyword);
 	   
 	   memoList = CamelMap.changeListMap(memoList);
 	   

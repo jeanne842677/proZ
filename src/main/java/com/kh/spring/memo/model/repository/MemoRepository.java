@@ -39,9 +39,9 @@ public interface MemoRepository {
 	@Select("	  	select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR ,memo.reg_date,content,member.NICKNAME"
 			+ "		from memo memo"
 			+ "		inner join project_member member USING (PM_IDX)"
-			+ "		where ws_idx = #{wsIdx} and (content like '%'||#{search}||'%' or member.NICKNAME like '%'||#{search}||'%')"
+			+ "		where ws_idx = #{wsIdx} and (content like '%'||#{keyword}||'%' or member.NICKNAME like '%'||#{keyword}||'%')"
 			+ "     order by reg_date desc, memo_idx desc")
-	List<Map<String, Object>> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("search") String search);
+	List<Map<String, Object>> selectMemoBySearch(@Param("wsIdx") String wsIdx, @Param("keyword") String keyword);
 
 	
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxAsc(String wsIdx);

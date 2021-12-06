@@ -60,9 +60,9 @@ public class MemoServiceImpl implements MemoService {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectMemoBySearch(String wsIdx, String search) {
+	public List<Map<String, Object>> selectMemoBySearch(String wsIdx, String keyword) {
 		// TODO Auto-generated method stub
-		return memoRepository.selectMemoBySearch(wsIdx, search);
+		return memoRepository.selectMemoBySearch(wsIdx, keyword);
 	}
 
 
