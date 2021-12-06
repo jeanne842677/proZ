@@ -246,6 +246,13 @@ nav, aside{
 font-family: 'NanumSquareRound';
 } 
  
+ 
+ 	.user-photo{
+	    background-color: RGB(143, 122, 229);
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 30px;
+	}
 
 </style>
 
@@ -333,7 +340,7 @@ font-family: 'NanumSquareRound';
 									<div class="textvalue">${ memo.content }</div>
 								</div>
 								<div id="profile">
-									<i class="fas fa-user-circle fa-2x"></i>
+									<div class="user-photo"></div>
 								</div>
 							</div>
 						</c:forEach>
