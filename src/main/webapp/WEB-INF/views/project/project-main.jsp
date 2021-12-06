@@ -492,9 +492,7 @@ margin-bottom:0;
           display:flex;
           
        }
-       div{
-       	border:solid thin;
-       }
+      
    }
     </style>
 </head>
