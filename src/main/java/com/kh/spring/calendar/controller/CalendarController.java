@@ -100,12 +100,13 @@ public class CalendarController {
 	@ResponseBody
 	public String removeCal(@RequestBody Calendar calendar) {
 		
-	
+		System.out.println(calendar);
 		calendarService.deleteCalendar(calendar);
 		
+		System.out.println("딜리트완료=====================");
 		
 		
-		return "";
+		return "complete";
 		
 	}
 	

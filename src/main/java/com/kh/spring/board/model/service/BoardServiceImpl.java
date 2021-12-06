@@ -223,7 +223,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<Post> selectPostListByBdIdx(String bdIdx) {
+	public List<Map<String, Object>> selectPostListByBdIdx(String bdIdx) {
 		return boardRepository.selectPostListByBdIdx(bdIdx);
 	}
 

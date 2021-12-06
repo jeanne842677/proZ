@@ -104,8 +104,8 @@ public interface BoardRepository {
 	@Select("select * from board where ws_idx = #{wsIdx} and parent is not null")
 	List<Board> selectLeafBoardByWsIdx(String wsIdx);
 
-	@Select("select * from post where bd_idx = #{bdIdx} order by sort")
-	List<Post> selectPostListByBdIdx(String bdIdx);
+	@Select("select pm_idx , post_idx , bd_idx , post_title , sort  , post_color , user_idx , nickname, profile_color  from post  join project_member using(pm_idx) where bd_idx = #{bdIdx} order by sort")
+	List<Map<String, Object>> selectPostListByBdIdx(String bdIdx);
 
 	// 12월 5일 지영 추가
 	@Select("select * from board where bd_idx = (select nvl(parent , bd_idx) from board where (parent is null and bd_Idx= #{bdIdx}) or (bd_idx=#{bdIdx}))")

@@ -269,9 +269,9 @@ public class BoardController {
 
 	@PostMapping("select/leaf-board-post")
 	@ResponseBody
-	public List<Post> selectLeafBoardPost(@RequestBody Board board) {
+	public List<Map<String, Object>> selectLeafBoardPost(@RequestBody Board board) {
 
-		List<Post> postList = boardService.selectPostListByBdIdx(board.getBdIdx());
+		List<Map<String, Object>> postList = CamelMap.changeListMap(boardService.selectPostListByBdIdx(board.getBdIdx()));
 
 		return postList;
 	}

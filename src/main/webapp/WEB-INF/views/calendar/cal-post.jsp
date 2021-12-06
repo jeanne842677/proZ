@@ -82,7 +82,7 @@
 				<div class="post-session-wrapper">
 					<div class="post-main-title-wrapper">
 						<!-- ++++ 수정 -->
-						<div class="post-main-title"># 캘린더 제목</div>
+						<div class="post-main-title">#{workspace.wsName }</div>
 					</div>
 					<div class="post-main-content-wrapper">
 						<!-- ++++ 수정 -->
@@ -161,23 +161,28 @@
         }
     }); 
     
-    //text만 복사하는 js
-    document.querySelector('.comment-textArea').addEventListener('paste' , function(event) {
-        event.preventDefault();
-        let text =event.clipboardData.getData("text/plain");
-        document.execCommand("insertHTML", false,  text);
-    });
-    
 
+  
     // delete 기능 btn 
     $('#post-delete-btn').on('click', function(e){
-    	fetch('/calendar/change/remove-cal?' + 'calIdx=${calendar.calIdx}', {
-    		method : 'POST'
+    	
+    	
+
+    	fetch('/calendar/change/remove-cal', {
+    		
+    			method : "POST",
+    			headers :  {"Content-type" : "application/json; charset=UTF-8"},
+    			body : JSON.stringify({
+    				
+    				calIdx : ${calendar.calIdx} 
+
+    				})
     	})
     	.then(response => response.text())
     	.then(text => {
 			location.href = '/calendar/${projectIdx}?wsIdx=${calendar.wsIdx}';   
     	})
+    	
     });
 
 </script>

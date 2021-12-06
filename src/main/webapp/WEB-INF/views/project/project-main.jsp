@@ -728,7 +728,7 @@ margin-bottom:0;
 		
 		<c:forEach items="${calendarList}" var="cl">
     	
-        var data = {                    
+/*         var data = {                    
                 id: "${cl.calIdx}",
                 title: "${cl.calTitle}",
                 start: "${cl.startDate}",
@@ -741,6 +741,8 @@ margin-bottom:0;
         events.push(data);
         
         </c:forEach>
+ */
+        
 		
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
@@ -779,6 +781,8 @@ margin-bottom:0;
 
 
         });    
+        
+
     
     </script>
 </body>

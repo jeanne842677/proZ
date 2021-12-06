@@ -60,7 +60,7 @@ public interface BoardService {
 
 	List<Board> selectLeafBoardByWsIdx(String wsIdx);
 
-	List<Post> selectPostListByBdIdx(String bdIdx);
+	List<Map<String, Object>> selectPostListByBdIdx(String bdIdx);
 
 	Map<String, Object> selectBoardAndPost(String wsIdx);
 

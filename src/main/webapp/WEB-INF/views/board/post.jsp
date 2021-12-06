@@ -259,10 +259,11 @@ console.dir(replyIdx);
            replyIdx :replyIdx
            
                })
-    }).then(res=>{res.text()})
+    }).then(res=>res.text())
      .then(reply=>{
         
-    	
+
+         location.reload();
      })
  })
  
