@@ -15,6 +15,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
+import com.kh.spring.common.interceptor.service.InterceptorService;
+import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectRole;
@@ -25,6 +27,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	ProjectService projectService;
+	
+	@Autowired
+	InterceptorService interceptorService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Object handler) {
@@ -60,47 +65,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 		HttpSession session = httpRequest.getSession();
 		Member member = (Member) session.getAttribute("authentication");
 		
-		System.out.println("아ㅏㅏㅏㅏㅏㅏㅇ아ㅏ아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ아아ㅏㅏㅏㅏㅏ"+projectIdx);
+		//인터셉터
+		interceptorService.authInterceptor(projectIdx,member,httpRequest);
 		
 		
-		Project project = projectService.selectProjectExist(projectIdx);
-		
-		// 로그인 하지 않았을 경우
-		
-		if (member == null) {
-			throw new HandlableException(ErrorCode.NEED_LOGIN);
-		} else {
-			// 프로젝트가 없을 경우
-			if (project == null || projectService.projectIsDel(projectIdx) == 1) {
-				throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-			}
-
-			// 프로젝트 멤버가 아닐 경우
-			List<String> proIdxList = projectService.selectProjectIdxByUserIdx(member.getUserIdx());
-			
-			System.out.println("인터셉터 프로젝트 리스트 : " + proIdxList);
-			boolean flg = true;
-			for (String proIdx : proIdxList) {
-				if (proIdx.equals(projectIdx) ) {
-					flg = false;
-				}
-			}
-			try {
-				Map<String, Object> projectMember = (Map<String, Object>) httpRequest.getAttribute("projectMember");
-				if(projectMember.get("isLeave").equals("1")) {//맴버가 프로젝트를 탈퇴했을시
-					flg = false;
-				};
-			} catch (Exception e) {
-				throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);
-			}
-			
-			
-			
-			
-			if (flg) {
-				throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);
-			}
-		}
 		
 	}
 
@@ -113,36 +81,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 			switch (uri[2]) {
 
 			case "setting":
-				
-				System.out.println("setting projectIdx :  " + projectIdx);
-
-				Project project = projectService.selectProjectExist(projectIdx);
-				
-
-				// 로그인 하지 않았을 경우
-				if (member == null) {
-					throw new HandlableException(ErrorCode.NEED_LOGIN);
-				} else {
-					// 프로젝트가 없을 경우
-					if (project == null || projectService.projectIsDel(projectIdx) == 1) {
-						throw new HandlableException(ErrorCode.PROJECT_URL_ERROR);
-					}
-
-					// 프로젝트 멤버가 아닐 경우
-					List<String> proIdxList = projectService.selectProjectIdxByUserIdx(member.getUserIdx());
-					System.out.println("인터셉터 프로젝트 리스트 : " + proIdxList);
-					boolean flg = true;
-					for (String proIdx : proIdxList) {
-						if (proIdx.equals(projectIdx)) {
-							flg = false;
-						}
-					}
-
-					if (flg) {
-						throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);
-					}
-
-				}
+				//인터셉터
+				interceptorService.authInterceptor(projectIdx,member,httpRequest);
 				
 				ProjectRole role = projectService.selectProjectRoleByProjectIdxAndUserIdx(projectIdx,member.getUserIdx());
 				System.out.println("인터셉터 롤 : " + role);

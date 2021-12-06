@@ -213,7 +213,7 @@
 /* 댓글 수정 삭제 입력 최윤지 */
 //댓글 입력
 $(".comment-textArea-submit-btn").off().on('click',function () {
-    let replyIdx = "";
+    
      let reply = $('.comment-textArea').html().trim();
      console.dir(reply);
 
@@ -226,11 +226,27 @@ $(".comment-textArea-submit-btn").off().on('click',function () {
             postIdx : "${param.postIdx}",
             pmIdx: "${projectMember.pmIdx}"
                })
-    }).then(res=>{res.text()})
-     .then(reply=>{
-        
-         location.reload();
-     })
+    }).then(res=>res.text())
+    .then(text=> {
+		let re = JSON.parse(text);
+		
+		stompClient.send("/app/reply-alert/${project.projectIdx}", {}, JSON
+				.stringify({
+					userIdx : "${authentication.userIdx}",
+					nickname : "${authentication.nickname}" ,
+					replyIdx : re.replyIdx ,
+					replyContent : reply ,
+					postIdx : "${param.postIdx}" ,
+					projectIdx : "${project.projectIdx}" ,
+					link : "/board/view/${project.projectIdx}?postIdx=${param.postIdx}&bdIdx=${param.bdIdx}"
+
+		}));
+    	
+    }).then(res=>{
+
+        location.reload();
+    })
+
  })
  //댓글 삭제하기
 $(".remove-btn").off().on('click',function () {
@@ -243,12 +259,14 @@ console.dir(replyIdx);
            replyIdx :replyIdx
            
                })
-    }).then(res=>{res.text()})
+    }).then(res=>res.text())
      .then(reply=>{
         
-        location.reload();
+
+         location.reload();
      })
  })
+ 
  
   
 
@@ -264,6 +282,7 @@ $(".modify-btn").off().on('click' ,function() {
    
   
 })
+ 
  
  
  

@@ -25,7 +25,7 @@ public interface BoardService {
 
 	void insertPost(Map<String, String> map, Member member);
 
-	List<Post> selectPostListByWsIdx(String wsIdx);
+	List<Map<String, Object>> selectPostListByWsIdx(String wsIdx);
 
 	Board selectBoardByBdIdx(String bdidx);
 
@@ -33,7 +33,7 @@ public interface BoardService {
 
 	Post selectPostByPostIdx(String pmIdx);
 
-	List<Post> selectBoardByTop(String projectIdx);
+	List<Map<String, Object>> selectBoardByTop(String projectIdx);
 
 	// 유송추가
 	void deletePost(String postIdx);
@@ -49,7 +49,7 @@ public interface BoardService {
 
 	void deleteReplyByReplyIdx(String replyIdx);
 
-	List<Reply> selectReplyByTop(String projectIdx);
+	List<Map<String, Object>> selectReplyByTop(String projectIdx);
 
 	void updateReplyByReplyIdx(Reply reply);
 
@@ -60,6 +60,10 @@ public interface BoardService {
 
 	List<Board> selectLeafBoardByWsIdx(String wsIdx);
 
-	List<Post> selectPostListByBdIdx(String bdIdx);
+	List<Map<String, Object>> selectPostListByBdIdx(String bdIdx);
+
+	Map<String, Object> selectBoardAndPost(String wsIdx);
+
+	Map<String, Object> selectPostInfo(String postIdx);
 
 }

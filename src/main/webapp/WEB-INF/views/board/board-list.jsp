@@ -232,14 +232,30 @@ a:hover {
 	font-size: 15px;
 }
 
+.post-pm-content {
+
+	position: absolute;
+	display: flex;
+	
+	bottom: 7px;
+	right: 7px;
+	width: auto;
+	font-size: 14px;
+	line-height: 25px;
+
+}
+
+.post-pm {
+
+	margin-left: 3px;
+
+}
+
 .profile-img {
 	width: 25px;
 	height: 25px;
 	background-color: blueviolet;
 	border-radius: 25px;
-	position: absolute;
-	bottom: 10px;
-	right: 5px;
 }
 
 .profile-img2 {
@@ -384,10 +400,13 @@ a:hover {
 										<div class="card-wrap">
 											<c:forEach items="${postList}" var="post">
 												<c:if test="${board.bdIdx == post.bdIdx }">
-													<div class="card" id="${post.postIdx }"
+													<div class="card" id="${post.postIdx }" style="background-color: ${post.postColor}"
 														data-sort="${post.sort}">
 														<div class="card-subject">${post.postTitle}</div>
-														<div class="profile-img"></div>
+														<div class="post-pm-content">
+															<!-- <div class="profile-img"></div> -->
+															<div class="post-pm"><b>${ post.nickname}</b></div>
+														</div>
 													</div>
 												</c:if>
 											</c:forEach>
@@ -875,12 +894,14 @@ a:hover {
 				
 				cardList.forEach(function(post) {
 					
-					let card = $('<div class="card" ><div class="card-subject"></div><div class="profile-img"></div>');
+					let card = $('<div class="card" ><div class="card-subject"></div><div class="post-pm-content"><div class="post-pm"><b></b></div></div>');
 					
+					card.css('background-color' , post.postColor)
 					card.attr('id' , post.postIdx);
 					card.data('sort' , post.sort);
 					card.find('.card-subject').text(post.postTitle);
 					board.find('.card-wrap').append(card);
+					board.find('b').append(post.nickname);
 					
 					
 					

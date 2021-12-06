@@ -246,6 +246,20 @@ nav, aside{
 font-family: 'NanumSquareRound';
 } 
  
+ 
+ 	.user-photo{
+	    background-color: RGB(143, 122, 229);
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 30px;
+	}
+	
+	.profile-img {
+		width: 100%;
+   		height: 100%;
+    	vertical-align: middle;
+   		border-radius: 30px;
+	}
 
 </style>
 
@@ -333,7 +347,11 @@ font-family: 'NanumSquareRound';
 									<div class="textvalue">${ memo.content }</div>
 								</div>
 								<div id="profile">
-									<i class="fas fa-user-circle fa-2x"></i>
+									<div class="user-photo">
+										<c:if test="${!empty memo.flIdx}">
+											<img class="profile-img" src="/file/${memo.savePath}${memo.renameFileName}">
+										</c:if>
+									</div>
 								</div>
 							</div>
 						</c:forEach>
@@ -465,7 +483,7 @@ font-family: 'NanumSquareRound';
                  memoIdx = memo.memoIdx;
                     
                     
-               let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><i class="fas fa-user-circle fa-2x"></i></div></div>');
+               let newMemo = $('<div class="memo-yellow" ><div id="content"><div class="textvalue"></div></div><div id="profile"><div class="user-photo"><img class="profile-img" src="/file/'+ "${projectMember.savePath}" + "${projectMember.renameFileName}" + '"></div></div></div>');
                $("#memo").prepend(newMemo);
                /* newMemo.find('.textvalue').text($(".note-editable").text()); */
                newMemo.find('.textvalue').html(markupStr);
@@ -545,7 +563,7 @@ font-family: 'NanumSquareRound';
                     $(".modal-yellow").find(".reg-date").html("최근 수정일 : " + memo.data('memo-reg-date'));
                     $(".modal-yellow").find(".writer").html("작성자 : " + memo.data('memo-writer'));
                     
-                    if($(this).data("pm-idx") == ${userPmIdx}) {//본인이 만든 메모일시 수정/삭제 띄우기
+                    if($(this).data("pm-idx") == ${projectMember.pmIdx}) {//본인이 만든 메모일시 수정/삭제 띄우기
                        $(".user-aut-editor").show();
                        
                        let thisMemoIdx = $(this).data("memo-idx");

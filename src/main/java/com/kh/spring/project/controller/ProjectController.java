@@ -1,13 +1,9 @@
 package com.kh.spring.project.controller;
 
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -16,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -30,14 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kh.spring.board.model.dto.Board;
-import com.kh.spring.board.model.dto.Post;
-import com.kh.spring.board.model.dto.Reply;
 import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.calendar.model.service.CalendarService;
-import com.kh.spring.common.code.CashItem;
 import com.kh.spring.common.code.ErrorCode;
-import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.common.util.file.FileUtil;
@@ -47,12 +37,9 @@ import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.validator.MypageForm;
-import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.memo.model.service.MemoService;
 import com.kh.spring.project.model.dto.Project;
-import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
-import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
 
 @Controller
@@ -87,7 +74,7 @@ public class ProjectController {
    @GetMapping("setting/member-management/{projectIdx}")
    public String memberManagement(Model model, @PathVariable String projectIdx) {
 
-
+	     
       // 멤버 권한 불러오기
       List<ProjectRole> projectRoleList = projectService.selectProjectRoleByIdx(projectIdx);
       // 멤버 리스트 불러오기
@@ -292,22 +279,21 @@ public class ProjectController {
    public String settingProject(Model model, @PathVariable String projectIdx,
          @SessionAttribute(value = "authentication") Member member) {
 
-        Project project =projectService.selectProjectExist(projectIdx);
-         System.out.println("controller : " + projectIdx);
+       FileDTO projectImg = null;
+       projectImg   = projectService.selectProjectImgSavePath(projectIdx);
         
-
-        model.addAttribute("project", project);
-
+       if(projectImg != null) {
+          model.addAttribute("projectImg", projectImg.getSavePath() + projectImg.getRenameFileName());
+       }
+       
+       
       return "project/setting/setting-project";
    }
 
    @PostMapping("setting/project-setting/{projectIdx}")
-   public String projectSettingSave(Model model, @PathVariable String projectIdx,
-         @RequestBody Map<String, String> project) {
-      System.out.println(project);
-      String res = projectService.updateProjectByProjectIdx(project);
+   public String projectSettingSave(Model model, @PathVariable String projectIdx, @RequestBody Map<String, String> project) {
 
-      System.out.println(res);
+      projectService.updateProjectByProjectIdx(project);
 
       return "통신완료";
    }
@@ -315,10 +301,7 @@ public class ProjectController {
    //11-18민협
    @PostMapping("setting/project-delete/{projectIdx}")
    public void projectDelete(Model model, @PathVariable String projectIdx) {
-      System.out.println("delete projectIdx : " + projectIdx);
-      System.out.println("is del : " + projectService.projectIsDel(projectIdx));
       projectService.updateIsDelProjectByProjectIdx(projectIdx);
-      
    }
 
    // ============================================민협 작업
@@ -327,27 +310,14 @@ public class ProjectController {
    // ========================================은비 작업=========================
 
    @GetMapping("project-list")
-   public String enterProjectList(@SessionAttribute(required = false, name = "authentication") Member member,
-         Model model, HttpSession session) {
+   public String enterProjectList(@SessionAttribute(required = false, name = "authentication") Member member, Model model) {
 
-      if (member == null) {
-         return "redirect:/"; // 지영 추가 코드
-      }
-
-      // member가 속한 프로젝트 list 정보를 보내기
-      String userIdx = member.getUserIdx();
-
-      // member가 속한 프로젝트 list (11월16일)
-      
-      
-      List<Map<String,Object>>  projectList = null;
-      projectList = CamelMap.changeListMap(projectService.selectProjectAndProjectImgByUserIdx(userIdx));
+      List<Map<String,Object>>  projectList = CamelMap.changeListMap(projectService.selectProjectAndProjectImgByUserIdx(member.getUserIdx()));
       
       if(projectList != null) {
-         model.addAttribute("projectList" ,projectList);
+         model.addAttribute("projectList", projectList);
       }
       
-
       return "project/project-list";
    }
 
@@ -358,11 +328,8 @@ public class ProjectController {
       String proName = project.getProName();
       String proDescription = project.getProDescription();
       String userIdx = member.getUserIdx();
-
-      // 새로운 프로젝트의 초대코드 생성
       String inviteCode = UUID.randomUUID().toString();
 
-      // 새로운 프로젝트 생성
       projectService.insertProject(proName, proDescription, inviteCode, userIdx);
    };
 
@@ -372,33 +339,13 @@ public class ProjectController {
    };
 
 
-   // 프로젝트 상세로 이동 알고리즘?////지영이 수정 12/4
+   ///////// 프로젝트 상세로 이동 알고리즘?////
    @GetMapping("{projectIdx}")
-   public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member, Model model, HttpSession session) {      
+   public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member, Model model) {      
       
-      //프로젝트에 속한 워크스페이스
-      List<Map<String,Object>> workspace = new ArrayList<Map<String,Object>>();
-      workspace = CamelMap.changeListMap(projectService.selectWorkspaceListByProjectIdx(projectIdx)); 
-      model.addAttribute("workspace", workspace);
-      
+	  Map<String,Object> projectMainInfo = projectService.selectProjectMainData(projectIdx); 
 
-      ////////////윤지가 작성할 코드(main에서 불러올 거)/////////
-         System.out.println("workspace : " + workspace);
-         
-         List<Memo> mainMemoList = memoService.selectMemoByTop(projectIdx);
-        model.addAttribute("mainMemoList", mainMemoList);
-        
-          //////////////////윤지 추가 코드 12월 1일////////////////////////////////
-        List<Post> postList = boardService.selectBoardByTop(projectIdx);
-       model.addAttribute("postList", postList);
-       
-       List<Reply> replyList = boardService.selectReplyByTop(projectIdx);
-       model.addAttribute("replyList", replyList);
-       System.out.println("postList 찍어본다 :"+postList);
-       System.out.println("replyList 찍어본다:"+replyList);
-        
-       List<com.kh.spring.calendar.model.dto.Calendar> calendarList = calendarSerivce.selectCalendarListByProjectIdx(projectIdx);
-       model.addAttribute("calendarList" , calendarList);
+      model.addAllAttributes(projectMainInfo);
 
       return "project/project-main"; 
    }
@@ -408,17 +355,13 @@ public class ProjectController {
    @GetMapping("setting/workspace-management/{projectIdx}")
    public String settingWorkspace(Model model, @PathVariable String projectIdx, @SessionAttribute(value = "authentication") Member member) {
 
-      List<Workspace> workspaceList = projectService.selectWorkspaceByProjectIdx(projectIdx);
-      model.addAttribute(workspaceList);
-      
       return "project/setting/workspace-management";
    }
    
    @PostMapping("setting/workspace-management/{projectIdx}")
    @ResponseBody
    public void updateWorkspace(@RequestBody List<Map<String, Object>> workspaceList, @PathVariable String projectIdx) {
-      projectService.settingWorkspace(workspaceList, projectIdx);
-      System.out.println(workspaceList);
+      projectService.updateWorkspace(workspaceList, projectIdx);
    }
 
    // ========================================은비 작업 끝=========================
@@ -426,20 +369,14 @@ public class ProjectController {
    
    //윤지코드
    @GetMapping("project-profile/{projectIdx}") 
-   public String mypage( HttpSession session,
-         Model model, @PathVariable String projectIdx
-         ,@SessionAttribute(value = "authentication") Member member
-         ) {
+   public String mypage( HttpSession session, Model model, @PathVariable String projectIdx,
+		   		@SessionAttribute(value = "authentication") Member member) {
       String userIdx = member.getUserIdx();
       member = projectService.selectProjectMemberByUserIdx(projectIdx,userIdx);
-      logger.debug(member.toString());
       
 
       //프로필 사진 추출
       FileDTO fileDTO = projectService.selectProfileImgFilebyMemberIdx(member);
-      System.out.println("userIdx :"+userIdx);
-      System.out.println("projectIdx :"+projectIdx);
-      
       
       if(fileDTO == null) {
          System.out.println("1. fileDTO 없음 진입확인");
@@ -472,7 +409,7 @@ public class ProjectController {
          tempMember.setProfileColor(profileColor); 
          tempMember.setUserIdx(sessionMember.getUserIdx());
          
-         int res = projectService.updateMemberByProfileColor(tempMember,projectIdx);
+         projectService.updateMemberByProfileColor(tempMember,projectIdx);
          
          
       } catch(Exception e) {
@@ -485,8 +422,7 @@ public class ProjectController {
 
    @PostMapping("profile/update/Img/{projectIdx}")
    @ResponseBody
-   public String changeProfileImg(@RequestParam List<MultipartFile> files
-         ,HttpSession session,  @PathVariable String projectIdx) {
+   public String changeProfileImg(@RequestParam List<MultipartFile> files, HttpSession session,  @PathVariable String projectIdx) {
       
       //1) 파일 추출 및 DB저장 
       FileUtil fileUtil = new FileUtil(); 
@@ -494,15 +430,13 @@ public class ProjectController {
    
       try {
          Member member = (Member) session.getAttribute("authentication");
-         System.out.println(member.getUserIdx());
-         int res = projectService.insertProfileImg(fileUploaded, member.getUserIdx(),projectIdx); 
+         projectService.insertProfileImg(fileUploaded, member.getUserIdx(),projectIdx); 
       } catch(Exception e) {
          e.printStackTrace();
          
       }
       //2) profileImg는 join을 통해 추출, session 업데이트 불필요
-      logger.debug(fileUploaded.getSavePath());
-      logger.debug(fileUploaded.getRenameFileName());
+
       return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
    }
    
@@ -510,8 +444,7 @@ public class ProjectController {
    
    @PostMapping(value= "profile/update/Nickname/{projectIdx}", produces = "text/plain;charset=UTF-8")
    @ResponseBody
-   public String changeProfileNickname(@Validated MypageForm mypageForm
-         ,Errors errors
+   public String changeProfileNickname(@Validated MypageForm mypageForm, Errors errors
          ,HttpSession session, @PathVariable String projectIdx) {
       
       try {
@@ -527,9 +460,9 @@ public class ProjectController {
          member.setUserIdx(sessionMember.getUserIdx());
          
       
-         int res = projectService.updateMemberByNickname(member,projectIdx);
+         projectService.updateMemberByNickname(member,projectIdx);
 
-             
+      
       } catch(Exception e) {
          e.printStackTrace(); 
          return "failed";
@@ -549,7 +482,7 @@ public class ProjectController {
          Member member = new Member();
          Member sessionMember =(Member) session.getAttribute("authentication");  
          member.setUserIdx(sessionMember.getUserIdx());
-         int res = projectService.updateProjectIsLeave(member,projectIdx); 
+         projectService.updateProjectIsLeave(member,projectIdx); 
          
          
       } catch(Exception e) {
@@ -562,10 +495,8 @@ public class ProjectController {
    
    @PostMapping("projectImg/{projectIdx}")
    @ResponseBody
-   public String projectImg(@RequestParam List<MultipartFile> files
-         ,HttpSession session
-         ,@PathVariable String projectIdx
-         ,@Param(value = "state") String state) {
+   public String projectImg(@RequestParam List<MultipartFile> files, HttpSession session
+         ,@PathVariable String projectIdx ,@Param(value = "state") String state) {
       //1) 파일 추출 및 DB저장 
       FileUtil fileUtil = new FileUtil(); 
       FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
@@ -595,9 +526,7 @@ public class ProjectController {
    }
    
    @PostMapping("delete/projectImg/{projectIdx}")
-   public String deleteProjectImg(
-         HttpSession session
-         ,@PathVariable String projectIdx) {
+   public String deleteProjectImg(@PathVariable String projectIdx) {
       
       projectService.deleteProjectImg(projectIdx);
       

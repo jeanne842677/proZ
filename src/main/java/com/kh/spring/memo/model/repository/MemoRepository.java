@@ -48,8 +48,14 @@ public interface MemoRepository {
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
 
-	@Select("select * from (select * from memo where ws_idx in (select ws_idx from workspace where ws_type='ME' and project_idx=#{projectIdx}) order by memo_idx desc) where rownum <=6")
-	List<Memo> selectMemoByTop(String projectIdx);
+	@Select("select * from"
+			+ " (select * from memo "
+			+ " join project_member pm using(pm_idx)"
+			+ " left join file_dto f on (user_idx = f.type_idx)"
+			+ " where ws_idx in (select ws_idx from workspace where ws_type='ME' and project_idx=#{projectIdx})"
+			+ " order by memo_idx desc)"
+			+ " where rownum <=6")
+	List<Map<String, Object>> selectMemoByTop(String projectIdx);
 	
 	
 

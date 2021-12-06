@@ -29,7 +29,7 @@ public interface MemoService {
 
 	List<Map<String, Object>> selectMemoAndWriterByWsIdxDesc(String wsIdx);
 
-	List<Memo> selectMemoByTop(String projectIdx); 
+	List<Map<String, Object>> selectMemoByTop(String projectIdx); 
 	
 	
 }

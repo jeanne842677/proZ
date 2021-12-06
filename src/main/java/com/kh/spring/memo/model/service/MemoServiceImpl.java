@@ -77,8 +77,7 @@ public class MemoServiceImpl implements MemoService {
 	}
 
 	@Override
-	public List<Memo> selectMemoByTop(String projectIdx) {
-	
+	public List<Map<String, Object>> selectMemoByTop(String projectIdx) {
 		return memoRepository.selectMemoByTop(projectIdx);
 	}
 

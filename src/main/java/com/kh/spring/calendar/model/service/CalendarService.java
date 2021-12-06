@@ -17,4 +17,6 @@ public interface CalendarService {
 
 	List<Calendar> selectCalendarListByProjectIdx(String projectIdx);
 
+	void deleteCalendar(Calendar calendar);
+
 }

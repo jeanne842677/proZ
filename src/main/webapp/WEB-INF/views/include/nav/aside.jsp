@@ -18,10 +18,10 @@
 		<div class="offline">
 			<ul id="sortable2">
 				<c:forEach items="${ projectMemberList }" var="pm">
-					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}" data-auth-name="${pm.authName}" data-git="${ pm.git }" 
-						style="color:${ pm.profileColor }"><div class="onoffprofile"></div> ${ pm.nickname }
-
-					</li>
+					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}"
+						data-auth-name="${pm.authName}" data-git="${ pm.git }"
+						style="color:${ pm.profileColor }"><div class="onoffprofile"></div>
+						${ pm.nickname }</li>
 				</c:forEach>
 
 			</ul>
@@ -31,26 +31,47 @@
 	</div>
 </div>
 
-<div class="member-info" style=" width:300px; height:200px; z-index: 1000 ;  position: absolute; 
-	background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); display:none; flex-direction: column; align-items: center; ">
- <div class="profile-info" style="width:100%; height: 30% ; background-color: red;  border-radius: 5px 5px 0 0; ">
- 	
- </div>
- <div class="profile-info-img" style="width:60px ; height:60px; border-radius: 50px ;background-color: blue; position:relative; top:-30px"></div>
-	<div class="profile-info-content" style="display: flex ; flex-direction: column; align-items: center;  position: relative; top:-20px" >
-	<div class="profile-info-name" style="font-size: 20px">임지영</div>
-	<div class="profile-info-auth">권한</div>
-	<input class="profile-info-git" value="없음" disabled="disabled">
-</div>
-	
-</div>
+<div class="member-info"
+	style="width: 300px; height: 200px; z-index: 1000; position: absolute; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); display: none; flex-direction: column; align-items: center;">
+	<div class="profile-info"
+		style="width: 100%; height: 30%; background-color: red; border-radius: 5px 5px 0 0;">
 
-<div class="alert-popup" style="width:400px; height:300px; z-index: 4 ; position: absolute; display:none;
-background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); right:8px ; top:5px">
-
-
+	</div>
+	<div class="profile-info-img"
+		style="width: 60px; height: 60px; border-radius: 50px; background-color: blue; position: relative; top: -30px"></div>
+	<div class="profile-info-content"
+		style="display: flex; flex-direction: column; align-items: center; position: relative; top: -20px">
+		<div class="profile-info-name" style="font-size: 20px">임지영</div>
+		<div class="profile-info-auth">권한</div>
+		<input class="profile-info-git" value="없음" disabled="disabled">
+	</div>
 
 </div>
+
+<div class="alert-popup"
+	style="width: 400px; height: 300px; z-index: 4; position: absolute; display: none; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); right: 8px; top: 5px; flex-direction: column; align-items: center; overflow: auto;">
+	<div class="alarm-text"
+		style="width: 95%; margin: 5px; padding: 10px; height: 30px; display: flex; color: #292929;" >
+		🔔알림내역</div>
+	<c:set var="length" value="0"> </c:set>
+	<c:forEach items="${alarmList }" var="al" varStatus="status">
+		<c:if test="${ al.isLook == 0 }"> 
+			<c:set var="length" value="${ length+1 }"></c:set>
+		</c:if>
+		<div class="alarm" 
+			style="width: 95%; height: 100px; background-color: #eee; border-radius: 5px; display: flex; margin: 5px; padding
+			<c:if test="${ al.isLook == 1 }"> color:gray; </c:if>
+			">
+			<div class="alarm-content" style="margin: 5px;">
+				<b style="color:#666; font-size:13px;">${al.alType}</b>
+				<div class="al-content" style="color: #292929;">${al.alContent }</div>
+			</div>
+		</div>
+	</c:forEach>
+
+</div>
+
+
 
 <script>
 
@@ -117,7 +138,17 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
     	
     }else {
     	
+    	if($('.alert-popup').css('display')=='flex' ) {
+
+        	$('.new').text("0");
+    		$('.alarm').css('color' , 'gray');
+    	}
+    	 
+    	
+    	
     	$('.alert-popup').css('display' , 'none');
+    	
+    
     }
     
   
@@ -167,6 +198,26 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
 							let user = $('#' + userIdx);
 
 							$('.offline ul').append(user);
+						}else if(content.status="alarm") {
+							
+							let alr = content.alarm;
+							console.dir("알림들어옴");
+							
+							if(alr.userIdx == "${authentication.userIdx}") {
+
+								let alarmDiv = $('<div class="alarm" style="width:95% ; height: 50px; border-bottom: solid gray thin; display: flex"><div class="alarm-content"><b></b><div class="al-content"></div></div></div>')
+								alarmDiv.find('b').text(alr.alType);
+								alarmDiv.find('.al-content').text(alr.alContent);
+								$(".alarm-text").after(alarmDiv);
+								let newInt = parseInt($('.new').text());
+								$('.new').text(newInt+1);
+								
+								
+							}
+							
+							
+							
+							
 						}
 				
 					 	
@@ -214,6 +265,33 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
 	
 	window.addEventListener('beforeunload', (e) => {
 		disconnect();
+	})
+	
+	
+	$('.new').text("${length}");
+	
+	$('.bell-btn').on('click' , function() {
+		
+	 	
+    	fetch("/alarm/update/look" , {
+			
+			method : "POST",
+			headers :  {"Content-type" : "application/json; charset=UTF-8"},
+			body : JSON.stringify({
+				userIdx : "${authentication.userIdx}" ,
+				projectIdx : ${projectIdx}
+			
+				})
+			
+		}).then(res=> {
+			
+			
+			
+		})
+    	
+		
+		
+		
 	})
 	
 	

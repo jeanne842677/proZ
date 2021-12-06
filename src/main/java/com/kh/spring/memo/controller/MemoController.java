@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +49,8 @@ public class MemoController {
    public String boardForm(@PathVariable String projectIdx , Model model,
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
 		   				   @SessionAttribute("authentication") Member member,
-		   				   @RequestParam(value = "order") int order
-		   
-		   				   
+		   				   @RequestParam(value = "order") int order,
+		   				   HttpServletRequest request
 		   				) {
 	   
 	   List<Map<String,Object>> memoList =  new ArrayList<Map<String,Object>>();
@@ -66,16 +67,13 @@ public class MemoController {
 	   
 	   for (Map<String, Object> map : memoList) {
 		  map.replace("regDate", map.get("regDate").toString().substring(0,16));
-	}
+	   }
 	   System.out.println("memoList -------------------"+memoList);
-	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
-	   
-	   
-	   
+	   Map<String,Object> projectMember = (Map<String,Object>) request.getAttribute("projectMember");
 	   
 	   model.addAttribute("memoList",memoList);
 	   model.addAttribute("wsIdx",wsIdx);
-	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
+	   model.addAttribute("projectMember", projectMember);
 	   model.addAttribute("projectIdx",projectIdx);
 	   model.addAttribute("order",order);
 	   
@@ -92,7 +90,8 @@ public class MemoController {
    public String searchForm(@PathVariable String projectIdx , Model model,
 		   				   @RequestParam(value = "wsIdx") String wsIdx,
 		   				   @SessionAttribute("authentication") Member member,
-		   				   @PathVariable String  search
+		   				   @PathVariable String  search,
+		   				   HttpServletRequest request
 		   				   
 		   				) {
 	   List<Map<String, Object>> memoList = memoService.selectMemoBySearch(wsIdx,search);
@@ -102,11 +101,11 @@ public class MemoController {
 	   for (Map<String, Object> map : memoList) {
 		  map.replace("regDate", map.get("regDate").toString().substring(0,16));
 	   }
-	   ProjectMember projectMember = memoService.selectProjectMember(member.getUserIdx(),wsIdx);
+	   Map<String,Object> projectMember = (Map<String,Object>) request.getAttribute("projectMember");
 	   System.out.println("projectMember : " + projectMember);
 	   model.addAttribute("memoList",memoList);
 	   model.addAttribute("wsIdx",wsIdx);
-	   model.addAttribute("userPmIdx",projectMember.getPmIdx());
+	   model.addAttribute("projectMember",projectMember);
 	   
 	   return "/memo/memo" ;
 	   
@@ -122,8 +121,6 @@ public class MemoController {
 	   
 	   System.out.println("오기 전" + memo);
 	   Memo insertedMemo = memoService.insertMemo(memo, member);
-	   
-	 
 	   
 	   return JsonMaker.json(memo) ;
 	   

@@ -21,18 +21,23 @@
   	 
   	 <!-- 민협 11/23 -->
   	 <!-- A.MEMO_IDX, A.WS_IDX, PM_IDX, A.BG_COLOR, A.CONTENT, A.REG_DATE,B.NICKNAME -->
+
   	 <select id="selectMemoAndWriterByWsIdxAsc"  resultType="map">
-	  	select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR ,memo.reg_date,content,member.NICKNAME
-		from memo memo
-		inner join project_member member USING (PM_IDX)
-		where ws_idx = #{wsIdx} order by reg_date asc,memo_idx asc
+  	  	select * from (select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR , memo.reg_date,content,m.NICKNAME , f.save_path , f.rename_file_name , fl_idx
+        from memo memo
+        inner join project_member m USING (PM_IDX)
+        left join file_dto f on(m.user_idx = f.type_Idx))
+        where ws_Idx = #{wsIdx}
+        ORDER by (memo_IDX + 0) asc
   	 </select>
   	 
   	  <select id="selectMemoAndWriterByWsIdxDesc"  resultType="map">
-	  	select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR ,memo.reg_date,content,member.NICKNAME
-		from memo memo
-		inner join project_member member USING (PM_IDX)
-		where ws_idx = #{wsIdx} order by reg_date desc,memo_idx desc
+  	  	select * from (select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR , memo.reg_date,content,m.NICKNAME , f.save_path , f.rename_file_name , fl_idx
+        from memo memo
+        inner join project_member m USING (PM_IDX)
+        left join file_dto f on(m.user_idx = f.type_Idx))
+        where ws_Idx = #{wsIdx}
+        ORDER by (memo_IDX + 0) desc
   	 </select>
   	 
   	

@@ -611,7 +611,7 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
    		let fileType = $(this).parent().data('file-type');
    		
    		var x=new XMLHttpRequest();
-   		x.open("GET", fileUrl , true);
+   		x.open("GET","https://proz-cors.herokuapp.com/"+ fileUrl , true);
    		x.responseType = 'blob';
    		x.onload=function(e){download(x.response, fileName, fileType ); }
    		x.send();
@@ -693,7 +693,7 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
 		                          scrollFixedBottom();
 		                          newChat.find('.img-section').off().on('click', function () {
 		                           		var x=new XMLHttpRequest();
-		                           		x.open("GET", url , true);
+		                           		x.open("GET", "https://proz-cors.herokuapp.com/" + url , true);
 		                           		x.responseType = 'blob';
 		                           		x.onload=function(e){download(x.response, content.content, content.fileType ); }
 		                           		
@@ -728,7 +728,7 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
 		                           scrollFixedBottom();
 		                           newChat.find('.img-section').off().on('click', function () {
 		                            		var x=new XMLHttpRequest();
-		                            		x.open("GET", url , true);
+		                            		x.open("GET", "https://proz-cors.herokuapp.com/" + url , true);
 		                            		x.responseType = 'blob';
 		                            		x.onload=function(e){download(x.response, content.content, content.fileType ); }
 		                            		
