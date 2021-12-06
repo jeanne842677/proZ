@@ -485,3 +485,19 @@ aside {
     margin-right: 10px;
     border-radius: 30px;
 }
+
+
+
+.alert-popup::-webkit-scrollbar {
+    width: 6px;
+}
+.alert-popup::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+.alert-popup::-webkit-scrollbar-track {
+    background-color: grey;
+}
+
+.alert-popup::-webkit-scrollbar {
+    width: 6px;
+}
