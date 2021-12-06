@@ -268,7 +268,6 @@ margin-bottom:0;
             width:47%;
             height:100%;
             background-color:#fff;
-            border-radius: 10px;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
             display:flex;
             flex-direction: column;
@@ -300,8 +299,9 @@ margin-bottom:0;
         .boardcon{
             width:95%;
             height:25%;
-            border-radius: 10px;
+            border-radius: 5px;
             border:solid 1px #ccc;
+          
         }
 
         
@@ -447,7 +447,7 @@ margin-bottom:0;
        .replyCon{
        	display: flex;
 	    height: 100%;
-	    width: 75%;
+	    width: 65%;
 	    align-items: center;
        }
        
@@ -465,6 +465,7 @@ margin-bottom:0;
 		    justify-content: space-around;
 		    height: 100%;
 		    padding: 5px;
+		    border-radius: 5px;
        }
 
 	.user-photo{
@@ -484,6 +485,17 @@ margin-bottom:0;
 }
 	
 	}
+	 .replyCon{
+          display:flex;
+       }
+       .profile-nickname{
+          display:flex;
+          
+       }
+       div{
+       	border:solid thin;
+       }
+   }
     </style>
 </head>
 <body>
@@ -536,7 +548,7 @@ margin-bottom:0;
 	                             </c:if> 
 	                                     <c:forEach items="${postList}" var="post">
 	                                    	<div class="boardcon">
-	                                        <div class="card" data-sort="${post.sort}" data-board-post-idx="${post.postIdx}">
+	                                        <div class="card" data-sort="${post.sort}" data-board-post-idx="${post.postIdx}" style="background-color:${post.postColor}">
 	                                            <div class="card-subject">${post.postTitle}</div>
 	                                            <div class="profile-img"><div class="user-photo"></div></div>
 	                                        </div>
@@ -555,7 +567,7 @@ margin-bottom:0;
                                 <div class="commentcon" data-reply-post-idx="${reply.postIdx}">
                                 
                                 	<div class="replyCon">${reply.replyContent}</div>
-                                	<div class="profile-img"><div class="commentnick">이거슨닉네임</div></div>
+                                   <div class="profile-nickname" style="color:${reply.profileColor}">${reply.nickname}</div>
                                 	
                                 </div>
                                 </c:forEach>
