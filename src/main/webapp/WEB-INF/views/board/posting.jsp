@@ -356,7 +356,7 @@ function dropHandler(ev) {
 			  // img일 경우 경로첨부 및 immutableDiv에 append 처리 
 			  let img = document.createElement('img');
 			  // 최대 크기제한, 500px 
-			  img.style.maxWidth = '500px';
+			  img.style.maxWidth = '400px';
 			  img.style.margin = '20px 10px 20px 10px';
 			  img.setAttribute('src', '/file/' + res.savePath + res.renameFileName);
 			  immutableDiv.append(img); 
