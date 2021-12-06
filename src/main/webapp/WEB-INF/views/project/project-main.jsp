@@ -753,10 +753,10 @@ margin-bottom:0;
     
     	let today = new Date();
 		let events = [];
-		
+		/* 		
 		<c:forEach items="${calendarList}" var="cl">
     	
-/*         var data = {                    
+        var data = {                    
                 id: "${cl.calIdx}",
                 title: "${cl.calTitle}",
                 start: "${cl.startDate}",
