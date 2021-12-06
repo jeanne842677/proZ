@@ -35,6 +35,7 @@
 		<mapper resource="mybatis/mapper/cashMapper.xml"/>
 		<mapper resource="mybatis/mapper/calendarMapper.xml"/>
 		<mapper resource="mybatis/mapper/loadmapMapper.xml"/>
+		<mapper resource="mybatis/mapper/alarmMapper.xml"/>
 	</mappers>  
 
   </configuration>

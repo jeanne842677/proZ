@@ -175,16 +175,16 @@ public class BoardController {
 		Post newPost = boardService.selectPostByPostIdx(postIdx);
 
 		// ++++ 수정, 모델에 boardName 정보를 넣어야 한다.
-		model.addAttribute("post", newPost);
-		model.addAttribute("isSamePM", newPost.getPmIdx());
+		model.addAttribute("post", newPost); 
+		model.addAttribute("isSamePM", newPost.getBdIdx());
 
-		Board board = boardService.selectBoardByBdIdx(bdIdx);
+		Board board = boardService.selectBoardByBdIdx(newPost.getBdIdx());
 		model.addAttribute("board", board);
-
 		// 2. 댓글 기능을 위해 댓글 목록을 불러온다.
-		List<Map<String,Object>> replyMember = CamelMap.changeListMap(boardService.selectReplyByProjectMember(postIdx));
-        System.out.println("replyMember :"+replyMember);
-        model.addAttribute("replyMember",replyMember);
+		List<Map<String, Object>> replyMember = CamelMap
+				.changeListMap(boardService.selectReplyByProjectMember(postIdx));
+		System.out.println("replyMember :" + replyMember);
+		model.addAttribute("replyMember", replyMember);
 
 		// 3. post로 return한다.
 		return "board/post";
@@ -251,18 +251,16 @@ public class BoardController {
 	// <최윤지 코드블록>
 	// -----------------------------------------------------
 
+	// 리플 추가
 	@PostMapping("post/add/reply")
 	@ResponseBody
-	public String addReply(@RequestBody Reply reply, @SessionAttribute("authentication") Member member, Model model) {
-
-		System.out.println("리플 :::" + reply);
-		// insert 작성
+	public Reply addReply(@RequestBody Reply reply, @SessionAttribute("authentication") Member member, Model model) {
 
 		boardService.insertReply(reply);
 
-		System.out.println(reply);
+		System.out.println("인서트 리플::::::::" + reply);
 
-		return "board/post";
+		return reply;
 	}
 
 	@PostMapping("post/delete/reply")

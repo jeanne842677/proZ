@@ -13,8 +13,10 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import com.kh.spring.member.model.dto.Member;
+import com.kh.spring.projectmember.dto.Alarm;
 import com.kh.spring.projectmember.dto.ProjectMemberSession;
 import com.kh.spring.projectmember.model.repository.ProjectMemberRepository;
+import com.kh.spring.projectmember.model.service.ProjectMemberService;
 
 @Controller
 public class ProjectMemberController {
@@ -23,6 +25,8 @@ public class ProjectMemberController {
 	@Autowired
 	ProjectMemberRepository pm;
 	
+	@Autowired
+	ProjectMemberService projectMemberService;
 
     @MessageMapping("/project/{projectIdx}") //이 주소로 보낸 애들한테 메세지를 받음
     @SendTo("/online/project/{projectIdx}") //이 주소인 애한테 메세지를 보냄
@@ -70,6 +74,31 @@ public class ProjectMemberController {
     	
     	
     	return res;
+    }
+    
+    
+    
+    @MessageMapping("/reply-alert/{projectIdx}")
+    @SendTo("/online/project/{projectIdx}") //이 주소인 애한테 메세지를 보냄
+    public Map<String, Object>  replyAlert(@DestinationVariable("projectIdx") String projectIdx , 
+    		Map<String , String> reply) {
+    	
+    	
+    	System.out.println("메세지 들어옴!!!");
+    	System.out.println(reply);
+    	
+    	Alarm alarm =projectMemberService.updateReplyAlarm(reply);
+
+    	Map<String, Object> res = new HashMap<>();
+    	res.put("status", "alarm");
+    	res.put("alarm", alarm);
+    	
+    	
+    	
+    	
+    	
+    	return res;
+    	
     }
     
     
