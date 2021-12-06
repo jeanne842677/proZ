@@ -81,7 +81,7 @@
             <footer>
                 <div class="footleft">
                     <div class="footdes1">project by DragonBall.</div>
-                    <div class="footdes2">Lim Ji-young , Kang Min-hyup ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yun-ji</div>
+                    <div class="footdes2">Lim Ji-young , Kang Min-hyup ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Choi Yun-ji</div>
                 </div>
                 <div class="footright">Email_ lucky007proz@gmail.com</div>
 

@@ -133,6 +133,16 @@
             padding: 10px;
             font-size: 15px;
         }
+        
+        .terms-box::-webkit-scrollbar {
+		    width: 6px;
+		}
+		.terms-box::-webkit-scrollbar-thumb {
+		    background-color: #000000;
+		}
+		.terms-box::-webkit-scrollbar-track {
+		    background-color: grey;
+		}
 
         .terms-wrap {
             width: 392px;
@@ -239,7 +249,7 @@
         <div class="content-wrap">
             <section>
                 <div class="logo-wrap">
-                <a href="/member/logout.do">로그아웃</a>
+                
                     <img src="/resources/img/logo-white.png" height="100%">
                 </div>
                 <form:form modelAttribute="joinForm" 
@@ -262,18 +272,21 @@
 
 
                     <label for="password" id="password-label">02-1. 사용하실 비밀번호를 입력하세요. </label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="8글자 이상의 숫자 영문자 특수문자 조합 입니다."
+                    <input type="password" class="pw1 pw form-control" id="password" name="password" placeholder="8글자 이상의 숫자 영문자 특수문자 조합 입니다."
                         <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if>  required/>
                         <form:errors path="password" cssClass="valid-msg"/>
                    
-                   <%--  <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
-                    <input type="password" class="form-control" id="password-check" 
+                   <label for="password-check" id="password-check-label">02-2. 비밀번호 재확인</label>
+                    <input type="password" class="pw2 pw form-control" id="password-check" placeholder="비밀번호를 다시 입력해주세요."
                         <c:if test="${empty error.password}">
                             value="${joinForm.password}"   
                         </c:if> 
-                    required/>/ --%>
+                    required/>                  
+                
+               <div class="alert-fail" style="display: none;">패스워드가 틀렸습니다.</div>
+               <div class="alert" style="display: none;">패스워드가 일치합니다.</div>
 
 
                     <label for="nickname" id="nickname-label" >03. 사용하실 닉네임을 입력하세요.</label>
@@ -285,10 +298,15 @@
 
                     <label id="terms-label">05. 이용 약관에 동의 후 회원가입 버튼을 클릭하세요. </label>
                     <div class="terms-box">
-                        목숨을 미인을 길지 이상 보이는 넣는 우리는 새 없으면, 이것이다. 관현악이며, 같은 청춘에서만 거친 그들의 때까지 이상은 군영과 찾아 것이다. 인류의 우는 하는 전인 못할
-                        피는 청춘은 싶이 오직 끓는다. 아니더면, 기쁘며, 사람은 그들에게 같이 청춘의 공자는 싸인 있다. 품으며, 광야에서 시들어 영락과 원질이 운다. 품고 인류의 그들의 온갖
-                        피가 작고 황금시대를 것이다. 오아이스도 있을 작고 자신과 가슴에 봄바람이다. 그와 구하기 되려니와, 인도하겠다는 사라지지 열매를 너의 살 있는가? 만천하의 간에 원대하고,
-                        새가 되는 꾸며 보라. 이 얼마나 같으며, 이상이 가지에 피고, 이상 목숨을 위하여서.
+                        제1장 총칙<br>
+			제1조 (목적)<br>
+			이 약관은 proZ (이하 "프로제트"라 합니다) 홈페이지가 제공하는 통합회원 서비스(이하 "서비스"라 합니다)를 이용함에 있어 이용자와 proZ간의 권리·의무 및 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.<br>
+			
+			제2조 (약관의 효력 및 변경)<br>
+			① 이 약관은 서비스 화면에 게시하거나 기타의 방법으로 공지함으로써 이용자에게 공시하고, 이에 동의한 이용자가 서비스에 가입함으로써 효력이 발생합니다.<br>
+			② proZ는 필요하다고 인정되는 경우 이 약관의 내용을 변경할 수 있으며, 변경된 약관은 서비스 화면에 공지함으로써 이용자가 직접 확인할 수 있도록 할 것입니다.<br>
+			③ 이용자는 변경된 약관에 동의하지 않으실 경우 서비스 이용을 중단하고 본인의 회원등록을 취소할 수 있으며, 계속 사용하시는 경우에는 약관 변경에 동의한 것으로 간주되며 변경된 약관은 전항과 같은 방법으로 효력이 발생합니다.<br>
+			④ 이용자가 이 약관의 내용에 동의하는 경우 서울시의 서비스 제공행위 및 이용자의 서비스 이용행위에는 이 약관이 우선적으로 적용될 것입니다. 이 약관에 명시되지 않은 사항에 대해서는 전기통신기본법, 전기통신사업법, 정보통신망이용촉진및정보보호등에관한법률, 방송통신심의위원회 심의규정, 정보통신 윤리강령, 프로그램 보호법 등 기타 대한민국의 관련법령과 상관습에 의합니다.
                     </div>
                     <div class="form-check terms-wrap">
                         <input class="form-check-input" type="checkbox" value="" id="terms-agree" required>
@@ -315,6 +333,41 @@
 
     </div>
 
+<script type="text/javascript">
+$('.pw').focusout(function() {
+    let pw1 = $('.pw1').val();
+    let pw2 = $('.pw2').val();
+    
+    if(pw1 & pw2) {
+        return;
+    }
+    
+    if(pw1 == "" || pw2 =="" ) {
+        $('.alert-fail').css('display' , 'none');
+        $('.alert').css('display' , 'none');
+        $("#join-impl").attr("disabled", "disabled");    
+    }
+
+
+    if(pw1 != pw2 ) {
+        $('.alert-fail').css('display' , 'block');
+        $('.alert-fail').css('color' , 'red');
+        $('.alert').css('display' , 'none');
+        $("#join-impl").attr("disabled", "disabled");
+
+       
+    }else if(pw1 == pw2){
+        $('.alert').css('display' , 'block');
+         $('.alert').css('color' , 'red');
+         $('.alert-fail').css('display' , 'none');
+         $("#join-impl").removeAttr("disabled");
+
+        
+    }
+    
+
+})
+</script>
 
 
 </body>
