@@ -138,10 +138,17 @@
     	
     }else {
     	
+    	if($('.alert-popup').css('display')=='flex' ) {
+
+        	$('.new').text("0");
+    		$('.alarm').css('color' , 'gray');
+    	}
+    	 
+    	
+    	
     	$('.alert-popup').css('display' , 'none');
-    	$('.new').text("0");
-		
-		$('.alarm').css('color' , 'gray');
+    	
+    
     }
     
   
@@ -194,6 +201,7 @@
 						}else if(content.status="alarm") {
 							
 							let alr = content.alarm;
+							console.dir("알림들어옴");
 							
 							if(alr.userIdx == "${authentication.userIdx}") {
 
@@ -270,7 +278,8 @@
 			method : "POST",
 			headers :  {"Content-type" : "application/json; charset=UTF-8"},
 			body : JSON.stringify({
-				userIdx : "${authentication.userIdx}"
+				userIdx : "${authentication.userIdx}" ,
+				projectIdx : ${projectIdx}
 			
 				})
 			

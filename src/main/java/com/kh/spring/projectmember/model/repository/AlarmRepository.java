@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -22,7 +23,7 @@ public interface AlarmRepository {
 	void insetAlarm(Alarm alarm);
 	
 	@Select("select * from (select * from alarm where user_Idx =#{userIdx} order by al_idx desc) where  project_idx = #{projectIdx} and rownum < 10")
-	List<Alarm> selectAlramListByUserIdx(String userIdx);
+	List<Alarm> selectAlramListByUserIdx(@Param("userIdx") String userIdx , @Param("projectIdx") String projectIdx);
 
 	
 	@Update("update alarm set is_look = 1 where user_idx = #{userIdx} and project_idx = #{projectIdx}")

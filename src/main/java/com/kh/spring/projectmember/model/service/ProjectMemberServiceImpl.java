@@ -29,8 +29,15 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
 		String postIdx = reply.get("postIdx");
 		
 		
-		Map<String, Object> data = CamelMap.changeMap(alarmRepository.selectPostAndReplyJoin(replyIdx));
 		
+		Map<String, Object> data = CamelMap.changeMap(alarmRepository.selectPostAndReplyJoin(replyIdx));
+		if(replyUserIdx.equals((String)data.get("userIdx"))) {
+			
+			return null;
+			
+		}
+
+			
 		String postTitle = (String )data.get("postTitle");
 		if(postTitle.length() >=11 ) {
 			postTitle = postTitle.substring(0, 10) + "...";

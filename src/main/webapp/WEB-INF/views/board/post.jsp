@@ -242,6 +242,9 @@ $(".comment-textArea-submit-btn").off().on('click',function () {
 
 		}));
     	
+    }).then(res=>{
+
+        location.reload();
     })
 
  })
