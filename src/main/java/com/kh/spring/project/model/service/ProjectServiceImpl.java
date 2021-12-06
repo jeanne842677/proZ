@@ -13,8 +13,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.kh.spring.board.model.dto.Post;
-import com.kh.spring.board.model.dto.Reply;
 import com.kh.spring.board.model.repository.BoardRepository;
 import com.kh.spring.calendar.model.dto.Calendar;
 import com.kh.spring.calendar.model.repository.CalendarRepository;
@@ -25,7 +23,6 @@ import com.kh.spring.common.mail.MailSender;
 import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
-import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.memo.model.repository.MemoRepository;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;

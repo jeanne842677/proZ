@@ -208,9 +208,7 @@ public class ProjectController {
 
       return "complete";
    };
-
-   // =
-
+   
    // ==========================================지영 작업 end=====================
 
    // ============================================민협 작업
@@ -320,7 +318,7 @@ public class ProjectController {
       
       return "project/project-list";
    }
-   /////////////////////////////////////////////은비 여기 바꿨어요!!!!@@
+
    @PostMapping("project-list")
    @ResponseBody
    public String createProject(@RequestBody Project project, @SessionAttribute("authentication") Member member,Model model) {
@@ -353,7 +351,6 @@ public class ProjectController {
       return "project/project-main"; 
    }
    
-   ///////은비 11월 19일 워크스페이스 작업
    
    @GetMapping("setting/workspace-management/{projectIdx}")
    public String settingWorkspace(Model model, @PathVariable String projectIdx, @SessionAttribute(value = "authentication") Member member) {
@@ -520,11 +517,7 @@ public class ProjectController {
          e.printStackTrace();
          return "failed";
       }
-      //2) profileImg는 join을 통해 추출, session 업데이트 불필요
-      logger.debug(fileUploaded.getSavePath());
-      logger.debug(fileUploaded.getRenameFileName());
-      
-      System.out.println("파일 저장 경로  : " + fileUploaded.getSavePath() +fileUploaded.getRenameFileName());
+
       return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
    }
    

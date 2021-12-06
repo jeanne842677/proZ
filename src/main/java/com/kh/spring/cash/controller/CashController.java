@@ -39,8 +39,6 @@ public class CashController {
 		List<Map<String,Object>> cashNameList = new ArrayList<Map<String,Object>>();
 		cashNameList = CamelMap.changeListMap(cashService.selectCashNameListByProjectIdx(projectIdx));
 		
-		//[{멤버수 추가, 12/11}, {알림 기능, 12/11}]
-		System.out.println(cashNameList);
 		for(Map<String,Object> cashName : cashNameList) {
 			String item = (String) cashName.get("cashName");
 		
