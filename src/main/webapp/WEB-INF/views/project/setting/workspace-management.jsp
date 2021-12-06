@@ -194,22 +194,29 @@
 
 <script type="text/javascript" src="/resources/js/setting/workspace-management.js"></script>
 <script>
+let thisCategory;
+let input;
+let workspaceCnt = ${workspaceListCnt};
+let totalCnt = $(".workspace-cnt").data('total-cnt');
+
 //1. (기존 존재항목) 삭제 버튼을 누르면 -> 모달 '삭제하시겠습니까?' -> 비동기로 반영
-$(".category-delete-button").click(function(){
-  deleteModal.modal.find('.first-button').on('click', () => { 
-	  $(this).closest(".category-wrapper").data('state','hide');
-	  $(this).closest(".category-wrapper").hide(); 
-    
+$(".category-delete-button").on('click', function(e){
+	let agree = $(this);
+  deleteModal.modal.find('.first-button').off().on('click', () => { 
+	  agree.closest(".category-wrapper").data('state','hide');
+	  agree.closest(".category-wrapper").hide(); 
+	  
+	  workspaceCnt--;
+	  
+	  deleteModal.modal.hide();
+	  $('.myWorkspace-cnt').text(workspaceCnt);
   })
 })
 
 
 // 2. (수정항목) 카테고리 추가 및 삭제 -> 비동기로 반영
 
-let thisCategory;
-let input;
-let workspaceCnt = ${workspaceListCnt};
-let totalCnt = $(".workspace-cnt").data('total-cnt');
+
 
 
 
@@ -218,8 +225,9 @@ $(deleteModal.modal).find('.first-button').on('click' , function() {
     return;
   }
   thisCategory.remove();
+  
   workspaceCnt--;
-  $('.myWorkspaceCnt').text(workspaceCnt);
+  $('.myWorkspace-cnt').text(workspaceCnt);
 });
 
 //카테고리 추가 메서드
@@ -239,6 +247,7 @@ function addCategory(){
   newCategory.find(".category-input-text").attr('value',input);
   
   workspaceCnt++;
+  $('.myWorkspace-cnt').text(workspaceCnt);
   switch(selectOption){
   case '메모' :
 	  newCategory.find(".search-icon").addClass("far fa-sticky-note fa-2x");
@@ -266,7 +275,6 @@ function addCategory(){
   
   newCategory.appendTo(".all-category-list");
   newCategory.removeClass("new-category");
-  $('.myWorkspaceCnt').text(workspaceCnt);
 
 
   deleteModal.makeModalBtn(newCategory.find(".category-delete-button"));
@@ -311,10 +319,8 @@ beforeSaveModal.modal.find(".first-button").on('click', function() {
 		let workWrite = $(this).children().find(".category-input-text").val();
 		let workWsIdx = $(this).data("wsidx");
 
-		console.log(workWsIdx);
 		let workData = {"workState": workState, "workOption": workOption, "workWrite": workWrite, "workWsIdx": workWsIdx};
 		workspaceList.push(workData);
-		console.log(workspaceList);
 	});
 
 	let projectUri = "/project/setting/workspace-management/" + "${projectIdx}";
@@ -324,8 +330,9 @@ beforeSaveModal.modal.find(".first-button").on('click', function() {
 		headers: { "Content-type": "application/json; charset=UTF-8" },
 		body: JSON.stringify(workspaceList)
 	}).then(function(){
-		saveModal.viewModal();
+		location.reload();
 	});
+	
 });
 
 

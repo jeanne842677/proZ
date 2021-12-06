@@ -161,7 +161,7 @@ section{
 			pay_method : 'card',
 			merchant_uid : 'merchant_' + ${projectIdx} + item_name,
 			name : item_name,
-			amount : 100,
+			amount : charge,
 			buyer_name : '닉네임 : ' + '${buyerInfo.nickname}' + ', 멤버 번호 : ' + '${buyerInfo.pmIdx}'
 		}, function(rsp){
 			console.log(rsp);

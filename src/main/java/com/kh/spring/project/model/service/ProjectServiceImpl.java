@@ -284,18 +284,19 @@ public class ProjectServiceImpl implements ProjectService {
    }
 
    @Override
-   public int insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
+   public String insertProject(String proName, String proDescription, String inviteCode, String userIdx) {
       Project project = new Project();
       project.setProName(proName);
       project.setProDescription(proDescription);
       project.setInviteCode(inviteCode);
-      int res = projectRepository.insertProject(project);
+      
+      projectRepository.insertProject(project);
       projectRepository.insertRole();
       projectRepository.insertAdmin(userIdx);
       
-      
-      System.out.println("서비스 : 제발 되어라" + project.getProjectIdx());
-      return res;
+      //간지철철..소름이다.
+      System.out.println("000000000000" + project.getProjectIdx());
+      return project.getProjectIdx();
       
       
    }
@@ -326,6 +327,9 @@ public class ProjectServiceImpl implements ProjectService {
    public void updateWorkspace(List<Map<String, Object>> workspaceList, String projectIdx) {//트랜잭션 문제(open,close)
       int sort = 1;
 
+      if(workspaceList.isEmpty()) {
+    	  return;
+      }
       for (Map<String, Object> map : workspaceList) {
     	  String wsIdx = map.get("workWsIdx").toString();
           String wsType = map.get("workOption").toString();
@@ -343,8 +347,8 @@ public class ProjectServiceImpl implements ProjectService {
            }
         }
         // 더미 data 전부 삭제
-        projectRepository.deleteNonWorkspace(sort);
-       
+      	projectRepository.deleteNonWorkspace(sort, projectIdx);
+      	  
      }
 
 		@Override
@@ -352,8 +356,8 @@ public class ProjectServiceImpl implements ProjectService {
 			Map<String, Object> mainData = new HashMap<String, Object>();
 
 			List<Map<String, Object>> workspace = CamelMap.changeListMap(projectRepository.selectWorkspaceListByProjectIdx(projectIdx));
-			List<Memo> mainMemoList = memoRepository.selectMemoByTop(projectIdx);
-			List<Post> postList = boardRepository.selectBoardByTop(projectIdx);
+			List<Map<String,Object>> mainMemoList = CamelMap.changeListMap(memoRepository.selectMemoByTop(projectIdx));
+	         List<Map<String,Object>> postList = CamelMap.changeListMap(boardRepository.selectBoardByTop(projectIdx));
 			List<Map<String, Object>> replyList =CamelMap.changeListMap(boardRepository.selectReplyByTop(projectIdx));
 			List<Calendar> calendarList = calendarRepository.selectCalendarListByProjectIdx(projectIdx);
 

@@ -128,8 +128,7 @@
 
 	<div class="con1 clone">
 		<div class="conimg">
-			<a href="${project.projectIdx}"> <img src="/resources/img/no-img.png" width="100%" height="100%">
-			</a>
+			<a href="" class="clone-href"> <img src="/resources/img/no-img.png" width="100%" height="100%"> </a>
 		</div>
 		<div class="con1title">
 			<div class="projecttit">${project.proName}</div>
@@ -163,7 +162,6 @@
 	
 	secondModal.setConfirmFnc((e) => {
 		
-		
 		let projectTitle = newProject.getInputValue(); //제목 input value
 		let projectSummary = $("#input-summary").val(); // 설명 input value
 
@@ -182,7 +180,13 @@
 		fetch('/project/project-list', projectData)
 			.then(response => response.json())
 			.then((data) => {
-				console.log('hi');
+				let clone = $(".clone").clone();
+				
+				clone.find(".projecttit").html(projectTitle);
+				clone.find(".summary").html(projectSummary);
+				clone.toggleClass("clone")
+				clone.find('.clone-href').attr("href", data);
+				clone.appendTo(".tem-wrap");
 			});
 		
 		
@@ -192,15 +196,9 @@
 		test.find("#input-summary").val('');
 		//여기서 데이터 보내기
 		
-		let clone = $(".clone").clone();
 		
-		clone.find(".projecttit").html(projectTitle);
-		clone.find(".summary").html(projectSummary);
-		clone.toggleClass("clone")
 		
-		clone.appendTo(".tem-wrap");
 		
-		location.reload()
 		
 		});
 	

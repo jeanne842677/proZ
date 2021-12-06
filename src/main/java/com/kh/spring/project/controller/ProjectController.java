@@ -320,17 +320,20 @@ public class ProjectController {
       
       return "project/project-list";
    }
-
+   /////////////////////////////////////////////은비 여기 바꿨어요!!!!@@
    @PostMapping("project-list")
    @ResponseBody
-   public void createProject(@RequestBody Project project, @SessionAttribute("authentication") Member member) {
+   public String createProject(@RequestBody Project project, @SessionAttribute("authentication") Member member,Model model) {
 
       String proName = project.getProName();
       String proDescription = project.getProDescription();
       String userIdx = member.getUserIdx();
       String inviteCode = UUID.randomUUID().toString();
 
-      projectService.insertProject(proName, proDescription, inviteCode, userIdx);
+      String newProjectIdx = projectService.insertProject(proName, proDescription, inviteCode, userIdx);
+      
+      return newProjectIdx;
+      
    };
 
    @PostMapping("{projectIdx}") 

@@ -140,10 +140,13 @@
 
   	<!-- 은비 작성 시작  -->
   	<insert id="insertProject" useGeneratedKeys="true" keyProperty="projectIdx" parameterType="com.kh.spring.project.model.dto.Project">
+  		<selectKey keyProperty="projectIdx" resultType="string" order="BEFORE">
+  			select sc_proz_idx.nextval from dual
+  		</selectKey>
   	insert into project
   		(project_idx, pro_name, invite_code, pro_description)
   	values
-  		(sc_proz_idx.nextval, #{proName}, #{inviteCode}, #{proDescription})
+  		(#{projectIdx}, #{proName}, #{inviteCode}, #{proDescription})
   	</insert>
   	
   	

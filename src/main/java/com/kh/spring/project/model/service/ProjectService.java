@@ -70,7 +70,7 @@ public interface ProjectService {
 /////////////////은비가 작성한 코드 시작
    List<Project> selectProjectByUserIdx(String userIdx);
 
-   int insertProject(String proName, String proDescription, String inviteCode, String userIdx);
+   String insertProject(String proName, String proDescription, String inviteCode, String userIdx);
 
    List<String> selectProjectIdxByUserIdx(String userIdx);
 
