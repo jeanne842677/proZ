@@ -39,11 +39,11 @@
 <div class="member-info"
 	style="width: 300px; height: 200px; z-index: 1000; position: absolute; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); display: none; flex-direction: column; align-items: center;">
 	<div class="profile-info"
-		style="width: 100%; height: 30%; background-color: red; border-radius: 5px 5px 0 0;">
-
-	</div>
+		style="width: 100%; height: 30%; background-color: red; border-radius: 5px 5px 0 0;"></div>
 	<div class="profile-info-img"
-		style="width: 60px; height: 60px; border-radius: 50px; background-color: blue; position: relative; top: -30px"></div>
+		style="width: 60px; height: 60px; border-radius: 50px; background-color: blue; position: relative; top: -30px">
+		<img class="inner-profile-info-img" style="width: 100%; height:100%; border-radius: 50px;">
+		</div>
 	<div class="profile-info-content"
 		style="display: flex; flex-direction: column; align-items: center; position: relative; top: -20px">
 		<div class="profile-info-name" style="font-size: 20px">임지영</div>
@@ -92,6 +92,7 @@
 		
 		$(this).on('click' , function() {
 			
+			
 			let mem = $(this);
 			var divX = mem.offset().left;
 			var divY = mem.offset().top-60;
@@ -102,6 +103,13 @@
 			
 			$('.profile-info')
 			.css('backgroundColor' , mem.css('color') );
+			
+			
+			if(mem.find(".profile-img").attr('src')) {
+				$('.inner-profile-info-img').attr('src', mem.find(".profile-img").attr('src'))
+			}else{
+				$('.inner-profile-info-img').attr('src', '')
+			}
 			
 			$('.profile-info-name').text( mem.text() ).css('color' , mem.css('color'))
 			$('.profile-info-auth').text( mem.data('auth-name'))

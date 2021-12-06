@@ -1,6 +1,5 @@
 package com.kh.spring.chat.model.dto;
 
-import java.util.Date;
 
 public class Chat {
 
@@ -16,7 +15,14 @@ public class Chat {
 	private String filePath;
 	private String dataUrl;
 	private String fileType;
+	private String profileImgPath;
 	
+	public String getProfileFilePath() {
+		return profileImgPath;
+	}
+	public void setProfileFilePath(String profileFilePath) {
+		this.profileImgPath = profileFilePath;
+	}
 	public int getChIdx() {
 		return chIdx;
 	}
@@ -87,8 +93,10 @@ public class Chat {
 	public String toString() {
 		return "Chat [chIdx=" + chIdx + ", wsIdx=" + wsIdx + ", chName=" + chName + ", content=" + content
 				+ ", regDate=" + regDate + ", nickname=" + nickname + ", pmIdx=" + pmIdx + ", isFile=" + isFile
-				+ ", filePath=" + filePath + ", dataUrl=" + dataUrl + ", fileType=" + fileType + "]";
+				+ ", filePath=" + filePath + ", dataUrl=" + dataUrl + ", fileType=" + fileType + ", profileFilePath="
+				+ profileImgPath + "]";
 	}
+	
 	
 	
 	

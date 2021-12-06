@@ -348,14 +348,14 @@ cursor: pointer;
                            </div>
                            <div class="user-picture">
                               <i class="fas fa-user-circle fa-3x"
-                                 style="color: lightskyblue"></i>
+                                 style="color: #7B68EE;"></i>
                            </div>
                         </div>
                      </c:when>
                      <c:otherwise>
                         <div class="chat-block chat-other">
                         <div class="user-picture">
-                           <i class="fas fa-user-circle fa-3x" style="color: lightskyblue"></i>
+                           <i class="fas fa-user-circle fa-3x" style="color: #ccc"></i>
                            <!-- 이미지로 나중에 변경  -->
                         </div>
                         <div class="chat-information">
@@ -404,7 +404,7 @@ cursor: pointer;
                 
                   <div class="clone-other"> <!-- 복제할코드 -->
                     <div class ="user-picture">
-                      <i class="fas fa-user-circle fa-3x" style="color:lightskyblue"></i>
+                      <i class="fas fa-user-circle fa-3x" style="color:#ccc"></i>
                     </div>
                     <div class ="chat-information">
                       <div class="user">
@@ -427,7 +427,7 @@ cursor: pointer;
                       </div>
                     </div>
                     <div class ="user-picture">
-                      <i class="fas fa-user-circle fa-3x" style="color:lightskyblue"></i>
+                      <i class="fas fa-user-circle fa-3x" style="color:#7B68EE"></i>
                     </div>
                   </div>
                 
@@ -442,8 +442,7 @@ cursor: pointer;
 			<ul id="sortable">
 				<!-- <li class="member"><i class="fas fa-user-circle" style="color:#ffc107"></i>3조_길예진</li>
                                     <li class="member"><i class="fas fa-user-circle" style="color:#17a2b8"></i>3조_길예진</li>
-                                    <li class="member"><i class="fas fa-user-circle" style="color:#dc3538"></i>3조_길예진</li>
- -->
+                                    <li class="member"><i class="fas fa-user-circle" style="color:#dc3538"></i>3조_길예진</li>-->
 			</ul>
 
 		</div>
@@ -454,7 +453,6 @@ cursor: pointer;
 				<c:forEach items="${ projectMemberList }" var="pm">
 					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}" data-auth-name="${pm.authName}" data-git="${ pm.git }" 
 						style="color:${ pm.profileColor }"><div class="onoffprofile"></div> ${ pm.nickname }
-
 					</li>
 				</c:forEach>
 

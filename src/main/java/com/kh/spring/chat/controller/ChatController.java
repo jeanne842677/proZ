@@ -45,6 +45,7 @@ public class ChatController {
     public Chat sendChatMessage(@DestinationVariable("wsIdx") String wsIdx
        ,Chat chat, SimpMessageHeaderAccessor headerAccessor, Principal principal) {
         
+    	
         chatService.insertChat(chat);
         
         return chat; //response BODY 느낌
@@ -57,37 +58,7 @@ public class ChatController {
     public String chatting(Model model, @Param(value = "wsIdx") String wsIdx , @SessionAttribute("authentication") Member member,
                       @PathVariable String projectIdx, HttpServletRequest request) {
        
-       
-       @SuppressWarnings("unchecked")
-      List<Workspace> workspaceList = (List<Workspace>) request.getAttribute("workspaceList");
-       Workspace workspace = new Workspace();
-       for (Workspace ws : workspaceList) {//workspaceList중 현재 접속한 ws찾기
-         if(ws.getWsIdx().equals(wsIdx)) {
-            workspace = ws;
-         }
-      }
-       
-       @SuppressWarnings("unchecked")
-      List<Map<String, Object>> projectMemberList = (List<Map<String, Object>>) request.getAttribute("projectMemberList");
-       
-       Map<String, Object> projectMember = new HashMap<String, Object>();
-       for (Map<String, Object> pm : projectMemberList) {//projectMember중 현재 접속한 pm 찾기
-         if(pm.get("userIdx").equals(member.getUserIdx())) {
-            projectMember = pm;
-         }
-      }
-       
-       List<Chat> chatList = chatService.selectAllMeassage(wsIdx);
-
-       model.addAttribute("workspace",workspace);
-       model.addAttribute("chatList", chatList);
-       model.addAttribute("length", chatList.size());
-       model.addAttribute("projectMember", projectMember);
-       
-      
-       System.out.println("============================workspaceList : " + workspaceList);
-       System.out.println("================ chatList : " + chatList);
-       System.out.println("================ projectMember : " + projectMember);
+    	chatService.showChattingList(request,member,wsIdx,model);
        
        return "/chat/chat";
     }
