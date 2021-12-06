@@ -49,7 +49,7 @@ public interface BoardService {
 
 	void deleteReplyByReplyIdx(String replyIdx);
 
-	List<Reply> selectReplyByTop(String projectIdx);
+	List<Map<String, Object>> selectReplyByTop(String projectIdx);
 
 	void updateReplyByReplyIdx(Reply reply);
 
@@ -61,5 +61,9 @@ public interface BoardService {
 	List<Board> selectLeafBoardByWsIdx(String wsIdx);
 
 	List<Post> selectPostListByBdIdx(String bdIdx);
+
+	Map<String, Object> selectBoardAndPost(String wsIdx);
+
+	Map<String, Object> selectPostInfo(String postIdx);
 
 }

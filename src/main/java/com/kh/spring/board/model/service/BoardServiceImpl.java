@@ -1,6 +1,7 @@
 package com.kh.spring.board.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -169,7 +170,7 @@ public class BoardServiceImpl implements BoardService {
 	// 윤지 추가
 
 	@Override
-	public List<Reply> selectReplyByTop(String projectIdx) {
+	public List<Map<String, Object>> selectReplyByTop(String projectIdx) {
 		// TODO Auto-generated method stub
 		return boardRepository.selectReplyByTop(projectIdx);
 	}
@@ -224,6 +225,65 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<Post> selectPostListByBdIdx(String bdIdx) {
 		return boardRepository.selectPostListByBdIdx(bdIdx);
+	}
+
+	@Override
+	public Map<String, Object> selectBoardAndPost(String wsIdx) {
+		
+		Map<String, Object> mapInfo = new HashMap<>(); 
+		
+
+		List<Board> boardList = boardRepository.selectBoardByWsIdx(wsIdx);
+		List<Map<String, Object>> postList = CamelMap.changeListMap(boardRepository.selectPostListByWsIdx(wsIdx));
+		List<Board> parentBoard = new ArrayList<>();
+		List<Board> leafBoardList = new ArrayList<>();
+		
+
+		for (int i = 0; i < boardList.size(); i++) {
+
+			if (i != 0 && boardList.get(i - 1).getSort() == boardList.get(i).getSort()) {
+				leafBoardList.add(boardList.get(i));
+			} else {
+				parentBoard.add(boardList.get(i));
+
+			}
+
+		}
+		
+
+		mapInfo.put("boardList", parentBoard);
+		mapInfo.put("postList", postList);
+		mapInfo.put("leafBoardList", leafBoardList);
+
+		
+		return mapInfo;
+	}
+
+	@Override
+	public Map<String, Object> selectPostInfo(String postIdx) {
+		
+		Map<String, Object> mapInfo = new HashMap<>();
+		
+		
+		// 1. postIdx로 공개할 post를 받아 model에 넣는다.
+		Post newPost = boardRepository.selectPostByPostIdx(postIdx);
+
+		// ++++ 수정, 모델에 boardName 정보를 넣어야 한다.
+		mapInfo.put("post", newPost); 
+		mapInfo.put("isSamePM", newPost.getBdIdx());
+
+		Board board = boardRepository.selectBoardByBdIdx(newPost.getBdIdx());
+		mapInfo.put("board", board);
+		// 2. 댓글 기능을 위해 댓글 목록을 불러온다.
+		List<Map<String, Object>> replyMember = CamelMap
+				.changeListMap(boardRepository.selectReplyByProjectMember(postIdx));
+		
+		mapInfo.put("replyMember", replyMember);
+
+		
+		
+		
+		return mapInfo;
 	}
 
 }

@@ -52,28 +52,10 @@ public class BoardController {
 	// 여기 지영이 수정
 	@GetMapping("{projectIdx}")
 	public String board(@PathVariable String projectIdx, Model model, @RequestParam String wsIdx) {
-
-		List<Board> boardList = boardService.selectBoardByWsIdx(wsIdx);
-		List<Map<String, Object>> postList = boardService.selectPostListByWsIdx(wsIdx);
-
-		List<Board> parentBoard = new ArrayList<>();
-		List<Board> leafBoardList = new ArrayList<>();
-
-		for (int i = 0; i < boardList.size(); i++) {
-
-			if (i != 0 && boardList.get(i - 1).getSort() == boardList.get(i).getSort()) {
-				leafBoardList.add(boardList.get(i));
-			} else {
-				parentBoard.add(boardList.get(i));
-
-			}
-
-		}
-
-		model.addAttribute("boardList", parentBoard);
-		model.addAttribute("postList", postList);
-		model.addAttribute("leafBoardList", leafBoardList);
-
+		
+		
+		Map<String , Object> modelInfo = boardService.selectBoardAndPost(wsIdx);
+		model.addAllAttributes(modelInfo);
 		return "/board/board-list";
 	}
 
@@ -114,8 +96,8 @@ public class BoardController {
 	public String addPost(@RequestBody Map<String, String> map,
 			@SessionAttribute(required = false, value = "authentication") Member member, Model model) {
 
-		logger.debug(map.get("postColor"));
-		logger.debug(map.toString());
+		//logger.debug(map.get("postColor"));
+		//logger.debug(map.toString());
 		// 일단, addPost에 색이 제대로 database에 도달하는지 확인, 도달하지 않음. 수정필요
 
 		// 게시글을 저장 시 trim처리를 통해 저장, 일단 trim처리 완료
@@ -170,22 +152,12 @@ public class BoardController {
 	@GetMapping("view/{projectIdx}")
 	public String getBoardInfo(@PathVariable String projectIdx, @RequestParam(required = false) String postIdx,
 			@RequestParam(required = false) String wsIdx, @RequestParam(required = false) String bdIdx, Model model) {
-
-		// 1. postIdx로 공개할 post를 받아 model에 넣는다.
-		Post newPost = boardService.selectPostByPostIdx(postIdx);
-
-		// ++++ 수정, 모델에 boardName 정보를 넣어야 한다.
-		model.addAttribute("post", newPost); 
-		model.addAttribute("isSamePM", newPost.getBdIdx());
-
-		Board board = boardService.selectBoardByBdIdx(newPost.getBdIdx());
-		model.addAttribute("board", board);
-		// 2. 댓글 기능을 위해 댓글 목록을 불러온다.
-		List<Map<String, Object>> replyMember = CamelMap
-				.changeListMap(boardService.selectReplyByProjectMember(postIdx));
-		System.out.println("replyMember :" + replyMember);
-		model.addAttribute("replyMember", replyMember);
-
+		
+		Map<String, Object> mapInfo = boardService.selectPostInfo(postIdx);
+		
+		model.addAllAttributes(mapInfo);
+		
+		
 		// 3. post로 return한다.
 		return "board/post";
 	}
@@ -267,7 +239,6 @@ public class BoardController {
 	public String deleteReply(@SessionAttribute("authentication") Member member, @RequestBody Reply reply) {
 
 		String replyIdx = reply.getReplyIdx();
-		System.out.println("replyIdx" + replyIdx);
 		boardService.deleteReplyByReplyIdx(replyIdx);
 		return "board/post";
 	}
@@ -277,8 +248,6 @@ public class BoardController {
 
 		String replyIdx = reply.getReplyIdx();
 
-		System.out.println("replyIdx" + replyIdx);
-		System.out.println("수정할 reply" + reply);
 		boardService.updateReplyByReplyIdx(reply);
 
 		return "board/post";
@@ -292,7 +261,6 @@ public class BoardController {
 	@ResponseBody
 	public String addLeafBoard(@RequestBody Board board) {
 
-		System.out.println(board);
 
 		boardService.insertLeafBoard(board);
 
@@ -303,9 +271,7 @@ public class BoardController {
 	@ResponseBody
 	public List<Post> selectLeafBoardPost(@RequestBody Board board) {
 
-		System.out.println("보드이름: " + board.getBdName());
 		List<Post> postList = boardService.selectPostListByBdIdx(board.getBdIdx());
-		System.out.println(postList);
 
 		return postList;
 	}
