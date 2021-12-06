@@ -1,5 +1,6 @@
 package com.kh.spring.common.interceptor.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.spring.common.code.CashItem;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.map.CamelMap;
@@ -96,6 +98,28 @@ public class InterceptorServiceImpl implements InterceptorService {
 	         
 	      
 	      }
+	      
+	      
+	      
+	       List<String> cashList = new ArrayList<String>();
+	         cashList = projectRepository.selectCashListByProjectIdx(projectIdx);
+	         if(!cashList.isEmpty()) {
+	        	 modelMap.put("golden", "gold");
+
+	              for(String list : cashList) {
+	              if(list.equals(CashItem.MEMBER_COUNT_UPGRADE.getITEM_NAME())) {
+	            	  modelMap.put("memberFunction", list); 
+	                 }else if(list.equals(CashItem.WORKSPACE_UPGRADE.getITEM_NAME())) {
+	                	 modelMap.put("workspaceFunction", list); 
+	                 }else if(list.equals(CashItem.WORKSPACE_UPGRADE.getITEM_NAME())) {
+	                	 modelMap.put("chatFunction", list); 
+	                 }else {//전체 결제 경우
+	                	 modelMap.put("allFunction", list); 
+	                 }
+	              
+	              }
+	             
+	         }
 		
 		
 		

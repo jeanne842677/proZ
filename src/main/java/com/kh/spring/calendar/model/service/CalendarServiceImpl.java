@@ -74,6 +74,14 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<Calendar> selectCalendarListByProjectIdx(String projectIdx) {
 		return calendarRepository.selectCalendarListByProjectIdx(projectIdx);
 	}
+
+
+
+	@Override
+	public void deleteCalendar(Calendar calendar) {
+		calendarRepository.deleteCalendar(calendar);
+		
+	}
 	
 	
 	

@@ -48,9 +48,6 @@ public class CalendarController {
 	public String posting(@PathVariable String projectIdx , 
 			@RequestParam(required = false) String wsIdx) {
 		
-		System.out.println(wsIdx);
-		
-		
 		
 		return "/calendar/cal-posting" ; 
 		
@@ -96,6 +93,20 @@ public class CalendarController {
 		
 		
 		return "";
+		
+	}
+	
+	@PostMapping("change/remove-cal")
+	@ResponseBody
+	public String removeCal(@RequestBody Calendar calendar) {
+		
+		System.out.println(calendar);
+		calendarService.deleteCalendar(calendar);
+		
+		System.out.println("딜리트완료=====================");
+		
+		
+		return "complete";
 		
 	}
 	

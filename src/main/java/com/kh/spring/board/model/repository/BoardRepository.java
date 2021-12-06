@@ -85,8 +85,9 @@ public interface BoardRepository {
 	@Update("update reply set reply_content= #{reply.replyContent} where reply_idx=#{reply.replyIdx}")
 	void updateReplyByReplyIdx(@Param("reply") Reply reply);
 
-	@Select("select * from (select * from reply where post_idx in (select post_idx from post where bd_idx in (select bd_idx from board where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='BO'))) order by reply_idx desc)where rownum <=5")
-	List<Reply> selectReplyByTop(String projectIdx);
+	@Select("select * from (select * from (select * from reply where post_idx in (select post_idx from post where bd_idx in (select bd_idx from board where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='BO'))))"
+	         + " join project_member using(pm_idx) order by reply_idx desc )where rownum <=5")
+	   List<Map<String, Object>> selectReplyByTop(String projectIdx);
 
 	@Select("select * from reply join project_member using(pm_idx) where post_idx= #{postIdx} order by reply_idx")
 	List<Map<String, Object>> selectReplyByProjectMember(String postIdx);
@@ -103,8 +104,8 @@ public interface BoardRepository {
 	@Select("select * from board where ws_idx = #{wsIdx} and parent is not null")
 	List<Board> selectLeafBoardByWsIdx(String wsIdx);
 
-	@Select("select * from post where bd_idx = #{bdIdx} order by sort")
-	List<Post> selectPostListByBdIdx(String bdIdx);
+	@Select("select pm_idx , post_idx , bd_idx , post_title , sort  , post_color , user_idx , nickname, profile_color  from post  join project_member using(pm_idx) where bd_idx = #{bdIdx} order by sort")
+	List<Map<String, Object>> selectPostListByBdIdx(String bdIdx);
 
 	// 12월 5일 지영 추가
 	@Select("select * from board where bd_idx = (select nvl(parent , bd_idx) from board where (parent is null and bd_Idx= #{bdIdx}) or (bd_idx=#{bdIdx}))")

@@ -6,7 +6,7 @@
 
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp" %>
-    <title>Document</title>
+    <title>로드맵</title>
 <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=4">
     <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
     <link type="text/css" rel="stylesheet" href="/resources/js/modal/modal.js">
@@ -397,7 +397,7 @@
     
     
                         <div class="roadmap-tit">
-                            #RoadMap
+                            <b>#</b><b> ${workspace.wsName } </b>
                             <hr>
                         </div>
 
@@ -598,6 +598,8 @@ $("#modifinishbtn").click(function(){
     		    		
     	})
     
+    	
+    	loading.on();
     	
     	fetch("/loadmap/git/upload",{
 			method : "POST",

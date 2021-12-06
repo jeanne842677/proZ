@@ -101,7 +101,11 @@
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
-                                        <div></div>
+                                         <div class="date">
+                                            <div class="start-date">2021년 03월 03일</div>
+                                            &nbsp;~&nbsp;
+                                            <div class="end-date">2021년 11월 13일</div>
+                                        </div>
                                     </div>
                                     <div class="br-line"></div>
                                 </div>
@@ -434,12 +438,16 @@ $(function() {
         return day.getFullYear()+"년 " + (day.getMonth()+1)+"월 " + day.getDate()+"일";
     }
     
+    let dateDiv =$('<div class="date"><div class="start-date"></div></div>');
+    
     let start = new Date(${param.start});
     let end = new Date(${param.end});
     end.setDate(end.getDate()-1);
     
-    $('.start-date').text(changeDate(start));
-    $('.end-date').text(changeDate(end));
+    dateDiv.find('.start-date').text(changeDate(start));
+    $('.date').remove();
+    $('.editor-content-date').append(dateDiv);
+    
     
 })
 
