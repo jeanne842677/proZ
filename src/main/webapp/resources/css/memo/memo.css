@@ -42,7 +42,7 @@
     border-color:red;
    
 }
-#search{
+#keyword{
     display: flex;
     width: 180px;
     height: 30px;
@@ -60,6 +60,7 @@
     color: white;
     border: white;
     border-radius: 5px;
+    margin-left:5px;
     align-items: center;
 }
 .memocon{
