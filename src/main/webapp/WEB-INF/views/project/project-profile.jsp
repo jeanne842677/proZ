@@ -41,10 +41,9 @@
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
                     </div>
                     <div class="content-wrapper" id="profile">
-                        <div class="profile-title">#사용자 프로필</div>
-                        <div class="profile-subtitle">프로필 사진 변경</div>
+                       
                         <div class="profile-message"></div>
-                        <div class="proflie-advice">프로필 사진을 클릭하여 최대 2MB 크기의 원하는 프로필 사진을 첨부하세요. </div>
+                      
                         <div class="profile-subtitle">개인 색상 지정</div>
                         <div class="proflie-advice">프로필 배너를 클릭하여 개인 색상을 선택하세요.</div>
                         <div class="profile-subtitle">사용자 닉네임</div>
