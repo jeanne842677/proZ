@@ -46,7 +46,7 @@ public interface BoardRepository {
 
 	void insertPost(Map<String, String> map);
 
-	List<Post> selectPostListByWsIdx(String wsIdx);
+	List<Map<String , Object>> selectPostListByWsIdx(String wsIdx);
 
 	@Select("select * from board where bd_idx = #{bdIdx} ")
 	Board selectBoardByBdIdx(String bdIdx);

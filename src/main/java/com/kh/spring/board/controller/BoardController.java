@@ -54,7 +54,7 @@ public class BoardController {
 	public String board(@PathVariable String projectIdx, Model model, @RequestParam String wsIdx) {
 
 		List<Board> boardList = boardService.selectBoardByWsIdx(wsIdx);
-		List<Post> postList = boardService.selectPostListByWsIdx(wsIdx);
+		List<Map<String, Object>> postList = boardService.selectPostListByWsIdx(wsIdx);
 
 		List<Board> parentBoard = new ArrayList<>();
 		List<Board> leafBoardList = new ArrayList<>();

@@ -41,10 +41,13 @@
 
 	</insert>
 
-	<select id="selectPostListByWsIdx" resultType="Post">
+	<select id="selectPostListByWsIdx" resultType="map">
 
-		select post_idx ,
-		bd_idx , pm_idx , post_title , sort , post_color from post
+	
+	select post_idx ,
+		bd_idx , pm_idx , post_title , sort , post_color , nickname from post
+        join project_member
+        using(pm_idx)
 		where bd_idx
 		in(select bd_idx from board where ws_idx = #{wsIdx})
 		order by sort

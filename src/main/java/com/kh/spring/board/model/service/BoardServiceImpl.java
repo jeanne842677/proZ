@@ -12,6 +12,7 @@ import com.kh.spring.board.model.dto.Post;
 import com.kh.spring.board.model.dto.Reply;
 import com.kh.spring.board.model.repository.BoardRepository;
 import com.kh.spring.common.util.file.FileDTO;
+import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.memo.model.dto.Memo;
 import com.kh.spring.project.model.dto.ProjectMember;
@@ -103,9 +104,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<Post> selectPostListByWsIdx(String wsIdx) {
+	public List<Map<String, Object>> selectPostListByWsIdx(String wsIdx) {
 
-		List<Post> postList = boardRepository.selectPostListByWsIdx(wsIdx);
+		List<Map<String, Object>> postList = CamelMap.changeListMap(boardRepository.selectPostListByWsIdx(wsIdx));
 
 		return postList;
 	}

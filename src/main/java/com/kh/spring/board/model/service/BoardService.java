@@ -25,7 +25,7 @@ public interface BoardService {
 
 	void insertPost(Map<String, String> map, Member member);
 
-	List<Post> selectPostListByWsIdx(String wsIdx);
+	List<Map<String, Object>> selectPostListByWsIdx(String wsIdx);
 
 	Board selectBoardByBdIdx(String bdidx);
 
