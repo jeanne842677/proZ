@@ -81,7 +81,7 @@
                         <div class="leave-wrapper">
                             <img class="leave-img" src="/resources/img/undraw-space.png"> 
                             <div class="profile-subtitle">정말로 PRO_Z를 탈퇴하시나요?</div>
-                            <div class="proflie-advice">회원탈퇴는 7일 이후에 완료되며 추가 인증이 필요합니다.</div>  
+                            <div class="proflie-advice"></div>  
                             <div class="br-line"></div>
                             <button class="btn btn-secondary" id="button-isleave"> PROZ 회원 탈퇴 </button>
                             <div class="br-line"></div>
