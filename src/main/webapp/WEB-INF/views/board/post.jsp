@@ -285,6 +285,7 @@ $(".modify-btn").off().on('click' ,function() {
  
  
  
+ 
    //댓글 수정등록하기
 $(".register-btn").off().on('click',function () {
    let reviseReply= $(this).parents('.comment-text-wrapper').find('.test').html().trim();
