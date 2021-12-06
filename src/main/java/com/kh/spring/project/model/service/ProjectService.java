@@ -54,6 +54,16 @@ public interface ProjectService {
    void updateIsDelProjectByProjectIdx(String projectIdx);
    
    int projectIsDel(String projectIdx);
+   
+   void insertProjectImg(FileDTO fileUploaded, String projectIdx);
+
+   FileDTO selectProjectImgSavePath(String projectIdx);
+
+   FileDTO updateProjectImg(FileDTO fileUploaded, String projectIdx);
+
+   void deleteProjectImg(String projectIdx);
+
+   List<Map<String, Object>> selectProjectAndProjectImgByUserIdx(String userIdx);
 
    // 민협 코드 끝
 
@@ -74,10 +84,12 @@ public interface ProjectService {
 
    List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
-   void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx);
-
+   void settingWorkspace(List<Map<String, Object>> workspaceList, String projectIdx);
+////////////////////////////////////////
    List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
 
+   List<String> selectCashListByProjectIdx(String projectIdx);
+   
    
 /////////////윤지 + 예진
    
@@ -105,6 +117,8 @@ public interface ProjectService {
 		Workspace selectWorkspaceByWsIdx(String wsIdx);
 
 		ProjectMember selectProjectMemberByProjectIdxAndUserIdx(String projectIdx, String userIdx);
+
+		
 	
    
 

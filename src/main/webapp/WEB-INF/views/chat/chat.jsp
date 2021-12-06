@@ -433,7 +433,61 @@ cursor: pointer;
                 
 
             </section>
-            <aside><%@ include file="/WEB-INF/views/include/nav/aside.jsp" %></aside>
+            <aside>
+            <div class="teams1">
+	<div class="teamstit">프로젝트 참여 멤버</div>
+	<div id="onoff">
+		<div class="onlinetit">온라인</div>
+		<div class="online">
+			<ul id="sortable">
+				<!-- <li class="member"><i class="fas fa-user-circle" style="color:#ffc107"></i>3조_길예진</li>
+                                    <li class="member"><i class="fas fa-user-circle" style="color:#17a2b8"></i>3조_길예진</li>
+                                    <li class="member"><i class="fas fa-user-circle" style="color:#dc3538"></i>3조_길예진</li>
+ -->
+			</ul>
+
+		</div>
+
+		<div class="offlinetit">오프라인</div>
+		<div class="offline">
+			<ul id="sortable2">
+				<c:forEach items="${ projectMemberList }" var="pm">
+					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}" data-auth-name="${pm.authName}" data-git="${ pm.git }" 
+						style="color:${ pm.profileColor }"><div class="onoffprofile"></div> ${ pm.nickname }
+
+					</li>
+				</c:forEach>
+
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+
+<div class="member-info" style=" width:300px; height:200px; z-index: 1000 ;  position: absolute; 
+	background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); display:none; flex-direction: column; align-items: center; ">
+ <div class="profile-info" style="width:100%; height: 30% ; background-color: red;  border-radius: 5px 5px 0 0; ">
+ 	
+ </div>
+ <div class="profile-info-img" style="width:60px ; height:60px; border-radius: 50px ;background-color: blue; position:relative; top:-30px"></div>
+	<div class="profile-info-content" style="display: flex ; flex-direction: column; align-items: center;  position: relative; top:-20px" >
+	<div class="profile-info-name" style="font-size: 20px">임지영</div>
+	<div class="profile-info-auth">권한</div>
+	<input class="profile-info-git" value="없음" disabled="disabled">
+</div>
+	
+</div>
+
+<div class="alert-popup" style="width:400px; height:300px; z-index: 4 ; position: absolute; display:none;
+background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); right:8px ; top:5px">
+
+
+
+</div>
+            
+            
+            </aside>
         </div>
 
     </div>
@@ -452,6 +506,84 @@ cursor: pointer;
 <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
 
 
+<script>
+
+	$('.alram').on('click' , function() {
+		$('.alert-popup').css('display' , 'flex');
+		
+	})
+
+
+	$('aside').css('position', 'relative');
+
+	$('.member').each(function() {
+		
+		$(this).on('click' , function() {
+			
+			let mem = $(this);
+			var divX = mem.offset().left;
+			var divY = mem.offset().top-60;
+			
+			
+			$('.member-info').css('left' , '-310px')
+			.css('top' , divY).css('display' , 'flex')
+			
+			$('.profile-info')
+			.css('backgroundColor' , mem.css('color') );
+			
+			$('.profile-info-name').text( mem.text() ).css('color' , mem.css('color'))
+			$('.profile-info-auth').text( mem.data('auth-name'))
+			
+			let git = mem.data('git') 
+			if(git) {
+			$('.profile-info-git').val(mem.data('git'));
+				
+			}else {
+				
+				
+			$('.profile-info-git').val('없음');
+			}
+			
+		})
+		
+	})
+	
+	
+	$('body').on('click', function(e){
+    
+		
+	let b = $(e.target);
+    bParents = b.parents('.member-info').attr("class");
+    var popUp = $('.member-info').attr("class");
+    var teams = $('.teams1');
+ 
+    
+    if( b.attr("class") == popUp || bParents == popUp || $($(b).parents('.teams1'))[0] == teams[0]) {
+    	
+    }else {
+    
+       $('.member-info').css('display' , 'none');
+    
+    	
+    }
+    
+    if(b.attr("class")=='alert-popup' || $($(b).parents('.alram')).attr('class')=='alram') {
+    	
+    }else {
+    	
+    	$('.alert-popup').css('display' , 'none');
+    }
+    
+  
+    
+	});
+
+	
+	
+
+
+
+</script>
    
 
   
@@ -537,87 +669,155 @@ cursor: pointer;
           
            console.log("connected: " + frame);
 
-           
-           stompClient.subscribe('/room/msg/'+wsIdx,function(chat) {
-                
-                var content = JSON.parse(chat.body); //sendig한 객체를 받아옴.
-                
-                if(content.pmIdx == pmIdx) { //내가 입력할 때
-                   let newChat = $(".clone-me").clone();
-                   newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
-                   
-                   if(content.isFile == "1") {//보낸 메세지가 파일일 경우
-                      var pathReference = firebase.storage().ref(content.filePath);
-                      var urlStirng = "";
-                      pathReference.getDownloadURL().then(function(url) {
-                      console.log("지나가?");
-                          
-                          urlStirng = url;
-                          console.log("urlllllllllllllll" + url);
-                          
-                          newChat.find(".talk-me").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
-                          scrollFixedBottom();
-                          newChat.find('.img-section').off().on('click', function () {
-                           		var x=new XMLHttpRequest();
-                           		x.open("GET", url , true);
-                           		x.responseType = 'blob';
-                           		x.onload=function(e){download(x.response, content.content, content.fileType ); }
-                           		
-                           		x.send();
-                           		
-                           	});
-                        }).catch(function(error) {//나중에
-                        	alert("데이터 통신중 오류가 발생했습니다.");
-                        	console.log(error);
-                        });
+		
+			let msg = function() {
 
-                   }else {
-                	   newChat.find(".talk-me").append("<div class='chat-content'>" + content.content + "</div>");
-                   }
-                   newChat.find(".currentTime").html(content.regDate);
-                   newChat.find(".user-nickname").html(content.nickname);
-                   $(".chat-section").append(newChat);
-                   
-                }else{//다른사람이 입력할 때
-                   let newChat = $(".clone-other").clone();
-                   newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
-                   if(content.isFile == "1") {//보낸 매세지가 파일일때
-                	   var pathReference = firebase.storage().ref(content.filePath);
-                       var urlStirng = "";
-                       pathReference.getDownloadURL().then(function(url) {
-                       console.log("지나가?");
-                           
-                           urlStirng = url;
-                           console.log("urlllllllllllllll" + url);
-                           
-                           newChat.find(".talk-other").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
-                           scrollFixedBottom();
-                           newChat.find('.img-section').off().on('click', function () {
-                            		var x=new XMLHttpRequest();
-                            		x.open("GET", url , true);
-                            		x.responseType = 'blob';
-                            		x.onload=function(e){download(x.response, content.content, content.fileType ); }
-                            		
-                            		x.send();
-                            		
-                            	});
-                         }).catch(function(error) {//나중에
-                         	alert("데이터 통신중 오류가 발생했습니다.");
-                         	console.log(error);
-                         });
-                   }else {
-                	   newChat.find(".talk-other").append("<div class='chat-content'>" + content.content + "</div>");
-                   }
-                   newChat.find(".currentTime").html(content.regDate);
-                   newChat.find(".user-nickname").html(content.nickname);
-                   $(".chat-section").append(newChat);
-                }
-                
-                chIdx = content.chIdx;
-                scrollFixedBottom();
-          });
+		           stompClient.subscribe('/room/msg/'+wsIdx,function(chat) {
+		                
+		                var content = JSON.parse(chat.body); //sendig한 객체를 받아옴.
+		                
+		                if(content.pmIdx == pmIdx) { //내가 입력할 때
+		                   let newChat = $(".clone-me").clone();
+		                   newChat.removeClass("clone-me").addClass("chat-block").addClass("chat-me");
+		                   
+		                   if(content.isFile == "1") {//보낸 메세지가 파일일 경우
+		                      var pathReference = firebase.storage().ref(content.filePath);
+		                      var urlStirng = "";
+		                      pathReference.getDownloadURL().then(function(url) {
+		                      console.log("지나가?");
+		                          
+		                          urlStirng = url;
+		                          console.log("urlllllllllllllll" + url);
+		                          
+		                          newChat.find(".talk-me").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
+		                          scrollFixedBottom();
+		                          newChat.find('.img-section').off().on('click', function () {
+		                           		var x=new XMLHttpRequest();
+		                           		x.open("GET", url , true);
+		                           		x.responseType = 'blob';
+		                           		x.onload=function(e){download(x.response, content.content, content.fileType ); }
+		                           		
+		                           		x.send();
+		                           		
+		                           	});
+		                        }).catch(function(error) {//나중에
+		                        	alert("데이터 통신중 오류가 발생했습니다.");
+		                        	console.log(error);
+		                        });
+
+		                   }else {
+		                	   newChat.find(".talk-me").append("<div class='chat-content'>" + content.content + "</div>");
+		                   }
+		                   newChat.find(".currentTime").html(content.regDate);
+		                   newChat.find(".user-nickname").html(content.nickname);
+		                   $(".chat-section").append(newChat);
+		                   
+		                }else{//다른사람이 입력할 때
+		                   let newChat = $(".clone-other").clone();
+		                   newChat.removeClass("clone-other").addClass("chat-block").addClass("chat-other");
+		                   if(content.isFile == "1") {//보낸 매세지가 파일일때
+		                	   var pathReference = firebase.storage().ref(content.filePath);
+		                       var urlStirng = "";
+		                       pathReference.getDownloadURL().then(function(url) {
+		                       console.log("지나가?");
+		                           
+		                           urlStirng = url;
+		                           console.log("urlllllllllllllll" + url);
+		                           
+		                           newChat.find(".talk-other").append("<div class='chat-content' data-file-name='"+ content.content +"' data-file-type='"+ content.fileType +"'><img class='img-section' src='" + url + "'></div>");
+		                           scrollFixedBottom();
+		                           newChat.find('.img-section').off().on('click', function () {
+		                            		var x=new XMLHttpRequest();
+		                            		x.open("GET", url , true);
+		                            		x.responseType = 'blob';
+		                            		x.onload=function(e){download(x.response, content.content, content.fileType ); }
+		                            		
+		                            		x.send();
+		                            		
+		                            	});
+		                         }).catch(function(error) {//나중에
+		                         	alert("데이터 통신중 오류가 발생했습니다.");
+		                         	console.log(error);
+		                         });
+		                   }else {
+		                	   newChat.find(".talk-other").append("<div class='chat-content'>" + content.content + "</div>");
+		                   }
+		                   newChat.find(".currentTime").html(content.regDate);
+		                   newChat.find(".user-nickname").html(content.nickname);
+		                   $(".chat-section").append(newChat);
+		                }
+		                
+		                chIdx = content.chIdx;
+		                scrollFixedBottom();
+		          })
+				
+				
+				
+			}
+           
            console.log("빠져나와?");
            scrollFixedBottom();
+           
+        	
+           
+           let on = function() {
+        	   
+              	stompClient.subscribe('/online/project/${project.projectIdx}',
+        				function(chat) {
+
+        					var content = JSON.parse(chat.body);
+        					console.dir(content);
+        					
+        					
+        					if(content.status=="online") {
+        						
+        						content.members.forEach(function(e) {
+        							var userIdx = e.userIdx;
+        							let user = $('#' + userIdx);
+        							$('.online ul').append(user);
+
+        						})
+         
+        						
+        					}else if(content.status=="offline") {
+        						userIdx = content.member.userIdx;
+
+        						let user = $('#' + userIdx);
+
+        						$('.offline ul').append(user);
+        					}
+        			
+        				 	
+
+        		});
+              	
+
+				stompClient.send("/app/project/${project.projectIdx}", {}, JSON
+						.stringify({
+							userIdx : "${authentication.userIdx}",
+							nickname : "${authentication.nickname}"
+						}));
+				
+               
+           }
+           
+          
+           
+         setTimeout(function() {
+        	 
+        	 msg();
+        	 on();
+        	 
+        	 
+         } , 50);
+       	
+         
+
+       
+       
+       
+       
+       
        });
        
    
@@ -627,13 +827,24 @@ cursor: pointer;
 
     function disconnect() {
         if(stompClient !== null) {
-           stompClient.send("/app/out") , {} , usersessionid.value +"is out chatroom";
+          
+           stompClient.send("/app/remove/${project.projectIdx}", {}, JSON
+					.stringify({
+						userIdx : "${authentication.userIdx}",
+						nickname : "${authentication.nickname}"
+					}));
+			
+           
            stompClient.disconnect();
            
         }
         
         
      }
+    
+    window.addEventListener('beforeunload', (e) => {
+		disconnect();
+	})
 
     //스크롤 설정
      function scrollFixedBottom(){

@@ -30,13 +30,15 @@
         <header>
         
 
-
+			<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
 
 
         </header>
 
         <div class="con">
-        <nav></nav>
+        <nav>
+        	<%@ include file="/WEB-INF/views/include/nav/setting-nav.jsp"%>
+        </nav>
         <section>
             <!--여기서만 작업-->
             
@@ -50,14 +52,23 @@
                     <div class="main-frame">
                         <div class="main-wrapper">
                                 <div class="project-img-wrapper">
-                                    <img id="project-img" src="/resources/img/no-img.png">
+                                    <img id="project-img" 
+                                    <c:choose>
+	                                    <c:when test="${projectImg != null}">
+	                                    src="/file/${projectImg}"
+	                                    </c:when>
+	                                    <c:otherwise>
+	                                    src="/resources/img/no-img.png"
+	                                    </c:otherwise>
+                                    </c:choose>
+                                    >
                                 </div>
                                 <div class="project-img-button">
                                     <p style="color :slategray;">서버 이미지는 최소 151p x 151p  이상 , 1mb 미만</p>
                                     <div class="form-group">
                                         <div class="button-wrapper">
                                             <label for="image_upload" class="btn btn-gradi1">이미지 업로드</label>
-                                            <input type="file" id="image_upload"  ></button>
+                                            <input type="file" id="image_upload" accept="img/*"  ></button>
                                             <button type="button" id="delete-img" class="btn btn-secondary">이미지 제거</button>
                                         </div>
                                     </div>
@@ -94,7 +105,11 @@
            
 
         </section>
-        <aside></aside>
+        <aside>
+        
+        	<%@ include file="/WEB-INF/views/include/nav/aside.jsp"%>
+        
+        </aside>
         </div>
 
     </div>
@@ -104,6 +119,8 @@
 </body>
 <script type="text/javascript" src="/resources/js/setting/project.js"></script>
 <script type="text/javascript">
+
+
 
 var firstSaveModal = new Modal("설정 저장","설정을 저장하시겠습니까?");
 
@@ -118,35 +135,77 @@ firstSaveModal.makeModalBtn($(".save"));   //버튼에 지정
 secondSaveModal.createAlertModal(); //두번쨰모달 생성
 secondSaveModal.makeModalBtn(firstSaveModal.modal.find(".first-button")); //first-button : 저장 <--여기에지정
 
+let projectIdx = "${projectIdx}";
 
 
-function readImage(input) {//이미지 업로드 함수
+//프로젝트 프로필이미지 업로드
+var projectImg = $('#image_upload'); 
+
+//만약 현제 이미지가 존재한다면 업데이트
+
+projectImg.on('input', function() {
+	 
+	var file = document.querySelector('#image_upload').files[0]; 
+	var formData = new FormData();  
+	var projectImg = $("#project-img").attr('src');
 	
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        
-        reader.onload = (e) => {
-            const previewImage = document.getElementById('project-img');
-            previewImage.src = e.target.result;
-            console.log("e.target.result  " + e.target.result);
-            console.dir(reader.result);//이미지파일
-        }
-        reader.readAsDataURL(input.files[0]);
-        console.dir("input.files" + input.files);
-        console.dir(reader);
-        
-    }
-}
-// 이미지 업로드==========================================
-document.getElementById('image_upload').addEventListener('change', (e) => {
-    readImage(e.target);
+	if(file == null){
+		alert('파일을 선댁해주세요'); 
+		return false; 
+	}
+	
+	formData.append('files', file); 
+	
+	if(projectImg == "/resources/img/no-img.png" ) {
+		projectImgFeth(projectIdx,'insert',formData);
+	}else{
+		projectImgFeth(projectIdx,'update',formData);
+	}
+	
+		
 });
+
+function projectImgFeth(projectIdx,state,formData) {
+	fetch('/project/projectImg/' + projectIdx + '?state=' + state, {
+		method: 'POST', 	
+		body : formData
+	})
+	.then(response => response.text())
+	.then(text=>{
+		if(text != 'failed'){ 
+			$('#project-img').attr('src', '/file/' + text);
+		}else {
+			alert('프로젝트 대표이미지 변경에 실패하였습니다. 다시 시도하세요'); 
+		}
+	})
+	.catch( ()=>{
+		alert('프로젝트 대표이미지 변경에 실패하였습니다. 다시 시도하세요'); 
+	});
+}
+
+
+
 
 
 $("#delete-img").click(function () {//이미지 제거
-    $("#project-img").attr("src","/resources/img/no-img.png");
+	
+	fetch('/project/delete/projectImg/' + projectIdx , {
+		method: 'POST'
+	})
+	.then(response => response.text())
+	.then(text=>{
+		if(text != 'delete'){ 
+			$("#project-img").attr("src","/resources/img/no-img.png");
+		}else {
+			alert('프로젝트 대표이미지 삭제에 실패하였습니다. 다시 시도하세요'); 
+		}
+	})
+	.catch( ()=>{
+		alert('프로젝트 대표이미지 삭제에 실패하였습니다. 다시 시도하세요'); 
+	});
+    
+    
 });
-
 
 
 

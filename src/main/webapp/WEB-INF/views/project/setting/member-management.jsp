@@ -82,8 +82,17 @@
 								<div class="button-wrapper">
 									<button type="button" id="invite-btn"
 										class="btn btn-gradi1 insert-member">멤버 추가</button>
-
 								</div>
+								<c:if test="${not empty memberFuntion || not empty allFunction}">
+									<div class="member-cnt" data-total-cnt="100">
+										멤버 수 (<span class="member-total-cnt">${projectMemberListCnt}</span>/ 100)
+									</div>
+								</c:if>
+								<c:if test="${empty memberFuntion && empty allFunction}">
+									<div class="member-cnt" data-total-cnt="10">
+										멤버 수 (<span class="member-total-cnt">${projectMemberListCnt}</span>/ 10)
+									</div>
+								</c:if>
 							</div>
 						</div>
 
@@ -188,6 +197,8 @@
 	<script type="text/javascript"
 		src="/resources/js/setting/member-management.js?ver=3"></script>
 	<script type="text/javascript">
+	let memberCnt = ${projectMemberListCnt};
+	let totalCnt = $(".member-cnt").data('total-cnt');
 	
 	$(function() {
 		
@@ -253,6 +264,10 @@
 		
 		//이메일로 추가하기 버튼
 		$('#invite-btn').on('click' , function() {
+			if(memberCnt > totalCnt){
+				  lackWorkspaceModal.viewModal();
+				  return;
+			  }
 			
 			let memberEmail = $('#invite-member-input').val();
 			fetch("/project/invite-member" ,{
@@ -288,6 +303,8 @@
 						memberDiv.find('.user-email').text(member.email);
 						memberDiv.find('.auth-save').addClass('disabled')
 						$('.member-list-wrapper').append(memberDiv);
+						memberCnt++;
+						$('.member-total-cnt').text(memberCnt);
 						
 						memberDiv.find('.invite-cancel').on('click' , function() {
 							fetch("/project/invite-cancel-by-userIdx",{
@@ -299,6 +316,7 @@
 								
 							}).then(res=> {
 								memberDiv.remove();
+								memberCnt--;
 							})
 							
 							
@@ -320,7 +338,10 @@
 		
 		//저장버튼 눌렀을떄
 		$(".auth-save").each(function() {
-			
+			if(memberCnt > totalCnt){
+				  lackWorkspaceModal.viewModal();
+				  return;
+			  }
 			
 			let member= $(this).parents('.member-wrap');
 			let pmIdx = member.attr('id');
@@ -397,6 +418,8 @@
 				if(text="complete") {
 					
 					member.remove();
+					memberCnt--;
+					$('.member-total-cnt').text(memberCnt);
 					
 				}
 				
@@ -430,6 +453,8 @@
 				if(text=="complete") {
 					
 					memberWrap.remove();
+					memberCnt--;
+					$('.member-total-cnt').text(memberCnt);
 					
 				}
 				

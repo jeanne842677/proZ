@@ -13,6 +13,10 @@
  a:visited { color: #fff; text-decoration: none;}
  a:hover { color: #fff; text-decoration: none;}
 
+.project-img {
+	height: 100%;
+	width: 100%;
+}
 
 
 	.clone{
@@ -70,7 +74,7 @@
                     <div class="line"><hr></div>
                     <div class="line2"><hr></div>
                     <div class="thistit">Projects</div>
-                    <div class="thisdes">All of these templates are<br>provided for free widthin Proz.
+                    <div class="thisdes">Start your project with more effective communication <br>with more team members by adding a project with Proz.
                         <div class="addnew">+ new project</div></div>
                 </div>
                 
@@ -82,7 +86,16 @@
 								<div class="con1">
 									<div class="conimg">
 										<a href="${project.projectIdx}">
-											<img src="/resources/img/no-img.png" > 
+											<img class="project-img" 
+			                                    <c:choose>
+				                                    <c:when test="${project.renameFileName != null}">
+				                                    src="/file/${project.savePath}${project.renameFileName}"
+				                                    </c:when>
+				                                    <c:otherwise>
+				                                    src="/resources/img/no-img.png"
+				                                    </c:otherwise>
+			                                    </c:choose>
+                                    		>
 										</a>
 									</div>
 									<div class="con1title">
@@ -105,7 +118,7 @@
 			<footer style="margin-top : 200px">
                 <div class="footleft">
                     <div class="footdes1">project by DragonBall.</div>
-                    <div class="footdes2">Lim Ji-young , Kang Min-hyeop ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Cho Chae-eun , Choi Yun-ji</div>
+                    <div class="footdes2">Lim Ji-young , Kang Min-hyup ,  Gil Ye-jin , Son Eun-bi , Lee Yoo-song , Choi Yun-ji</div>
                 </div>
                 <div class="footright">Email_ lucky007proz@gmail.com</div>
 

@@ -9,6 +9,8 @@ var needNameModal = new Modal("카테고리 이름 설정", "카테고리 명을
 
 var needCategoryModal = new Modal("카테고리 선택", "카테고리를 선택해주세요.");
 
+var lackWorkspaceModal = new Modal("워크스페이스 부족", "사용할 수 있는 워크스페이스를 초과하였습니다.");
+
 deleteModal.createTwoButtonModal("삭제", "취소");
 
 deleteModal.makeModalBtn($(".category-delete-button"));
@@ -19,11 +21,11 @@ beforeSaveModal.makeModalBtn($(".category-save-button"));
 
 saveModal.createAlertModal();
 
-saveModal.makeModalBtn(beforeSaveModal.modal.find(".first-button"));
-
 needNameModal.createAlertModal();
 
 needCategoryModal.createAlertModal();
+
+lackWorkspaceModal.createAlertModal();
 
 
 

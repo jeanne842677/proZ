@@ -21,8 +21,6 @@
     .commonDiv:hover{
         background-color: #EEEEEE;
     }
-    /* ++++ 수정 */
-	/* 의사 요소 (before 삭제) */
     .immutableDiv:hover{
         background-color: #EEEEEE;
     }
@@ -72,17 +70,12 @@
                 <!--여기서만 작업-->
                 <div class="editor-session-wrapper">
                     <div class="editor-main-title-wrapper">
-                    <!--  ++++ 수정 -->
                         <div class="editor-main-title"># ${board.bdName}</div>
                     </div>
                     <div class="editor-main-content-wrapper">
                         <div class="editor-navigation-bar"></div>
                         <div class="editor-minHeight-div" style="min-height: 500px;">
-                        <div class="editor-title" contenteditable="true" placeholder="제목을 입력하세요"></div>
-                        <div class="initPage">
-                            <div>이곳을 클릭하여 새로운 포스트를 작성하세요</div>
-                            <img src="/resources/img/undraw_control_panel_re_y3ar.svg" style="height: 200px;">
-                        </div>
+                        	${content}
                         </div>
                         <div class="footer-wrapper">
                             <div class="footer-wrapper">
@@ -97,7 +90,7 @@
                                             <button class="editor-cover" style="background-color:#9fdfeb;"></button>
                                             <button class="editor-cover" style="background-color:#d8bbdc;"></button>
                                         </div>
-                                        <button type="button" id="editor-submit-btn" class="btn btn-primary">POST</button>
+                                        <button type="button" id="editor-submit-btn" class="btn btn-primary">EDIT</button>
                                     </div>
                                     <div class="editor-content-date">
                                         <div class="editor-message">작성 날짜</div>
@@ -121,7 +114,7 @@
 <script src="/resources/js/posting/customJqueryAutoOption.js"></script>
 <script src="/resources/js/modal/modal.js"></script>
 <script>
-
+    
     // *** 페이지 기능 (분리 이전) 
    
    	// 1) initPage(시작페이지) 추가 및 시작페이지에 enter_click시 사라지는 기능 부여 
@@ -129,12 +122,17 @@
             element.on('click', function(e){
             $(this).parent().append("<div class='commonDiv'contenteditable='true' style='font-size:14px;'></div>");
             $(this).parent().children('.commonDiv').get(0).focus(); 
+            
+            // ***원인, ++++ 수정필요!! 
             createCustomAutocomplete($(this).parent().children('.commonDiv')); 
             $(this).remove(); 
         });
     };
-    createInitPageFnc($('.initPage')); 
     
+    if($('.initPage').length){
+    	createInitPageFnc($('.initPage'));
+    }
+     
     // 2) Titlediv enterFunction을 customize  
     var createTitleDiv = function(element){
         TitleEnterFnc(element);  
@@ -248,14 +246,14 @@ $('#editor-submit-btn').on('click' , function() {
 	}
 	
 	// 2. 전송시작 
-	// ++++ 수정 
-    fetch("/board/add-post" , {
+    fetch("/board/view/edit-post" , {
         method : "POST",
         headers :  {"Content-type" : "application/json; charset=UTF-8"},
         body : JSON.stringify({
             postTitle : subject,
             postContent : content,
             postColor : postColor, 
+            postIdx : "${post.postIdx}",
             bdIdx : "${param.bdidx}"
             })
     }).then(res=>{res.text()})
@@ -276,6 +274,7 @@ $('#editor-submit-btn').on('click' , function() {
 	modal.createAlertModal(); 
 	
 	// 3) init custom_autocomplete widget
+	// +++ 이쪽이 원인, 수정필요
 	initcustomAutocomplete(); 
 	createCustomAutocomplete($('.commonDiv')); 
 	
@@ -283,7 +282,8 @@ $('#editor-submit-btn').on('click' , function() {
 	createTitleDiv($('.editor-title'));
 	
 	// 5) init postBannerColor to default value; 
-	var postColor = 'white';
+	// 먼저번 postIdx로 바꿈
+	var postColor = '${post.postColor}';
 	$('.editor-cover').on('click', function(e){
   	 postColor = $(this).css('background-color'); 
     });
@@ -338,7 +338,7 @@ function dropHandler(ev) {
   
   // 7. 최종 fetch 
   	
-  	fetch(`/board/posting/fileIo?projectIdx=${projectIdx}&bdIdx=${param.bdidx}` , {
+  	fetch(`/board/posting/fileIo?projectIdx=${projectIdx}` , {
 	  method : 'POST',
 	  body : formdata
 	})
@@ -422,7 +422,58 @@ function dragleaveHandler(ev) {
   ev.preventDefault(); 
 }
 
+</script>
+<script type="text/javascript">
+	
+	// innerHTML 추가 및 eventListener 복원 
+	let wsIdx = `${board.wsIdx}`; 
+	let content = `${content}`; 
+	
+	// 모두 복원 후 이벤트를 다시 걸어주어야 한다 => 적용 안됨 
+	
+	// 0. title contentEditable 활성화 (title은 init과 동시에 기능부여)
+	// 1. commonDiv 및 immutableDiv 활성화
+	$('.editor-title').attr('contentEditable', 'true'); 
+	$('.commonDiv').attr('contentEditable', 'true'); 	
+	$('.immutableDiv').attr('contentEditable', 'true'); 	
+	let immutableDivs = $('.editor-minHeight-div').children('.immutableDiv');
+	
+	// 2. immutableDiv 복원
+	// initPage가 들어갈 경우, 중복을 통해서 이미 commonDiv는 기능 적용 
+	// + switch_case문으로 dataType을 받아서 각각 다르게 적용 	
+	for (var i = 0; i < immutableDivs.length; i++) {
+		let element = immutableDivs[i];
+		let dataId = element.getAttribute('data-id')
+		let jqueryElement = $(element);
+		
+		// 1. id값 안된다 (중복 불가)
+		switch(dataId){
+		case 'immutableCode': 
+			createCodeBlock(jqueryElement); 
+			break;
+		case 'immutableAudio': 
+			createImmutableDiv(jqueryElement); 
+			break;
+		case 'immutableImg':
+			createImmutableDiv(jqueryElement); 
+			break; 
+		case 'immutableFile':
+			createHyperLinkDiv(jqueryElement); 
+			break; 
+		case 'immutableLine': 
+			createImmutableDiv(jqueryElement); 
+			break; 
+		default :
+			//alert('에디터 에러가 발생하였습니다. 다시 시도하세요'); 
+			break; 
+		} 
+		
+		 
+	}
+	
 
+	
+	
 
 </script>
 

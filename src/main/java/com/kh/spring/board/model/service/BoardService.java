@@ -34,19 +34,26 @@ public interface BoardService {
 	Post selectPostByPostIdx(String pmIdx);
 
 	List<Post> selectBoardByTop(String projectIdx);
-	
-	//유송추가
+
+	// 유송추가
 	void deletePost(String postIdx);
-	
-	 int insertPostFile(FileDTO fileUploaded, String userIdx);
+
+	int insertPostFile(FileDTO fileUploaded, String bdIdx);
+
+	String selectWsIdxByPostIdx(String postIdx);
+
+	void updatePostByPostIdx(Map<String, String> map);
+
 	// 윤지 추가
 	Reply insertReply(Reply reply);
 
-	List<Map<String, Object>> selectReplyByPostIdx(String postIdx);
-
 	void deleteReplyByReplyIdx(String replyIdx);
 
+	List<Reply> selectReplyByTop(String projectIdx);
+
 	void updateReplyByReplyIdx(Reply reply);
+
+	List<Map<String, Object>> selectReplyByProjectMember(String postIdx);
 
 	// 지영 추가
 	void insertLeafBoard(Board board);

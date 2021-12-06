@@ -2756,8 +2756,8 @@ $.widget( "ui.autocomplete", {
 	// 실제 rendering할 메뉴를 바꾸는 작업은 이 메서드를 overload 한다 
 	_renderItem: function( ul, item ) {
 		return $( "<li>" )
-		.append( "<img src='" + item.icon + 
-		"' style='width: 50px; height: 50px; padding-left:10px;'><div>" 
+		.append( "<div style='width:50px; height:50px; padding-left:10px;'><img src='" + item.icon + 
+		"' style='width:30px;'></div><div>" 
 		+ item.value + "<br><div style='color:#9F9F9F; font-size:12px; padding-top:5px;'>" 
 		+ item.desc + "</div></div>" )
 		.appendTo( ul ).css('display', 'flex');

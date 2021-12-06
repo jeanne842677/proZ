@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.board.model.dto.Reply;
 import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.calendar.model.service.CalendarService;
+import com.kh.spring.common.code.CashItem;
 import com.kh.spring.common.code.ErrorCode;
 import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
@@ -335,96 +338,77 @@ public class ProjectController {
       String userIdx = member.getUserIdx();
 
       // member가 속한 프로젝트 list (11월16일)
-      List<Project> projectList = new ArrayList<Project>();
-      projectList = projectService.selectProjectByUserIdx(userIdx);
-
-      model.addAttribute(projectList);
+      
+      
+      List<Map<String,Object>>  projectList = null;
+      projectList = CamelMap.changeListMap(projectService.selectProjectAndProjectImgByUserIdx(userIdx));
+      
+      if(projectList != null) {
+         model.addAttribute("projectList" ,projectList);
+      }
+      
 
       return "project/project-list";
    }
 
    @PostMapping("project-list")
    @ResponseBody
-   public Project createProject(@RequestBody Project project, @SessionAttribute("authentication") Member member,
-         HttpSession session) {
-      System.out.println(member.toString());
-      System.out.println("project-list 통신 되나요?");
-
-      logger.debug(project.getProName());
-      logger.debug(project.getProDescription());
+   public void createProject(@RequestBody Project project, @SessionAttribute("authentication") Member member) {
 
       String proName = project.getProName();
       String proDescription = project.getProDescription();
       String userIdx = member.getUserIdx();
 
-      System.out.println("userIdx : " + userIdx); 
-
       // 새로운 프로젝트의 초대코드 생성
       String inviteCode = UUID.randomUUID().toString();
 
       // 새로운 프로젝트 생성
-      int res = projectService.insertProject(proName, proDescription, inviteCode, userIdx);
-
-      // 생성된 프로젝트 column
-      // 제이슨으로 만들고 ..넹! 객체로 리턴 보내고.
-      // jsp에서 return이 되는지 확인.
-      // 생성 되고나도 원래 페이지에 있도록 유지
-      return null;
+      projectService.insertProject(proName, proDescription, inviteCode, userIdx);
    };
 
-   @PostMapping("{projectIdx}") // 페이지 이동은 get, 요청은 post
+   @PostMapping("{projectIdx}") 
    public String enterProjectMain(@PathVariable String projectIdx, HttpServletResponse response) throws Exception {
-
       return "project/project-main";
    };
 
-   
-   
-   
+
    // 프로젝트 상세로 이동 알고리즘?////지영이 수정 12/4
    @GetMapping("{projectIdx}")
-   public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member,
-         HttpSession session, Model model) {      
+   public String enterProjectMain(@PathVariable String projectIdx, @SessionAttribute("authentication") Member member, Model model, HttpSession session) {      
       
       //프로젝트에 속한 워크스페이스
       List<Map<String,Object>> workspace = new ArrayList<Map<String,Object>>();
-      workspace = CamelMap.changeListMap(projectService.selectWorkspaceListByProjectIdx(projectIdx));
-      
+      workspace = CamelMap.changeListMap(projectService.selectWorkspaceListByProjectIdx(projectIdx)); 
       model.addAttribute("workspace", workspace);
       
-   
+
       ////////////윤지가 작성할 코드(main에서 불러올 거)/////////
-      	System.out.println("workspace : " + workspace);
-      	
-      	List<Memo> mainMemoList = memoService.selectMemoByTop(projectIdx);
-      
-		
+         System.out.println("workspace : " + workspace);
+         
+         List<Memo> mainMemoList = memoService.selectMemoByTop(projectIdx);
         model.addAttribute("mainMemoList", mainMemoList);
         
           //////////////////윤지 추가 코드 12월 1일////////////////////////////////
         List<Post> postList = boardService.selectBoardByTop(projectIdx);
-    	 model.addAttribute("postList", postList);
-    	 
-    	 List<com.kh.spring.calendar.model.dto.Calendar> calendarList = calendarSerivce.selectCalendarListByProjectIdx(projectIdx);
-    	 model.addAttribute("calendarList" , calendarList);
-    	
+       model.addAttribute("postList", postList);
+       
+       List<Reply> replyList = boardService.selectReplyByTop(projectIdx);
+       model.addAttribute("replyList", replyList);
+       System.out.println("postList 찍어본다 :"+postList);
+       System.out.println("replyList 찍어본다:"+replyList);
         
-        
-      
+       List<com.kh.spring.calendar.model.dto.Calendar> calendarList = calendarSerivce.selectCalendarListByProjectIdx(projectIdx);
+       model.addAttribute("calendarList" , calendarList);
+
       return "project/project-main"; 
    }
    
    ///////은비 11월 19일 워크스페이스 작업
    
    @GetMapping("setting/workspace-management/{projectIdx}")
-   public String settingWorkspace(Model model, @PathVariable String projectIdx,
-         @SessionAttribute(value = "authentication") Member member) {
+   public String settingWorkspace(Model model, @PathVariable String projectIdx, @SessionAttribute(value = "authentication") Member member) {
 
-      System.out.println("프로젝트 여기 들어오나?" + projectIdx);
-      
       List<Workspace> workspaceList = projectService.selectWorkspaceByProjectIdx(projectIdx);
-      
-      System.out.println(workspaceList);
       model.addAttribute(workspaceList);
       
       return "project/setting/workspace-management";
@@ -432,11 +416,9 @@ public class ProjectController {
    
    @PostMapping("setting/workspace-management/{projectIdx}")
    @ResponseBody
-   public void updateWorkspace(@RequestBody List<Map<String, String>> workspaceList,
-                         @PathVariable String projectIdx) {
-      
+   public void updateWorkspace(@RequestBody List<Map<String, Object>> workspaceList, @PathVariable String projectIdx) {
       projectService.settingWorkspace(workspaceList, projectIdx);
-      
+      System.out.println(workspaceList);
    }
 
    // ========================================은비 작업 끝=========================
@@ -444,135 +426,183 @@ public class ProjectController {
    
    //윤지코드
    @GetMapping("project-profile/{projectIdx}") 
-	public String mypage( HttpSession session,
-			Model model, @PathVariable String projectIdx
-			,@SessionAttribute(value = "authentication") Member member
-			) {
-	   String userIdx = member.getUserIdx();
-	   member = projectService.selectProjectMemberByUserIdx(projectIdx,userIdx);
-		logger.debug(member.toString());
-		
+   public String mypage( HttpSession session,
+         Model model, @PathVariable String projectIdx
+         ,@SessionAttribute(value = "authentication") Member member
+         ) {
+      String userIdx = member.getUserIdx();
+      member = projectService.selectProjectMemberByUserIdx(projectIdx,userIdx);
+      logger.debug(member.toString());
+      
 
-		//프로필 사진 추출
-		FileDTO fileDTO = projectService.selectProfileImgFilebyMemberIdx(member);
-		System.out.println("userIdx :"+userIdx);
-		System.out.println("projectIdx :"+projectIdx);
-		
-		
-		if(fileDTO == null) {
-			System.out.println("1. fileDTO 없음 진입확인");
-			session.setAttribute("profileImg", "person.png");
-		} else {
-			session.setAttribute("profileImg", fileDTO.getSavePath()+fileDTO.getRenameFileName());
-		}
-		model.addAttribute("member",member);
-		// Model에 error 객체 추가 
-		model.addAttribute(new MypageForm()).addAttribute("error",new ValidateResult().getError());
-		return "project/project-profile"; 
-	}
+      //프로필 사진 추출
+      FileDTO fileDTO = projectService.selectProfileImgFilebyMemberIdx(member);
+      System.out.println("userIdx :"+userIdx);
+      System.out.println("projectIdx :"+projectIdx);
+      
+      
+      if(fileDTO == null) {
+         System.out.println("1. fileDTO 없음 진입확인");
+         session.setAttribute("profileImg", "person.png");
+      } else {
+         session.setAttribute("profileImg", fileDTO.getSavePath()+fileDTO.getRenameFileName());
+      }
+      model.addAttribute("member",member);
+      // Model에 error 객체 추가 
+      model.addAttribute(new MypageForm()).addAttribute("error",new ValidateResult().getError());
+      return "project/project-profile"; 
+   }
    
    @PostMapping("profile/update/Color/{projectIdx}")
-	@ResponseBody 
-	public String changeProfileColor(@Validated MypageForm mypageForm
-			,Errors errors 
-			,HttpSession session, @PathVariable String projectIdx) {
-		
-		try {
-			//1) 값 Validate 검증
-			if(errors.hasErrors()) {
-				return "failed"; 
-			}
-			//2) 색 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update 
-			String profileColor = "#" + mypageForm.getProfileColor();
-			Member tempMember = new Member();
-			Member sessionMember = (Member) session.getAttribute("authentication");
-			
-			tempMember.setProfileColor(profileColor); 
-			tempMember.setUserIdx(sessionMember.getUserIdx());
-			
-			int res = projectService.updateMemberByProfileColor(tempMember,projectIdx);
-			
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-			return "failed";
-		}
-			//3) color값 반환 
-			return "#" + mypageForm.getProfileColor(); 
-	}
+   @ResponseBody 
+   public String changeProfileColor(@Validated MypageForm mypageForm
+         ,Errors errors 
+         ,HttpSession session, @PathVariable String projectIdx) {
+      
+      try {
+         //1) 값 Validate 검증
+         if(errors.hasErrors()) {
+            return "failed"; 
+         }
+         //2) 색 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update 
+         String profileColor = "#" + mypageForm.getProfileColor();
+         Member tempMember = new Member();
+         Member sessionMember = (Member) session.getAttribute("authentication");
+         
+         tempMember.setProfileColor(profileColor); 
+         tempMember.setUserIdx(sessionMember.getUserIdx());
+         
+         int res = projectService.updateMemberByProfileColor(tempMember,projectIdx);
+         
+         
+      } catch(Exception e) {
+         e.printStackTrace();
+         return "failed";
+      }
+         //3) color값 반환 
+         return "#" + mypageForm.getProfileColor(); 
+   }
 
    @PostMapping("profile/update/Img/{projectIdx}")
-	@ResponseBody
-	public String changeProfileImg(@RequestParam List<MultipartFile> files
-			,HttpSession session,  @PathVariable String projectIdx) {
-		
-		//1) 파일 추출 및 DB저장 
-		FileUtil fileUtil = new FileUtil(); 
-		FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
-	
-		try {
-			Member member = (Member) session.getAttribute("authentication");
-			System.out.println(member.getUserIdx());
-			int res = projectService.insertProfileImg(fileUploaded, member.getUserIdx(),projectIdx); 
-		} catch(Exception e) {
-			e.printStackTrace();
-			
-		}
-		//2) profileImg는 join을 통해 추출, session 업데이트 불필요
-		logger.debug(fileUploaded.getSavePath());
-		logger.debug(fileUploaded.getRenameFileName());
-		return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
-	}
+   @ResponseBody
+   public String changeProfileImg(@RequestParam List<MultipartFile> files
+         ,HttpSession session,  @PathVariable String projectIdx) {
+      
+      //1) 파일 추출 및 DB저장 
+      FileUtil fileUtil = new FileUtil(); 
+      FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
+   
+      try {
+         Member member = (Member) session.getAttribute("authentication");
+         System.out.println(member.getUserIdx());
+         int res = projectService.insertProfileImg(fileUploaded, member.getUserIdx(),projectIdx); 
+      } catch(Exception e) {
+         e.printStackTrace();
+         
+      }
+      //2) profileImg는 join을 통해 추출, session 업데이트 불필요
+      logger.debug(fileUploaded.getSavePath());
+      logger.debug(fileUploaded.getRenameFileName());
+      return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
+   }
    
   
-	
-	@PostMapping(value= "profile/update/Nickname/{projectIdx}", produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String changeProfileNickname(@Validated MypageForm mypageForm
-			,Errors errors
-			,HttpSession session, @PathVariable String projectIdx) {
-		
-		try {
-			//1) 값 validate 검증 
-			if(errors.hasErrors()) {
-				return "failed";
-			}
-			//2) 닉네임 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
-			String nickname = mypageForm.getNickname();
-			Member member = new Member();
-			Member sessionMember =(Member) session.getAttribute("authentication"); 
-			member.setNickname(nickname);
-			member.setUserIdx(sessionMember.getUserIdx());
-			
-		
-			int res = projectService.updateMemberByNickname(member,projectIdx);
+   
+   @PostMapping(value= "profile/update/Nickname/{projectIdx}", produces = "text/plain;charset=UTF-8")
+   @ResponseBody
+   public String changeProfileNickname(@Validated MypageForm mypageForm
+         ,Errors errors
+         ,HttpSession session, @PathVariable String projectIdx) {
+      
+      try {
+         //1) 값 validate 검증 
+         if(errors.hasErrors()) {
+            return "failed";
+         }
+         //2) 닉네임 추출, SESSION_Member에 넣어 DB저장, 이후 SESSION update
+         String nickname = mypageForm.getNickname();
+         Member member = new Member();
+         Member sessionMember =(Member) session.getAttribute("authentication"); 
+         member.setNickname(nickname);
+         member.setUserIdx(sessionMember.getUserIdx());
+         
+      
+         int res = projectService.updateMemberByNickname(member,projectIdx);
 
-		       
-		} catch(Exception e) {
-			e.printStackTrace(); 
-			return "failed";
-		}
-			//3) nickname 반환 
-			return mypageForm.getNickname(); 
-	}
-	
-	@PostMapping("profile/update/isLeave/{projectIdx}")
-	@ResponseBody
-	public String changeMemberIsleave(HttpSession session,@PathVariable String projectIdx) {
-			
-		//1. session에서 member추출, isLeave 변경 
-		try {
-			Member member = new Member();
-			Member sessionMember =(Member) session.getAttribute("authentication");  
-			member.setUserIdx(sessionMember.getUserIdx());
-			int res = projectService.updateProjectIsLeave(member,projectIdx); 
-			
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-			return "failed"; 
-		}
-		//2. return "success"
-		return "success"; 
-	}
+             
+      } catch(Exception e) {
+         e.printStackTrace(); 
+         return "failed";
+      }
+         //3) nickname 반환 
+         return mypageForm.getNickname(); 
+   }
+   
+   //윤지코드 작업
+   //12월 5일
+   @PostMapping("profile/update/isLeave/{projectIdx}")
+   @ResponseBody
+   public String changeMemberIsleave(HttpSession session,@PathVariable String projectIdx) {
+         
+      //1. session에서 member추출, isLeave 변경 
+      try {
+         Member member = new Member();
+         Member sessionMember =(Member) session.getAttribute("authentication");  
+         member.setUserIdx(sessionMember.getUserIdx());
+         int res = projectService.updateProjectIsLeave(member,projectIdx); 
+         
+         
+      } catch(Exception e) {
+         e.printStackTrace();
+         return "failed"; 
+      }
+      //2. return "success"
+      return "success"; 
+   }
+   
+   @PostMapping("projectImg/{projectIdx}")
+   @ResponseBody
+   public String projectImg(@RequestParam List<MultipartFile> files
+         ,HttpSession session
+         ,@PathVariable String projectIdx
+         ,@Param(value = "state") String state) {
+      //1) 파일 추출 및 DB저장 
+      FileUtil fileUtil = new FileUtil(); 
+      FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
+      
+   
+      try {
+         switch (state) {
+         case "insert":
+            projectService.insertProjectImg(fileUploaded, projectIdx);
+            break;
+         case "update":
+            fileUploaded = projectService.updateProjectImg(fileUploaded, projectIdx);
+            break;
+         
+         }
+         
+      } catch(Exception e) {
+         e.printStackTrace();
+         return "failed";
+      }
+      //2) profileImg는 join을 통해 추출, session 업데이트 불필요
+      logger.debug(fileUploaded.getSavePath());
+      logger.debug(fileUploaded.getRenameFileName());
+      
+      System.out.println("파일 저장 경로  : " + fileUploaded.getSavePath() +fileUploaded.getRenameFileName());
+      return fileUploaded.getSavePath() +fileUploaded.getRenameFileName(); 
+   }
+   
+   @PostMapping("delete/projectImg/{projectIdx}")
+   public String deleteProjectImg(
+         HttpSession session
+         ,@PathVariable String projectIdx) {
+      
+      projectService.deleteProjectImg(projectIdx);
+      
+      return "delete";
+   }
+   
+   
 }

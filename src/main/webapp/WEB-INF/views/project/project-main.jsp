@@ -432,7 +432,18 @@ margin-bottom:0;
         	position: relative;
         	top:-5px;
         }
-        
+        .profile-img{
+        	display:flex;
+        	justify-content: flex-end;
+        	margin-right:10px;
+        }
+       
+       .replyCon{
+       	display:flex;
+       }
+       div{
+       	border:solid thin;
+       }
     </style>
 </head>
 <body>
@@ -485,9 +496,9 @@ margin-bottom:0;
 	                             </c:if> 
 	                                     <c:forEach items="${postList}" var="post">
 	                                    	<div class="boardcon">
-	                                        <div class="card" id="${post.postIdx }" data-sort="${post.sort}">
+	                                        <div class="card" data-sort="${post.sort}" data-board-post-idx="${post.postIdx}">
 	                                            <div class="card-subject">${post.postTitle}</div>
-	                                            <div class="profile-img"></div>
+	                                            <div class="profile-img"><i class="fas fa-user-circle fa-2x"></i></div>
 	                                        </div>
 	                                       </div>
 	                                    </c:forEach>
@@ -497,11 +508,17 @@ margin-bottom:0;
                         <div class="comment">
                             <div class="commentarea" >comment</div>
                             <div class="commentwrap">
-                            <c:if test="${empty commentList}">
+                            <c:if test="${empty replyList}">
 	                             	<div id="noticeText">현재 댓글이 존재하지 않습니다.</div>
 	                             </c:if> 
-                               <!--  <div class="commentcon"></div> -->
+	                             <c:forEach items="${replyList}" var="reply">
+                                <div class="commentcon" data-reply-post-idx="${reply.postIdx}">
                                 
+                                	<div class="replyCon">${reply.replyContent}</div>
+                                	<div class="profile-img"><i class="fas fa-user-circle fa-2x"></i></div>
+                                	
+                                </div>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
@@ -549,8 +566,14 @@ margin-bottom:0;
     
     
     <script type="text/javascript">
+    $('.commentcon').click(function(){
+    	var replyIdx = $(this).data('reply-post-idx');
+    	location.href = 'http://localhost:9090/board/view/${projectIdx}?postIdx='+replyIdx;
+    	
+    });
     $('.boardcon').click(function(){
-    	var postIdx = $(this).data('board-post-idx');
+    	//수정
+    	var postIdx = $(this).children('.card').data('board-post-idx');
     	location.href = 'http://localhost:9090/board/view/${projectIdx}?postIdx='+postIdx;
     	
     });

@@ -195,13 +195,19 @@ aside {
     left:35px;
 }
 
-
+.member-cnt{
+        	margin-top : 6px;
+        	font-size : 1.2em;
+        	font-weight : bolder;
+        	margin-left : 15px;
+        }
 
 .member {
     display: flex;
     height: 60px;
     justify-content: space-between;
     align-content: center;
+    
     
 
 }

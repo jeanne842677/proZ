@@ -29,6 +29,36 @@
         font-size: 16px;
         color: gray;
     }
+    /* 윤지 12월 5일  */
+    .nickname, .modify-btn, .remove-btn, .register-btn{
+       margin-left: 10px;
+    }
+    .modify-btn, .register-btn,.remove-btn{
+       color: gray;
+       font-weight: bolder;
+    }
+    
+  
+    .all-btn{
+       display:flex;
+    }
+    .nickname{
+         display:flex;
+       font-weight: bolder;
+    }
+    .reply-icon{
+       display:flex;
+       font-weight: bolder;
+       
+    }
+    
+    .test{
+       margin-left:10px;
+       width:100%;
+    }
+    .comment-text-wrapper{
+       width:100%;
+    }
 	</style>
 </head>
 <body>
@@ -40,9 +70,12 @@
                 <!--여기서만 작업-->
                 <div class="post-session-wrapper">
                     <div class="post-main-title-wrapper">
-                        <div class="post-main-title"># 메인 타이틀</div>
+                    <!-- ++++ 수정 -->
+                        <div class="post-main-title"># ${board.bdName}</div>
                     </div>
                     <div class="post-main-content-wrapper">
+                    <!-- ++++ 수정 -->
+                    	<div class="post-navigation-bar"></div>
                         <div class="editor-minHeight-div" style="min-height: 500px;">
                         </div>
                         <div class="footer-wrapper">
@@ -70,76 +103,37 @@
                             </div>
                         </div>
                         <!-- 댓글 기능 DIV, 윤지 수정본 -->
-                           
                             <div class="post-comment-textArea-div">
                                 <i id="comment-smile" class="fas fa-smile"></i></label>
-                                <form class="post-comment-textArea-form">
+                                <div class="post-comment-textArea-form">
                                     <div id="comment-textArea" class="comment-textArea" contenteditable="true"></div>
                                     <button class="comment-textArea-submit-btn">등록</button>
-                                </form>
+                                </div>
                             </div>
-                           <c:forEach  items="${replyList}" var="reply">
+                           <c:forEach  items="${replyMember}" var="reply">
                             <label class="post-comment-textArea-label"
                                data-reply-idx="${reply.replyIdx}" data-reply-content="${reply.replyContent}"   >
-                                <label for="comment-textArea"><i id="comment-smile" class="fas fa-smile"></i></label>
+                                <label for="comment-textArea">
+                              
+                               <div class="reply-icon" style="color:${reply.profileColor}"> <i id="comment-smile" class="fas fa-smile"></i>${reply.nickname}</div>
+                       </label>
                                 <div class="comment-text-wrapper">
-                                    <pre class="test">${reply.replyContent}</pre>
+                                    <div class="test">${reply.replyContent}</div>
                                     <div class="content-btn-wrapper">
-                                        <div>${reply.regDate}</div><a class="coment-anchor-btn" href="#">답글달기</a>
+                                        <div>${reply.regDate}</div>
+                                                    
                                         <c:if test="${projectMember.pmIdx eq reply.pmIdx}">
-                                       <a class="modify-btn" >수정하기</a>
-                                       <a class="remove-btn">삭제하기</a>
+                                       <div class="all-btn">
+                                       <div class="modify-btn" id="modify-btn">수정하기</div>
+                                       <div class="remove-btn" id="remove-btn">삭제하기</div>
+                                       <div class="register-btn" style="display:none" id="register-btn">등록하기</div>
+                                       </div>
                                         </c:if>
                                     </div>
                                 </div>
                             </label>
                             </c:forEach>
 						<!-- 댓글기능 div 윤지 수정본 -->
-						
-                        <!-- <div class="post-comment-wrapper">
-                            <div class="post-comment-title">
-                                <div class="title-text">댓글</div><div class="title-number">48</div>
-                            </div>
-                            
-                            
-                            <div class="post-comment-textArea-div">
-                                <i id="comment-smile" class="fas fa-smile"></i></label>
-                                <form class="post-comment-textArea-form">
-                                    <div id="comment-textArea" class="comment-textArea" contenteditable="true"></div>
-                                    <button class="comment-textArea-submit-btn">등록</button>
-                                </form>
-                            </div>
-                            
-                            <label class="post-comment-textArea-label">
-                                <label for="comment-textArea"><i id="comment-smile" class="fas fa-smile"></i></label>
-                                <div class="comment-text-wrapper">
-                                    <pre class="test">댓글 테스트</pre>
-                                    <div class="content-btn-wrapper">
-                                        <div>3시간 전</div><a class="coment-anchor-btn" href="#">답글달기</a>
-                                    </div>
-                                </div>
-                            </label>
-                            <label class="post-comment-textArea-label">
-                                <label for="comment-textArea"><i id="comment-smile" class="fas fa-smile"></i></label>
-                                <div class="comment-text-wrapper">
-                                    <span class="testCopyValue">댓글 테스트 (클릭)</span>
-                                    <div class="content-btn-wrapper">
-                                        <div>3시간 전</div><a class="coment-anchor-btn" href="#">답글달기</a>
-                                    </div>
-                                </div>
-                            </label>
-                            <div class="post-comment-anchor-wrapper">
-                                <label class="post-comment-anchor-label">
-                                    <label for="comment-textArea"><i id="comment-smile" class="fas fa-smile"></i></label>
-                                    <div class="comment-text-wrapper">
-                                        <pre class="test">댓글 테스트</pre>
-                                        <div class="content-btn-wrapper">
-                                            <div>3시간 전</div><a class="coment-anchor-btn" href="#">답글달기</a>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </section>
@@ -188,23 +182,27 @@
 
     // delete 기능 btn 
     $('#post-delete-btn').on('click', function(e){
-    	//loading.on(); 
-    	fetch('/board/view/remove-post?' + 'postIdx=${post.postIdx}?wsIdx=${wsIdx}', {
+    	fetch('/board/view/remove-post?' + 'postIdx=${post.postIdx}', {
     		method : 'POST'
     	})
     	.then(response => response.text())
     	.then(text => {
-			location.href = '/board/${projectIdx}';   
+			location.href = '/board/${projectIdx}?wsIdx=' + text;   
     	})
     });
    
     // edit 기능 btn 
-    $('#post-change-btn').on('click', function(e){
-    	//loading.on(); 
+    $('#post-change-btn').on('click', function(e){ 
     	let form = document.createElement('form'); 
-    	form.action = '/board/view/change-post?bdidx=${post.bdIdx}'; 
+    	// ++++ 수정
+    	form.action = '/board/view/change-post/${projectIdx}?bdidx=${board.bdIdx}&postIdx=${param.postIdx}'; 
     	form.method = 'POST'; 
-    	form.innerHTML = '<input name="content" value=${postContent}>';
+    	let input = document.createElement('input'); 
+    	input.type = 'text'; 
+    	input.value = postContent;
+    	input.name = 'content'; 
+    	form.append(input); 
+    	//form.innerHTML = '<input name="content" value='+ postContent" + '>';
     	document.body.append(form);
     	form.submit();
     });
@@ -212,7 +210,7 @@
     //
 </script>
 <script type="text/javascript">
-/* 댓글 입력 삭제 수정 javascript 윤지   */
+/* 댓글 수정 삭제 입력 최윤지 */
 //댓글 입력
 $(".comment-textArea-submit-btn").off().on('click',function () {
     let replyIdx = "";
@@ -252,17 +250,36 @@ console.dir(replyIdx);
      })
  })
  
-  //댓글 수정하기
-$(".modify-btn").off().on('click',function () {
-let replyIdx = $(this).closest(".post-comment-textArea-label").data("reply-idx");
-let reply = $(this).closest(".post-comment-textArea-label").data("reply-content");
-console.dir(reply);
-console.dir(replyIdx);
+  
+
+$(".modify-btn").off().on('click' ,function() {
+  
+   reviseReply= $(this).parents('.comment-text-wrapper').find('.test');
+   reviseReply.attr('contenteditable' , 'true');
+  $(".test").focus();
+  
+  $(this).siblings( ".remove-btn" ).hide();
+  $(this).hide();
+  $(this).siblings(".register-btn").show();
+   
+  
+})
+ 
+ 
+ 
+   //댓글 수정등록하기
+$(".register-btn").off().on('click',function () {
+   let reviseReply= $(this).parents('.comment-text-wrapper').find('.test').html().trim();
+    //reviseReply.attr('contenteditable' , 'false');
+ $(".test").blur();
+    let replyIdx = $(this).closest(".post-comment-textArea-label").data("reply-idx");
+   console.dir(reviseReply);
+   console.dir(replyIdx);
     fetch("/board/post/update/reply" , {
          method : "POST" ,
          headers : {"Content-type" : "application/json; charset=UTF-8"} ,
          body : JSON.stringify({
-         replyContent : reply,
+         replyContent : reviseReply,
          replyIdx :replyIdx,
          postIdx : "${param.postIdx}",
          pmIdx: "${projectMember.pmIdx}"
@@ -271,9 +288,10 @@ console.dir(replyIdx);
     }).then(res=>{res.text()})
      .then(reply=>{
         
-        location.reload();
+       location.reload();
      })
- })
+ }) 
+
 </script>
 </body>
 </html>

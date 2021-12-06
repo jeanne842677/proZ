@@ -467,4 +467,21 @@ aside {
     align-items: center;
     color: #Fff;
     font-weight: 800;
+    cursor:pointer;
+}
+
+.onoffprofile{
+	background-color: RGB(143, 122, 229);
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+    border-radius: 30px;
+}
+
+.myprofile-photo{
+	background-color: RGB(143, 122, 229);
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 30px;
 }

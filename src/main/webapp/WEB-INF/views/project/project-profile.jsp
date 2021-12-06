@@ -11,8 +11,8 @@
 <link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css">
 <link type="text/css" rel="stylesheet" href="/resources/css/nav.css">
 <style type="text/css">
-					#profile-change-git-btn{
-                    	width: 200px; 
+               #profile-change-git-btn{
+                       width: 200px; 
                     }
                     a{
                     text-decoration: none; 
@@ -25,17 +25,17 @@
 <body>
     <div class="wrap">
         <header>
-        	<%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
+           <%@ include file="/WEB-INF/views/include/nav/header.jsp"%>
         </header>
         <div class="con">
             <nav>
-            	<%@ include file="/WEB-INF/views/include/nav/profile-nav.jsp"%>
+               <%@ include file="/WEB-INF/views/include/nav/profile-nav.jsp"%>
             </nav>
             <section>
                 <!--작업 내용-->
                 <div class="section-wrapper">
                     <div class="content-wrapper" id="profileImg-wrapper">
-                    	<a name="userProfile"></a>
+                       <a name="userProfile"></a>
                         <button id="profile-banner-btn" style="background-color: ${member.profileColor}"></button>
                         <button id="profile-img"><img class="profileImg" src="<spring:url value='/file/${profileImg}'/>"></button>
                         <input id="profile-img-input" type="file" accept="image/*" style="display: none;">
@@ -79,76 +79,76 @@
 <script src="/resources/js/validator/validateMachine1.1.js"></script>
 <script>
 
-	//**ColorPicker 설정 
-	var parent = document.querySelector('#profile-banner-btn');
+   //**ColorPicker 설정 
+   var parent = document.querySelector('#profile-banner-btn');
     var picker = new Picker(parent);
     picker.setOptions({
         popup:'bottom'
     })
     var parentJquery = $('#profile-banner-btn'); 
     parentJquery.click( ()=>{
-    	parentJquery.children().css('position','relative'); 
-    	parentJquery.children().css('left', '100px');
+       parentJquery.children().css('position','relative'); 
+       parentJquery.children().css('left', '100px');
     });  
      
-   	//**ColorPicker 통한 프로필컬러 변경 
-   	picker.onDone = function(color) {
-    	//color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
-    	profileColorHex = color.hex.slice(1);
-    	
-    	fetch('/project/profile/update/Color/${projectIdx}?profileColor='+ profileColorHex, 
-    			{
-    			method: 'POST', 	
-    			credentials : 'include'
-    		}) 
-    	.then(response => response.text())
-    	.then(text=>{
-    		if(text != 'failed'){
-    			parentJquery.css('background-color', text);
-    		} else {
-    			alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
-    		}
-    	})
-    	.catch( ()=>{
-    		alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
-    	});	
-	};
+      //**ColorPicker 통한 프로필컬러 변경 
+      picker.onDone = function(color) {
+       //color.hex로 hexColor를 불러오기, 전송을 위해 # 제거  
+       profileColorHex = color.hex.slice(1);
+       
+       fetch('/project/profile/update/Color/${projectIdx}?profileColor='+ profileColorHex, 
+             {
+             method: 'POST',    
+             credentials : 'include'
+          }) 
+       .then(response => response.text())
+       .then(text=>{
+          if(text != 'failed'){
+             parentJquery.css('background-color', text);
+          } else {
+             alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
+          }
+       })
+       .catch( ()=>{
+          alert('색 변경이 실패하였습니다. 다시 시도하세요'); 
+       });   
+   };
     
-	//**프로필 이미지 비동기변경 
-	var profileImgInputJquery = $('#profile-img-input'); 
-	
-	$('#profile-img').click( ()=>{
-		profileImgInputJquery.click(); 
-	});
-	
-	profileImgInputJquery.on('input', function() {
-		 
-		var file = document.querySelector('#profile-img-input').files[0]; 
-		var formData = new FormData();  
-		
-		if(file == null){
-			alert('파일을 선댁해주세요'); 
-			return false; 
-		}
-		
-		formData.append('files', file); 
-		
-		fetch('/project/profile/update/Img/${projectIdx}', {
-			method: 'POST', 	
-			body : formData
-		})
-		.then(response => response.text())
-    	.then(text=>{
-    		if(text != 'failed'){ 
-    			$('.profileImg').attr('src', '/file/' + text);
-    		} else {
-    			alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
-    		}
-    	})
-    	.catch( ()=>{
-    		alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
-    	});	
-	});
+   //**프로필 이미지 비동기변경 
+   var profileImgInputJquery = $('#profile-img-input'); 
+   
+   $('#profile-img').click( ()=>{
+      profileImgInputJquery.click(); 
+   });
+   
+   profileImgInputJquery.on('input', function() {
+       
+      var file = document.querySelector('#profile-img-input').files[0]; 
+      var formData = new FormData();  
+      
+      if(file == null){
+         alert('파일을 선댁해주세요'); 
+         return false; 
+      }
+      
+      formData.append('files', file); 
+      
+      fetch('/project/profile/update/Img/${projectIdx}', {
+         method: 'POST',    
+         body : formData
+      })
+      .then(response => response.text())
+       .then(text=>{
+          if(text != 'failed'){ 
+             $('.profileImg').attr('src', '/file/' + text);
+          } else {
+             alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
+          }
+       })
+       .catch( ()=>{
+          alert('프로필 사진 변경이 실패하였습니다. 다시 시도하세요'); 
+       });   
+   });
 
     //**닉네임 변경 Modal 코드
     let nickNameModal = new Modal('닉네임 변경하기', '변경하실 닉네임을 입력하세요'); 
@@ -159,25 +159,25 @@
     //nickNamePopUp.find('#input').attr('maxlength',8);
     nickNameModal.setConfirmFnc( function(){
 
-    	
-    	var changedNickname = nickNamePopUp.find('#input').val(); 
-    	fetch('/project/profile/update/Nickname/${projectIdx}?nickname='+changedNickname, {
-    		method : 'POST'
-    	})
-    	.then(response => response.text())
-    	.then(text=>{
-    		if(text != 'failed'){
-    			$('.nickname').text(text);  
-    		} else {
-    			alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
-    		}
-    	})
-    	.catch( ()=>{
-    		alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
-    	})
-    	
-    	nickNamePopUp.find('#input').val("");  
-    	
+       
+       var changedNickname = nickNamePopUp.find('#input').val(); 
+       fetch('/project/profile/update/Nickname/${projectIdx}?nickname='+changedNickname, {
+          method : 'POST'
+       })
+       .then(response => response.text())
+       .then(text=>{
+          if(text != 'failed'){
+             $('.nickname').text(text);  
+          } else {
+             alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
+          }
+       })
+       .catch( ()=>{
+          alert('닉네임 변경이 실패하였습니다. 다시 시도하세요'); 
+       })
+       
+       nickNamePopUp.find('#input').val("");  
+       
     }); 
 
     
@@ -186,23 +186,25 @@
     isleaveModal.createAlertModal(); 
     isleaveModal.makeModalBtn($('#button-isleave')); 
     isleaveModal.setConfirmFnc( function() {
-    	fetch('/project/isleave', {
-    		method : 'POST'
-    	})
-    	.then(response => response.text())
-    	.then(text=>{
-    		if(text == 'success'){
-    		  alert('회원 탈퇴에 성공하였습니다.');
-    		  location.href = "/"; 
-    		} else if (text == 'failed'){
-    			alert('회원 탈퇴에 실패하였습니다. 다시 시도하세요'); 
-    		} else {
-    			alert('회원 탈퇴에 실패하였습니다. 다시 시도하세요'); 
-    		}
-    	})
-    	.catch( ()=>{
-    		alert('회원 탈퇴에 실패하였습니다. 다시 시도하세요'); 
-    	})
+       
+       fetch('/project/profile/update/isLeave/${projectIdx}', {
+          method : 'POST'
+          
+       })
+       .then(response => response.text())
+       .then(text=>{
+          if(text == 'success'){
+            alert('프로젝트 탈퇴에 성공하였습니다.');
+            location.href = "/"; 
+          } else if (text == 'failed'){
+             alert('프로젝트 탈퇴에 실패하였습니다. 다시 시도하세요'); 
+          } else {
+             alert('프로젝트 탈퇴에 실패하였습니다. 다시 시도하세요'); 
+          }
+       })
+       .catch( ()=>{
+          alert('프로젝트 탈퇴에 실패하였습니다. 다시 시도하세요'); 
+       })
     }); 
     
     
@@ -239,7 +241,7 @@
        '\\s' : '패스워드에 공백을 포함할 수 없습니다'
    });
    v3.addRegExp({
-	   '\^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Zㄱ-힣0-9]).{8,70}$' : '8-70자의 영문,숫자,특수문자가 아닙니다.'
+      '\^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Zㄱ-힣0-9]).{8,70}$' : '8-70자의 영문,숫자,특수문자가 아닙니다.'
     })
    // 중복검사를 위한 코드
    
@@ -256,14 +258,14 @@
    // modal을 다시 킬 경우 clickevent의 이전에 그 안의 inputTag들을 inputEvent를 
    // 통해 초기화시켜야 한다. 
    // 모든 모달에 이벤트핸들러를 초기회시킨 후 다시 적용시킨다.. 
-	var event = new Event('input', {
-	    bubbles: true,
-	    cancelable: true,
-	});
+   var event = new Event('input', {
+       bubbles: true,
+       cancelable: true,
+   });
    
    $('#profile-change-nickName-btn').on('click', ()=>{
-	    let nicknameDOM = nickNamePopUp.find('#input').get();
-	    nicknameDOM[0].dispatchEvent(event); 
+       let nicknameDOM = nickNamePopUp.find('#input').get();
+       nicknameDOM[0].dispatchEvent(event); 
    })
  
     

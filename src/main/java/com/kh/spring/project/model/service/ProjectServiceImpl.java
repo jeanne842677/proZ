@@ -1,5 +1,6 @@
 package com.kh.spring.project.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -232,6 +233,32 @@ public class ProjectServiceImpl implements ProjectService {
       return projectRepository.selectProjectRoleByProjectIdxAndUserIdx(projectIdx,userIdx);
    }
 
+   @Override
+   public void insertProjectImg(FileDTO fileUploaded, String projectIdx) {
+      projectRepository.insertProjectImg(fileUploaded,projectIdx);
+      
+   }
+
+   @Override
+   public FileDTO selectProjectImgSavePath(String projectIdx) {
+      return projectRepository.selectProjectImgSavePath(projectIdx);
+   }
+
+   @Override
+   public FileDTO updateProjectImg(FileDTO fileUploaded,String projectIdx) {
+      projectRepository.updateProjectImg(fileUploaded,projectIdx);
+      return fileUploaded;
+   }
+
+   @Override
+   public void deleteProjectImg(String projectIdx) {
+      projectRepository.deleteProjectImg(projectIdx);
+   }
+
+   @Override
+   public List<Map<String, Object>> selectProjectAndProjectImgByUserIdx(String userIdx) {
+      return projectRepository.selectProjectAndProjectImgByUserIdx(userIdx);
+   }
 
    // 민협 코드 끝
 ////////////은비가 작성한 코드 시작
@@ -281,61 +308,50 @@ public class ProjectServiceImpl implements ProjectService {
 
    //11월 24일 은비 추가
    @Override
-   public void settingWorkspace(List<Map<String, String>> workspaceList, String projectIdx) {
+   public void settingWorkspace(List<Map<String, Object>> workspaceList, String projectIdx) {//트랜잭션 문제(open,close)
       int sort = 1;
       System.out.println("projectIdx" + projectIdx);
       System.out.println("workspaceList"+workspaceList);
-      for (Map<String, String> map : workspaceList) {
+      List<Map<String,Object>> updateList = new ArrayList<Map<String,Object>>();
+      List<Map<String,Object>> deleteList = new ArrayList<Map<String,Object>>();
+      List<Map<String,Object>> insertList = new ArrayList<Map<String,Object>>();
+      
+      for (Map<String, Object> map : workspaceList) {
          
-         String wsIdx = map.get("workWsIdx");
-         String wsType = map.get("workOption");
-         String wsName = map.get("workWrite");
-         String wsState = map.get("workState");
-         
-         System.out.println("wsIdx : " + wsIdx);
-         System.out.println("wsType : " + wsType);
-         System.out.println("wsName : " +wsName);
-         System.out.println("wsState : " +wsState);
-         switch(wsType) {
-            case "메모" :
-               wsType = "ME";
-               break;
-            case "로드맵" :
-               wsType = "LD";
-               break;
-            case "채팅" :
-               wsType = "CH";
-               break;
-            case "캘린더" :
-            	wsType = "CL";
-            	break;
-            case "게시판" :
-               wsType = "BO";
-         }
+         String wsState = (String) map.get("workState");
+      
          
          if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경. (UPDATE)
-            System.out.println("변경되면 지나가는 곳");
-               projectRepository.updateWorkspace(wsIdx, wsName,sort);
-               sort++;
+        	 map.put("sort", sort);
+        	 updateList.add(map);
+             sort++;
             } else if (wsState.equals("hide")) {// 리스트가 hide된게 있으면, (DELETE)
-               System.out.println("삭제되면 지나가는 곳");
-               projectRepository.deleteWorkspace(wsIdx);
+             deleteList.add(map);
             } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
-               System.out.println("삽입되면 지나가는 곳");
-               projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
-               sort++;
+             map.put("sort",sort);
+             insertList.add(map);
+             sort++;
             }
          }
          // 더미 data 전부 삭제
-         projectRepository.deleteNonWorkspace(sort);
-         // 모든 wsState를 none으로 변경
-      }
+			projectRepository.insertWorkspace(insertList);
+			projectRepository.deleteWorkspace(deleteList);
+			projectRepository.updateWorkspace(updateList);
+			
+			projectRepository.deleteNonWorkspace(sort);
+
+		}
 
       @Override
       public List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx) {
 
          return projectRepository.selectWorkspaceListByProjectIdx(projectIdx);
       }
+      
+      @Override
+  	public List<String> selectCashListByProjectIdx(String projectIdx) {
+  		return projectRepository.selectCashListByProjectIdx(projectIdx);
+  	}
 
 //은비가 작성한 코드 끝
 
@@ -398,6 +414,8 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		return projectRepository.selectProjectMemberByProjectIdxAndUserIdx(projectIdx , userIdx);
 	}
+
+	
 
 
 

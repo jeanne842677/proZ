@@ -388,8 +388,9 @@ footer{
     width: 80%;
     height: 200px;
     margin-top: 128px;
-    position: absolute;
+    position: relative;
     margin-left: 418px;
+    top: 40px;
 }
 
 
@@ -397,7 +398,8 @@ footer{
     width:9%;
     height:200px;
     margin-top: 128px;
-    position: absolute;
+    position: relative;
+    top: -122px;
 }
 
 .temtit{
@@ -414,7 +416,9 @@ footer{
     font-size:40px;
     font-weight: bold;
     padding: 33px 0px 0px 200px;
-}
+    position: relative;
+    top: -200px;
+    }
 
 .thisdes{
     font-size:20px;
@@ -422,6 +426,8 @@ footer{
     width:80%;
     display:flex;
     justify-content: space-between;
+    position:relative;
+    top : -210px;
 }
 
 .addnew{

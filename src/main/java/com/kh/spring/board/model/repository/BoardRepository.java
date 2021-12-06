@@ -31,18 +31,17 @@ public interface BoardRepository {
 	@Delete("delete from board where bd_idx = #{bdIdx}")
 	void deleteBoard(Board board);
 
-	@Update("update board set sort=sort-1 where ws_idx ={wsIdx} and sort > #{sort}")
+	@Update("update board set sort=sort-1 where  (select count(sort) from board where ws_idx=#{wsIdx} and sort=#{sort})=0 and ws_idx =#{wsIdx} and sort > #{sort}")
 	void updateBoardSortWhenRemoveBoard(Board board);
 
-	@Update("update board set sort=#{changeSort} where bd_idx = #{bdIdx}")
-	void updateBoardSort(Map<String, String> map);
+	void updateBoardSort(@Param("bdIdxList") List<String> bdIdxList, @Param("changeSort") int changeSort);
 
 	@Update("update board set sort=sort+1 where bd_idx in (select bd_idx from board where ws_idx = #{wsIdx}"
-			+ " and sort between #{changeSort} and #{sort}-1)")
+			+ " and sort between #{changeSort} and (select sort from board where bd_idx=#{bdIdx} )-1)")
 	void updateBoardSortPlus(Map<String, String> map);
 
 	@Update("update board set sort=sort-1 where bd_idx in (select bd_idx from board where ws_idx = #{wsIdx}"
-			+ " and sort between #{sort}+1 and #{changeSort})")
+			+ " and sort between (select sort from board where bd_idx=#{bdIdx} )+1 and #{changeSort})")
 	void updateBoardSortMinus(Map<String, String> map);
 
 	void insertPost(Map<String, String> map);
@@ -71,20 +70,31 @@ public interface BoardRepository {
 	void deletePost(String postIdx);
 
 	@Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
-			+ "values(sc_file_idx.nextval, #{userIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
-	int insertPostFile(@Param("FileDTO") FileDTO fileUploaded, @Param("userIdx") String userIdx);
+			+ "values(sc_file_idx.nextval, #{bdIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
+	int insertPostFile(@Param("FileDTO") FileDTO fileUploaded, @Param("bdIdx") String bdIdx);
+
+	@Select("select w.ws_idx from post p, board b, workspace w where p.bd_idx = b.bd_idx"
+			+ " and b.ws_idx = w.ws_idx and p.post_idx = #{postIdx}")
+	String selectWsIdxByPostIdx(String postIdx);
+
+	@Update("update post set post_title=#{postTitle}, post_content=#{postContent}, "
+			+ "reg_date=#{regDate}, post_color=#{postColor} where post_idx=#{postIdx}")
+	void updatePostByPostIdx(Map<String, String> map);
 
 	// 윤지 추가
-	int insertReply(Reply reply);
+	@Update("update reply set reply_content= #{reply.replyContent} where reply_idx=#{reply.replyIdx}")
+	void updateReplyByReplyIdx(@Param("reply") Reply reply);
 
-	@Select("select * from reply where post_idx = #{postIdx} order by reply_idx desc")
-	List<Map<String, Object>> selectReplyByPostIdx(String postIdx);
+	@Select("select * from (select * from reply where post_idx in (select post_idx from post where bd_idx in (select bd_idx from board where ws_idx in (select ws_idx from workspace where project_idx = #{projectIdx} and ws_type='BO'))) order by reply_idx desc)where rownum <=5")
+	List<Reply> selectReplyByTop(String projectIdx);
+
+	@Select("select * from reply join project_member using(pm_idx) where post_idx= #{postIdx} order by reply_idx")
+	List<Map<String, Object>> selectReplyByProjectMember(String postIdx);
+
+	int insertReply(Reply reply);
 
 	@Delete("delete from reply where reply_idx = #{replyIdx}")
 	void deleteReplyByReplyIdx(String replyIdx);
-
-	@Update("update reply set reply_content= #{reply_content} where reply_idx=#{replyIdx}")
-	void updateReplyByReplyIdx(Reply reply);
 
 	// 지영 추가
 
@@ -95,5 +105,12 @@ public interface BoardRepository {
 
 	@Select("select * from post where bd_idx = #{bdIdx} order by sort")
 	List<Post> selectPostListByBdIdx(String bdIdx);
+
+	// 12월 5일 지영 추가
+	@Select("select * from board where bd_idx = (select nvl(parent , bd_idx) from board where (parent is null and bd_Idx= #{bdIdx}) or (bd_idx=#{bdIdx}))")
+	Board selectParentBoardByBdIdx(String bdIdx);
+
+	@Select("select * from board where sort = (select sort from board where bd_idx = #{bdIdx})")
+	List<Board> selectBoardAndBoardLeafList(String bdIdx);
 
 }
