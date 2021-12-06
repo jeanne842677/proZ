@@ -84,7 +84,7 @@ public interface ProjectService {
 
    List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
-   void settingWorkspace(List<Map<String, Object>> workspaceList, String projectIdx);
+   void updateWorkspace(List<Map<String, Object>> workspaceList, String projectIdx);
 ////////////////////////////////////////
    List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
 
@@ -117,6 +117,15 @@ public interface ProjectService {
 		Workspace selectWorkspaceByWsIdx(String wsIdx);
 
 		ProjectMember selectProjectMemberByProjectIdxAndUserIdx(String projectIdx, String userIdx);
+
+		
+
+		
+		//////은비 추가
+		
+		Map<String, Object> selectProjectMainData(String projectIdx);
+		
+		Map<String, Object> selectMemberManagementByProjectIdx(String projectIdx);
 
 		
 	

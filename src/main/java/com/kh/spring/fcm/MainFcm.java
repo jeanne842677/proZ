@@ -70,14 +70,5 @@ public class MainFcm   {
 		db.collection(COLLECTION_NAME).document("chat").set(item);
 	}
 
-	private void update() {//채팅 방 이름 변경
-		Map<String, Object> update = new HashMap<String, Object>();
-		update.put("ㅇㅇㅇ", 1522);
-		update.put("채팅에는 필요 없을 것 같은데?", "이게 필요한가..? 아 채팅방 이름");
-		db.collection(COLLECTION_NAME).document("chat").update(update);
-	}
 	
-	private void delete() {//채팅 방 삭제 isDel? 
-		db.collection(COLLECTION_NAME).document("chat").delete();
-	}
 }

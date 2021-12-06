@@ -32,7 +32,7 @@
                     		<i class="far fa-comments" id="folderclose"></i>${ws.wsName}
                     		</c:when>
                     		<c:when test="${ws.wsType == 'CL'}">
-                    		<i class="far fa-calendar-alt id="folderclose"></i>${ws.wsName}
+                    		<i class="far fa-calendar-alt" id="folderclose"></i>${ws.wsName}
                     		</c:when>
                     		<c:otherwise>
                     			<i class="far fa-clipboard" id="folderclose"></i>${ws.wsName}
@@ -64,7 +64,7 @@
                 })
                 
                 $('.search').find('.setting').on('click' , function() {
-                	location.href="/project/setting/role-management/${projectIdx}";
+                	location.href="/project/setting/project-setting/${projectIdx}";
                 })
                 
                  $('.private').find('.cash').on('click' , function() {

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
                 <c:if test="${empty golden}">
@@ -14,7 +14,6 @@
                     <div class="workspacemanage"><i class="fas fa-user-cog"></i>워크스페이스 설정</div>
                     <div class="rolemanage"><i class="fas fa-user-cog"></i>역할 관리</div>
                     <div class="membermanage"><i class="fas fa-users-cog"></i>멤버 관리</div>
-                    <div class="chatset"><i class="fas fa-quote-right"></i>채팅설정</div>
                 </div>
                 
                 

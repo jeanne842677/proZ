@@ -5,7 +5,7 @@
 <head>
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
 
-<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=6">
+<link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=8">
 <link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css" />
  <link type="text/css" rel="stylesheet" href="/resources/css/setting/workspace-management.css?ver=3">
 <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
@@ -324,7 +324,6 @@ beforeSaveModal.modal.find(".first-button").on('click', function() {
 		headers: { "Content-type": "application/json; charset=UTF-8" },
 		body: JSON.stringify(workspaceList)
 	}).then(function(){
-		window.location.reload();
 		saveModal.viewModal();
 	});
 });
