@@ -14,11 +14,12 @@
 <title>Welcome</title>
 <style>
 
-    @font-face {
-    font-family: 'NanumSquareRound';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+@font-face {
+ font-family: 'NanumBarunGothic';
+ font-style: normal;
+ font-weight: 400;
+ src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+ src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
 }
 
 @font-face {
@@ -36,7 +37,7 @@ margin-bottom:0;
 
         html,body{
             background-color: #F5F6F7;
-            font-family: 'NanumSquareRound';
+             font-family: 'NanumBarunGothic';
             overflow:hidden;
         }
         /* div{
@@ -242,7 +243,7 @@ margin-bottom:0;
             background-color:#fff;
             border-radius: 10px;
             box-shadow : 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-        	padding: 5px;
+        	padding: 20px;
         
         }
 
@@ -338,10 +339,14 @@ margin-bottom:0;
         }
 
         .commentcon{
-            width:95%;
-            height:15%;
-            border-radius: 10px;
-            border:solid 1px #ccc;
+                width: 95%;
+			    height: 15%;
+			    border-radius: 10px;
+			    border: solid 1px #ccc;
+			    display: flex;
+			    justify-content: space-around;
+			    padding: 5px;
+			    align-items: center;
         }
 
         
@@ -424,7 +429,7 @@ margin-bottom:0;
            border-color: red;
         }
         #profileImg{
-           margin-right:10px;
+           margin-right:6px;
         }
         
         .fc-more-link {
@@ -433,17 +438,52 @@ margin-bottom:0;
         	top:-5px;
         }
         .profile-img{
-        	display:flex;
-        	justify-content: flex-end;
-        	margin-right:10px;
+        	display: flex;
+		    justify-content: center;
+		    width: auto;
+		    height: auto;
         }
        
        .replyCon{
-       	display:flex;
+       	display: flex;
+	    height: 100%;
+	    width: 75%;
+	    align-items: center;
        }
-       div{
-       	border:solid thin;
+       
+       .fc .fc-toolbar .fc-header-toolbar{
+       	margin-bottom:5px;
        }
+       
+       .card-subject{
+           width: 80%;
+       }
+       
+       .card{
+       		display: flex;
+		    align-items: center;
+		    justify-content: space-around;
+		    height: 100%;
+		    padding: 5px;
+       }
+
+	.user-photo{
+	    background-color: RGB(143, 122, 229);
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 30px;
+	}
+	
+	.commentnick{
+		width: 100%;
+	    font-size: 11px;
+	    height: 100%;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+}
+	
+	}
     </style>
 </head>
 <body>
@@ -498,7 +538,7 @@ margin-bottom:0;
 	                                    	<div class="boardcon">
 	                                        <div class="card" data-sort="${post.sort}" data-board-post-idx="${post.postIdx}">
 	                                            <div class="card-subject">${post.postTitle}</div>
-	                                            <div class="profile-img"><i class="fas fa-user-circle fa-2x"></i></div>
+	                                            <div class="profile-img"><div class="user-photo"></div></div>
 	                                        </div>
 	                                       </div>
 	                                    </c:forEach>
@@ -515,7 +555,7 @@ margin-bottom:0;
                                 <div class="commentcon" data-reply-post-idx="${reply.postIdx}">
                                 
                                 	<div class="replyCon">${reply.replyContent}</div>
-                                	<div class="profile-img"><i class="fas fa-user-circle fa-2x"></i></div>
+                                	<div class="profile-img"><div class="commentnick">이거슨닉네임</div></div>
                                 	
                                 </div>
                                 </c:forEach>
@@ -544,7 +584,7 @@ margin-bottom:0;
 		                           <div class="textvalue">${ memo.content }</div>
 		                        </div>
 		                        <div id="profile">
-		                           <div id="profileImg"><i class="fas fa-user-circle fa-2x"></i></div>
+		                           <div id="profileImg"><div class="user-photo"></div></i></div>
 		                        </div>
 		                     </div>
 		                  </c:forEach>
