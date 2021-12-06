@@ -51,20 +51,20 @@
 <div class="alert-popup"
 	style="width: 400px; height: 300px; z-index: 4; position: absolute; display: none; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); right: 8px; top: 5px; flex-direction: column; align-items: center; overflow: auto;">
 	<div class="alarm-text"
-		style="width: 95%; margin-top: 5px; height: 30px; border-bottom: solid gray thin; display: flex">
-		알림내역</div>
+		style="width: 95%; margin: 5px; padding: 10px; height: 30px; display: flex; color: #292929;" >
+		🔔알림내역</div>
 	<c:set var="length" value="0"> </c:set>
 	<c:forEach items="${alarmList }" var="al" varStatus="status">
 		<c:if test="${ al.isLook == 0 }"> 
 			<c:set var="length" value="${ length+1 }"></c:set>
 		</c:if>
 		<div class="alarm" 
-			style="width: 95%; height: 100px; border-bottom: solid gray thin; display: flex;
+			style="width: 95%; height: 100px; background-color: #eee; border-radius: 5px; display: flex; margin: 5px; padding
 			<c:if test="${ al.isLook == 1 }"> color:gray; </c:if>
 			">
-			<div class="alarm-content">
-				<b>${al.alType}</b>
-				<div class="al-content">${al.alContent }</div>
+			<div class="alarm-content" style="margin: 5px;">
+				<b style="color:#666; font-size:13px;">${al.alType}</b>
+				<div class="al-content" style="color: #292929;">${al.alContent }</div>
 			</div>
 		</div>
 	</c:forEach>
