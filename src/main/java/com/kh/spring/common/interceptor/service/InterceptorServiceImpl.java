@@ -31,25 +31,21 @@ public class InterceptorServiceImpl implements InterceptorService {
 	@Override
 	public Map<String, Object> selectProjectInfo(String projectIdx, Member member , String wsIdx) {
 		
-		
 		Map<String, Object> modelMap = new HashMap<>();
-			
-	      
-	      Project project = projectRepository.selectProjectByIdx(projectIdx);
-	      
-	      
-	      if (project == null) {
-	          throw new HandlableException(ErrorCode.REDIRECT_MAIN_PAGE);
-	       }
-
-	      List<Workspace> workspaceList = projectRepository.selectWorkspaceByProjectIdx(projectIdx);
-	      List<Map<String, Object>> projectMemberList = CamelMap
-	            .changeListMap(projectRepository.selectProjectMemberByProjectIdx(projectIdx));
-	      
+		List<Workspace> workspaceList = projectRepository.selectWorkspaceByProjectIdx(projectIdx);
+		List<Map<String, Object>> projectMemberList = CamelMap.changeListMap(projectRepository.selectProjectMemberByProjectIdx(projectIdx));
+		Project project = projectRepository.selectProjectByIdx(projectIdx);
+		
+		if (project == null) {
+			throw new HandlableException(ErrorCode.REDIRECT_MAIN_PAGE);
+		}
+	    
+		  modelMap.put("projectIdx", projectIdx);
 	      modelMap.put("workspaceList", workspaceList);
 	      modelMap.put("projectMemberList", projectMemberList);
 	      modelMap.put("project", project);
-	      modelMap.put("projectIdx", projectIdx);
+	      
+	      //////////////은비가 추가
 	      modelMap.put("workspaceListCnt", workspaceList.size());
 	      modelMap.put("projectMemberListCnt", projectMemberList.size());
 

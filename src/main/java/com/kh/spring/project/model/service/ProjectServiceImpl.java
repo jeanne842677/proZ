@@ -1,6 +1,6 @@
 package com.kh.spring.project.model.service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,15 +13,20 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.kh.spring.board.model.dto.Post;
+import com.kh.spring.board.model.dto.Reply;
+import com.kh.spring.board.model.repository.BoardRepository;
+import com.kh.spring.calendar.model.dto.Calendar;
+import com.kh.spring.calendar.model.repository.CalendarRepository;
 import com.kh.spring.common.code.Config;
 import com.kh.spring.common.code.ErrorCode;
-import com.kh.spring.common.code.WorkspaceType;
 import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.mail.MailSender;
 import com.kh.spring.common.util.file.FileDTO;
 import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
-import com.kh.spring.member.model.repository.MemberRepository;
+import com.kh.spring.memo.model.dto.Memo;
+import com.kh.spring.memo.model.repository.MemoRepository;
 import com.kh.spring.project.model.dto.Project;
 import com.kh.spring.project.model.dto.ProjectMember;
 import com.kh.spring.project.model.dto.ProjectRole;
@@ -30,15 +35,25 @@ import com.kh.spring.project.model.repository.ProjectRepository;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-
+	
    @Autowired
    ProjectRepository projectRepository;
 
+   @Autowired
+   MemoRepository memoRepository;
+   
+   @Autowired
+   BoardRepository boardRepository;
+   
+   @Autowired
+   CalendarRepository calendarRepository;
+   
    @Autowired
    private MailSender mailSender;
 
    @Autowired
    private RestTemplate http;
+   
 
    @Override
    public String updateProjectInviteCode(String projectIdx) {
@@ -261,7 +276,7 @@ public class ProjectServiceImpl implements ProjectService {
    }
 
    // 민협 코드 끝
-////////////은비가 작성한 코드 시작
+/////////////////은비가 작성한 코드 시작
    @Override
    public List<Project> selectProjectByUserIdx(String userIdx) {
 
@@ -308,38 +323,48 @@ public class ProjectServiceImpl implements ProjectService {
 
    //11월 24일 은비 추가
    @Override
-   public void settingWorkspace(List<Map<String, Object>> workspaceList, String projectIdx) {//트랜잭션 문제(open,close)
+   public void updateWorkspace(List<Map<String, Object>> workspaceList, String projectIdx) {//트랜잭션 문제(open,close)
       int sort = 1;
-      System.out.println("projectIdx" + projectIdx);
-      System.out.println("workspaceList"+workspaceList);
-      List<Map<String,Object>> updateList = new ArrayList<Map<String,Object>>();
-      List<Map<String,Object>> deleteList = new ArrayList<Map<String,Object>>();
-      List<Map<String,Object>> insertList = new ArrayList<Map<String,Object>>();
-      
-      for (Map<String, Object> map : workspaceList) {
-         
-         String wsState = (String) map.get("workState");
-      
-         
-         if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경. (UPDATE)
-        	 map.put("sort", sort);
-        	 updateList.add(map);
-             sort++;
-            } else if (wsState.equals("hide")) {// 리스트가 hide된게 있으면, (DELETE)
-             deleteList.add(map);
-            } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
-             map.put("sort",sort);
-             insertList.add(map);
-             sort++;
-            }
-         }
-         // 더미 data 전부 삭제
-			projectRepository.insertWorkspace(insertList);
-			projectRepository.deleteWorkspace(deleteList);
-			projectRepository.updateWorkspace(updateList);
-			
-			projectRepository.deleteNonWorkspace(sort);
 
+      for (Map<String, Object> map : workspaceList) {
+    	  String wsIdx = map.get("workWsIdx").toString();
+          String wsType = map.get("workOption").toString();
+          String wsName = map.get("workWrite").toString();
+          String wsState = map.get("workState").toString();
+
+          if (wsState.equals("none")) {// 변경된 내역이 있다면, 변경. (UPDATE)
+              projectRepository.updateWorkspace(wsIdx, wsName,sort);
+              sort++;
+           } else if (wsState.equals("hide")) {// 리스트가 hide된게 있으면, (DELETE)
+              projectRepository.deleteWorkspace(wsIdx);
+           } else if (wsState.equals("insert")) {// 리스트가 새로 생성됬을 경우에 (INSERT)
+              projectRepository.insertWorkspace(wsIdx,wsType, wsName, sort, projectIdx);
+              sort++;
+           }
+        }
+        // 더미 data 전부 삭제
+        projectRepository.deleteNonWorkspace(sort);
+       
+     }
+
+		@Override
+		public Map<String, Object> selectProjectMainData(String projectIdx) {
+			Map<String, Object> mainData = new HashMap<String, Object>();
+
+			List<Map<String, Object>> workspace = CamelMap.changeListMap(projectRepository.selectWorkspaceListByProjectIdx(projectIdx));
+			List<Memo> mainMemoList = memoRepository.selectMemoByTop(projectIdx);
+			List<Post> postList = boardRepository.selectBoardByTop(projectIdx);
+			List<Map<String, Object>> replyList =CamelMap.changeListMap(boardRepository.selectReplyByTop(projectIdx));
+			List<Calendar> calendarList = calendarRepository.selectCalendarListByProjectIdx(projectIdx);
+
+			
+			mainData.put("workspace", workspace);
+			mainData.put("mainMemoList", mainMemoList);
+			mainData.put("postList", postList);
+			mainData.put("replyList", replyList);
+			mainData.put("calendarList", calendarList);
+			
+			return mainData;
 		}
 
       @Override
@@ -409,11 +434,29 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.selectWorkspaceByWsIdx(wsIdx);
 	}
 
+	
+	
 	@Override
 	public ProjectMember selectProjectMemberByProjectIdxAndUserIdx(String projectIdx, String userIdx) {
 		
 		return projectRepository.selectProjectMemberByProjectIdxAndUserIdx(projectIdx , userIdx);
 	}
+
+/////////은비 추가
+	@Override
+	public Map<String, Object> selectMemberManagementByProjectIdx(String projectIdx) {
+			Map<String, Object> memberData = new HashMap<String, Object>();
+			
+			List<ProjectRole> projectRoleList = projectRepository.selectProjectRoleByIdx(projectIdx);
+			List<Map<String, Object>> projectMemberList = CamelMap.changeListMap(projectRepository.selectProjectMemberRoleByProjectIdx(projectIdx));
+	      
+	      memberData.put("projectRoleList", projectRoleList);
+	      memberData.put("projectMemberList", projectMemberList);
+	      
+	      return memberData;
+	}
+
+
 
 	
 

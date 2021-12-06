@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.spring.cash.model.repository.CashRepository;
-import com.kh.spring.common.code.CashItem;
 
 @Service
 public class CashServiceImpl implements CashService {

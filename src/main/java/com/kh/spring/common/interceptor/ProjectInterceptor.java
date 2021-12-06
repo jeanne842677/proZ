@@ -12,20 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.kh.spring.board.model.dto.Board;
-import com.kh.spring.board.model.dto.Post;
+
 import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.common.code.CashItem;
-import com.kh.spring.common.code.ErrorCode;
-import com.kh.spring.common.exception.HandlableException;
+
 import com.kh.spring.common.interceptor.service.InterceptorService;
-import com.kh.spring.common.util.map.CamelMap;
 import com.kh.spring.member.model.dto.Member;
-import com.kh.spring.project.model.dto.Project;
-import com.kh.spring.project.model.dto.ProjectMember;
-import com.kh.spring.project.model.dto.Workspace;
 import com.kh.spring.project.model.service.ProjectService;
-import com.kh.spring.projectmember.dto.Alarm;
 import com.kh.spring.projectmember.model.repository.AlarmRepository;
 
 //url이 projectIdx로 끝나는 모든 친구들 interceptor 
