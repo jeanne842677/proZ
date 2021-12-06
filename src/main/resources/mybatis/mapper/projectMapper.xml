@@ -120,9 +120,20 @@
 		<result property="regDate" column="REG_DATE"/>
 	</resultMap>
 
+
+	<update id="updateProjectImg">
+
+		<selectKey keyProperty="typeIdx" resultType="string"
+			order="AFTER">
+			select TYPE_IDX FROM file_dto WHERE TYPE_IDX = #{projectIdx}
+		</selectKey>
+		update file_dto set
+		ORIGIN_FILE_NAME = #{FileDTO.originFileName} ,
+		RENAME_FILE_NAME = #{FileDTO.renameFileName} ,
+		SAVE_PATH = #{FileDTO.savePath} where TYPE_IDX = #{projectIdx}
+	</update>
   	
-  	
-  	
+	  
   	
   	
   	     <!-- 민협작성 끝-->
@@ -134,6 +145,38 @@
   	values
   		(sc_proz_idx.nextval, #{proName}, #{inviteCode}, #{proDescription})
   	</insert>
+  	
+  	
+  	<insert id="insertWorkspace" parameterType="java.util.List">
+  		<foreach collection="insertList" item="ws" open="INSERT ALL " index="index" close="SELECT * FROM DUAL" separator=" ">
+  		into workspace
+  			(ws_idx, project_idx, ws_type, ws_name, sort)
+  		values(sc_proz_idx.currval+(index+1), #{ws.projectIdx}, #{ws.wsType}, #{ws.wsName}, #{ws.sort})
+  			</foreach>
+  	</insert>
+  	
+  	<update id="updateWorkspace" parameterType="com.kh.spring.project.model.dto.Workspace">
+  		update workspace set
+  		<foreach collection="updateList" item="ws">
+  				ws_name = #{ws.wsName}, sort = #{ws.sort} where ws_idx=#{ws.wsIdx}
+  		</foreach>
+  	</update>
+  	
+  	<delete id="deleteWorkspace" parameterType="java.util.ArrayList">
+  		delete workspace where 
+  		<foreach collection="deleteList" item="ws">
+  				ws_idx=#{ws.wsIdx}
+  		</foreach>
+  	</delete>
+  	
+  	<!-- <resultMap type="com.kh.spring.project.model.dto.Workspace" id="workspace">
+		<result property="wsIdx" column="WS_IDX" />
+		<result property="projectIdx" column="PROJECT_IDX"/>
+		<result property="wsType" column="WS_TYPE"/>
+		<result property="wsName" column="WS_NAME"/>
+		<result property="sort" column="sort"/>
+		<result property="regDate" column="REG_DATE"/>
+	</resultMap>  -->
   	
   </mapper>
   

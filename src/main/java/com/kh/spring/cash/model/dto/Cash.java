@@ -8,6 +8,15 @@ public class Cash {
 	private String cashName;
 	private String projectIdx;
 	private Date expirationDate;
+	
+	
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	
 	public String getCashIdx() {
 		return cashIdx;
 	}
@@ -26,12 +35,7 @@ public class Cash {
 	public void setProjectIdx(String projectIdx) {
 		this.projectIdx = projectIdx;
 	}
-	public Date getRegDate() {
-		return expirationDate;
-	}
-	public void setRegDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
+	
 	@Override
 	public String toString() {
 		return "Cash [cashIdx=" + cashIdx + ", cashName=" + cashName + ", projectIdx=" + projectIdx + ", regDate="

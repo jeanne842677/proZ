@@ -83,6 +83,23 @@ public interface ProjectRepository {
 	ProjectRole selectProjectRoleByProjectIdxAndUserIdx(@Param("projectIdx") String projectIdx,
 			@Param("userIdx") String userIdx);
 
+	@Insert("insert into file_dto(FL_IDX, TYPE_IDX, ORIGIN_FILE_NAME, RENAME_FILE_NAME, SAVE_PATH)"
+			+ "values(sc_file_idx.nextval, #{projectIdx}, #{FileDTO.originFileName}, #{FileDTO.renameFileName}, #{FileDTO.savePath})")
+	void insertProjectImg(@Param("FileDTO") FileDTO fileUploaded, @Param("projectIdx") String projectIdx);
+
+	@Select("select * from file_dto where type_idx = #{projectIdx}")
+	FileDTO selectProjectImgSavePath(String projectIdx);
+
+	int updateProjectImg(@Param("FileDTO") FileDTO fileUploaded, @Param("projectIdx") String projectIdx);
+
+	@Delete("delete from file_dto where TYPE_IDX = #{projectIdx}")
+	void deleteProjectImg(String projectIdx);
+
+	@Select("select pro.* ,fil.save_path ,fil.rename_file_name " + " from project pro"
+			+ " left JOIN file_dto fil ON (pro.project_idx = fil.type_idx)"
+			+ " where pro.project_idx in(select project_idx from project_member where user_idx = #{userIdx} and is_del = 0) order by (project_idx + 0) asc ")
+	List<Map<String, Object>> selectProjectAndProjectImgByUserIdx(String userIdx);
+
 	// 민협 추가 코드 끝
 
 	// 은비가 작성한 코드 시작
@@ -119,22 +136,38 @@ public interface ProjectRepository {
 	@Select("select * from workspace where project_idx = #{projectIdx} order by sort asc")
 	List<Workspace> selectWorkspaceByProjectIdx(String projectIdx);
 
-	@Update("update workspace set ws_name = #{wsName}, sort = #{sort} where ws_idx=#{wsIdx}")
-	void updateWorkspace(@Param("wsIdx") String wsIdx, @Param("wsName") String wsName, @Param("sort") int sort);
-
-	@Delete("delete from workspace where ws_idx=#{wsIdx}")
-	void deleteWorkspace(String wsIdx);
-
-	@Insert("insert into workspace(ws_idx, project_idx, ws_type, ws_name, sort) "
-			+ " values(sc_proz_idx.nextval, #{projectIdx}, #{wsType}, #{wsName}, #{sort})")
-	void insertWorkspace(@Param("wsIdx") String wsIdx, @Param("wsType") String wsType, @Param("wsName") String wsName,
-			@Param("sort") int sort, @Param("projectIdx") String projectIdx);
+	void insertWorkspace(@Param("insertList") List<Map<String, Object>> insertList);
+	
+	void deleteWorkspace(List<Map<String, Object>> deleteList);
+	
+	void updateWorkspace(List<Map<String, Object>> updateList);
+	
+	
+	/*
+	 * @Update("update workspace set ws_name = #{wsName}, sort = #{sort} where ws_idx=#{wsIdx}"
+	 * ) void updateWorkspace(@Param("wsIdx") String wsIdx, @Param("wsName") String
+	 * wsName, @Param("sort") int sort);
+	 * 
+	 * @Delete("delete from workspace where ws_idx=#{wsIdx}") void
+	 * deleteWorkspace(String wsIdx);
+	 * 
+	 * @Insert("insert into workspace(ws_idx, project_idx, ws_type, ws_name, sort) "
+	 * +
+	 * " values(sc_proz_idx.nextval, #{projectIdx}, #{wsType}, #{wsName}, #{sort})")
+	 * void insertWorkspace(@Param("wsIdx") String wsIdx, @Param("wsType") String
+	 * wsType, @Param("wsName") String wsName,
+	 * 
+	 * @Param("sort") int sort, @Param("projectIdx") String projectIdx);
+	 */
 
 	@Select("select * from workspace where project_idx = #{projectIdx} order by sort asc")
 	List<Map<String, Object>> selectWorkspaceListByProjectIdx(String projectIdx);
 
 	@Delete("delete from workspace where sort >= #{sort}")
 	void deleteNonWorkspace(int sort);
+	/////////////////////
+	@Select("select cash_name  from cash where project_idx=#{projectIdx} and expiration_date > sysdate")
+	List<String> selectCashListByProjectIdx(String projectIdx);
 
 	// 은비가 작성한 코드 끝
 
@@ -170,5 +203,9 @@ public interface ProjectRepository {
 
 	@Select("select * from project_member where project_idx = #{projectIdx} and user_idx = #{userIdx}")
 	ProjectMember selectProjectMemberByProjectIdxAndUserIdx( @Param("projectIdx") String projectIdx,  @Param("userIdx") String userIdx);
+
+	
+
+	
 
 }
