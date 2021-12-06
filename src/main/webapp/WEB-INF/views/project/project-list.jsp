@@ -13,6 +13,10 @@
  a:visited { color: #fff; text-decoration: none;}
  a:hover { color: #fff; text-decoration: none;}
 
+.project-img {
+	height: 100%;
+	width: 100%;
+}
 
 
 	.clone{
@@ -82,7 +86,16 @@
 								<div class="con1">
 									<div class="conimg">
 										<a href="${project.projectIdx}">
-											<img src="/resources/img/no-img.png" > 
+											<img class="project-img" 
+			                                    <c:choose>
+				                                    <c:when test="${project.renameFileName != null}">
+				                                    src="/file/${project.savePath}${project.renameFileName}"
+				                                    </c:when>
+				                                    <c:otherwise>
+				                                    src="/resources/img/no-img.png"
+				                                    </c:otherwise>
+			                                    </c:choose>
+                                    		>
 										</a>
 									</div>
 									<div class="con1title">

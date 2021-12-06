@@ -1,6 +1,7 @@
 package com.kh.spring.common.interceptor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
@@ -65,6 +66,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 		Project project = projectService.selectProjectExist(projectIdx);
 		
 		// 로그인 하지 않았을 경우
+		
 		if (member == null) {
 			throw new HandlableException(ErrorCode.NEED_LOGIN);
 		} else {
@@ -75,13 +77,25 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 			// 프로젝트 멤버가 아닐 경우
 			List<String> proIdxList = projectService.selectProjectIdxByUserIdx(member.getUserIdx());
+			
 			System.out.println("인터셉터 프로젝트 리스트 : " + proIdxList);
 			boolean flg = true;
 			for (String proIdx : proIdxList) {
-				if (proIdx.equals(projectIdx)) {
+				if (proIdx.equals(projectIdx) ) {
 					flg = false;
 				}
 			}
+			try {
+				Map<String, Object> projectMember = (Map<String, Object>) httpRequest.getAttribute("projectMember");
+				if(projectMember.get("isLeave").equals("1")) {//맴버가 프로젝트를 탈퇴했을시
+					flg = false;
+				};
+			} catch (Exception e) {
+				throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);
+			}
+			
+			
+			
 			
 			if (flg) {
 				throw new HandlableException(ErrorCode.WRONG_ACCESS_ERROR);

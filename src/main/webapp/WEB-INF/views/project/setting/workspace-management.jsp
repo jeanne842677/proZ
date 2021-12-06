@@ -7,7 +7,7 @@
 
 <link type="text/css" rel="stylesheet" href="/resources/css/nav.css?ver=6">
 <link type="text/css" rel="stylesheet" href="/resources/css/modal/modal.css" />
- <link type="text/css" rel="stylesheet" href="/resources/css/setting/workspace-management.css">
+ <link type="text/css" rel="stylesheet" href="/resources/css/setting/workspace-management.css?ver=3">
 <script type="text/javascript" src="/resources/js/modal/modal.js"></script>
 <script type="text/javascript" src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript"src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -38,6 +38,13 @@
                         <div class="top-description">
                             <div class="big-description">워크스페이스 추가</div>
                             <div class="small-description">워크스페이스를 추가/변경 할 수 있습니다.</div>
+                            <c:if test="${not empty chatFunction || not empty allFunction || not empty workspaceFunction}">
+                             <div class="small-description" style="color:purple">
+                             	이제는 채팅 기능도 사용할 수 있습니다!(사용 기한이 지난 워크스페이스와 채팅방은 결제 만료 후 3일 뒤 <span style="font-weight : bold">자동 삭제</span>됩니다.)
+                             </div>
+                            </c:if>
+                           
+                           
                         </div>
                     </div>
 
@@ -52,18 +59,33 @@
                                     <option selected disabled> 카테고리 선택</option>
                                     <option> 메모 </option>
                                     <option> 게시판 </option>
-                                    <option> 채팅 </option>
                                     <option> 로드맵 </option>
                                     <option> 캘린더 </option>
+                                    <c:if test="${not empty chatFunction || not empty allFunction}">
+                                    <option> 채팅 </option>
+                                    </c:if>
                                 </select>
                             </div>
                             <div class="select-input">
                                 <input class="category-name-input form-control" type="text" placeholder="새 카테고리명을 입력해주세요." value="">
                             </div>
+                            
                             <div class="select-button">
                                 <button type="button" class="btn btn-gradi1 category-add-button">추가하기</button>
                             </div>
-                        </div>
+                            
+                            <c:if test="${not empty workspaceFuntion || not empty allFunction}">
+                            	<div class="workspace-cnt" data-total-cnt="100">
+                            		워크스페이스 개수  (<span class="myWorkspaceCnt">${workspaceListCnt}</span> / 100)
+                            	</div>
+                            </c:if>
+                            <c:if test="${empty workspaceFuntion && empty allFunction}">
+                            	<div class="workspace-cnt" data-total-cnt="10">
+                            		워크스페이스 개수  (<span class="myWorkspace-cnt">${workspaceListCnt}</span> / 10)
+                            	</div>
+                            </c:if>
+                           
+                            </div>
 
                         <!-- 카테고리 추가되는 부분 -->
                         <div class="category-list-wrapper"> 
@@ -175,7 +197,6 @@
 //1. (기존 존재항목) 삭제 버튼을 누르면 -> 모달 '삭제하시겠습니까?' -> 비동기로 반영
 $(".category-delete-button").click(function(){
   deleteModal.modal.find('.first-button').on('click', () => { 
-	  window.alert("여기지나가?");
 	  $(this).closest(".category-wrapper").data('state','hide');
 	  $(this).closest(".category-wrapper").hide(); 
     
@@ -187,12 +208,18 @@ $(".category-delete-button").click(function(){
 
 let thisCategory;
 let input;
+let workspaceCnt = ${workspaceListCnt};
+let totalCnt = $(".workspace-cnt").data('total-cnt');
+
+
 
 $(deleteModal.modal).find('.first-button').on('click' , function() {
   if(thisCategory==undefined){
     return;
   }
   thisCategory.remove();
+  workspaceCnt--;
+  $('.myWorkspaceCnt').text(workspaceCnt);
 });
 
 //카테고리 추가 메서드
@@ -205,27 +232,33 @@ function addCategory(){
     needCategoryModal.viewModal();
     return;
   }
+  
 
-  if(input!=""){// 워크스페이스 이름을 입력
+  if(input!="" ){// 워크스페이스 이름을 입력
   newCategory = $(".new-category").clone();
   newCategory.find(".category-input-text").attr('value',input);
-  newCategory.data('option',selectOption);
-  window.alert(selectOption);
+  
+  workspaceCnt++;
   switch(selectOption){
   case '메모' :
 	  newCategory.find(".search-icon").addClass("far fa-sticky-note fa-2x");
+	  newCategory.data('option','ME');
 	  break;
   case '로드맵' :
 	  newCategory.find(".search-icon").addClass("fas fa-map-signs fa-2x");
+	  newCategory.data('option','LD');
 	  break;
   case '채팅' :
 	  newCategory.find(".search-icon").addClass("far fa-comments fa-2x");
+	  newCategory.data('option','CH');
 	  break;
   case '캘린더' :
 	  newCategory.find(".search-icon").addClass("far fa-calendar-alt fa-2x");
+	  newCategory.data('option','CL');
 	  break;
   default :
 	  newCategory.find(".search-icon").addClass("far fa-clipboard fa-2x");
+  	  newCategory.data('option','BO');
 	  break;
   }
   
@@ -233,6 +266,7 @@ function addCategory(){
   
   newCategory.appendTo(".all-category-list");
   newCategory.removeClass("new-category");
+  $('.myWorkspaceCnt').text(workspaceCnt);
 
 
   deleteModal.makeModalBtn(newCategory.find(".category-delete-button"));
@@ -259,6 +293,10 @@ $(".select-input").on("keyup", function(key){
 
 // 3. 저장 버튼을 누르면 -> 모달 '저장하시겠습니까?' -> 비동기 POST 요청
 beforeSaveModal.modal.find(".first-button").on('click', function() {
+	if(workspaceCnt > totalCnt){
+		  lackWorkspaceModal.viewModal();
+		  return;
+	  }
 	let workspaceList = [];
 	
 	//clone-category-list 삭제(back으로 넘어갈 때 넘기는 것 방지)
@@ -287,6 +325,7 @@ beforeSaveModal.modal.find(".first-button").on('click', function() {
 		body: JSON.stringify(workspaceList)
 	}).then(function(){
 		window.location.reload();
+		saveModal.viewModal();
 	});
 });
 

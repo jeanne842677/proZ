@@ -148,7 +148,19 @@
         .select-wrapper>div:not(:first-child) {
             margin-left: 15px;
         }
-
+        
+       
+        
+       
+        
+        .workspace-cnt{
+        	margin-top : 6px;
+        	font-size : 1.2em;
+        	font-weight : bolder;
+        	
+        }
+        
+        
         select {
             border: lightgray;
             text-align-last: center;
@@ -188,6 +200,8 @@
             margin-left : 50px;
 
         }
+        
+        
 
         .category-subheading>div {
             font-size: 20px;

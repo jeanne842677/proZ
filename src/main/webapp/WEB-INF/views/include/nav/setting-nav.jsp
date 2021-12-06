@@ -3,7 +3,12 @@
     
 
 
-                <div class="setproject"><i class="fas fa-arrow-left"></i>${ project.proName }</div>
+                <c:if test="${empty golden}">
+	                <div class="setproject"><i class="fas fa-arrow-left"></i>${project.proName}</div>
+	            </c:if>
+	            <c:if test="${not empty golden}">
+	                 <div class="setproject" style="color: #ffce3d"><i class="fas fa-arrow-left" style="color:white"></i>${project.proName}</div>
+                </c:if>
                 <div class="search">
                     <div class="pjset"><i class="fas fa-tools"></i>프로젝트 설정</div>
                     <div class="workspacemanage"><i class="fas fa-user-cog"></i>워크스페이스 설정</div>
@@ -30,6 +35,10 @@
                 })
                 $('.search').find('.membermanage').on('click' , function() {
                 	location.href="/project/setting/member-management/${projectIdx}";
+                	
+                })
+                $('.search').find('.pjset').on('click' , function() {
+                	location.href="/project/setting/project-setting/${projectIdx}";
                 	
                 })
                 
