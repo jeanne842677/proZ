@@ -191,6 +191,8 @@
     height:370px;
     border-color: rgba(255, 255, 255, 0.5);
     flex-direction:column;
+    position:absolute;
+    top:277px;
 }
 #close{
 	width : 97%;
