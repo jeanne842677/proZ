@@ -713,8 +713,6 @@ a:hover {
 		let removeEvent = function() {
 
 			
-
-				alert("삭제");
 				let board = $(this).parents('.board')
 				board.remove();
 				

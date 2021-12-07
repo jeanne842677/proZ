@@ -278,7 +278,6 @@
 				
 			}).then(res => res.text())
 			.then(text => {
-				alert(text);
 
 				$('.invite-msg').remove();
 				if(text=="no-member") {
@@ -349,7 +348,7 @@
 			$(this).on('click' , function() {
 				
 			let authIdx = member.find('.role option:selected').attr('id');
-			alert(pmIdx);
+		
 			fetch('/project/change-member-auth' , {
 				
 				method : "POST",
@@ -361,7 +360,6 @@
 				
 			}).then(res=>res.text())
 			.then(text=>{
-				alert("업뎃 완료");
 				
 			})
 			
@@ -437,7 +435,6 @@
 			let memberWrap = $(this).parents('.member-wrap')
 			let pmIdx = memberWrap.attr('id');
 			
-			alert(pmIdx);
 			
 		 	fetch("/project/invite-cancel" , {
 				

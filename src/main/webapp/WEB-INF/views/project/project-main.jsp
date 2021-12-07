@@ -517,7 +517,7 @@ margin-bottom:0;
                     <div class="myname">${projectMember.nickname}</div>
                     <div class="myrole">${projectMember.authName}</div>
                 </div>
-                <div id="top2">팀정보</div>
+                <div id="top2"></div>
             </div>
             <div id="bottom">
                 <div id="left">
