@@ -434,7 +434,7 @@ cursor: pointer;
 
             </section>
             <aside>
-            <div class="teams1">
+<div class="teams1">
 	<div class="teamstit">프로젝트 참여 멤버</div>
 	<div id="onoff">
 		<div class="onlinetit">온라인</div>
@@ -442,7 +442,8 @@ cursor: pointer;
 			<ul id="sortable">
 				<!-- <li class="member"><i class="fas fa-user-circle" style="color:#ffc107"></i>3조_길예진</li>
                                     <li class="member"><i class="fas fa-user-circle" style="color:#17a2b8"></i>3조_길예진</li>
-                                    <li class="member"><i class="fas fa-user-circle" style="color:#dc3538"></i>3조_길예진</li>-->
+                                    <li class="member"><i class="fas fa-user-circle" style="color:#dc3538"></i>3조_길예진</li>
+ -->
 			</ul>
 
 		</div>
@@ -451,9 +452,15 @@ cursor: pointer;
 		<div class="offline">
 			<ul id="sortable2">
 				<c:forEach items="${ projectMemberList }" var="pm">
-					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}" data-auth-name="${pm.authName}" data-git="${ pm.git }" 
-						style="color:${ pm.profileColor }"><div class="onoffprofile"></div> ${ pm.nickname }
-					</li>
+					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}"
+						data-auth-name="${pm.authName}" data-git="${ pm.git }"
+						style="color:${ pm.profileColor }"><div class="onoffprofile">
+							<c:if test="${!empty pm.savePath}">
+								<img class="profile-img"
+									style="height: 100%; width: 100%; border-radius: 30px;"
+									src="/file/${pm.savePath}${pm.renameFileName}">
+							</c:if>
+						</div> ${ pm.nickname }</li>
 				</c:forEach>
 
 			</ul>
@@ -463,27 +470,50 @@ cursor: pointer;
 	</div>
 </div>
 
-<div class="member-info" style=" width:300px; height:200px; z-index: 1000 ;  position: absolute; 
-	background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); display:none; flex-direction: column; align-items: center; ">
- <div class="profile-info" style="width:100%; height: 30% ; background-color: red;  border-radius: 5px 5px 0 0; ">
- 	
- </div>
- <div class="profile-info-img" style="width:60px ; height:60px; border-radius: 50px ;background-color: blue; position:relative; top:-30px"></div>
-	<div class="profile-info-content" style="display: flex ; flex-direction: column; align-items: center;  position: relative; top:-20px" >
-	<div class="profile-info-name" style="font-size: 20px">임지영</div>
-	<div class="profile-info-auth">권한</div>
-	<input class="profile-info-git" value="없음" disabled="disabled">
-</div>
-	
-</div>
-
-<div class="alert-popup" style="width:400px; height:300px; z-index: 4 ; position: absolute; display:none;
-background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); right:8px ; top:5px">
-
-
+<div class="member-info"
+   style="width: 300px; height: 200px; z-index: 1000; position: absolute; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); display: none; flex-direction: column; align-items: center;">
+   <div class="profile-info"
+      style="width: 100%; height: 30%; background-color: red; border-radius: 5px 5px 0 0;"></div>
+   <div class="profile-info-img"
+      style="width: 60px; height: 60px; border-radius: 50px; background-color: blue; position: relative; top: -30px">
+      <img class="inner-profile-info-img" style="width: 100%; height:100%; border-radius: 50px;">
+      </div>
+   <div class="profile-info-content"
+      style="display: flex; flex-direction: column; align-items: center; position: relative; top: -20px">
+      <div class="profile-info-name" style="font-size: 20px">임지영</div>
+      <div class="profile-info-auth">권한</div>
+      <input class="profile-info-git" value="없음" disabled="disabled">
+   </div>
 
 </div>
-            
+
+<div class="alert-popup"
+	style="width: 400px; min-height: 50px; max-height: 300px; z-index: 4; position: absolute; display: none; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); right: 8px; top: 5px; flex-direction: column; align-items: center; overflow: auto;">
+	<div class="alarm-text"
+		style="width: 95%; margin: 5px; padding: 10px; height: 30px; display: flex; color: #292929;">
+		🔔알림내역</div>
+	<c:set var="length" value="0">
+	</c:set>
+
+
+	<c:forEach items="${alarmList }" var="al" varStatus="status">
+		<c:if test="${ al.isLook == 0 }">
+			<c:set var="length" value="${ length+1 }"></c:set>
+		</c:if>
+		<a class="alram-a" href="${ al.link }"
+			style="text-decoration: none; width: 95%; height: 100px; background-color: #eee; border-radius: 5px; display: flex; margin: 5px; padding: 1px"><div
+				class="alarm"
+				<c:if test="${ al.isLook == 0 }"> style="color:black; font-weight:bold" </c:if><c:if test="${ al.isLook == 1 }"> style="color:#292929;" </c:if>
+			">
+				<div class="alarm-content" style="margin: 5px;">
+					<b style="color: #666; font-size: 13px;">${al.alType}</b>
+					<div class="al-content">${al.alContent }</div>
+				</div>
+			</div> </a>
+	</c:forEach>
+
+</div>
+
             
             </aside>
         </div>
@@ -506,78 +536,98 @@ background-color:white; border-radius:5px; box-shadow: 0 3px 6px rgba(0,0,0,0.5)
 
 <script>
 
-	$('.alram').on('click' , function() {
-		$('.alert-popup').css('display' , 'flex');
+
+$('.alram').on('click' , function() {
+	$('.alert-popup').css('display' , 'flex');
+	
+})
+
+
+$('aside').css('position', 'relative');
+
+$('.member').each(function() {
+	
+	$(this).on('click' , function() {
+		
+		let mem = $(this);
+		var divX = mem.offset().left;
+		var divY = mem.offset().top-60;
+		
+		
+		$('.member-info').css('left' , '-310px')
+		.css('top' , divY).css('display' , 'flex')
+		
+		$('.profile-info')
+		.css('backgroundColor' , mem.css('color') );
+		
+		if(mem.find(".profile-img").attr('src')) {
+			$('.inner-profile-info-img').attr('src', mem.find(".profile-img").attr('src'))
+		}else{
+			$('.inner-profile-info-img').attr('src', '')
+		}
+
+		
+		
+		$('.profile-info-name').text( mem.text() ).css('color' , mem.css('color'))
+		$('.profile-info-auth').text( mem.data('auth-name'))
+		
+		let git = mem.data('git') 
+		if(git) {
+		$('.profile-info-git').val(mem.data('git'));
+			
+		}else {
+			
+			
+		$('.profile-info-git').val('없음');
+		}
 		
 	})
+	
+})
 
 
-	$('aside').css('position', 'relative');
-
-	$('.member').each(function() {
-		
-		$(this).on('click' , function() {
-			
-			let mem = $(this);
-			var divX = mem.offset().left;
-			var divY = mem.offset().top-60;
-			
-			
-			$('.member-info').css('left' , '-310px')
-			.css('top' , divY).css('display' , 'flex')
-			
-			$('.profile-info')
-			.css('backgroundColor' , mem.css('color') );
-			
-			$('.profile-info-name').text( mem.text() ).css('color' , mem.css('color'))
-			$('.profile-info-auth').text( mem.data('auth-name'))
-			
-			let git = mem.data('git') 
-			if(git) {
-			$('.profile-info-git').val(mem.data('git'));
-				
-			}else {
-				
-				
-			$('.profile-info-git').val('없음');
-			}
-			
-		})
-		
-	})
-	
-	
-	$('body').on('click', function(e){
-    
-		
-	let b = $(e.target);
-    bParents = b.parents('.member-info').attr("class");
-    var popUp = $('.member-info').attr("class");
-    var teams = $('.teams1');
- 
-    
-    if( b.attr("class") == popUp || bParents == popUp || $($(b).parents('.teams1'))[0] == teams[0]) {
-    	
-    }else {
-    
-       $('.member-info').css('display' , 'none');
-    
-    	
-    }
-    
-    if(b.attr("class")=='alert-popup' || $($(b).parents('.alram')).attr('class')=='alram') {
-    	
-    }else {
-    	
-    	$('.alert-popup').css('display' , 'none');
-    }
-    
-  
-    
-	});
+$('body').on('click', function(e){
 
 	
+let b = $(e.target);
+bParents = b.parents('.member-info').attr("class");
+var popUp = $('.member-info').attr("class");
+var teams = $('.teams1');
+
+
+if( b.attr("class") == popUp || bParents == popUp || $($(b).parents('.teams1'))[0] == teams[0]) {
 	
+}else {
+
+   $('.member-info').css('display' , 'none');
+
+	
+}
+
+if(b.attr("class")=='alert-popup' || $($(b).parents('.alram')).attr('class')=='alram') {
+	
+}else {
+	
+	if($('.alert-popup').css('display')=='flex' ) {
+
+    	$('.new').text("0");
+		$('.alarm').css('fontWeight' , '100');
+		$('.alarm').css('color' , 'RGB(41, 41, 41)');
+	}
+	 
+	
+	
+	$('.alert-popup').css('display' , 'none');
+	
+
+}
+
+
+
+});
+
+
+
 
 
 

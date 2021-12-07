@@ -11,7 +11,15 @@
 			
                     <i class="fas fa-bell bell-btn"></i>
                 </div>
-                <div class="profile"><div class="myprofile-photo"></div></div>
+                <div class="profile">     
+				<c:forEach items="${ projectMemberList }" var="pm">
+                <c:if test="${pm.userIdx ==authentication.userIdx }">
+                <img class="profile-img" 
+									style="border: solid thin black; height: 40px%; width: 40px; border-radius: 30px;"
+									src="/file/${pm.savePath}${pm.renameFileName}">
+				</c:if>
+				</c:forEach>
+						</div>
             </div>
         	<script>
         		document.querySelector('.profile').addEventListener('click', e=>{
