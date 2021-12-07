@@ -503,7 +503,7 @@ font-family: 'NanumSquareRound';
                    }else {
                 	   $(".modal-yellow").find(".reg-date").html("최근 수정일 : " + timeNow());
                    }
-                   $(".modal-yellow").find(".writer").html("작성자 : " + "${authentication.nickname}");
+                   $(".modal-yellow").find(".writer").html("작성자 : " + "${projectMember.nickname}");
                    newMemo.data("memo-idx", memoIdx);
                   
                    $(".user-aut-editor").show();

@@ -21,12 +21,12 @@
 					<li class="member" id="${pm.userIdx}" data-auth-idx="${pm.authIdx}"
 						data-auth-name="${pm.authName}" data-git="${ pm.git }"
 						style="color:${ pm.profileColor }"><div class="onoffprofile">
-							<c:if test="${!empty pm.savePath}"> 
-								<img class="profile-img"  style="height: 100%; width:100%; border-radius: 30px;" src="/file/${pm.savePath}${pm.renameFileName}">
+							<c:if test="${!empty pm.savePath}">
+								<img class="profile-img"
+									style="height: 100%; width: 100%; border-radius: 30px;"
+									src="/file/${pm.savePath}${pm.renameFileName}">
 							</c:if>
-						</div>
-
-						${ pm.nickname }</li>
+						</div> ${ pm.nickname }</li>
 				</c:forEach>
 
 			</ul>
@@ -39,11 +39,11 @@
 <div class="member-info"
 	style="width: 300px; height: 200px; z-index: 1000; position: absolute; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); display: none; flex-direction: column; align-items: center;">
 	<div class="profile-info"
-		style="width: 100%; height: 30%; background-color: red; border-radius: 5px 5px 0 0;"></div>
+		style="width: 100%; height: 30%; background-color: red; border-radius: 5px 5px 0 0;">
+
+	</div>
 	<div class="profile-info-img"
-		style="width: 60px; height: 60px; border-radius: 50px; background-color: blue; position: relative; top: -30px">
-		<img class="inner-profile-info-img" style="width: 100%; height:100%; border-radius: 50px;">
-		</div>
+		style="width: 60px; height: 60px; border-radius: 50px; background-color: blue; position: relative; top: -30px"></div>
 	<div class="profile-info-content"
 		style="display: flex; flex-direction: column; align-items: center; position: relative; top: -20px">
 		<div class="profile-info-name" style="font-size: 20px">임지영</div>
@@ -54,24 +54,28 @@
 </div>
 
 <div class="alert-popup"
-	style="width: 400px; height: 300px; z-index: 4; position: absolute; display: none; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); right: 8px; top: 5px; flex-direction: column; align-items: center; overflow: auto;">
+	style="width: 400px; min-height: 50px; max-height: 300px; z-index: 4; position: absolute; display: none; background-color: white; border-radius: 5px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5); right: 8px; top: 5px; flex-direction: column; align-items: center; overflow: auto;">
 	<div class="alarm-text"
-		style="width: 95%; margin: 5px; padding: 10px; height: 30px; display: flex; color: #292929;" >
+		style="width: 95%; margin: 5px; padding: 10px; height: 30px; display: flex; color: #292929;">
 		🔔알림내역</div>
-	<c:set var="length" value="0"> </c:set>
+	<c:set var="length" value="0">
+	</c:set>
+
+
 	<c:forEach items="${alarmList }" var="al" varStatus="status">
-		<c:if test="${ al.isLook == 0 }"> 
+		<c:if test="${ al.isLook == 0 }">
 			<c:set var="length" value="${ length+1 }"></c:set>
 		</c:if>
-		<div class="alarm" 
-			style="width: 95%; height: 100px; background-color: #eee; border-radius: 5px; display: flex; margin: 5px; padding
-			<c:if test="${ al.isLook == 1 }"> color:gray; </c:if>
+		<a class="alram-a" href="${ al.link }"
+			style="text-decoration: none; width: 95%; height: 100px; background-color: #eee; border-radius: 5px; display: flex; margin: 5px; padding: 1px"><div
+				class="alarm"
+				<c:if test="${ al.isLook == 0 }"> style="color:black; font-weight:bold" </c:if><c:if test="${ al.isLook == 1 }"> style="color:#292929;" </c:if>
 			">
-			<div class="alarm-content" style="margin: 5px;">
-				<b style="color:#666; font-size:13px;">${al.alType}</b>
-				<div class="al-content" style="color: #292929;">${al.alContent }</div>
-			</div>
-		</div>
+				<div class="alarm-content" style="margin: 5px;">
+					<b style="color: #666; font-size: 13px;">${al.alType}</b>
+					<div class="al-content">${al.alContent }</div>
+				</div>
+			</div> </a>
 	</c:forEach>
 
 </div>
@@ -92,7 +96,6 @@
 		
 		$(this).on('click' , function() {
 			
-			
 			let mem = $(this);
 			var divX = mem.offset().left;
 			var divY = mem.offset().top-60;
@@ -103,13 +106,6 @@
 			
 			$('.profile-info')
 			.css('backgroundColor' , mem.css('color') );
-			
-			
-			if(mem.find(".profile-img").attr('src')) {
-				$('.inner-profile-info-img').attr('src', mem.find(".profile-img").attr('src'))
-			}else{
-				$('.inner-profile-info-img').attr('src', '')
-			}
 			
 			$('.profile-info-name').text( mem.text() ).css('color' , mem.css('color'))
 			$('.profile-info-auth').text( mem.data('auth-name'))
@@ -154,7 +150,8 @@
     	if($('.alert-popup').css('display')=='flex' ) {
 
         	$('.new').text("0");
-    		$('.alarm').css('color' , 'gray');
+    		$('.alarm').css('fontWeight' , '100');
+    		$('.alarm').css('color' , 'RGB(41, 41, 41)');
     	}
     	 
     	
@@ -218,7 +215,7 @@
 							
 							if(alr.userIdx == "${authentication.userIdx}") {
 
-								let alarmDiv = $('<div class="alarm" style="width:95% ; height: 50px; border-bottom: solid gray thin; display: flex"><div class="alarm-content"><b></b><div class="al-content"></div></div></div>')
+								let alarmDiv = $('<a href="' +  alr.link+'" style=" text-decoration:none; width: 95%; height: 100px; background-color: #eee; border-radius: 5px; display: flex; margin: 5px; padding:1px" ><div class="alarm" style="color:black ; font-weight:bold;"><div class="alarm-content"  style="margin: 5px;"><b style="color:#666; font-size:13px;"></b><div class="al-content"></div></div></div></a>')
 								alarmDiv.find('b').text(alr.alType);
 								alarmDiv.find('.al-content').text(alr.alContent);
 								$(".alarm-text").after(alarmDiv);
