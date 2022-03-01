@@ -40,7 +40,7 @@ import com.kh.spring.project.model.service.ProjectService;
 
 @Controller
 @RequestMapping("board")
-public class BoardController {
+public class BoardController  {
 
 	@Autowired
 	BoardService boardService;
@@ -49,7 +49,7 @@ public class BoardController {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	// 여기 지영이 수정
+	// �뿬湲� 吏��쁺�씠 �닔�젙
 	@GetMapping("{projectIdx}")
 	public String board(@PathVariable String projectIdx, Model model, @RequestParam String wsIdx) {
 		
@@ -80,7 +80,7 @@ public class BoardController {
 		return "complete";
 	}
 
-	// 3)board_changeSort //지영 수정
+	// 3)board_changeSort //吏��쁺 �닔�젙
 	@PostMapping("change/sort")
 	public String changeSort(@RequestBody Map<String, String> map) {
 
@@ -98,9 +98,9 @@ public class BoardController {
 
 		//logger.debug(map.get("postColor"));
 		//logger.debug(map.toString());
-		// 일단, addPost에 색이 제대로 database에 도달하는지 확인, 도달하지 않음. 수정필요
+		// �씪�떒, addPost�뿉 �깋�씠 �젣��濡� database�뿉 �룄�떖�븯�뒗吏� �솗�씤, �룄�떖�븯吏� �븡�쓬. �닔�젙�븘�슂
 
-		// 게시글을 저장 시 trim처리를 통해 저장, 일단 trim처리 완료
+		// 寃뚯떆湲��쓣 ���옣 �떆 trim泥섎━瑜� �넻�빐 ���옣, �씪�떒 trim泥섎━ �셿猷�
 		boardService.insertPost(map, member);
 
 		return "complete";
@@ -116,7 +116,7 @@ public class BoardController {
 
 	}
 
-	// 2. Postring_Post 관련 메서드
+	// 2. Postring_Post 愿��젴 硫붿꽌�뱶
 	// **Posting
 	// 1) Posting_getMapping
 	@GetMapping("posting/{projectIdx}")
@@ -124,30 +124,30 @@ public class BoardController {
 
 		Board board = boardService.selectBoardByBdIdx(bdidx);
 		if (board == null) {
-			// 존재하지 않거나, 삭제된 보드임 > 알람처리 필요
-			// addFlashAttribute로 처리필요
+			// 議댁옱�븯吏� �븡嫄곕굹, �궘�젣�맂 蹂대뱶�엫 > �븣�엺泥섎━ �븘�슂
+			// addFlashAttribute濡� 泥섎━�븘�슂
 		}
-		// ++++ 수정 부분, board로 변경
+		// ++++ �닔�젙 遺�遺�, board濡� 蹂�寃�
 		model.addAttribute("board", board);
 		return "/board/posting";
 	}
 
-	// 2) Posting file 비동기전송 Code
+	// 2) Posting file 鍮꾨룞湲곗쟾�넚 Code
 	@PostMapping(value = "posting/fileIo", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String insertFileAsync(HttpSession session, @RequestParam(required = false) String bdIdx,
 			@RequestParam(required = false) List<MultipartFile> files) {
 
-		// 1. 파일 추출 및 DB저장
+		// 1. �뙆�씪 異붿텧 諛� DB���옣
 		FileUtil fileUtil = new FileUtil();
 		FileDTO fileUploaded = fileUtil.fileUpload(files.get(0));
 		boardService.insertPostFile(fileUploaded, bdIdx);
 
-		// 2. DTO를 JSON형식으로 전달
+		// 2. DTO瑜� JSON�삎�떇�쑝濡� �쟾�떖
 		return JsonMaker.json(fileUploaded);
 	}
 
-	// **Post 관련 메서드
+	// **Post 愿��젴 硫붿꽌�뱶
 	// 1) Post_getMapping
 	@GetMapping("view/{projectIdx}")
 	public String getBoardInfo(@PathVariable String projectIdx, @RequestParam(required = false) String postIdx,
@@ -158,7 +158,7 @@ public class BoardController {
 		model.addAllAttributes(mapInfo);
 		
 		
-		// 3. post로 return한다.
+		// 3. post濡� return�븳�떎.
 		return "board/post";
 	}
 
@@ -166,71 +166,71 @@ public class BoardController {
 	@PostMapping("view/remove-post")
 	@ResponseBody
 	public String removePost(@RequestParam String postIdx) {
-		// ++++ 수정부분
+		// ++++ �닔�젙遺�遺�
 		// 1. postIdx > boardIdx > wsIdx
 		String wsIdx = boardService.selectWsIdxByPostIdx(postIdx);
 
-		// delete_repository를 작동시킨다.
+		// delete_repository瑜� �옉�룞�떆�궓�떎.
 		boardService.deletePost(postIdx);
 
 		return wsIdx;
 	}
 
-	// ++++ 수정
+	// ++++ �닔�젙
 	// 3) change_Post
 	@PostMapping("view/change-post/{projectIdx}")
 	public String changePost(Model model, @PathVariable String projectIdx, @RequestParam String content,
 			@RequestParam String bdidx, @RequestParam String postIdx) {
 
-		// 1. posting 접근 시 필요한 wsIdx를 조회해서 불러온다.
+		// 1. posting �젒洹� �떆 �븘�슂�븳 wsIdx瑜� 議고쉶�빐�꽌 遺덈윭�삩�떎.
 		Board board = boardService.selectBoardByBdIdx(bdidx);
 		if (board == null) {
-			// *addFlashAttribute 필요 :
-			logger.debug("2. 만일 null이라면, return처리");
+			// *addFlashAttribute �븘�슂 :
+			logger.debug("2. 留뚯씪 null�씠�씪硫�, return泥섎━");
 			return "redirect:/board/" + projectIdx + "?wsIdx=" + board.getWsIdx();
 		}
 
 		Post post = boardService.selectPostByPostIdx(postIdx);
-		// 2. posting 수정 시 필요한 data를 전달
+		// 2. posting �닔�젙 �떆 �븘�슂�븳 data瑜� �쟾�떖
 		model.addAttribute("board", board);
 		model.addAttribute("content", content);
 		model.addAttribute("post", post);
-		logger.debug("2. 정상 작동, model객체에 addAttribute");
+		logger.debug("2. �젙�긽 �옉�룞, model媛앹껜�뿉 addAttribute");
 		// selection
 
-		// 이후 모델 객체를 점검, content 여부에 따라 InnerHTML 추가
-		logger.debug("editing 출발");
+		// �씠�썑 紐⑤뜽 媛앹껜瑜� �젏寃�, content �뿬遺��뿉 �뵲�씪 InnerHTML 異붽�
+		logger.debug("editing 異쒕컻");
 		return "board/editing";
 	}
 
-	// ++++ 수정
+	// ++++ �닔�젙
 	// 4) editPost
 	@PostMapping("view/edit-post")
 	@ResponseBody
 	public String editPost(@RequestBody Map<String, String> map,
 			@SessionAttribute(required = false, value = "authentication") Member member, Model model) {
 
-		// 1. 현제 Date를 map에 추가
+		// 1. �쁽�젣 Date瑜� map�뿉 異붽�
 		java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		map.put("regDate", date.toString());
 
-		// 2. boardService를 통해 update
+		// 2. boardService瑜� �넻�빐 update
 		boardService.updatePostByPostIdx(map);
 
 		return "complete";
 	}
 
-	// <최윤지 코드블록>
+	// <理쒖쑄吏� 肄붾뱶釉붾줉>
 	// -----------------------------------------------------
 
-	// 리플 추가
+	// 由ы뵆 異붽�
 	@PostMapping("post/add/reply")
 	@ResponseBody
 	public Reply addReply(@RequestBody Reply reply, @SessionAttribute("authentication") Member member, Model model) {
 
 		boardService.insertReply(reply);
 
-		System.out.println("인서트 리플::::::::" + reply);
+		System.out.println("�씤�꽌�듃 由ы뵆::::::::" + reply);
 
 		return reply;
 	}
@@ -253,7 +253,7 @@ public class BoardController {
 		return "board/post";
 	}
 
-	// <지영 코드블록>
+	// <吏��쁺 肄붾뱶釉붾줉>
 
 	// -----------------------------------------------------
 
