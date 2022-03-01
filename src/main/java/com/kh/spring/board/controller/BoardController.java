@@ -40,7 +40,7 @@ import com.kh.spring.project.model.service.ProjectService;
 
 @Controller
 @RequestMapping("board")
-public class BoardController  {
+public class BoardController {
 
 	@Autowired
 	BoardService boardService;
