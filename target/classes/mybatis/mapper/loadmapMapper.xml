@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.kh.spring.loadmap.model.repository.LoadmapRepository">
+
+
+	<insert id="insertGit">
+
+		<selectKey resultType="string" keyProperty="lmIdx"
+			order="BEFORE">
+			select sc_proz_idx.nextval from dual
+		</selectKey>
+
+		insert into loadmap(lm_idx , ws_idx , git_repo , git_tree , branch ,
+		ignore)
+		values(#{lmIdx} , #{wsIdx} , #{gitRepo} , #{gitTree}
+		,#{branch} , #{ignore})
+	</insert>
+
+
+</mapper>
+  
+  
+  

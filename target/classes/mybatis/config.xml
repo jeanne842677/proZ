@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  <configuration>
+  
+  
+  <!-- 스네이크 케이스를 카멜케이스로 변경 -->
+  	<settings> 
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+	
+	<!-- 별명 지정 -->
+	<typeAliases>
+		  <typeAlias alias="Member" type="com.kh.spring.member.model.dto.Member"/>
+		  <typeAlias alias="Board" type="com.kh.spring.board.model.dto.Board"/>
+		  <typeAlias alias="ProjectMember" type="com.kh.spring.project.model.dto.ProjectMember"/>
+		  <typeAlias alias="Post" type="com.kh.spring.board.model.dto.Post"/>
+		  <typeAlias alias="Memo" type="com.kh.spring.memo.model.dto.Memo"/>
+		   <typeAlias alias="Cash" type="com.kh.spring.cash.model.dto.Cash"/>
+		   <typeAlias alias="Calendar" type="com.kh.spring.calendar.model.dto.Calendar"/>
+		   <typeAlias alias="Loadmap" type="com.kh.spring.loadmap.model.dto.Loadmap"/>
+	</typeAliases>
+	
+	
+	<!-- 매퍼틑 Dao 1개당 1개씩 있음-->
+	<mappers>
+		<mapper resource="mybatis/mapper/boardMapper.xml" />	
+		<mapper resource="mybatis/mapper/chatMapper.xml" />	
+		<mapper resource="mybatis/mapper/memberMapper.xml" />	
+		<mapper resource="mybatis/mapper/memoMapper.xml" />	
+		<mapper resource="mybatis/mapper/projectMapper.xml" />	
+		<mapper resource="mybatis/mapper/workspaceMapper.xml" />	
+		<mapper resource="mybatis/mapper/cashMapper.xml"/>
+		<mapper resource="mybatis/mapper/calendarMapper.xml"/>
+		<mapper resource="mybatis/mapper/loadmapMapper.xml"/>
+		<mapper resource="mybatis/mapper/alarmMapper.xml"/>
+	</mappers>  
+
+  </configuration>
+  
+  
+  <!-- 매퍼등록은 root-context의 sqlSession 밑에서 함 -->

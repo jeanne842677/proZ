@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.kh.spring.project.model.repository.ProjectRepository">
+  	 
+  	 
+  	     <!-- 11/15 지영작성 -->
+  	 
+  	<select id="selectProjectMemberRoleByProjectIdx" resultType="map">
+		select pm_idx , auth_idx , auth_name , email , member.nickname , is_ok from project_member member
+	    join project_role role
+	    using(auth_idx)
+	    join proz_user prouser
+	    using(user_idx)
+	    where role.project_idx = #{projectIdx}
+	    order by is_ok desc, role.reg_date , member.reg_date
+  	</select>
+  	
+   	<!-- 일반 권한 찾기 -->
+  	<select id="selectDefaultOfProjectRole" resultType="map">
+	  	select * from 
+		(select auth_idx , auth_name, rank() over(order by auth_idx) as rank from project_role
+		where project_idx = #{projectIdx})
+		where rank=2
+  	</select>
+  	
+  	<delete id="deleteProjectMember" parameterType="map">
+  	
+  	delete from project_member 
+  	<where>
+			<if test="pmIdx !=null">
+				and pm_idx = #{pmIdx}
+			</if>  		
+			<if test="userIdx !=null">
+				and user_Idx = #{userIdx}
+			</if>  		
+			<if test="projectIdx !=null">
+				and project_Idx = #{projectIdx}
+			</if>  		
+  	</where>
+  	
+	
+  	</delete>
+  	
+  	   <select id="selectProjectMemberByMap" resultType="ProjectMember"
+      parameterType="Map">
+      select * from project_member
+      <where>
+         <if test="userIdx != null">
+            and user_idx = #{userIdx}
+         </if>
+         <if test="bdIdx != null">
+            and project_idx = (
+            select project_idx from board
+            join workspace
+            using(ws_idx)
+            where bd_idx = #{bdIdx})
+         </if>
+         <if test="wsIdx != null">
+         	and project_idx = (
+         	select project_idx from workspace
+         	where ws_idx = #{wsIdx})
+         </if> 
+
+      </where>
+   </select>
+  	
+  	     <!-- 11/15 지영작성 끝-->
+  	 
+  	
+  	     <!-- 민협작성-->
+     <update id="updateRoleByPrevAuthName" parameterType="hashmap">
+     update PROJECT_ROLE 
+     set
+     AUTH_NAME = #{authName},
+     PROJECT_AUTH = #{projectAuth},
+     CREATE_AUTH = #{createAuth},
+     MEMBER_AUTH = #{memberAuth}
+     where 
+     PROJECT_IDX = #{projectIdx}
+      AND AUTH_NAME = #{prevAuthName}
+
+      
+     </update>
+     
+     <insert id="insertNewRole" parameterType="com.kh.spring.project.model.dto.ProjectRole">
+     insert into PROJECT_ROLE
+     values(SC_PROZ_IDX.nextval , #{projectIdx} , #{authName} , #{projectAuth}, #{createAuth}, #{memberAuth}, current_date )
+     
+     </insert>
+     
+     <delete id="deleteRoleByAuthIdx">
+     delete from PROJECT_ROLE
+     where AUTH_IDX = #{authIdx}
+     </delete>
+     
+     <delete id="deleteRoleByProjectIdxAndAuthName" parameterType="com.kh.spring.project.model.dto.ProjectRole" >
+     delete from PROJECT_ROLE
+     where PROJECT_IDX = #{projectIdx} and AUTH_NAME = #{authName}
+     
+     </delete>
+     
+     
+     <select id="selectProjectRoleByProjectIdxAndUserIdx" resultMap="projectRole">
+     select * from project_role 
+     where
+     auth_idx = (select auth_idx from project_member where project_idx = #{projectIdx} and user_idx = #{userIdx})
+     </select>
+
+	
+	<resultMap type="com.kh.spring.project.model.dto.ProjectRole" id="projectRole">
+		<result property="authIdx" column="AUTH_IDX"/>
+		<result property="projectIdx" column="PROJECT_IDX"/>
+		<result property="authName" column="AUTH_NAME"/>
+		<result property="projectAuth" column="PROJECT_AUTH"/>
+		<result property="createAuth" column="CREATE_AUTH"/>
+		<result property="memberAuth" column="MEMBER_AUTH"/>
+		<result property="regDate" column="REG_DATE"/>
+	</resultMap>
+
+
+	<update id="updateProjectImg">
+
+		<selectKey keyProperty="typeIdx" resultType="string"
+			order="AFTER">
+			select TYPE_IDX FROM file_dto WHERE TYPE_IDX = #{projectIdx}
+		</selectKey>
+		update file_dto set
+		ORIGIN_FILE_NAME = #{FileDTO.originFileName} ,
+		RENAME_FILE_NAME = #{FileDTO.renameFileName} ,
+		SAVE_PATH = #{FileDTO.savePath} where TYPE_IDX = #{projectIdx}
+	</update>
+  	
+	  
+  	
+  	
+  	     <!-- 민협작성 끝-->
+
+  	<!-- 은비 작성 시작  -->
+  	<insert id="insertProject" useGeneratedKeys="true" keyProperty="projectIdx" parameterType="com.kh.spring.project.model.dto.Project">
+  		<selectKey keyProperty="projectIdx" resultType="string" order="BEFORE">
+  			select sc_proz_idx.nextval from dual
+  		</selectKey>
+  	insert into project
+  		(project_idx, pro_name, invite_code, pro_description)
+  	values
+  		(#{projectIdx}, #{proName}, #{inviteCode}, #{proDescription})
+  	</insert>
+  	
+  	
+  	
+  </mapper>
+  
+  
+  
+  

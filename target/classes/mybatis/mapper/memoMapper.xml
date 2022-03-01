@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.kh.spring.memo.model.repository.MemoRepository">
+  	 
+  	 <insert id="insertMemo" >
+  	 
+  	 <selectKey keyProperty="memoIdx" resultType="string" order="BEFORE">
+			select sc_proz_idx.nextval from dual
+		</selectKey>
+  	 
+		insert into memo(memo_idx , ws_idx , pm_idx , content , bg_color)
+		values(#{memoIdx} , #{wsIdx} , #{pmIdx} , #{content} , #{bgColor})
+		
+		
+		
+  	 </insert>
+  	 
+  	 
+  	 <!-- 민협 11/23 -->
+  	 <!-- A.MEMO_IDX, A.WS_IDX, PM_IDX, A.BG_COLOR, A.CONTENT, A.REG_DATE,B.NICKNAME -->
+
+  	 <select id="selectMemoAndWriterByWsIdxAsc"  resultType="map">
+  	  	select * from (select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR , memo.reg_date,content,m.NICKNAME , f.save_path , f.rename_file_name , fl_idx
+        from memo memo
+        inner join project_member m USING (PM_IDX)
+        left join file_dto f on(m.user_idx = f.type_Idx))
+        where ws_Idx = #{wsIdx}
+        ORDER by (memo_IDX + 0) asc
+  	 </select>
+  	 
+  	  <select id="selectMemoAndWriterByWsIdxDesc"  resultType="map">
+  	  	select * from (select MEMO_IDX,  WS_IDX,  PM_IDX, BG_COLOR , memo.reg_date,content,m.NICKNAME , f.save_path , f.rename_file_name , fl_idx
+        from memo memo
+        inner join project_member m USING (PM_IDX)
+        left join file_dto f on(m.user_idx = f.type_Idx))
+        where ws_Idx = #{wsIdx}
+        ORDER by (memo_IDX + 0) desc
+  	 </select>
+  	 
+  	
+ 
+  	 <!--   윤지 코드 끝  -->
+  	 
+<!--   	 
+  	 <resultMap type="map" id="memoMap">
+  	 	<result column="MEMO_IDX" property="memoIdx"/>
+  	 	<result column="WS_IDX" property="wsIdx"/>
+  	 	<result column="PM_IDX" property="pmIdx"/>
+  	 	<result column="BG_COLOR" property="bgColor"/>
+  	 	<result column="CONTENT" property="content"/>
+  	 	<result column="REG_DATE" property="regDate"/>
+  	 	<result column="NICKNAME" property="nickname"/>
+  	 </resultMap> -->
+  	
+  	
+  	
+  </mapper>
+  
+  
+  
